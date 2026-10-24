@@ -1,0 +1,21 @@
+{
+  "name": "wuh.site.video",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "studio": "remotion studio src/index.ts --port 3210",
+    "typecheck": "tsc --noEmit",
+    "new-video": "node scripts/new-video.mjs",
+    "render:self-intro": "remotion render src/index.ts SelfIntro out/self-intro.mp4 --crf=16 --browser-executable=\"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome\" --port=3211"
+  },
+  "dependencies": {
+    "@remotion/cli": "^4.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "remotion": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "typescript": "^5.7.0"
+  }
+}
