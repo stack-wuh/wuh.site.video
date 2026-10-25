@@ -4,7 +4,7 @@
   "name": "20261025-feature-site-film-preprod",
   "type": "feature",
   "scope": "video-materials",
-  "status": "reviewed",
+  "status": "published",
   "baseBranch": "main",
   "branch": "feature/20261025-feature-site-film-preprod",
   "files": [
@@ -16,8 +16,8 @@
     "repository": "stack-wuh/wuh.site.video",
     "issue": 2,
     "issueUrl": "https://github.com/stack-wuh/wuh.site.video/issues/2",
-    "pullRequest": null,
-    "pullRequestUrl": null
+    "pullRequest": 3,
+    "pullRequestUrl": "https://github.com/stack-wuh/wuh.site.video/pull/3"
   },
   "review": {
     "conclusion": "passed",
@@ -26,7 +26,7 @@
   },
   "workflow": {
     "operation": null,
-    "checkpoint": "issue:2",
+    "checkpoint": "pr:3",
     "planHash": "af7d1fc2f3326ac5558c9f801ac4f457bcdb3d35f17073bbe25e71d45088b1eb",
     "updatedAt": null,
     "lastError": null,
