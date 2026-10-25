@@ -41,3 +41,17 @@ verified-scope: 2026-10-24 新仓首渲实测：node 22.23.2 直跑 remotion ren
 ## 关联知识
 
 - 无（本仓首批卡片）
+
+## 文件存放与版本管理（Remotion 项目规范）
+
+| 路径 | 进 git | 说明 |
+|---|---|---|
+| `videos/<slug>/*.tsx`、`motion-tokens.ts`、`components/` | ✅ | 场景源码，核心资产 |
+| `videos/<slug>/assets/*.md`（素材库/分镜/规范/选曲文档） | ✅ | 施工图，评审与复用依赖 |
+| `videos/<slug>/assets/bgm*-candidate-*` | ❌ gitignore | 试听候选（本地文件，单首 4–13MB），选中的转为正式轨入 `public/` |
+| `public/<slug>/*.m4a` | ✅ | 渲染依赖（staticFile 以 public/ 为根），其他机器/CI 出片必需；单轨 AAC ≤8MB 可接受，>50MB 考虑 LFS |
+| `out/`（成片/分段/微块/日志/一次性攻坚脚本） | ❌ gitignore | 渲染产物与临时物；可重生成的都不进 |
+| `*.log` | ❌ | 渲染日志 |
+| 落选音频候选 | ❌ | 选曲定稿后随变更清理 |
+
+原则：**能由源码+资产确定性重生的不进 git；渲染依赖（staticFile 引用物）必进**。
