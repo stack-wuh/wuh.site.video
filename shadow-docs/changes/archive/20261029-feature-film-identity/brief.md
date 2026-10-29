@@ -4,7 +4,7 @@
   "name": "20261029-feature-film-identity",
   "type": "feature",
   "scope": "video-materials",
-  "status": "reviewed",
+  "status": "archived",
   "baseBranch": "main",
   "branch": "feature/20261029-feature-film-identity",
   "files": [
@@ -25,18 +25,18 @@
     "repository": "stack-wuh/wuh.site.video",
     "issue": 6,
     "issueUrl": "https://github.com/stack-wuh/wuh.site.video/issues/6",
-    "pullRequest": null,
-    "pullRequestUrl": null
+    "pullRequest": 7,
+    "pullRequestUrl": "https://github.com/stack-wuh/wuh.site.video/pull/7"
   },
   "review": {
     "conclusion": "passed",
-    "verifiedCommit": "a532cebc904f79bffb9ca9fbe91c069dcfbeb5b9",
-    "verifiedAt": "2026-10-29T14:57:50.686Z"
+    "verifiedCommit": "9d42b19da98c812c3707dc1eff52cd986977955c",
+    "verifiedAt": "2026-10-29T15:10:14.700Z"
   },
   "workflow": {
     "operation": null,
-    "checkpoint": "issue:6",
-    "planHash": "c6f442ce7ddce626b1888795274e9c1ecfa6f6fd427b864a649ef25109b410aa",
+    "checkpoint": "merged-pr:7",
+    "planHash": "3c9b0e6d74dfd42b3a944adb73b33b870ce0ddb5e1f9bc4b212581432044c022",
     "updatedAt": null,
     "lastError": null,
     "issuePlan": {
@@ -51,25 +51,11 @@
     "worktree": "/Users/wuhong/shadow-desktop/github/wuh.site.video-identity",
     "release": {
       "files": [
-        "brand/ident",
-        "brand/motion.ts",
-        "brand/tokens.ts",
-        "public/self-intro",
-        "scripts/new-video.mjs",
-        "shadow-docs/changes/20261029-feature-film-identity",
-        "shadow-docs/knowledge/render-stability-playbook.md",
-        "shadow-docs/knowledge/video-studio-structure.md",
-        "shadow-docs/menu.md",
-        "src/Root.tsx",
-        "src/route.ts",
-        "videos/preprod-site-film/routes.ts",
-        "videos/self-intro",
-        "videos/site-film/motion-tokens.ts",
-        "videos/site-film/routes.ts"
+        "shadow-docs/changes/20261029-feature-film-identity"
       ],
-      "message": "feat(brand): 家族片头片尾套件 FilmShell——品牌基元上收 + self-intro 接入示范",
+      "message": "docs(shadow): 交付结论——无部署触发，合并后 B 站手工发布",
       "title": "家族片头片尾套件：FilmShell · 品牌基元上收 · self-intro 接入示范",
-      "body": "## 概述\n\n把「片头/片尾」沉淀为品牌级固定片段（`shadow-docs/domain.md` 已登记）：新增 `brand/ident/` 套件与 `FilmShell` 包装器，通用动效基元上收 `brand/motion.ts`，`self-intro` 作为最小真实样本接入（330f → 630f），`new-video` 脚手架默认带家族片头片尾。\n\n## 主要变更\n\n- `brand/ident/`：`identity`（INTRO=120 / OUTRO=180 / totalFilmFrames）、`BrandIntro`、`BrandOutro`、`FilmShell`、`dust`、`BrandIdent` 预览合成（420f）\n- `brand/motion.ts`：site-film 通用动效基元上收；`videos/site-film/motion-tokens.ts` 退化为再导出，七幕源码零改动\n- `brand/tokens.ts`：增补钤印朱红 `seal` 与暖金光尘 `gold`\n- `src/route.ts`：统一 `VideoRoute` 类型；`src/Root.tsx` 增加 brand 分组，最后一条硬编码 Composition 迁入路由\n- `videos/self-intro/`：接入 FilmShell（630f），BGM 两段式覆盖全片（片头静音 → 正片淡入 → 片尾续播 → 末 30f 淡出）\n- `scripts/new-video.mjs`：骨架默认 FilmShell 并自动生成 routes.ts\n- 知识闭环：`video-studio-structure` 新增家族片头片尾节；`render-stability-playbook` 新增 loop 音量按轮重置、分块终装重复帧两坑\n\n## 验证\n\n- `tsc --noEmit` 退出 0；`brand/ident` 内联色值/字体 grep 双归零；site-film 七幕 diff 为空、上收代码规范化 diff 逐行一致\n- BrandIdent 420f / 14.000s；self-intro 630f / 21.000s；片头→正片、正片→片尾、分块接缝抽帧连续\n- 440Hz 测试音整片渲染 volumedetect：片头 −91dB → 淡入中段 −37.1dB → 正片 −24.7dB → 片尾接续 −24.5dB → 末帧 −91dB\n- 证据缺口：site-film 新旧代码同帧像素级 A/B 因本机连续段错误（exit 139）未取得，以规范化 diff + 成帧渲染替代\n\n## 注意\n\n- 示范片当前静音：`public/self-intro/bgm.mp3` 本身是静音占位文件，替换同名文件重渲即有声\n- `<Audio loop>` 的 volume 回调按轮重置，收尾必须显式两遍播放 + 独立尾段淡出\n\nCloses #6"
+      "body": "交付结论更新：无部署触发，合并后手工发布 B 站。"
     }
   },
   "knowledge": {
@@ -165,6 +151,7 @@
   | INV-4 self-intro-audio | 观察点：ffprobe 630f/21.000s；以 440Hz 测试音替换占位轨整片渲染后 `volumedetect`：片头 0–3.5s −91.0dB；淡入中段 4.05–4.4s −37.1dB；正片 4.2–14.2s −24.7dB；片尾接续段 15.5–16.6s −24.5dB（无凹陷）；末帧 20.967–21.0s −91.0dB。注：交付片音轨实测 −91dB 属数据而非代码——占位曲 `public/self-intro/bgm.mp3` 本身为静音文件，替换同名文件即有声；实现以显式两遍播放替代 loop（实证 loop 下音量回调按轮重置，既无法收尾、又在循环点产生淡入凹陷） |
   | INV-5 scaffold-default | 观察点：`node scripts/new-video.mjs scaffold-check` 生成 FilmShell 骨架 + routes.ts，`tsc --noEmit` 退出 0（第三次尝试通过，前两次 exit 139 属环境），临时目录已移除 |
 - 实现期扩面: `videos/site-film/routes.ts`、`videos/preprod-site-film/routes.ts`（VideoRoute 类型统一所需）与 `shadow-docs/knowledge/render-stability-playbook.md`（review 知识结论）不在原申报文件集；当前 CLI 1.4.0 执行 `change amend` 返回 UNKNOWN_COMMAND，故在此登记，review 已覆盖实际 diff。
+- 交付发布: 项目无部署触发（`shadow-docs/menu.md` 无构建/部署域路由；`domain.md` 载明下游为 B 站成片发布）；用户 2026-10-29 确认——合并 PR 后手工发布到 B 站，交付链无 CI 环节。
 
 ## 知识评估
 
