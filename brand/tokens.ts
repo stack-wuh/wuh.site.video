@@ -11,6 +11,8 @@ export const colors = {
   paperDeep: '#e5ddcc', // 纸面次级块
   ink: '#2b2620', // 纸面标题墨色
   hairline: 'rgba(245,240,232,0.08)', // 暗底描边/分隔线
+  seal: '#7A1F16', // 钤印朱红
+  gold: '#E9D9AE', // 暖金光尘
 } as const;
 
 export const fontFamilies = {

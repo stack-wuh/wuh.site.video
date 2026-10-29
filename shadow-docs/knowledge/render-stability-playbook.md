@@ -1,14 +1,15 @@
 ---
 title: 渲染稳定性作战手册（误区与耗时点）
 domain: video-materials
-keywords: [渲染, 崩溃, 卡顿, 误区, 坑, 端口, 偏移, 拼接, 分块, 段错误, 静默, 重试, 收敛, 音轨, startFrom, radial, 渐变, pkill]
-scope: [videos/, scripts/, out/, package.json]
+keywords: [渲染, 崩溃, 卡顿, 误区, 坑, 端口, 偏移, 拼接, 分块, 段错误, 静默, 重试, 收敛, 音轨, startFrom, loop, 音量, 淡出, concat, 重复帧, 帧级对齐, radial, 渐变, pkill]
+scope: [videos/, brand/ident/, scripts/, out/, package.json]
 status: active
 source:
   - changes/20261025-feature-site-film-production/brief.md
-verified: 2026-10-25
+  - changes/20261029-feature-film-identity/brief.md
+verified: 2026-10-29
 verified-depth: runtime
-verified-scope: site-film 正式制作全天实战（十数小时渲染攻坚）全部坑位实证；每条对策均以当次出片验证
+verified-scope: site-film 正式制作全天实战（十数小时渲染攻坚）全部坑位实证；2026-10-29 家族片头片尾出片新增两坑实证——loop 音量按轮重置（440Hz 测试音整片 volumedetect）与分块终装重复帧（630f→633f 复现并帧级对齐修复）
 ---
 
 # 渲染稳定性作战手册（误区与耗时点）
@@ -29,6 +30,7 @@ verified-scope: site-film 正式制作全天实战（十数小时渲染攻坚）
 - **ReferenceError 漏网**：改 N 处引用必须 `grep` 清零；typecheck 必须跑出**明确绿/红**（静默失败=没验证，不算数）
 - **全屏动画 radial-gradient 崩溃**：动画的 `radial-gradient` + screen/soft-light 混合在本机 Chrome 确定性崩溃（Act3 红晕、Act7 光圈都栽过）。改用纯色 opacity 渐隐；样片级半透明渐变用 2-3 帧硬切
 - **Audio startFrom 超出曲长** → 尾段静音。`startFrom ≤ 曲长 − 段时长`；出片后 ffprobe 对比 video/audio 两路时长
+- **`<Audio loop>` 的 `volume` 回调按轮重置**（2026-10-29 实证）：每轮循环音量从起点重新求值——循环点出现 1s 淡入凹陷（实测 15.5s 处 −28.7dB vs 稳态 −24.5dB），依赖序列末尾的淡出永不触发（末 30f 仍 −24.5dB）。对策：不用 loop；显式两遍播放（第一遍播满曲目、第二遍续播）+ 独立尾段 Sequence 做淡出，尾段 `startFrom = 主段帧数 % 曲目帧数`；音量曲线用 440Hz 测试音整片渲染 + 分段 `volumedetect` 验证
 
 ### 流程纪律
 - **旧文件骗过存在性检查**：重试循环里 `[ -s file ]` 命中的是上次的旧产物 → 装配旧内容。渲染前必须先 `rm -f`
@@ -38,7 +40,7 @@ verified-scope: site-film 正式制作全天实战（十数小时渲染攻坚）
 - **typecheck 没绿就渲染** = 白烧数十分钟。先绿后渲是硬门槛
 
 ### 装配工艺
-- **`-c copy` 拼接时间戳漂移**（11ms 级）→ 播放卡顿。终装必须 **CFR 重编码**（`-c:v libx264 -r 30 -vsync cfr`）
+- **`-c copy` 拼接时间戳漂移**（11ms 级）→ 播放卡顿。终装必须重编码；但 2026-10-29 实证：**分块 mp4 每段容器带 ~16ms 音频余量**，`concat demuxer + -r 30 CFR` 会按时间戳补帧（630f 拼出 633f，多出 3 个重复帧 ≈100ms 卡顿）。正确姿势：`concat` **滤镜**拼接，每段视频 `trim=end_frame=N`、音频 `atrim=end=N/30` 帧级对齐后再合流，出片 ffprobe 必须等于总帧数
 - **音轨后修复**：视频已好、音频缺尾段时不要重渲——`ffmpeg atrim + concat` 补音频、`-c:v copy` 秒级完成
 - **静帧通过 ≠ 渲染通过**（渲染多音频 muxing/编码环节），二分定位杀手帧时两者都要试
 
