@@ -1,13 +1,7 @@
-import type { FC } from 'react';
+import type { VideoRoute } from '../../src/route';
 import { SiteFilmAnimatic } from './SiteFilmAnimatic';
 
 /** Animatic 分镜板路由声明 */
-export type AnimaticRoute = {
-  id: string;
-  component: FC;
-  durationInFrames: number;
-};
-
-export const preprodRoutes: AnimaticRoute[] = [
+export const preprodRoutes: VideoRoute[] = [
   { id: 'SiteFilmAnimatic', component: SiteFilmAnimatic, durationInFrames: 7200 },
 ];

@@ -1,15 +1,16 @@
 ---
 title: 视频工作室结构与渲染工具链
 domain: video-materials
-keywords: [工作室结构, 分镜, 视频, 脚手架, new-video, 渲染, render, chrome, 端口, 段错误, 崩溃, 沙箱, node22, staticFile, 分块渲染, 清场, animatic, storyboard, motion-spec]
-scope: [brand/, videos/, scripts/, src/Root.tsx, package.json, public/]
+keywords: [工作室结构, 分镜, 视频, 脚手架, new-video, 渲染, render, chrome, 端口, 段错误, 崩溃, 沙箱, node22, staticFile, 分块渲染, 清场, animatic, storyboard, motion-spec, 片头, 片尾, ident, FilmShell, 家族标识, 时长公式]
+scope: [brand/, brand/ident/, videos/, scripts/, src/Root.tsx, package.json, public/]
 status: active
 source:
   - ../../../x.wuh.site/shadow-docs/changes/20261024-feature-wuh-site-video-studio/brief.md
   - changes/20261025-feature-site-film-preprod/brief.md
-verified: 2026-10-25
+  - changes/20261029-feature-film-identity/brief.md
+verified: 2026-10-29
 verified-depth: runtime
-verified-scope: 2026-10-24/25 两日实测：v5《朝朝如念》2:30 成片 + v6 前期 animatic 4:00 分镜板（7200 帧）出片。实证：分段+轮转编排+渲染前清场+分块重试的收敛策略；Composition 越界拒绝（getRealFrameRanges）；staticFile 以 public/ 为根；Chrome 对部分透明度叠渲染的确定性崩溃及 3 帧跳变规避；前期三件套（素材库→storyboard→motion-spec→animatic）+ 分镜师/UE 大师 subagent 协作出品。硬件内存嫌疑仍未做诊断，标注待验证。
+verified-scope: 2026-10-24/25 两日实测：v5《朝朝如念》2:30 成片 + v6 前期 animatic 4:00 分镜板（7200 帧）出片。实证：分段+轮转编排+渲染前清场+分块重试的收敛策略；Composition 越界拒绝（getRealFrameRanges）；staticFile 以 public/ 为根；Chrome 对部分透明度叠渲染的确定性崩溃及 3 帧跳变规避；前期三件套（素材库→storyboard→motion-spec→animatic）+ 分镜师/UE 大师 subagent 协作出品。2026-10-29 家族片头片尾套件实证：BrandIdent 420f 与 self-intro 630f 出片、时长公式对账、令牌再导出零视觉变化。硬件内存嫌疑仍未做诊断，标注待验证。
 ---
 
 # 视频工作室结构与渲染工具链
@@ -48,6 +49,14 @@ verified-scope: 2026-10-24/25 两日实测：v5《朝朝如念》2:30 成片 + v
 - `node scripts/new-video.mjs <slug>` 生成后 `node --check` 与产物走查
 - 前期三件套：storyboard 帧数对账表合计 = animatic `durationInFrames` = 成片 ffprobe 帧数
 
+## 家族片头片尾（FilmShell）
+
+`brand/ident/` 是品牌级片头片尾套件的唯一维护地：`identity.ts`（INTRO=120 / OUTRO=180 / FilmMeta / totalFilmFrames()）、`BrandIntro.tsx`（4s 三拍：墨滴坠落→墨晕成字→钤印落定）、`BrandOutro.tsx`（6s：钤印浮现→站训打字→署名行→墨点收黑）、`FilmShell.tsx`（三段合成包装器）、`dust.tsx`（边缘淡出光尘，防回绕闪烁）、`BrandIdent.tsx` + `routes.ts`（420f 预览合成）。通用动效基元在 `brand/motion.ts`，site-film 的 `motion-tokens.ts` 只保留影片私有锚点/调色并再导出通用件。
+
+接入方式：`<FilmShell meta={{ title, subtitle, episode, credits }} contentFrames={N}>正片</FilmShell>`。Composition 的 `durationInFrames` 必须用 `totalFilmFrames(N)` 计算（120 + N + 180），routes.ts 与组件共用同一公式；`new-video.mjs` 生成的骨架已默认接入。
+
+音频口径：套件不带音效资产；BGM 在影片组件层声明——片头静音、正片首帧淡入、片尾接续并末 30f 淡出。不要用 `<Audio loop>` 收尾（音量回调按轮重置，见 [[render-stability-playbook]]），用显式两遍播放 + 独立尾段 Sequence。
+
 ## 关联知识
 
 - 无（本仓首批卡片）
@@ -56,6 +65,7 @@ verified-scope: 2026-10-24/25 两日实测：v5《朝朝如念》2:30 成片 + v
 
 | 路径 | 进 git | 说明 |
 |---|---|---|
+| `brand/ident/*.tsx`、`brand/motion.ts` | ✅ | 家族片头片尾套件与品牌动效基元 |
 | `videos/<slug>/*.tsx`、`motion-tokens.ts`、`components/` | ✅ | 场景源码，核心资产 |
 | `videos/<slug>/assets/*.md`（素材库/分镜/规范/选曲文档） | ✅ | 施工图，评审与复用依赖 |
 | `videos/<slug>/assets/bgm*-candidate-*` | ❌ gitignore | 试听候选（本地文件，单首 4–13MB），选中的转为正式轨入 `public/` |
