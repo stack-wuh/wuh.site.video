@@ -8,9 +8,10 @@ source:
   - ../../../x.wuh.site/shadow-docs/changes/20261024-feature-wuh-site-video-studio/brief.md
   - changes/20261025-feature-site-film-preprod/brief.md
   - changes/20261029-feature-film-identity/brief.md
-verified: 2026-10-29
+  - changes/20261031-docs-scaffold-knowledge-fix/brief.md
+verified: 2026-10-31
 verified-depth: runtime
-verified-scope: 2026-10-24/25 两日实测：v5《朝朝如念》2:30 成片 + v6 前期 animatic 4:00 分镜板（7200 帧）出片。实证：分段+轮转编排+渲染前清场+分块重试的收敛策略；Composition 越界拒绝（getRealFrameRanges）；staticFile 以 public/ 为根；Chrome 对部分透明度叠渲染的确定性崩溃及 3 帧跳变规避；前期三件套（素材库→storyboard→motion-spec→animatic）+ 分镜师/UE 大师 subagent 协作出品。2026-10-29 家族片头片尾套件实证：BrandIdent 420f 与 self-intro 630f 出片、时长公式对账、令牌再导出零视觉变化。硬件内存嫌疑仍未做诊断，标注待验证。
+verified-scope: 2026-10-24/25 两日实测：v5《朝朝如念》2:30 成片 + v6 前期 animatic 4:00 分镜板（7200 帧）出片。实证：分段+轮转编排+渲染前清场+分块重试的收敛策略；Composition 越界拒绝（getRealFrameRanges）；staticFile 以 public/ 为根；Chrome 对部分透明度叠渲染的确定性崩溃及 3 帧跳变规避；前期三件套（素材库→storyboard→motion-spec→animatic）+ 分镜师/UE 大师 subagent 协作出品。2026-10-29 家族片头片尾套件实证：BrandIdent 420f 与 self-intro 630f 出片、时长公式对账、令牌再导出零视觉变化。2026-10-31 脚手架口径修正（生成器产出 routes.ts、以临时 slug + typecheck 验证）经代码走查对齐。硬件内存嫌疑仍未做诊断，标注待验证。
 ---
 
 # 视频工作室结构与渲染工具链
@@ -28,7 +29,7 @@ verified-scope: 2026-10-24/25 两日实测：v5《朝朝如念》2:30 成片 + v
 ## 执行约束
 
 - 分镜组件禁止内联色值/字体字面量，一律引用 `brand/tokens`；白名单仅 SplitScreen 的 macOS 红绿灯 3 色（#e06c60/#e0b050/#7db27a）
-- 新视频走 `pnpm new-video <slug>` 生成骨架，手动在 `src/Root.tsx` 注册并加 `render:<slug>` 脚本，沿用上述渲染口径
+- 新视频走 `pnpm new-video <slug>` 生成骨架：生成器产出 `videos/<slug>/<Pascal>.tsx`（默认包 FilmShell）与 `routes.ts`（时长用 `totalFilmFrames()`）；`src/Root.tsx` 只需加一行 import 并把路由数组 spread 进 films 分组，`render:<slug>` 脚本仍手动添加，沿用上述渲染口径
 - 本机执行安装、渲染、shadow-dev CLI 一律绕开沙箱：沙箱内 pnpm 安装卡死、V8 段错误、CLI 挂起（均实测复现）
 - 渲染无输出超过 2 分钟先 kill 进程重试；`--log=verbose` 走 stderr 无缓冲可见进度；重试可过的随机崩溃不再当新故障排查
 - 内存可用 <4GB 时不启动渲染（崩溃与内存吃紧相关）；连续 3 次段错误立即停手，先跑 Apple 硬件诊断（重启按 D）或 memtest，不做无意义重试
@@ -46,7 +47,7 @@ verified-scope: 2026-10-24/25 两日实测：v5《朝朝如念》2:30 成片 + v
 - `pnpm typecheck`（node 22 下）零错误
 - `grep -rn "#[0-9a-fA-F]{6}" videos src`（排除 tokens.ts 与 assets/*.md 规范文档）仅剩红绿灯白名单；`grep "Songti\|PingFang\|Menlo" videos src` 零命中
 - `pnpm render:<slug>` 出片且时长帧数正确；分段渲染逐段 ffprobe 对账 + 拼接后总帧数对账
-- `node scripts/new-video.mjs <slug>` 生成后 `node --check` 与产物走查
+- `node scripts/new-video.mjs <slug>` 生成后用临时 slug 走一遍 `pnpm typecheck`（`node --check` 对 `.tsx` 无效），通过后移除临时目录并走查产物
 - 前期三件套：storyboard 帧数对账表合计 = animatic `durationInFrames` = 成片 ffprobe 帧数
 
 ## 家族片头片尾（FilmShell）
