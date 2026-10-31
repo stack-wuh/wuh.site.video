@@ -23,11 +23,11 @@ const ANCHORS = [
   { frame: 2520, label: '第一记重音' },
   { frame: 4000, label: '白闪' },
   { frame: 4380, label: '重启钤印' },
-  { frame: 5320, label: '联系钤印' },
-  { frame: 6620, label: '版本雨满' },
-  { frame: 6960, label: '方法论' },
-  { frame: 6990, label: '树起' },
-  { frame: 7290, label: '总结' },
+  { frame: 5600, label: '联系钤印' },
+  { frame: 6896, label: '版本雨满' },
+  { frame: 7236, label: '方法论' },
+  { frame: 7266, label: '树起' },
+  { frame: 7566, label: '总结' },
 ];
 
 /** 剧本用「」标记字幕，展示时剥掉最外层一对，避免与内层引号叠成「『…』」 */

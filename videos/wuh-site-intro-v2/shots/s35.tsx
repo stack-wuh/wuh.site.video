@@ -1,5 +1,5 @@
-/* 镜 35 · Act 6 入院 · 局部帧 [0,114) · 114f
-   16+82+16：S34 钤印红光余晖里面板显影（litSet=∅）→ 墨点光标自面板中央移到块 1、悬停、点击涟漪
+/* 镜 35 · Act 6 入院 · 局部帧 [0,150) · 150f
+   16+118+16：S34 钤印红光余晖里面板显影（litSet=∅）→ 墨点光标自面板中央移到块 1、悬停、点击涟漪
    → 窗口最大化；持续：首页 Hero write-fade + 46 枚墨点 2 拍扫过 + hover 条目染色左移；
    出场：反向收束回块 1（点亮），光标移向块 2。字幕「四十六篇文章，一枚枚墨点。」。 */
 import type { FC } from 'react';
@@ -12,7 +12,7 @@ import { DustField } from '../components/DustField';
 import { Grade } from '../components/Grade';
 import { PaperGrain } from '../components/PaperGrain';
 
-const DUR = 114;
+const DUR = 150;
 const IN = 16;
 const OUT = DUR - IN; // 98
 const CLICK = 9;

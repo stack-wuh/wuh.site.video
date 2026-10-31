@@ -1,21 +1,22 @@
-/* 镜 38 · Act 6 入院 · 局部帧 [0,120) · 120f
-   18+84+18：面板 01–03 亮，光标自块 3 移到块 4、悬停、点击 → 窗口最大化；
-   持续：黑胶 5s/圈（120f=288°，绝对时间不凑整圈）+ 唱针 12f 落定（局部 38f）+ 三墨柱 EQ 相位差
-   + 440px 迷你播放器跑马灯 + 年份刻度环；出场：唱针抬起、反向收束回块 4（点亮），光标移向块 5。
-   字幕两行「时间的年轮，刻着每一年的歌。」／「黑胶还在转，时光没走远。」。 */
+/* 镜 38 · Act 6 入院 · 局部帧 [0,150) · 150f
+   18+114+18：面板（litSet={1,2,3}）→ 光标点开块 4「音乐」→ 窗口最大化；
+   持续：黑胶 5s/圈（150f 恰好整圈，线性）、唱针 12f 落定（局部 30f = 4920f，第 247 拍）、
+   年份刻度环从 2018 走到 2025（每 13f 一年），每到一年亮出该年年度最爱（歌名 + 演唱者，八年真实数据）；
+   三墨柱 EQ 相位差 + 440px 迷你播放器跑马灯同步曲名；
+   出场：唱针抬起、碟面退暗，反向收束回块 4（点亮），光标移向块 5。 */
 import type { FC } from 'react';
 import { AbsoluteFill, interpolate, useCurrentFrame } from 'remotion';
 import { colors, fontFamilies } from '../../../brand/tokens';
-import { CURVES, eqBars, inkRise, marqueeDrift, needleSettle, orbitDrift, vinylSpin } from '../motion-tokens';
+import { CURVES, eqBars, inkRise, marqueeDrift, needleSettle, vinylSpin, writeFade } from '../motion-tokens';
 import { Caption } from '../components/Caption';
 import { ConsoleCursor, ConsolePanel, ConsoleWindow, TILE_RECTS } from '../components/Console';
 import { DustField } from '../components/DustField';
 import { Grade } from '../components/Grade';
 import { PaperGrain } from '../components/PaperGrain';
 
-const DUR = 120;
+const DUR = 150;
 const IN = 18;
-const OUT = DUR - IN; // 102
+const OUT = DUR - IN; // 132
 const CLICK = 11;
 const TILE = 3;
 const CLAMP = { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' } as const;
@@ -25,9 +26,21 @@ const serif = fontFamilies.serif;
 
 const tileCenter = (i: number) => ({ x: TILE_RECTS[i].x + TILE_RECTS[i].w / 2, y: TILE_RECTS[i].y + TILE_RECTS[i].h / 2 });
 
-const DISC = { cx: 1230, cy: 520, r: 280 };
-const YEARS = ['2019', '2020', '2021', '2022', '2023', '2024', '2025', '2026'];
-const NEEDLE_LAND = 38; // 全局 4820f（第 242 拍）
+/* 年度最爱（v1 2026-10-25 抓取，八年歌单播放之最；材料 §2.8） */
+const YEAR_FAVS: Array<{ year: string; song: string; artist: string }> = [
+  { year: '2018', song: '诱惑的街 (Live)', artist: '林志炫' },
+  { year: '2019', song: '腻味', artist: '金玟岐' },
+  { year: '2020', song: '少年不凡', artist: '刘美麟' },
+  { year: '2021', song: '风月缠绵（金风玉露变奏）', artist: '陈致逸' },
+  { year: '2022', song: '归期', artist: '钱润玉' },
+  { year: '2023', song: '爱意（金风玉露变奏）', artist: '陈致逸' },
+  { year: '2024', song: '爱意（金风玉露变奏）', artist: '陈致逸' },
+  { year: '2025', song: '爱意（金风玉露变奏）', artist: '陈致逸' },
+];
+const YEAR_START = 18;
+const YEAR_STEP = 13;
+
+const DISC = { x: 600, y: 520, r: 224 };
 
 const CaptionPlate: FC<{ appearAt: number }> = ({ appearAt }) => {
   const frame = useCurrentFrame();
@@ -36,10 +49,10 @@ const CaptionPlate: FC<{ appearAt: number }> = ({ appearAt }) => {
     <div
       style={{
         position: 'absolute',
-        left: 300,
-        right: 300,
-        bottom: 70,
-        height: 340,
+        left: 380,
+        right: 380,
+        bottom: 96,
+        height: 200,
         background: `linear-gradient(180deg, transparent, ${colors.bg} 20%, ${colors.bg} 80%, transparent)`,
         opacity: p * 0.5,
         pointerEvents: 'none',
@@ -48,16 +61,16 @@ const CaptionPlate: FC<{ appearAt: number }> = ({ appearAt }) => {
   );
 };
 
-const ShotVinylYears: FC = () => {
+const ShotYearDisc: FC = () => {
   const frame = useCurrentFrame();
-  const prev = tileCenter(TILE - 1);
   const to = tileCenter(TILE);
   const next = tileCenter(TILE + 1);
+  const panelCenter = { x: 960, y: 540 };
 
-  const fIn = interpolate(frame, [0, 7], [0.34, 1], { ...CLAMP, easing: CURVES.cineEaseInOut });
-  const fOut = interpolate(frame, [OUT + 6, DUR], [1, 0.34], { ...CLAMP, easing: CURVES.cineEaseInOut });
-  const cx = frame < OUT + 6 ? prev.x + (to.x - prev.x) * fIn : to.x + (next.x - to.x) * fOut;
-  const cy = frame < OUT + 6 ? prev.y + (to.y - prev.y) * fIn : to.y + (next.y - to.y) * fOut;
+  const cursorIn = interpolate(frame, [0, 7], [0, 1], { ...CLAMP, easing: CURVES.cineEaseInOut });
+  const cursorOut = interpolate(frame, [OUT + 6, DUR], [0, 1], { ...CLAMP, easing: CURVES.cineEaseInOut });
+  const cx = frame < OUT + 6 ? panelCenter.x + (to.x - panelCenter.x) * cursorIn : to.x + (next.x - to.x) * 0.34 * cursorOut;
+  const cy = frame < OUT + 6 ? panelCenter.y + (to.y - panelCenter.y) * cursorIn : to.y + (next.y - to.y) * 0.34 * cursorOut;
 
   const ripple = interpolate(frame, [CLICK, CLICK + 18], [0, 1], CLAMP);
   const progress =
@@ -65,116 +78,143 @@ const ShotVinylYears: FC = () => {
       ? interpolate(frame, [CLICK, IN], [0, 1], { ...CLAMP, easing: CURVES.cineEaseInOut })
       : interpolate(frame, [OUT, OUT + 12], [1, 0], { ...CLAMP, easing: CURVES.cineEaseInOut });
 
+  const panelOpacity = interpolate(frame, [0, 10], [0, 1], CLAMP);
+  const cursorOpacity = interpolate(frame, [0, 4], [0, 1], CLAMP);
   const lit = frame >= CLICK ? [0, 1, 2, 3] : [0, 1, 2];
   const active = frame >= 6 && frame < OUT ? TILE : -1;
 
-  const spin = vinylSpin(frame, 150);
-  const drop = interpolate(frame, [NEEDLE_LAND - 12, NEEDLE_LAND], [0, 1], { ...CLAMP, easing: CURVES.cineEaseIn });
-  const wobble = frame >= NEEDLE_LAND ? needleSettle(frame, NEEDLE_LAND, 2.4) : 0;
-  const lift = interpolate(frame, [OUT, OUT + 10], [0, 1], { ...CLAMP, easing: CURVES.cineEaseOut });
-  const armAngle = 142 + drop * 9 + wobble - lift * 9;
-  const discDim = interpolate(frame, [OUT, OUT + 12], [0, 0.35], { ...CLAMP, easing: CURVES.cineEaseOut });
+  const activeYear = Math.max(0, Math.min(YEAR_FAVS.length - 1, Math.floor((frame - YEAR_START) / YEAR_STEP)));
+  const fav = YEAR_FAVS[activeYear];
+  const yearIn = interpolate(frame, [YEAR_START, YEAR_START + 8], [0, 1], CLAMP);
+  const songKey = `song-${activeYear}`;
 
-  const zoneScale = interpolate(frame, [NEEDLE_LAND, OUT], [1, 1.02], { ...CLAMP, easing: CURVES.cineEaseInOut });
-  const zoneRot = interpolate(frame, [IN, OUT], [-0.8, 0.8], { ...CLAMP, easing: CURVES.cineEaseInOut });
-  const bars = eqBars(frame);
+  const spin = vinylSpin(frame, 150); // 5s/圈，150f 整圈
+  const needle = needleSettle(frame, 30); // 局部 30f = 4920f 落定
+  const arm = interpolate(frame, [26, 30], [-6, 0], { ...CLAMP, easing: CURVES.cineEaseOut });
+  const up = interpolate(frame, [OUT - 2, OUT + 8], [0, 1], { ...CLAMP, easing: CURVES.cineEaseInOut });
+  const discDim = interpolate(frame, [OUT, OUT + 10], [1, 0.6], { ...CLAMP, easing: CURVES.cineEaseInOut });
+  const eq = eqBars(frame);
 
   return (
     <AbsoluteFill>
-      <ConsolePanel lit={lit} active={active} />
+      <ConsolePanel lit={lit} active={active} style={{ opacity: panelOpacity }} />
       <Grade id="GR-01" />
-      <DustField act={6} count={26} seedBase="s38" />
-      <ConsoleCursor x={cx} y={cy} hover={frame >= 6 && frame < OUT} ripple={ripple} />
+      <DustField act={6} count={24} seedBase="s38" />
+      <ConsoleCursor x={cx} y={cy} hover={frame >= 6 && frame < OUT} ripple={ripple} opacity={cursorOpacity} />
 
       <ConsoleWindow tile={TILE} progress={progress}>
         <AbsoluteFill>
-          <div style={{ position: 'absolute', left: 140, top: 58, right: 140, display: 'flex', justifyContent: 'space-between', fontFamily: mono, fontSize: 15, letterSpacing: '0.24em', color: colors.muted, ...inkRise(frame, 18) }}>
-            <span>04 / 音乐 · VINYL & YEARS</span>
-            <span style={{ fontVariantNumeric: 'tabular-nums' }}>5s / 圈 · 33⅓</span>
+          <div
+            style={{
+              position: 'absolute',
+              left: 140,
+              top: 58,
+              right: 140,
+              display: 'flex',
+              justifyContent: 'space-between',
+              fontFamily: mono,
+              fontSize: 15,
+              letterSpacing: '0.24em',
+              color: colors.muted,
+              ...inkRise(frame, 20),
+            }}
+          >
+            <span>04 / 音乐 · MUSIC</span>
+            <span style={{ fontVariantNumeric: 'tabular-nums' }}>5s / 圈 · 2018—2025</span>
           </div>
 
-          <div style={{ position: 'absolute', left: 0, top: 0, right: 0, bottom: 0, transform: `rotate(${zoneRot}deg) scale(${zoneScale})`, transformOrigin: `${DISC.cx}px ${DISC.cy}px` }}>
+          {/* 黑胶 + 年份刻度环 */}
+          <div style={{ position: 'absolute', left: DISC.x - DISC.r, top: DISC.y - DISC.r, width: DISC.r * 2, height: DISC.r * 2 }}>
+            {[1, 0.86, 0.72, 0.58].map((k) => (
+              <div key={k} style={{ position: 'absolute', left: DISC.r * (1 - k), top: DISC.r * (1 - k), width: DISC.r * 2 * k, height: DISC.r * 2 * k, borderRadius: '50%', border: `1px solid ${colors.hairline}` }} />
+            ))}
+            <div style={{ position: 'absolute', inset: 0, borderRadius: '50%', background: colors.ink, opacity: 0.92 * discDim }} />
             <div
               style={{
                 position: 'absolute',
-                left: DISC.cx - DISC.r,
-                top: DISC.cy - DISC.r,
-                width: DISC.r * 2,
-                height: DISC.r * 2,
+                inset: 24,
                 borderRadius: '50%',
-                background: colors.ink,
-                transform: `rotate(${spin}deg)`,
-                opacity: 1 - discDim,
+                background: `conic-gradient(from ${spin}deg, transparent, ${colors.paperMuted}, transparent 42%)`,
+                opacity: 0.16 * discDim,
+                mixBlendMode: 'screen',
               }}
-            >
-              {[500, 420, 340, 260].map((s) => (
-                <div key={s} style={{ position: 'absolute', left: (DISC.r * 2 - s) / 2, top: (DISC.r * 2 - s) / 2, width: s, height: s, borderRadius: '50%', border: `1px solid ${colors.paperMuted}`, opacity: 0.18 }} />
-              ))}
-              <div style={{ position: 'absolute', left: 205, top: 205, width: 150, height: 150, borderRadius: '50%', background: colors.seal }} />
-              <div style={{ position: 'absolute', left: 271, top: 271, width: 18, height: 18, borderRadius: 9, background: colors.paper }} />
-              <div style={{ position: 'absolute', left: 394, top: 276, width: 8, height: 8, borderRadius: 4, background: colors.gold }} />
-              <div style={{ position: 'absolute', left: 262, top: 243, width: 36, height: 1, background: colors.paperMuted, opacity: 0.6 }} />
+            />
+            <div style={{ position: 'absolute', left: DISC.r - 64, top: DISC.r - 64, width: 128, height: 128, borderRadius: 64, background: colors.seal, opacity: 0.9 * discDim, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <span style={{ fontFamily: serif, fontSize: 30, color: colors.paper, letterSpacing: '0.2em' }}>{fav.year}</span>
             </div>
-
-            <div style={{ position: 'absolute', left: 1560, top: 240, transform: `rotate(${armAngle}deg)` }}>
-              <div style={{ position: 'absolute', left: 0, top: -2, width: 320, height: 4, background: colors.ink, borderRadius: 2 }} />
-              <div style={{ position: 'absolute', left: 306, top: -8, width: 16, height: 16, borderRadius: 8, background: colors.seal }} />
-              <div style={{ position: 'absolute', left: -14, top: -14, width: 28, height: 28, borderRadius: 14, background: colors.paperDeep, border: `1px solid ${colors.paperMuted}` }} />
-            </div>
+            {/* 唱针（12f 落定于局部 30f） */}
+            <div
+              style={{
+                position: 'absolute',
+                right: -54,
+                top: DISC.r - 190,
+                width: 2,
+                height: 190,
+                background: colors.paperMuted,
+                opacity: 0.7,
+                transform: `rotate(${18 + arm + needle + up * 10}deg)`,
+                transformOrigin: 'top center',
+              }}
+            />
+            <div style={{ position: 'absolute', right: -60, top: DISC.r - 200, width: 14, height: 14, borderRadius: 7, background: colors.muted }} />
           </div>
 
-          {YEARS.map((y, i) => {
-            const phase = (i / YEARS.length) * Math.PI * 2 - Math.PI / 2;
-            const pt = orbitDrift(frame, DISC.cx, DISC.cy, 340, 315, 0, phase);
+          {/* 年份刻度环：2018—2025 依次点亮 */}
+          {YEAR_FAVS.map((y, i) => {
+            const ang = (i / YEAR_FAVS.length) * Math.PI * 2 - Math.PI / 2;
+            const rx = DISC.r + 56;
+            const on = i === activeYear;
             return (
               <div
-                key={y}
+                key={y.year}
                 style={{
                   position: 'absolute',
-                  left: pt.x - 24,
-                  top: pt.y - 9,
-                  width: 48,
+                  left: DISC.x + Math.cos(ang) * rx - 34,
+                  top: DISC.y + Math.sin(ang) * rx - 12,
+                  width: 68,
                   textAlign: 'center',
                   fontFamily: mono,
-                  fontSize: 13,
-                  color: colors.muted,
+                  fontSize: on ? 20 : 15,
+                  color: on ? colors.seal : colors.muted,
+                  opacity: (frame >= YEAR_START + i * YEAR_STEP ? 0.95 : 0.4) * yearIn,
                   fontVariantNumeric: 'tabular-nums',
-                  opacity: 0.75,
-                  ...inkRise(frame, 24 + i * 3),
                 }}
               >
-                {y}
+                {y.year}
               </div>
             );
           })}
 
-          {[0, 1, 2].map((i) => (
-            <div
-              key={`eq-${i}`}
-              style={{
-                position: 'absolute',
-                left: 660 + i * 44,
-                top: 680,
-                width: 26,
-                height: 180,
-                borderRadius: 6,
-                background: i === 1 ? colors.seal : colors.ink,
-                opacity: 0.85,
-                transform: `scaleY(${bars[i]})`,
-                transformOrigin: 'bottom',
-              }}
-            />
-          ))}
+          {/* 年度最爱题签 */}
+          <div style={{ position: 'absolute', left: 1040, top: 170, width: 720 }}>
+            <div style={{ fontFamily: mono, fontSize: 14, letterSpacing: '0.32em', color: colors.muted, ...writeFade(frame, 22) }}>THE FAVORITE OF THE YEAR</div>
+            <div style={{ fontFamily: serif, fontSize: 150, lineHeight: 1, color: colors.paperDeep, marginTop: 4, opacity: 0.32, fontVariantNumeric: 'tabular-nums', ...writeFade(frame, 22) }}>
+              {fav.year}
+            </div>
+            <div key={songKey} style={{ marginTop: 6, ...writeFade(frame, YEAR_START + activeYear * YEAR_STEP, true) }}>
+              <div style={{ fontFamily: serif, fontSize: 46, lineHeight: 1.35, color: colors.ink }}>{fav.song}</div>
+              <div style={{ fontFamily: mono, fontSize: 19, color: colors.muted, marginTop: 10, letterSpacing: '0.08em' }}>{fav.artist}</div>
+              <div style={{ display: 'inline-block', marginTop: 16, padding: '4px 12px', borderRadius: 3, background: colors.seal, fontFamily: serif, fontSize: 14, color: colors.paper, letterSpacing: '0.24em' }}>当年最爱</div>
+            </div>
+          </div>
 
-          <div style={{ position: 'absolute', left: 140, top: 690, width: 440, height: 136, background: colors.paperDeep, borderRadius: 18, border: `1px solid ${colors.paperMuted}`, ...inkRise(frame, 26) }}>
-            <div style={{ position: 'absolute', left: 22, top: 24, width: 48, height: 48, borderRadius: 24, background: colors.ink }} />
-            <div style={{ position: 'absolute', left: 40, top: 38, width: 0, height: 0, borderTop: '10px solid transparent', borderBottom: '10px solid transparent', borderLeft: `16px solid ${colors.paper}` }} />
-            <div style={{ position: 'absolute', left: 86, top: 24, fontFamily: serif, fontSize: 26, color: colors.ink }}>黑胶还在转</div>
-            <div style={{ position: 'absolute', left: 86, top: 62, fontFamily: mono, fontSize: 12, color: colors.muted, letterSpacing: '0.16em' }}>WUH.SITE · 33⅓</div>
-            <div style={{ position: 'absolute', left: 22, right: 22, top: 98, height: 22, overflow: 'hidden' }}>
-              <div style={{ whiteSpace: 'nowrap', fontFamily: mono, fontSize: 12, color: colors.muted, ...marqueeDrift(frame, 46) }}>
-                正在播放 · 时间的年轮 · 每一年的歌 · 黑胶还在转 · 正在播放 · 时间的年轮 · 每一年的歌 · 黑胶还在转 ·
+          {/* 440px 迷你播放器：封面 / 曲名跑马灯 / EQ */}
+          <div style={{ position: 'absolute', left: 140, bottom: 84, width: 440, height: 132, borderRadius: 10, background: colors.paperMuted, border: `1px solid ${colors.paperDeep}`, ...inkRise(frame, 24) }}>
+            <div style={{ position: 'absolute', left: 14, top: 14, width: 104, height: 104, borderRadius: 6, background: colors.seal, opacity: 0.85, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <span style={{ fontFamily: serif, fontSize: 40, color: colors.paper }}>音</span>
+            </div>
+            <div style={{ position: 'absolute', left: 136, top: 20, right: 14, overflow: 'hidden', height: 26 }}>
+              <div style={{ whiteSpace: 'nowrap', fontFamily: serif, fontSize: 21, color: colors.ink, ...marqueeDrift(frame, 26) }}>
+                {`${fav.song} — ${fav.artist}　　${fav.song} — ${fav.artist}　　`}
               </div>
+            </div>
+            <div style={{ position: 'absolute', left: 136, top: 56, display: 'flex', alignItems: 'flex-end', gap: 5, height: 30 }}>
+              {eq.map((v, i) => (
+                <div key={i} style={{ width: 5, height: 30 * v, background: colors.seal, opacity: 0.85 }} />
+              ))}
+            </div>
+            <div style={{ position: 'absolute', left: 136, top: 96, fontFamily: mono, fontSize: 12, color: colors.muted, fontVariantNumeric: 'tabular-nums', letterSpacing: '0.14em' }}>
+              {fav.year} · WUH.SITE MUSIC
             </div>
           </div>
         </AbsoluteFill>
@@ -182,11 +222,11 @@ const ShotVinylYears: FC = () => {
         <Grade id="GR-02" />
       </ConsoleWindow>
 
-      <CaptionPlate appearAt={26} />
-      <Caption text="时间的年轮，刻着每一年的歌。" appearAt={26} bottom={214} />
-      <Caption text="黑胶还在转，时光没走远。" appearAt={34} bottom={142} />
+      <CaptionPlate appearAt={28} />
+      <Caption text="时间的年轮，刻着每一年的歌。" appearAt={28} bottom={214} />
+      <Caption text="黑胶还在转，时光没走远。" appearAt={44} bottom={142} />
     </AbsoluteFill>
   );
 };
 
-export default ShotVinylYears;
+export default ShotYearDisc;

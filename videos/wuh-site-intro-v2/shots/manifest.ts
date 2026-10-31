@@ -4,7 +4,7 @@ export type Manifest = { film: string; fps: number; totalFrames: number; acts: A
 export const manifest: Manifest = {
   "film": "wuh-site-intro-v2",
   "fps": 30,
-  "totalFrames": 7658,
+  "totalFrames": 7934,
   "acts": [
     {
       "act": 1,
@@ -40,19 +40,19 @@ export const manifest: Manifest = {
       "act": 6,
       "title": "入院",
       "startFrame": 4440,
-      "endFrame": 5364
+      "endFrame": 5640
     },
     {
       "act": 7,
       "title": "坐忘",
-      "startFrame": 5364,
-      "endFrame": 6432
+      "startFrame": 5640,
+      "endFrame": 6708
     },
     {
       "act": 8,
       "title": "此刻",
-      "startFrame": 6432,
-      "endFrame": 7658
+      "startFrame": 6708,
+      "endFrame": 7934
     }
   ],
   "shots": [
@@ -333,70 +333,70 @@ export const manifest: Manifest = {
       "act": 6,
       "title": "「四十六篇文章，一枚枚墨点。」",
       "startFrame": 4440,
-      "durationFrames": 114,
+      "durationFrames": 150,
       "source": "shots/s35.tsx"
     },
     {
       "id": "s36",
       "act": 6,
       "title": "「每一篇，都有一幅只属于它的山水。」",
-      "startFrame": 4554,
-      "durationFrames": 114,
+      "startFrame": 4590,
+      "durationFrames": 150,
       "source": "shots/s36.tsx"
     },
     {
       "id": "s37",
       "act": 6,
       "title": "「读过的书，都站在这里。」",
-      "startFrame": 4668,
-      "durationFrames": 114,
+      "startFrame": 4740,
+      "durationFrames": 150,
       "source": "shots/s37.tsx"
     },
     {
       "id": "s38",
       "act": 6,
       "title": "「时间的年轮，刻着每一年的歌。」／「黑胶还在转，",
-      "startFrame": 4782,
-      "durationFrames": 120,
+      "startFrame": 4890,
+      "durationFrames": 150,
       "source": "shots/s38.tsx"
     },
     {
       "id": "s39",
       "act": 6,
       "title": "「两种人格，一间屋子。」",
-      "startFrame": 4902,
-      "durationFrames": 114,
+      "startFrame": 5040,
+      "durationFrames": 150,
       "source": "shots/s39.tsx"
     },
     {
       "id": "s40",
       "act": 6,
       "title": "「三百六十五天，逐格真实。」／「此乐何极~」",
-      "startFrame": 5016,
-      "durationFrames": 120,
+      "startFrame": 5190,
+      "durationFrames": 150,
       "source": "shots/s40.tsx"
     },
     {
       "id": "s41",
       "act": 6,
       "title": "「换一种墨色，换一种心情。」",
-      "startFrame": 5136,
-      "durationFrames": 114,
+      "startFrame": 5340,
+      "durationFrames": 150,
       "source": "shots/s41.tsx"
     },
     {
       "id": "s42",
       "act": 6,
       "title": "「每一页，都在呼吸。」／「代码写诗，工具作画。」",
-      "startFrame": 5250,
-      "durationFrames": 114,
+      "startFrame": 5490,
+      "durationFrames": 150,
       "source": "shots/s42.tsx"
     },
     {
       "id": "s43",
       "act": 7,
       "title": "无（留白，留给音乐与窗）",
-      "startFrame": 5364,
+      "startFrame": 5640,
       "durationFrames": 132,
       "source": "shots/s43.tsx"
     },
@@ -404,7 +404,7 @@ export const manifest: Manifest = {
       "id": "s44",
       "act": 7,
       "title": "「七月，全站阅读最多的一篇不是技术，是《再读〈坐",
-      "startFrame": 5496,
+      "startFrame": 5772,
       "durationFrames": 168,
       "source": "shots/s44.tsx"
     },
@@ -412,7 +412,7 @@ export const manifest: Manifest = {
       "id": "s45",
       "act": 7,
       "title": "「常默元气不伤，少思慧烛内光。」",
-      "startFrame": 5664,
+      "startFrame": 5940,
       "durationFrames": 180,
       "source": "shots/s45.tsx"
     },
@@ -420,7 +420,7 @@ export const manifest: Manifest = {
       "id": "s46",
       "act": 7,
       "title": "「不怒百神和畅，不恼心地清凉。」",
-      "startFrame": 5844,
+      "startFrame": 6120,
       "durationFrames": 180,
       "source": "shots/s46.tsx"
     },
@@ -428,7 +428,7 @@ export const manifest: Manifest = {
       "id": "s47",
       "act": 7,
       "title": "画面落款：——司马承祯《坐忘歌》",
-      "startFrame": 6024,
+      "startFrame": 6300,
       "durationFrames": 108,
       "source": "shots/s47.tsx"
     },
@@ -436,7 +436,7 @@ export const manifest: Manifest = {
       "id": "s48",
       "act": 7,
       "title": "「清晨，他随口念起两句，临时把游戏日改成了读书日",
-      "startFrame": 6132,
+      "startFrame": 6408,
       "durationFrames": 168,
       "source": "shots/s48.tsx"
     },
@@ -444,7 +444,7 @@ export const manifest: Manifest = {
       "id": "s49",
       "act": 7,
       "title": "无（交接 八月）",
-      "startFrame": 6300,
+      "startFrame": 6576,
       "durationFrames": 132,
       "source": "shots/s49.tsx"
     },
@@ -452,7 +452,7 @@ export const manifest: Manifest = {
       "id": "s50",
       "act": 8,
       "title": "「八月，发布脚本落地。」",
-      "startFrame": 6432,
+      "startFrame": 6708,
       "durationFrames": 96,
       "source": "shots/s50.tsx"
     },
@@ -460,7 +460,7 @@ export const manifest: Manifest = {
       "id": "s51",
       "act": 8,
       "title": "「两个月，116 个版本。」",
-      "startFrame": 6528,
+      "startFrame": 6804,
       "durationFrames": 122,
       "source": "shots/s51.tsx"
     },
@@ -468,7 +468,7 @@ export const manifest: Manifest = {
       "id": "s52",
       "act": 8,
       "title": "「九月，音乐播放器能用了——自己接的网易云 AP",
-      "startFrame": 6650,
+      "startFrame": 6926,
       "durationFrames": 150,
       "source": "shots/s52.tsx"
     },
@@ -476,7 +476,7 @@ export const manifest: Manifest = {
       "id": "s53",
       "act": 8,
       "title": "「十月，他写道：『工作流存在的意义不是当加速器，",
-      "startFrame": 6800,
+      "startFrame": 7076,
       "durationFrames": 190,
       "source": "shots/s53.tsx"
     },
@@ -484,7 +484,7 @@ export const manifest: Manifest = {
       "id": "s54",
       "act": 8,
       "title": "「博客是根——碎片的知识，先写在 Issue 里",
-      "startFrame": 6990,
+      "startFrame": 7266,
       "durationFrames": 300,
       "source": "shots/s54.tsx"
     },
@@ -492,7 +492,7 @@ export const manifest: Manifest = {
       "id": "s55",
       "act": 8,
       "title": "「写作是根，代码是干；方法、工具、桌面与影像，是",
-      "startFrame": 7290,
+      "startFrame": 7566,
       "durationFrames": 140,
       "source": "shots/s55.tsx"
     },
@@ -500,7 +500,7 @@ export const manifest: Manifest = {
       "id": "s56",
       "act": 8,
       "title": "「写作是抵抗遗忘的方式，代码是构建世界的语言。」",
-      "startFrame": 7430,
+      "startFrame": 7706,
       "durationFrames": 132,
       "source": "shots/s56.tsx"
     },
@@ -508,7 +508,7 @@ export const manifest: Manifest = {
       "id": "s57",
       "act": 8,
       "title": "「吴尒红 · stack-wuh · a boy",
-      "startFrame": 7562,
+      "startFrame": 7838,
       "durationFrames": 96,
       "source": "shots/s57.tsx"
     }

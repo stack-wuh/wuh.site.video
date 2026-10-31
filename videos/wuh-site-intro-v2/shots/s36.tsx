@@ -1,5 +1,5 @@
-/* 镜 36 · Act 6 入院 · 局部帧 [0,114) · 114f
-   16+82+16：面板 01 亮，光标自块 1 移到块 2、悬停、点击涟漪 → 窗口最大化；
+/* 镜 36 · Act 6 入院 · 局部帧 [0,150) · 150f
+   16+118+16：面板 01 亮，光标自块 1 移到块 2、悬停、点击涟漪 → 窗口最大化；
    持续：生成式封面——山峦/涟漪双曲线 pathDraw 描边生长、大标题 write-fade、右下「wuh.site」落款如钤；
    出场：反向收束回块 2（点亮），光标移向块 3。字幕「每一篇，都有一幅只属于它的山水。」。 */
 import type { FC } from 'react';
@@ -12,7 +12,7 @@ import { DustField } from '../components/DustField';
 import { Grade } from '../components/Grade';
 import { PaperGrain } from '../components/PaperGrain';
 
-const DUR = 114;
+const DUR = 150;
 const IN = 16;
 const OUT = DUR - IN; // 98
 const CLICK = 9;
