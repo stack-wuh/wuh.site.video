@@ -107,7 +107,7 @@ function memoryGuard() {
     availGB = ((page('Pages free') + page('Pages inactive')) * 4096) / 2 ** 30;
   } else {
     const mem = readFileSync('/proc/meminfo', 'utf8');
-    availGB = Number(mem.match(/MemAvailable:\\s+(\\d+) kB/)?.[1] ?? 0) / 2 ** 20;
+    availGB = Number(mem.match(/MemAvailable:\s+(\d+) kB/)?.[1] ?? 0) / 2 ** 20;
   }
   if (availGB < MIN_MEM_GB) die(`可用内存 ${availGB.toFixed(1)}GB < ${MIN_MEM_GB}GB——按 playbook 不启动渲染`);
   log(`内存可用 ${availGB.toFixed(1)}GB ✓（阈值 ${MIN_MEM_GB}GB）`);
