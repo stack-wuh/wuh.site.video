@@ -4,7 +4,7 @@
   "name": "20261031-docs-intro-v2-s29-ink-rain",
   "type": "docs",
   "scope": "video-materials",
-  "status": "reviewed",
+  "status": "published",
   "baseBranch": "main",
   "branch": "docs/20261031-docs-intro-v2-s29-ink-rain",
   "files": [
@@ -19,8 +19,8 @@
     "repository": null,
     "issue": null,
     "issueUrl": null,
-    "pullRequest": null,
-    "pullRequestUrl": null
+    "pullRequest": 30,
+    "pullRequestUrl": "https://github.com/stack-wuh/wuh.site.video/pull/30"
   },
   "review": {
     "conclusion": "passed",
@@ -29,7 +29,7 @@
   },
   "workflow": {
     "operation": null,
-    "checkpoint": null,
+    "checkpoint": "pr:30",
     "planHash": "9198b873e509ee65061417e6925939c4f70fe7c7b393daab2edc2144e6408b48",
     "updatedAt": null,
     "lastError": null,
