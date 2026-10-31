@@ -4,7 +4,7 @@
   "name": "20261031-docs-intro-v2-act6-console",
   "type": "docs",
   "scope": "video-materials",
-  "status": "reviewed",
+  "status": "published",
   "baseBranch": "main",
   "branch": "docs/20261031-docs-intro-v2-act6-console",
   "files": [
@@ -20,8 +20,8 @@
     "repository": null,
     "issue": null,
     "issueUrl": null,
-    "pullRequest": null,
-    "pullRequestUrl": null
+    "pullRequest": 31,
+    "pullRequestUrl": "https://github.com/stack-wuh/wuh.site.video/pull/31"
   },
   "review": {
     "conclusion": "passed",
@@ -30,7 +30,7 @@
   },
   "workflow": {
     "operation": null,
-    "checkpoint": null,
+    "checkpoint": "pr:31",
     "planHash": "a70869aea3bfbc5082cba9da987f680c838cac76bfd1804967fca1d1cae1fec5",
     "updatedAt": null,
     "lastError": null,
