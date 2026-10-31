@@ -89,6 +89,14 @@ jobs:
         with: { node-version: 22, cache: pnpm }
       - run: pnpm install --frozen-lockfile
       - run: sudo apt-get update && sudo apt-get install -y ffmpeg
+      - name: Install CJK fonts + family aliases
+        run: |
+          sudo apt-get install -y fonts-noto-cjk fonts-noto-cjk-extra
+          sudo mkdir -p /etc/fonts
+          printf '%s\n' '<?xml version="1.0"?>' '<!DOCTYPE fontconfig SYSTEM "fonts.dtd">' '<fontconfig>' '  <alias><family>PingFang SC</family><accept><family>Noto Sans CJK SC</family></accept></alias>' '  <alias><family>Songti SC</family><accept><family>Noto Serif CJK SC</family></accept></alias>' '  <alias><family>Menlo</family><accept><family>Noto Sans Mono CJK SC</family></accept></alias>' '</fontconfig>' | sudo tee /etc/fonts/local.conf > /dev/null
+          fc-cache -f
+          fc-match "PingFang SC" && fc-match "Songti SC" && fc-match "Menlo" # 别名生效自证
+          fc-list :lang=zh | grep -q . || { echo '缺少中文字体——mono 语境会渲成方框'; exit 1; } # 字体哨兵
       - uses: actions/download-artifact@v4
         with: { name: remotion-bundle, path: ci-bundle }
       - name: Render segment
