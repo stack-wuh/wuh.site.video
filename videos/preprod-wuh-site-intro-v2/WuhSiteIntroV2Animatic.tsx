@@ -11,7 +11,7 @@ const serif = fontFamilies.serif;
 const mono = fontFamilies.mono;
 
 const META: FilmMeta = {
-  title: '长成',
+  title: '雾失楼台，月迷津渡',
   subtitle: '2019 → 2026 · wuh.site 实现历程',
   episode: 'WUH.SITE INTRO V2 · 2026-10',
   credits: [],
