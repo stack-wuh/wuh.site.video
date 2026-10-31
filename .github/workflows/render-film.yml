@@ -55,7 +55,7 @@ jobs:
     strategy:
       matrix:
         shot: ${{ fromJSON(needs.bundle.outputs.shots) }}
-      max-parallel: 4
+      max-parallel: 20 # 免费私有仓并发上限（45 镜 ≈ 3 波）
       fail-fast: false # 一镜红不影响其余镜——独立任务，独立重跑
     env:
       CHROME_EXECUTABLE: /usr/bin/google-chrome-stable # 完整版 Chrome：headless-shell 的 blend/色彩管理有差异（CI 抽帧实证偏色）
