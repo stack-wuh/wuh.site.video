@@ -4,7 +4,7 @@
   "name": "20261031-feature-wuh-site-intro-v2-preprod",
   "type": "feature",
   "scope": "video-materials",
-  "status": "reviewed",
+  "status": "published",
   "baseBranch": "main",
   "branch": "feature/20261031-feature-wuh-site-intro-v2-preprod",
   "files": [
@@ -20,8 +20,8 @@
     "repository": "stack-wuh/wuh.site.video",
     "issue": 27,
     "issueUrl": "https://github.com/stack-wuh/wuh.site.video/issues/27",
-    "pullRequest": null,
-    "pullRequestUrl": null
+    "pullRequest": 28,
+    "pullRequestUrl": "https://github.com/stack-wuh/wuh.site.video/pull/28"
   },
   "review": {
     "conclusion": "passed",
@@ -30,7 +30,7 @@
   },
   "workflow": {
     "operation": null,
-    "checkpoint": "issue:27",
+    "checkpoint": "pr:28",
     "planHash": "7c2fbf796601b5dba1c3f4b897dd323cd35c525dccfcedda43442d2d66ba6723",
     "updatedAt": null,
     "lastError": null,
