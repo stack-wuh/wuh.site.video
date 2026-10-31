@@ -67,6 +67,7 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: 22, cache: pnpm }
       - run: pnpm install --frozen-lockfile
+      - run: sudo apt-get update && sudo apt-get install -y ffmpeg # runner 无预装 ffprobe——INV-S5 校验必需（CI 五跑实证）
       - run: npx remotion browser ensure
       - uses: actions/download-artifact@v4
         with: { name: remotion-bundle, path: ci-bundle }
@@ -95,6 +96,7 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: 22, cache: pnpm }
       - run: pnpm install --frozen-lockfile
+      - run: sudo apt-get update && sudo apt-get install -y ffmpeg
       - run: npx remotion browser ensure
       - uses: actions/download-artifact@v4
         with: { pattern: 'shot-*', path: out/shots/site-film, merge-multiple: true }

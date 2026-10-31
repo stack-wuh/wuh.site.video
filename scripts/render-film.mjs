@@ -137,7 +137,7 @@ async function shotHash(s) {
   });
   const files = Object.keys(result.metafile.inputs).filter((k) => !k.includes('node_modules')).sort();
   const h = createHash('sha256');
-  h.update(JSON.stringify({ durationFrames: s.durationFrames, fps: manifest.fps }));
+  h.update(JSON.stringify({ schema: 2, composition: `SiteFilm-${s.id}`, durationFrames: s.durationFrames, fps: manifest.fps }));
   for (const f of files) {
     const abs = join(root, f);
     if (existsSync(abs) && statSync(abs).isFile()) h.update(readFileSync(abs));
@@ -147,7 +147,8 @@ async function shotHash(s) {
 
 const ffprobeFrames = (file) => {
   const r = spawnSync('ffprobe', ['-v', 'error', '-select_streams', 'v:0', '-show_entries', 'stream=nb_frames', '-of', 'default=noprint_wrappers=1:nokey=1', file], { encoding: 'utf8' });
-  return Number(r.stdout.trim());
+  if (r.error) throw new Error(`ffprobe 不可用: ${r.error.message}`);
+  return Number((r.stdout ?? '').trim());
 };
 const run = (cmd, args) => {
   const r = spawnSync(cmd, args, { cwd: root, encoding: 'utf8' });
@@ -178,7 +179,7 @@ async function renderRange(comp, serveUrl, start, end, out, stallMs = STALL_MS) 
   }, 5000);
   try {
     await renderMedia({
-      composition: { ...comp, durationInFrames: end - start },
+      composition: comp, // 全镜时长 Composition；frameRange 用镜内全局索引取块——禁止再用块长覆盖 duration
       serveUrl, codec: 'h264', crf: CRF, concurrency: CONCURRENCY, browserExecutable: CHROME,
       outputLocation: out, inputProps: {}, frameRange: [start, end - 1], cancelSignal,
       onProgress: ({ renderedFrames }) => {
@@ -239,7 +240,7 @@ async function renderShot(shot, comp, serveUrl, hash) {
           log(`${shot.id} 帧数不符：${frames} ≠ ${shot.durationFrames}（INV-S5）`);
           rmSync(out, { force: true });
         } catch (err) {
-          log(`${shot.id} 第 ${attempt} 次失败：${String(err).slice(0, 160)}`);
+          log(`${shot.id} 第 ${attempt} 次失败：${String(err?.stack ?? err).split('\n').slice(0, 3).join(' | ').slice(0, 320)}`);
           rmSync(out, { force: true });
         }
         await new Promise((r) => setTimeout(r, 3000));
@@ -309,8 +310,7 @@ if (assemble) {
   log(`bundle ${bundleDir ? `复用 ${bundleDir}` : `完成（${status.bundleProgress ?? 100}%）`} → 逐镜渲染`);
   status.stage = 'shots'; writeStatus(true);
 
-  const compBase = { id: 'SiteFilm', width: 1920, height: 1080, fps: manifest.fps };
-  for (const s of shots) {
+    for (const s of shots) {
     if (s.cached) {
       rendered.push(s.cachePath);
       status.doneShots.add(s.id);
@@ -322,7 +322,7 @@ if (assemble) {
       continue;
     }
     status.currentShot = s; status.currentShotFrames = 0; writeStatus(true);
-    const res = await renderShot(s, { ...compBase, durationInFrames: s.durationFrames }, serveUrl, s.hash);
+    const res = await renderShot(s, { id: `SiteFilm-${s.id}`, width: 1920, height: 1080, fps: manifest.fps, durationInFrames: s.durationFrames }, serveUrl, s.hash);
     if (!res.out) {
       const why = res.stalled ? `卡死 ×${MAX_HANGS}（看门狗止损）` : '渲染失败（含 30f 细块降级）';
       status.stage = 'failed'; ev(`❌ ${s.id} 终败：${why}`);
