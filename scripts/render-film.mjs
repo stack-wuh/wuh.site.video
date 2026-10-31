@@ -16,19 +16,25 @@ import { bundle } from '@remotion/bundler';
 import { makeCancelSignal, renderMedia } from '@remotion/renderer';
 import esbuild from 'esbuild';
 
-const CHROME = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
+/* 浏览器与并发可 env 化：本机默认系统 Chrome（headless-shell 本机网络下载卡死，见知识卡）；
+   CI（Linux）设 CHROME_EXECUTABLE=none 交由 Remotion 自动下载 headless-shell */
+const CHROME_ENV = process.env.CHROME_EXECUTABLE;
+const CHROME = CHROME_ENV && CHROME_ENV !== 'none' ? CHROME_ENV : process.platform === 'darwin' ? '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' : null;
+const CONCURRENCY = Number(process.env.RENDER_CONCURRENCY ?? 2);
 const STALL_MS = 120_000; // 心跳停更阈值（playbook：无输出 2 分钟即视为卡死）
 const MAX_HANGS = 3; // 同镜看门狗击杀止损轮数，超过即终败通知
 const root = join(import.meta.dirname, '..');
 const outDir = join(root, 'out');
 const filmDir = join(root, 'videos', 'site-film');
 const shotsCache = join(outDir, 'shots', 'site-film');
-const CONCURRENCY = 2;
 const CRF = 16;
 
 const flags = process.argv.slice(2);
 const force = flags.includes('--force');
 const noAudio = flags.includes('--no-audio');
+const assemble = flags.includes('--assemble'); // 跳过渲染，直接用缓存装配：concat + 音轨 + 三重终验
+const bundleDirIdx = flags.indexOf('--bundle-dir');
+const bundleDir = bundleDirIdx >= 0 ? flags[bundleDirIdx + 1] : null; // 复用预打包 bundle（驱动器逐镜模式必备）
 const onlyIdx = flags.indexOf('--only');
 const only = onlyIdx >= 0 ? flags[onlyIdx + 1] : null;
 
@@ -233,7 +239,7 @@ function bar(done, total) {
 }
 
 /* ─── 主流程 ─── */
-memoryGuard();
+if (!assemble) memoryGuard(); // assemble 纯 ffmpeg 装配不吃渲染内存；其音轨渲染前的守卫在 wav 缺失分支内
 const chromeVersion = spawnSync('defaults', ['read', '/Applications/Google Chrome.app/Contents/Info.plist', 'CFBundleShortVersionString'], { encoding: 'utf8' }).stdout.trim();
 const chromeStamp = join(outDir, '.last-render-chrome.json');
 if (existsSync(chromeStamp)) {
@@ -259,50 +265,62 @@ const todoFrames = shots.filter((s) => !s.cached).reduce((a, s) => a + s.duratio
 const etaMin = Math.max(1, Math.round(todoFrames / 200));
 const planLine = `${shots.length} 镜（缓存 ${status.cached} / 重渲 ${status.todo} ≈ ${todoFrames} 帧）预计 ~${etaMin} 分钟`;
 log(`开工：${planLine}`);
-status.stage = 'bundle'; ev(planLine); writeStatus(true);
-notify(`开工：${planLine}`);
-const serveUrl = await bundle({
-  entryPoint: join(root, 'src', 'index.ts'),
-  onProgress: ({ progress }) => { status.bundleProgress = Number.isFinite(progress) ? Math.round(progress * 100) : null; writeStatus(false); },
-});
-log(`bundle 完成（${status.bundleProgress ?? 100}%）→ 逐镜渲染`);
-status.stage = 'shots'; writeStatus(true);
 
-const compBase = { id: 'SiteFilm', width: 1920, height: 1080, fps: manifest.fps };
+/* ─── assemble 模式：跳过渲染，直接用缓存装配（驱动器逐镜渲完后的终装入口） ─── */
+let serveUrl = bundleDir; // 预打包目录直接作为 serveUrl（renderMedia 接受本地目录）；assemble/音轨段需要时按需补 bundle
 const rendered = [];
-for (const s of shots) {
-  if (s.cached) {
-    rendered.push(s.cachePath);
-    status.doneShots.add(s.id);
+if (assemble) {
+  const missing = shots.filter((s) => !s.cached);
+  if (missing.length > 0) die(`--assemble 缺 ${missing.length} 镜缓存：${missing.map((s) => s.id).join(' ')}——先逐镜渲染`);
+  rendered.push(...shots.map((s) => s.cachePath));
+  status.stage = 'concat'; ev(`assemble：${shots.length} 镜缓存齐 ✓`); writeStatus(true);
+} else {
+  status.stage = 'bundle'; ev(planLine); writeStatus(true);
+  notify(`开工：${planLine}`);
+  if (!serveUrl) {
+    serveUrl = await bundle({
+      entryPoint: join(root, 'src', 'index.ts'),
+      onProgress: ({ progress }) => { status.bundleProgress = Number.isFinite(progress) ? Math.round(progress * 100) : null; writeStatus(false); },
+    });
+  }
+  log(`bundle ${bundleDir ? `复用 ${bundleDir}` : `完成（${status.bundleProgress ?? 100}%）`} → 逐镜渲染`);
+  status.stage = 'shots'; writeStatus(true);
+
+  const compBase = { id: 'SiteFilm', width: 1920, height: 1080, fps: manifest.fps };
+  for (const s of shots) {
+    if (s.cached) {
+      rendered.push(s.cachePath);
+      status.doneShots.add(s.id);
+      status.doneFrames += s.durationFrames;
+      status.renderedFrames = status.doneFrames;
+      status.shotsDone += 1;
+      log(`${s.id} 缓存命中 ✓（${s.durationFrames}f）`);
+      writeStatus(false);
+      continue;
+    }
+    status.currentShot = s; status.currentShotFrames = 0; writeStatus(true);
+    const res = await renderShot(s, { ...compBase, durationInFrames: s.durationFrames }, serveUrl, s.hash);
+    if (!res.out) {
+      const why = res.stalled ? `卡死 ×${MAX_HANGS}（看门狗止损）` : '渲染失败（含 30f 细块降级）';
+      status.stage = 'failed'; ev(`❌ ${s.id} 终败：${why}`);
+      writeStatus(true);
+      notify(`❌ ${s.id} 终败：${why}，已停止`);
+      die(`${s.id} 终败：${why}`);
+    }
+    rendered.push(res.out);
     status.doneFrames += s.durationFrames;
     status.renderedFrames = status.doneFrames;
-    status.shotsDone += 1;
-    log(`${s.id} 缓存命中 ✓（${s.durationFrames}f）`);
-    writeStatus(false);
-    continue;
-  }
-  status.currentShot = s; status.currentShotFrames = 0; writeStatus(true);
-  const res = await renderShot(s, { ...compBase, durationInFrames: s.durationFrames }, serveUrl, s.hash);
-  if (!res.out) {
-    const why = res.stalled ? `卡死 ×${MAX_HANGS}（看门狗止损）` : '渲染失败（含 30f 细块降级）';
-    status.stage = 'failed'; ev(`❌ ${s.id} 终败：${why}`);
+    status.currentShot = null; status.shotsDone += 1;
+    const actShots = manifest.shots.filter((x) => x.act === s.act);
+    if (actShots.every((x) => status.doneShots.has(x.id)) && !status.actsDone.includes(s.act)) {
+      status.actsDone.push(s.act);
+      const act = manifest.acts.find((a) => a.act === s.act);
+      ev(`Act ${s.act} ${act.title} 完成（${status.shotsDone}/${shots.length} 镜）`);
+      notify(`Act ${s.act} ${act.title} 完成（${status.shotsDone}/${shots.length} 镜）`);
+    }
+    log(`${s.id} 完成 ✔ ${bar(status.doneFrames, status.planFrames)}`);
     writeStatus(true);
-    notify(`❌ ${s.id} 终败：${why}，已停止`);
-    die(`${s.id} 终败：${why}`);
   }
-  rendered.push(res.out);
-  status.doneFrames += s.durationFrames;
-  status.renderedFrames = status.doneFrames;
-  status.currentShot = null; status.shotsDone += 1;
-  const actShots = manifest.shots.filter((x) => x.act === s.act);
-  if (actShots.every((x) => status.doneShots.has(x.id)) && !status.actsDone.includes(s.act)) {
-    status.actsDone.push(s.act);
-    const act = manifest.acts.find((a) => a.act === s.act);
-    ev(`Act ${s.act} ${act.title} 完成（${status.shotsDone}/${shots.length} 镜）`);
-    notify(`Act ${s.act} ${act.title} 完成（${status.shotsDone}/${shots.length} 镜）`);
-  }
-  log(`${s.id} 完成 ✔ ${bar(status.doneFrames, status.planFrames)}`);
-  writeStatus(true);
 }
 
 if (only) {
@@ -327,6 +345,10 @@ if (!noAudio) {
     .digest('hex').slice(0, 8);
   const wav = join(outDir, `site-film-audio-${audioHash}.wav`);
   if (!existsSync(wav)) {
+    memoryGuard();
+    if (!serveUrl) {
+      serveUrl = await bundle({ entryPoint: join(root, 'src', 'index.ts'), onProgress: ({ progress }) => { status.bundleProgress = Number.isFinite(progress) ? Math.round(progress * 100) : null; } });
+    }
     cleanup();
     const { cancelSignal, cancel } = makeCancelSignal();
     let lastTick = Date.now();

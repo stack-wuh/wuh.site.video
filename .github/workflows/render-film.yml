@@ -1,0 +1,61 @@
+name: render-film
+# B 轨（shot-spec §5）：GitHub Actions 云端渲染——A 轨（本机 shell 驱动器）做不下去时的承接路径。
+# ⚠️ 字体口径：serif 落 Noto Serif SC（fonts-noto-cjk），sans/mono 在字体资产化前为替代字体——
+#    CI 成片可用于链路验证与兜底出片，像素定稿仍以本机为准；字体资产化（字体入仓 + @remotion/fonts）后此漂移消除。
+on:
+  workflow_dispatch:
+    inputs:
+      shots:
+        description: '镜号子集（空格分隔，如 "s03 s17"；空 = 全部 45 镜 + 终装）'
+        required: false
+        default: ''
+
+concurrency:
+  group: render-film
+  cancel-in-progress: false
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      CHROME_EXECUTABLE: none # 交由 Remotion 自动下载 headless-shell（本机网络卡死问题在 CI 不存在）
+      RENDER_CONCURRENCY: '3'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Install CJK fonts
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y fonts-noto-cjk fonts-noto-cjk-extra
+      - name: Ensure browser
+        run: npx remotion browser ensure
+      - name: Render
+        run: |
+          if [ -n "${{ github.event.inputs.shots }}" ]; then
+            for id in ${{ github.event.inputs.shots }}; do
+              node scripts/render-film.mjs --only "$id"
+            done
+          else
+            bash scripts/render-all.sh
+          fi
+      - name: Verify
+        if: github.event.inputs.shots == ''
+        run: |
+          ffprobe -v error -select_streams v:0 -show_entries stream=nb_frames -of csv=p=0 out/site-film-final.mp4
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: site-film-output
+          path: |
+            out/site-film-final.mp4
+            out/render-progress.html
+            out/render-status.txt
+          if-no-files-found: warn
