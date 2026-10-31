@@ -118,6 +118,6 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: site-film-final
-          path: out/site-film-final.mp4
+          path: out/*-site-film.mp4 # 规范名 {yyyyMMdd}-{序号}-{项目名}.mp4（artifact 名保持稳定便于 download）
           retention-days: 90 # 仓库上限
           if-no-files-found: error
