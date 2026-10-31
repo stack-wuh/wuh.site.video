@@ -4,7 +4,7 @@
   "name": "20261031-docs-scaffold-knowledge-fix",
   "type": "docs",
   "scope": "video-materials",
-  "status": "reviewed",
+  "status": "archived",
   "baseBranch": "main",
   "branch": "docs/20261031-docs-scaffold-knowledge-fix",
   "files": [
@@ -15,18 +15,18 @@
     "repository": null,
     "issue": null,
     "issueUrl": null,
-    "pullRequest": null,
-    "pullRequestUrl": null
+    "pullRequest": 8,
+    "pullRequestUrl": "https://github.com/stack-wuh/wuh.site.video/pull/8"
   },
   "review": {
     "conclusion": "passed",
-    "verifiedCommit": "de55e011ef33a23e049f4757454affd8c7ff304b",
-    "verifiedAt": "2026-10-31T03:41:52.330Z"
+    "verifiedCommit": "83e5db31ea641cba52131a6ef940c42ee92cd214",
+    "verifiedAt": "2026-10-31T03:44:29.957Z"
   },
   "workflow": {
     "operation": null,
-    "checkpoint": null,
-    "planHash": "f5cac266ed94c560f0e4a11bb40c61aa46a1754bdf980c71c3c4014dd48c399b",
+    "checkpoint": "merged-pr:8",
+    "planHash": "6fd29dad4e8c00b7a080551281da58468be24cc3b7481b891cf5920500660fb5",
     "updatedAt": null,
     "lastError": null,
     "release": {
