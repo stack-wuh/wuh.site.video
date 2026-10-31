@@ -4,7 +4,7 @@
   "name": "20261031-feature-wuh-site-intro-v2-production",
   "type": "feature",
   "scope": "video-production",
-  "status": "reviewed",
+  "status": "published",
   "baseBranch": "main",
   "branch": "feature/20261031-feature-wuh-site-intro-v2-production",
   "files": [
@@ -21,8 +21,8 @@
     "repository": null,
     "issue": null,
     "issueUrl": null,
-    "pullRequest": null,
-    "pullRequestUrl": null
+    "pullRequest": 34,
+    "pullRequestUrl": "https://github.com/stack-wuh/wuh.site.video/pull/34"
   },
   "review": {
     "conclusion": "passed",
@@ -31,7 +31,7 @@
   },
   "workflow": {
     "operation": null,
-    "checkpoint": null,
+    "checkpoint": "pr:34",
     "planHash": "1e1565408dd543795f6a6b7ca97f85d67a572ed228144c809c8e11af8d4c27ee",
     "updatedAt": null,
     "lastError": null,
