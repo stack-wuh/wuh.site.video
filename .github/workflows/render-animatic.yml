@@ -1,26 +1,56 @@
 name: render-animatic
-# 云端渲染 animatic（workflow_dispatch）——整片 7958f 或指定帧段；产物 artifact 下载
-# 用途：本机段错误风暴期间出 animatic 样片/整片；字体走 CI 安装的 Noto CJK（字形与品牌字体略有差异）
+# 云端渲染 animatic（workflow_dispatch）——bundle 一次 → 分段矩阵 → concat 帧级对齐 → 终验
+# 分段 = 片头 120f + 57 镜（内容帧 +120 偏移）+ 片尾 180f，单段失败只重跑单段
 on:
   workflow_dispatch:
     inputs:
-      frames:
-        description: '帧段（如 0-299；空 = 整片 7958f）'
+      shots:
+        description: '镜号子集（空格分隔，如 "s03 s17"；空 = 全部 59 段 + 汇总）'
         required: false
         default: ''
-      composition:
-        description: 'Composition ID'
-        required: false
-        default: 'WuhSiteIntroV2Animatic'
 
 concurrency:
   group: render-animatic
   cancel-in-progress: false
 
 jobs:
-  render:
+  plan:
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 5
+    outputs:
+      segments: ${{ steps.plan.outputs.segments }}
+      full: ${{ steps.plan.outputs.full }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: plan
+        env:
+          SHOTS_INPUT: ${{ github.event.inputs.shots }}
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const m = JSON.parse(fs.readFileSync('videos/wuh-site-intro-v2/shots-manifest.json', 'utf8'));
+          const INTRO = 120, OUTRO = 180;
+          const input = (process.env.SHOTS_INPUT || '').split(/\s+/).filter(Boolean);
+          const pick = (id) => input.length === 0 || input.includes(id);
+          const segments = [{ id: 'intro', start: 0, end: INTRO - 1 }];
+          for (const s of m.shots) {
+            if (!pick(s.id)) continue;
+            segments.push({ id: s.id, start: s.startFrame + INTRO, end: s.startFrame + s.durationFrames + INTRO - 1 });
+          }
+          segments.push({ id: 'outro', start: m.totalFrames + INTRO, end: m.totalFrames + INTRO + OUTRO - 1 });
+          const full = input.length === 0;
+          fs.writeFileSync('segments.json', JSON.stringify({ segments, full, total: m.totalFrames + INTRO + OUTRO }, null, 2));
+          console.log(`segments=${segments.length} full=${full} total=${m.totalFrames + INTRO + OUTRO}`);
+          NODE
+          echo "segments=$(jq -c .segments segments.json)" >> "$GITHUB_OUTPUT"
+          echo "full=$(jq -r .full segments.json)" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        with: { name: segments-plan, path: segments.json, retention-days: 7 }
+
+  bundle:
+    needs: plan
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -28,29 +58,109 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: 22, cache: pnpm }
       - run: pnpm install --frozen-lockfile
-      - run: sudo apt-get update && sudo apt-get install -y ffmpeg fontconfig
-      - name: Install CJK fonts + family aliases
+      - name: Bundle once
         run: |
-          sudo apt-get install -y fonts-noto-cjk fonts-noto-cjk-extra
-          sudo mkdir -p /etc/fonts
-          printf '%s\n' '<?xml version="1.0"?>' '<!DOCTYPE fontconfig SYSTEM "fonts.dtd">' '<fontconfig>' '  <alias><family>PingFang SC</family><accept><family>Noto Sans CJK SC</family></accept></alias>' '  <alias><family>Songti SC</family><accept><family>Noto Serif CJK SC</family></accept></alias>' '  <alias><family>Menlo</family><accept><family>Noto Sans Mono CJK SC</family></accept></alias>' '</fontconfig>' | sudo tee /etc/fonts/local.conf > /dev/null
-          fc-cache -f
-          fc-match "PingFang SC" && fc-match "Songti SC" && fc-match "Menlo"
-      - run: google-chrome-stable --version
-      - name: Render
+          cat > bundle.mjs <<'EOF'
+          import { cpSync } from 'node:fs';
+          import { bundle } from '@remotion/bundler';
+          const dir = await bundle({ entryPoint: 'src/index.ts' });
+          cpSync(dir, 'ci-bundle', { recursive: true });
+          console.log(`bundle → ci-bundle`);
+          EOF
+          node bundle.mjs
+          ls ci-bundle/index.html
+      - uses: actions/upload-artifact@v4
+        with: { name: remotion-bundle, path: ci-bundle, retention-days: 7 }
+
+  segments:
+    needs: [plan, bundle]
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      matrix:
+        seg: ${{ fromJSON(needs.plan.outputs.segments) }}
+      max-parallel: 20
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: { version: 10 }
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: pnpm }
+      - run: pnpm install --frozen-lockfile
+      - run: sudo apt-get update && sudo apt-get install -y ffmpeg
+      - uses: actions/download-artifact@v4
+        with: { name: remotion-bundle, path: ci-bundle }
+      - name: Render segment
         env:
-          FRAMES: ${{ github.event.inputs.frames }}
-          COMP: ${{ github.event.inputs.composition }}
+          SEG: ${{ matrix.seg.id }}
+          START: ${{ matrix.seg.start }}
+          END: ${{ matrix.seg.end }}
         run: |
           mkdir -p out
-          ARGS="--crf=16 --browser-executable=/usr/bin/google-chrome-stable --port=3211"
-          if [ -n "$FRAMES" ]; then
-            npx remotion render src/index.ts "$COMP" out/wuh-site-intro-v2-animatic.mp4 --frames="$FRAMES" $ARGS
-          else
-            npx remotion render src/index.ts "$COMP" out/wuh-site-intro-v2-animatic.mp4 $ARGS
-          fi
-      - name: ffprobe
-        run: ffprobe -v error -select_streams v:0 -show_entries stream=nb_frames,duration -of default=noprint_wrappers=1 out/wuh-site-intro-v2-animatic.mp4
+          cat > render-seg.mjs <<'EOF'
+          import { readFileSync } from 'node:fs';
+          import { renderMedia } from '@remotion/renderer';
+          const [seg, start, end] = process.argv.slice(2);
+          const m = JSON.parse(readFileSync('videos/wuh-site-intro-v2/shots-manifest.json', 'utf8'));
+          const total = m.totalFrames + 120 + 180;
+          await renderMedia({
+            composition: { id: 'WuhSiteIntroV2Animatic', width: 1920, height: 1080, fps: 30, durationInFrames: total },
+            serveUrl: 'ci-bundle',
+            codec: 'h264',
+            crf: 16,
+            outputLocation: `out/seg-${seg}.mp4`,
+            frameRange: [Number(start), Number(end)],
+            browserExecutable: '/usr/bin/google-chrome-stable',
+            concurrency: 1,
+          });
+          EOF
+          node render-seg.mjs "$SEG" "$START" "$END"
+          want=$((END - START + 1))
+          got=$(ffprobe -v error -select_streams v:0 -show_entries stream=nb_frames -of default=noprint_wrappers=1:nokey=1 "out/seg-$SEG.mp4")
+          echo "seg=$SEG frames=$got want=$want"
+          [ "$got" = "$want" ]
+      - uses: actions/upload-artifact@v4
+        with:
+          name: seg-${{ matrix.seg.id }}
+          path: out/seg-${{ matrix.seg.id }}.mp4
+          retention-days: 90
+          if-no-files-found: error
+
+  assemble:
+    needs: [plan, segments]
+    if: needs.plan.outputs.full == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update && sudo apt-get install -y ffmpeg
+      - uses: actions/download-artifact@v4
+        with: { pattern: 'seg-*', path: out/segs, merge-multiple: true }
+      - uses: actions/download-artifact@v4
+        with: { name: segments-plan, path: plan }
+      - name: Concat + verify
+        run: |
+          cat > assemble.mjs <<'EOF'
+          import { execFileSync } from 'node:child_process';
+          import { existsSync, readFileSync } from 'node:fs';
+          const { segments } = JSON.parse(readFileSync('plan/segments.json', 'utf8'));
+          const files = segments.map((s) => `out/segs/seg-${s.id}.mp4`);
+          const missing = files.filter((f) => !existsSync(f));
+          if (missing.length) { console.error('缺段:', missing.join(', ')); process.exit(1); }
+          const args = [];
+          for (const f of files) args.push('-i', f);
+          const chains = files.map((_, i) => `[${i}:v]trim=end_frame=${segments[i].end - segments[i].start + 1},setpts=PTS-STARTPTS[v${i}]`).join(';');
+          const graph = `${chains};${files.map((_, i) => `[v${i}]`).join('')}concat=n=${files.length}:v=1:a=0[cat]`;
+          args.push('-filter_complex', graph, '-map', '[cat]', '-r', '30', '-vsync', 'cfr', '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '16', '-pix_fmt', 'yuv420p', 'out/wuh-site-intro-v2-animatic.mp4');
+          execFileSync('ffmpeg', ['-y', ...args], { stdio: 'inherit' });
+          const out = 'out/wuh-site-intro-v2-animatic.mp4';
+          const frames = Number(execFileSync('ffprobe', ['-v', 'error', '-select_streams', 'v:0', '-show_entries', 'stream=nb_frames', '-of', 'default=noprint_wrappers=1:nokey=1', out], { encoding: 'utf8' }).trim());
+          const total = Number(JSON.parse(readFileSync('videos/wuh-site-intro-v2/shots-manifest.json', 'utf8')).totalFrames) + 120 + 180;
+          console.log(`final frames=${frames} total=${total}`);
+          if (frames !== total) process.exit(1);
+          EOF
+          node assemble.mjs
       - uses: actions/upload-artifact@v4
         with:
           name: wuh-site-intro-v2-animatic
