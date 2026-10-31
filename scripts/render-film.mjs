@@ -33,6 +33,7 @@ const flags = process.argv.slice(2);
 const force = flags.includes('--force');
 const noAudio = flags.includes('--no-audio');
 const assemble = flags.includes('--assemble'); // 跳过渲染，直接用缓存装配：concat + 音轨 + 三重终验
+const bundleOnly = flags.includes('--bundle-only'); // 只预打包，产物路径写入 out/bundle-path.txt（驱动器用，复用已验证的 Node API）
 const bundleDirIdx = flags.indexOf('--bundle-dir');
 const bundleDir = bundleDirIdx >= 0 ? flags[bundleDirIdx + 1] : null; // 复用预打包 bundle（驱动器逐镜模式必备）
 const onlyIdx = flags.indexOf('--only');
@@ -44,6 +45,14 @@ const manifest = JSON.parse(readFileSync(join(filmDir, 'shots-manifest.json'), '
 const shots = only ? manifest.shots.filter((s) => s.id === only) : manifest.shots;
 if (shots.length === 0) die(`--only ${only} 无匹配镜`);
 mkdirSync(shotsCache, { recursive: true });
+
+/* ─── bundle-only：驱动器第一步；产物路径落盘，逐镜进程经 --bundle-dir 复用 ─── */
+if (bundleOnly) {
+  const dir = await bundle({ entryPoint: join(root, 'src', 'index.ts'), onProgress: ({ progress }) => { process.stdout.write(`\rbundle ${Math.round((progress ?? 0) * 100)}%`); } });
+  writeFileSync(join(outDir, 'bundle-path.txt'), dir);
+  console.log(`\n[render] bundle 完成 → ${dir}`);
+  process.exit(0);
+}
 
 const log = (...m) => console.log(`[render] ${new Date().toTimeString().slice(0, 8)}`, ...m);
 

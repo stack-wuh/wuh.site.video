@@ -6,7 +6,6 @@
 set -u
 cd "$(dirname "$0")/.."
 OUT=out
-BUNDLE_DIR="$OUT/bundle"
 
 notify() {
   osascript -e "display notification \"$1\" with title \"site-film 驱动器\" sound name \"Glass\"" >/dev/null 2>&1 || true
@@ -14,11 +13,11 @@ notify() {
 }
 
 notify "[START] bundle + 逐镜渲染"
-rm -rf "$BUNDLE_DIR"
-if ! npx remotion bundle src/index.ts "$BUNDLE_DIR" --log=error; then
+if ! node scripts/render-film.mjs --bundle-only; then
   notify "[FAIL] bundle 失败，停止"
   exit 1
 fi
+BUNDLE_DIR=$(cat "$OUT/bundle-path.txt")
 
 IDS=$(node -e "const m=require('./videos/site-film/shots-manifest.json');console.log(m.shots.map(s=>s.id).join(' '))")
 TOTAL=$(echo $IDS | wc -w | tr -d ' ')
