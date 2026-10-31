@@ -360,7 +360,15 @@ log('拼接完成 → 音轨渲染（SiteFilmAudio）');
 status.stage = 'audio'; writeStatus(true);
 
 let finalOk = false;
-const finalPath = join(outDir, 'site-film-final.mp4');
+/* 成片命名规范：{yyyyMMdd}-{序号}-{项目名}.mp4——序号扫描 out/ 同项目成片递增（版本语义，不覆盖历史） */
+const d = new Date();
+const dateTag = `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}${String(d.getDate()).padStart(2, '0')}`;
+const prevSeq = readdirSync(outDir)
+  .map((f) => f.match(new RegExp(`^\\d{8}-(\\d{2})-${manifest.film}\\.mp4$`)))
+  .filter(Boolean)
+  .map((m) => Number(m[1]))
+  .reduce((a, b) => Math.max(a, b), 0);
+const finalPath = join(outDir, `${dateTag}-${String(prevSeq + 1).padStart(2, '0')}-${manifest.film}.mp4`);
 if (!noAudio) {
   const audioHash = createHash('sha256')
     .update(readFileSync(join(filmDir, 'SiteFilmAudio.tsx')))

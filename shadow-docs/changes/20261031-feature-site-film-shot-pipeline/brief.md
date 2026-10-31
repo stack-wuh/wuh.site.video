@@ -4,7 +4,7 @@
   "name": "20261031-feature-site-film-shot-pipeline",
   "type": "feature",
   "scope": "video-materials",
-  "status": "proposed",
+  "status": "published",
   "baseBranch": "main",
   "branch": null,
   "files": [
@@ -19,8 +19,8 @@
     "repository": "stack-wuh/wuh.site.video",
     "issue": 9,
     "issueUrl": "https://github.com/stack-wuh/wuh.site.video/issues/9",
-    "pullRequest": null,
-    "pullRequestUrl": null
+    "pullRequest": 10,
+    "pullRequestUrl": "https://github.com/stack-wuh/wuh.site.video/pull/10"
   },
   "review": {
     "conclusion": "pending",
@@ -29,8 +29,8 @@
   },
   "workflow": {
     "operation": null,
-    "checkpoint": "issue:9",
-    "planHash": "8ef76fbcc24d33fa6d977f82c862bd3f09cb9ce613851ec938c1b3397f069f2b",
+    "checkpoint": "pr:10",
+    "planHash": "658e49670ba1131fc4aa4fd1997ee088fef6a1afec2207d0440ac88e5d453580",
     "updatedAt": null,
     "lastError": null,
     "issuePlan": {

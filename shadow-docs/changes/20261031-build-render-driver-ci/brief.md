@@ -4,7 +4,7 @@
   "name": "20261031-build-render-driver-ci",
   "type": "build",
   "scope": "video-materials",
-  "status": "proposed",
+  "status": "published",
   "baseBranch": "main",
   "branch": null,
   "files": [
@@ -16,8 +16,8 @@
     "repository": "stack-wuh/wuh.site.video",
     "issue": 11,
     "issueUrl": "https://github.com/stack-wuh/wuh.site.video/issues/11",
-    "pullRequest": null,
-    "pullRequestUrl": null
+    "pullRequest": 12,
+    "pullRequestUrl": "https://github.com/stack-wuh/wuh.site.video/pull/12"
   },
   "review": {
     "conclusion": "pending",
@@ -26,8 +26,8 @@
   },
   "workflow": {
     "operation": null,
-    "checkpoint": "issue:11",
-    "planHash": "06685b048777a072fd52dec321c9617d63087b4f9cef8f5578c3f3f8e14f69a0",
+    "checkpoint": "pr:12",
+    "planHash": "03858cbbe4c09af5adf620417752276faf5b231542a4a999eed8a35af2129cf3",
     "updatedAt": null,
     "lastError": null,
     "issuePlan": {
