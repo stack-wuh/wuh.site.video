@@ -46,7 +46,7 @@ jobs:
         with:
           name: remotion-bundle
           path: ${{ steps.bundepath.outputs.dir }}
-          retention-days: 3
+          retention-days: 7 # 运行内中转物，仅本次 run 有用
 
   shots:
     needs: bundle
@@ -78,7 +78,7 @@ jobs:
         with:
           name: shot-${{ matrix.shot }}
           path: out/shots/site-film/${{ matrix.shot }}-*.mp4
-          retention-days: 3
+          retention-days: 90 # 仓库上限
           if-no-files-found: error
 
   assemble:
@@ -110,5 +110,5 @@ jobs:
         with:
           name: site-film-final
           path: out/site-film-final.mp4
-          retention-days: 14
+          retention-days: 90 # 仓库上限
           if-no-files-found: error
