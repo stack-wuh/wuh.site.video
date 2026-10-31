@@ -93,7 +93,8 @@ function writeStatus(persistHtml) {
 /* ─── 通知（重试静默；开工/每幕/完成/终败必达） ─── */
 function notify(msg) {
   try {
-    spawn('osascript', ['-e', `display notification "${msg}" with title "site-film 渲染" sound name "Glass"`], { stdio: 'ignore' }).unref();
+    spawn('osascript', ['-e', `display notification "${msg}" with title "site-film 渲染" sound name "Glass"`], { stdio: 'ignore' })
+      .on('error', () => {}) // Linux 无 osascript：error 事件必须吞掉，否则未捕获异常崩掉整镜进程
   } catch { /* 通知失败不阻塞渲染 */ }
 }
 
@@ -115,7 +116,8 @@ function memoryGuard() {
 function cleanup() {
   spawnSync('pkill', ['-f', 'remotion-shared-memory-capture']);
   spawnSync('pkill', ['-f', 'headless=old']);
-  const pids = spawnSync('lsof', ['-ti', ':3211'], { encoding: 'utf8' }).stdout.trim().split('\n').filter(Boolean);
+  const lsof = spawnSync('lsof', ['-ti', ':3211'], { encoding: 'utf8' });
+  const pids = (lsof.stdout ?? '').trim().split('\n').filter(Boolean);
   if (pids.length) spawnSync('kill', ['-9', ...pids]);
 }
 
@@ -247,7 +249,12 @@ function bar(done, total) {
 
 /* ─── 主流程 ─── */
 if (!assemble) memoryGuard(); // assemble 纯 ffmpeg 装配不吃渲染内存；其音轨渲染前的守卫在 wav 缺失分支内
-const chromeVersion = spawnSync('defaults', ['read', '/Applications/Google Chrome.app/Contents/Info.plist', 'CFBundleShortVersionString'], { encoding: 'utf8' }).stdout.trim();
+/* Chrome 版本漂移检测仅对 mac 系统 Chrome 有意义；CI/Linux 由 Remotion 管理 headless-shell，跳过 */
+let chromeVersion = null;
+if (process.platform === 'darwin') {
+  const r = spawnSync('defaults', ['read', '/Applications/Google Chrome.app/Contents/Info.plist', 'CFBundleShortVersionString'], { encoding: 'utf8' });
+  chromeVersion = r.stdout?.trim() ?? null;
+}
 const chromeStamp = join(outDir, '.last-render-chrome.json');
 if (existsSync(chromeStamp)) {
   const prev = JSON.parse(readFileSync(chromeStamp, 'utf8'));
@@ -392,7 +399,7 @@ const ok = frames === manifest.totalFrames;
 log(`终验：帧数 ${frames}/${manifest.totalFrames}（${ok ? '✓' : '✗ INV-S1'}）| ${v.trim().replace('\n', ' | ')} | audio ${a.trim()} | mean_volume ${meanVol} dB`);
 status.stage = ok ? 'done' : 'failed';
 status.final = { path: finalPath, frames, meanVolumeDb: meanVol };
-if (ok) writeFileSync(chromeStamp, JSON.stringify({ chrome: chromeVersion, at: new Date().toISOString() }));
+if (ok && chromeVersion) writeFileSync(chromeStamp, JSON.stringify({ chrome: chromeVersion, at: new Date().toISOString() }));
 ev(ok ? `✅ 出片完成 ${finalPath}（${frames} 帧）` : `❌ 终验帧数不符 ${frames}`);
 writeStatus(true);
 notify(ok ? `✅ 出片完成：${frames} 帧` : `❌ 终验失败：帧数 ${frames} ≠ ${manifest.totalFrames}`);
