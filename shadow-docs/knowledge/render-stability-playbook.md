@@ -1,15 +1,16 @@
 ---
 title: 渲染稳定性作战手册（误区与耗时点）
 domain: video-materials
-keywords: [渲染, 崩溃, 卡顿, 误区, 坑, 端口, 偏移, 拼接, 分块, 段错误, 静默, 重试, 收敛, 音轨, startFrom, loop, 音量, 淡出, concat, 重复帧, 帧级对齐, radial, 渐变, pkill]
-scope: [videos/, brand/ident/, scripts/, out/, package.json]
+keywords: [渲染, 崩溃, 卡顿, 误区, 坑, 端口, 偏移, 拼接, 分块, 段错误, 静默, 重试, 收敛, 音轨, startFrom, loop, 音量, 淡出, concat, 重复帧, 帧级对齐, radial, 渐变, pkill, 字体, CI, noto, 方框, fc-list]
+scope: [videos/, brand/ident/, scripts/, out/, package.json, .github/workflows/]
 status: active
 source:
   - changes/20261025-feature-site-film-production/brief.md
   - changes/20261029-feature-film-identity/brief.md
-verified: 2026-10-29
+  - changes/20261031-fix-ci-cjk-fonts/brief.md
+verified: 2026-10-31
 verified-depth: runtime
-verified-scope: site-film 正式制作全天实战（十数小时渲染攻坚）全部坑位实证；2026-10-29 家族片头片尾出片新增两坑实证——loop 音量按轮重置（440Hz 测试音整片 volumedetect）与分块终装重复帧（630f→633f 复现并帧级对齐修复）
+verified-scope: site-film 正式制作全天实战（十数小时渲染攻坚）全部坑位实证；2026-10-29 家族片头片尾出片新增两坑实证——loop 音量按轮重置（440Hz 测试音整片 volumedetect）与分块终装重复帧（630f→633f 复现并帧级对齐修复）；2026-10-31 render-animatic 云端首跑实证 CJK 字体缺失——mono 中文全成 .notdef 方框，render-film 早有字体块而 animatic 漏抄
 ---
 
 # 渲染稳定性作战手册（误区与耗时点）
@@ -21,6 +22,7 @@ verified-scope: site-film 正式制作全天实战（十数小时渲染攻坚）
 ## 执行约束（坑位清单）
 
 ### 环境态
+- **CI 字体缺失（2026-10-31 实证）**：render-animatic 云端首跑，slate 的 mono 中文全成 .notdef 方框——Ubuntu runner 无中文字体，`Menlo, monospace` 无字形回退；serif / sans 正常，因品牌 Noto SC 是随 bundle 的 webfont（`brand/fonts.ts`）。对策：渲染 job 照搬 render-film 的字体块（`fonts-noto-cjk` + `fonts-noto-cjk-extra` + fontconfig 别名 `Menlo→Noto Sans Mono CJK SC` + `fc-match` 自证）+ `fc-list :lang=zh` 哨兵。**字体契约：bundled webfont 自洽；任何非 bundled 的 family（mono 等）都依赖渲染主机——新增 family 必须同步检查所有 workflow 的字体安装。**
 - **端口僵尸（最大耗时坑）**：渲染启动报 `port 3211 is not available` 或静默失败——某次崩溃留下的 node/Chrome 进程占着端口。每次渲染前 `lsof -ti :3211 | xargs kill -9`，这是铁律
 - **段错误风暴有潮汐**：bundling/tsc 随机段错误（exit 139 空日志）会持续数小时又自行退去；期间**停止新重 JS 任务**，等窗口或重启；连续失败别硬磨，去做低负载活
 - **短渲染存活率高**：静帧/60-120f 块几乎必过，1440f 长渲染在风暴期必死——**分块收敛梯**：全段死 → 360f 块 → 120f 块 → 30f 子块，逐级必然收敛（当天所有短块全部通过）
@@ -46,10 +48,11 @@ verified-scope: site-film 正式制作全天实战（十数小时渲染攻坚）
 
 ## 适用边界
 
-本机（Intel MBP 2019 · 系统 Chrome）渲染流水线。硬件诊断完成前「内存硬件嫌疑」仍为假设。
+本机（Intel MBP 2019 · 系统 Chrome）与 GitHub Actions（ubuntu-latest · Chrome stable）两类渲染流水线。本机段错误风暴的硬件诊断完成前，「内存硬件嫌疑」仍为假设。
 
 ## 验证方式
 
 - 每次渲染前端口检查命令在脚本第一行
+- CI 渲染 job 用 `fc-match` 自证字体别名、`fc-list :lang=zh` 哨兵把关——缺中文字体直接失败，不再静默渲方框
 - 成片三重验证：ffprobe 帧数=总帧数、video/audio 两路时长、`-af volumedetect` 分段音量
 - 出片后人工全片走查一遍（动画连贯性/静音段/卡顿）
