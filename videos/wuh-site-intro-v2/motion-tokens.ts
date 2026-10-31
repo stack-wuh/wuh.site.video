@@ -57,17 +57,17 @@ export const ANCHORS = {
   whiteFlash: 4000, // 唯一纯白峰值（第 201 拍）
   sealRestart: 4380, // 重启钤印（第 220 拍）
   act6: 4440, // 入院（第 223 拍）
-  needle: 4820, // 唱针落定（第 242 拍）
-  sealContact: 5320, // 联系钤印（第 267 拍）
-  act7: 5364,
-  act8: 6432,
-  versionRain: 6620, // 116 点落满（第 332 拍）
-  playerOn: 6760, // 播放器可用（第 339 拍）
-  quoteSettle: 6960, // 方法论金句（第 349 拍）
-  treeStart: 6990, // 衍生树起（第 350.5 拍）
-  pageSettle: 7290, // 总结纸页（第 365.5 拍）
-  typewriter: 7430, // 打字机起（第 372.5 拍）
-  zero: 7658, // 归零（第 383.9 拍）
+  needle: 4920, // 唱针落定（第 247 拍）
+  sealContact: 5600, // 联系钤印（第 279 拍）
+  act7: 5640,
+  act8: 6708,
+  versionRain: 6896, // 116 点落满（第 345.8 拍）
+  playerOn: 7036, // 播放器可用（第 352.8 拍）
+  quoteSettle: 7236, // 方法论金句（第 362.8 拍）
+  treeStart: 7266, // 衍生树起（第 364.3 拍）
+  pageSettle: 7566, // 总结纸页（第 379.3 拍）
+  typewriter: 7706, // 打字机起（第 386.3 拍）
+  zero: 7934, // 归零（第 397.7 拍）
 } as const;
 
 /* ─── 幕界（帧号不动） ─── */
@@ -77,9 +77,9 @@ export const ACT_FRAMES = [
   { act: 3, start: 1872, end: 2862 },
   { act: 4, start: 2862, end: 3642 },
   { act: 5, start: 3642, end: 4440 },
-  { act: 6, start: 4440, end: 5364 },
-  { act: 7, start: 5364, end: 6432 },
-  { act: 8, start: 6432, end: 7658 },
+  { act: 6, start: 4440, end: 5640 },
+  { act: 7, start: 5640, end: 6708 },
+  { act: 8, start: 6708, end: 7934 },
 ] as const;
 
 /* ─── §3.7 八幕调色（GRADES：底色层 + 雾光层 + 全局滤镜） ─── */

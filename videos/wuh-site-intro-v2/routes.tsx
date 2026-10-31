@@ -20,7 +20,7 @@ const shotRoute = (id: string): VideoRoute => {
 };
 
 export const wuhSiteIntroV2Routes: VideoRoute[] = [
-  { id: 'WuhSiteIntroV2', component: WuhSiteIntroV2, durationInFrames: 7958 },
-  { id: 'WuhSiteIntroV2Audio', component: WuhSiteIntroV2Audio, durationInFrames: 7958 },
+  { id: 'WuhSiteIntroV2', component: WuhSiteIntroV2, durationInFrames: 8234 },
+  { id: 'WuhSiteIntroV2Audio', component: WuhSiteIntroV2Audio, durationInFrames: 8234 },
   ...manifest.shots.map((s) => shotRoute(s.id)),
 ];

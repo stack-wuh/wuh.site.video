@@ -99,6 +99,10 @@ const ShotQuoteTurn: FC = () => {
                 <div style={{ position: 'absolute', inset: 0, background: FILM_COLORS.blankPaper, boxShadow: `0 30px 80px ${colors.bg}`, ...qt.page }}>
                   <div style={{ position: 'absolute', left: 80, top: 58, width: 64, height: 3, background: colors.seal, opacity: 0.45 }} />
                   <div style={{ position: 'absolute', left: 80, right: 80, top: 130, fontFamily: fontFamilies.serif, fontSize: 50, lineHeight: 1.7, letterSpacing: '0.05em', color: colors.ink, fontVariantNumeric: 'tabular-nums', ...qt.text }}>{q}</div>
+                  {/* 出处与发布日期：标注来源、不推进时间线 */}
+                  <div style={{ position: 'absolute', left: 80, bottom: 46, fontFamily: fontFamilies.mono, fontSize: 17, letterSpacing: '0.1em', color: colors.muted, fontVariantNumeric: 'tabular-nums', ...qt.text }}>
+                    #165《再读〈坐忘歌〉》· 2026-07-05
+                  </div>
                 </div>
               </div>
             );

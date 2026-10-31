@@ -1,5 +1,5 @@
-/* 镜 40 · Act 6 入院 · 局部帧 [0,120) · 120f
-   18+84+18：面板 01–05 亮，光标自块 5 移到块 6、悬停、点击 → 窗口最大化；
+/* 镜 40 · Act 6 入院 · 局部帧 [0,150) · 150f
+   18+114+18：面板 01–05 亮，光标自块 5 移到块 6、悬停、点击 → 窗口最大化；
    持续：365 格暖色缓慢加深（heatDeepen 全局 ramp，159 天沉得更深，无波浪扫描），峰值格
    2026-07-24 · 1,263 被墨点圈（PT-03），380px 足迹图浮入、杨梅坑/梧桐山两点亮；
    出场：反向收束回块 6（点亮），光标移向块 7。字幕两行「三百六十五天，逐格真实。」／「此乐何极~」。 */
@@ -13,7 +13,7 @@ import { DustField } from '../components/DustField';
 import { Grade } from '../components/Grade';
 import { PaperGrain } from '../components/PaperGrain';
 
-const DUR = 120;
+const DUR = 150;
 const IN = 18;
 const OUT = DUR - IN; // 102
 const CLICK = 11;

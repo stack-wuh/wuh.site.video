@@ -1,5 +1,5 @@
-/* 镜 41 · Act 6 入院 · 局部帧 [0,114) · 114f
-   16+82+16：面板 01–06 亮，光标自块 6 移到块 7、悬停、点击 → 窗口最大化；
+/* 镜 41 · Act 6 入院 · 局部帧 [0,150) · 150f
+   16+118+16：面板 01–06 亮，光标自块 6 移到块 7、悬停、点击 → 窗口最大化；
    持续：100–900 色卡带 stagger 落定 + 酒红/素雅换装（两层色块 opacity 插值，不改布局）
    + 试墨色块被墨点光标拖动游走；出场：反向收束回块 7（点亮），光标移向块 8。
    字幕「换一种墨色，换一种心情。」。 */
@@ -13,7 +13,7 @@ import { DustField } from '../components/DustField';
 import { Grade } from '../components/Grade';
 import { PaperGrain } from '../components/PaperGrain';
 
-const DUR = 114;
+const DUR = 150;
 const IN = 16;
 const OUT = DUR - IN; // 98
 const CLICK = 9;

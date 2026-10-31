@@ -3,7 +3,7 @@
    68 repos 44–62f 落定、bio 50f 起 write-fade；64–90f 100→104% 极缓推；
    尾帧右缘掀缝透出下一幕旧站页。GR-02 + GR-03。无字幕。 */
 import type { FC } from 'react';
-import { AbsoluteFill, interpolate, useCurrentFrame } from 'remotion';
+import { AbsoluteFill, Img, interpolate, staticFile, useCurrentFrame } from 'remotion';
 import { colors, fontFamilies } from '../../../brand/tokens';
 import { CURVES, FILM_COLORS, cardFly, numRoll, writeFade } from '../motion-tokens';
 import { CameraRig } from '../components/CameraRig';
@@ -52,10 +52,10 @@ const ShotProfile: FC = () => {
             <div style={{ position: 'absolute', inset: 0, transform: 'translateY(12px)', background: colors.bg, opacity: 0.1, filter: 'blur(14px)' }} />
             <div style={{ position: 'absolute', inset: 0, borderRadius: 6, background: colors.paper, border: `1px solid ${colors.paperMuted}` }} />
             <span style={{ position: 'absolute', left: 44, top: 30, fontFamily: fontFamilies.mono, fontSize: 12, letterSpacing: '0.32em', color: colors.muted, opacity: 0.55 }}>ABOUT</span>
-            {/* 圆形头像占位：低饱和圆 + 内圈 */}
-            <div style={{ position: 'absolute', left: 44, top: 108, width: 124, height: 124, borderRadius: 62, background: colors.paperDeep, border: `1px solid ${colors.paperMuted}` }}>
-              <div style={{ position: 'absolute', left: 16, top: 16, width: 90, height: 90, borderRadius: 45, border: `1px solid ${colors.muted}`, opacity: 0.5 }} />
-              <div style={{ position: 'absolute', left: 34, top: 34, width: 56, height: 56, borderRadius: 28, background: colors.muted, opacity: 0.28 }} />
+            {/* GitHub 真头像（@stack-wuh，低饱和圆形裁切） */}
+            <div style={{ position: 'absolute', left: 44, top: 108, width: 124, height: 124, borderRadius: 62, overflow: 'hidden', border: `1px solid ${colors.paperMuted}`, background: colors.paperDeep }}>
+              <Img src={staticFile('wuh-site-intro-v2/avatar.png')} style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'saturate(0.55) brightness(0.96)' }} />
+              <div style={{ position: 'absolute', inset: 0, borderRadius: 62, border: `1px solid ${colors.paperMuted}`, opacity: 0.6 }} />
             </div>
             <div style={{ position: 'absolute', left: 200, top: 88, display: 'flex', alignItems: 'baseline', gap: 12 }}>
               <span style={{ fontFamily: fontFamilies.mono, fontSize: 42, color: colors.ink, fontVariantNumeric: 'tabular-nums' }}>{repos}</span>
