@@ -1,12 +1,15 @@
 name: render-film
-# B 轨（shot-spec §5）：GitHub Actions 云端渲染——A 轨（本机 shell 驱动器）做不下去时的承接路径。
-# ⚠️ 字体口径：serif 落 Noto Serif SC（fonts-noto-cjk），sans/mono 在字体资产化前为替代字体——
-#    CI 成片可用于链路验证与兜底出片，像素定稿仍以本机为准；字体资产化（字体入仓 + @remotion/fonts）后此漂移消除。
+# B 轨（shot-spec §5）：GitHub Actions 云端渲染——一镜一任务编排：
+#   bundle 任务（预打包 + 生成镜清单）→ shots 矩阵任务（一镜一个 job，fail-fast 关闭，互不牵连）
+#   → assemble 汇总任务（统一清点：缺镜明确列出，全绿才拼接 + 音轨 + 三重终验）。
+# 单镜重跑：Actions「Re-run failed jobs」只重跑红镜；或 workflow_dispatch 传镜号子集。
+# ⚠️ 字体口径：serif 落 Noto Serif SC，sans/mono 为替代字体——CI 成片用于链路验证与兜底出片，
+#    像素定稿以本机为准；字体资产化（入仓 + @remotion/fonts）后此漂移消除。
 on:
   workflow_dispatch:
     inputs:
       shots:
-        description: '镜号子集（空格分隔，如 "s03 s17"；空 = 全部 45 镜 + 终装）'
+        description: '镜号子集（空格分隔，如 "s03 s17"；空 = 全部 45 镜 + 汇总）'
         required: false
         default: ''
 
@@ -15,47 +18,97 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  render:
+  bundle:
     runs-on: ubuntu-latest
-    timeout-minutes: 120
-    env:
-      CHROME_EXECUTABLE: none # 交由 Remotion 自动下载 headless-shell（本机网络卡死问题在 CI 不存在）
-      RENDER_CONCURRENCY: '3'
+    timeout-minutes: 15
+    outputs:
+      shots: ${{ steps.plan.outputs.shots }}
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
-        with:
-          version: 10
+        with: { version: 10 }
       - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: pnpm
+        with: { node-version: 22, cache: pnpm }
       - run: pnpm install --frozen-lockfile
-      - name: Install CJK fonts
+      - run: npx remotion browser ensure
+      - id: plan
+        env:
+          SHOTS_INPUT: ${{ github.event.inputs.shots }}
         run: |
-          sudo apt-get update
-          sudo apt-get install -y fonts-noto-cjk fonts-noto-cjk-extra
-      - name: Ensure browser
-        run: npx remotion browser ensure
-      - name: Render
-        run: |
-          if [ -n "${{ github.event.inputs.shots }}" ]; then
-            for id in ${{ github.event.inputs.shots }}; do
-              node scripts/render-film.mjs --only "$id"
-            done
-          else
-            bash scripts/render-all.sh
-          fi
-      - name: Verify
-        if: github.event.inputs.shots == ''
-        run: |
-          ffprobe -v error -select_streams v:0 -show_entries stream=nb_frames -of csv=p=0 out/site-film-final.mp4
+          LIST=$(node -e "const m=require('./videos/site-film/shots-manifest.json');const i=process.env.SHOTS_INPUT||'';process.stdout.write(JSON.stringify(i?i.split(/\s+/).filter(Boolean):m.shots.map(s=>s.id)))")
+          echo "shots=$LIST" >> "$GITHUB_OUTPUT"
+          echo "镜任务清单: $LIST"
+      - run: node scripts/render-film.mjs --bundle-only
+      - name: Read bundle path
+        id: bundepath
+        run: echo "dir=$(cat out/bundle-path.txt)" >> "$GITHUB_OUTPUT"
       - uses: actions/upload-artifact@v4
-        if: always()
         with:
-          name: site-film-output
-          path: |
-            out/site-film-final.mp4
-            out/render-progress.html
-            out/render-status.txt
-          if-no-files-found: warn
+          name: remotion-bundle
+          path: ${{ steps.bundepath.outputs.dir }}
+          retention-days: 3
+
+  shots:
+    needs: bundle
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      matrix:
+        shot: ${{ fromJSON(needs.bundle.outputs.shots) }}
+      max-parallel: 4
+      fail-fast: false # 一镜红不影响其余镜——独立任务，独立重跑
+    env:
+      CHROME_EXECUTABLE: none
+      RENDER_CONCURRENCY: '1' # 每任务只渲一镜，单 Chrome 即可；总并发 = max-parallel
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: { version: 10 }
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: pnpm }
+      - run: pnpm install --frozen-lockfile
+      - run: npx remotion browser ensure
+      - uses: actions/download-artifact@v4
+        with: { name: remotion-bundle, path: ci-bundle }
+      - name: Locate bundle
+        id: loc
+        run: echo "dir=$(dirname "$(find ci-bundle -name index.html | head -1)")" >> "$GITHUB_OUTPUT"
+      - run: node scripts/render-film.mjs --only ${{ matrix.shot }} --bundle-dir "${{ steps.loc.outputs.dir }}"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: shot-${{ matrix.shot }}
+          path: out/shots/site-film/${{ matrix.shot }}-*.mp4
+          retention-days: 3
+          if-no-files-found: error
+
+  assemble:
+    needs: shots
+    if: always() # 有红镜也要跑：统一清点、明确列缺，不静默
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      CHROME_EXECUTABLE: none
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: { version: 10 }
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: pnpm }
+      - run: pnpm install --frozen-lockfile
+      - run: npx remotion browser ensure
+      - uses: actions/download-artifact@v4
+        with: { pattern: 'shot-*', path: out/shots/site-film, merge-multiple: true }
+      - uses: actions/download-artifact@v4
+        with: { name: remotion-bundle, path: ci-bundle }
+      - name: Locate bundle
+        id: loc
+        run: echo "dir=$(dirname "$(find ci-bundle -name index.html | head -1)")" >> "$GITHUB_OUTPUT"
+      - name: Count collected shots
+        run: echo "已收镜产物 $(ls out/shots/site-film/*.mp4 2>/dev/null | wc -l) 个"
+      - run: node scripts/render-film.mjs --assemble --bundle-dir "${{ steps.loc.outputs.dir }}" # 缺镜在此明确列出
+      - uses: actions/upload-artifact@v4
+        with:
+          name: site-film-final
+          path: out/site-film-final.mp4
+          retention-days: 14
+          if-no-files-found: error
