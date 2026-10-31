@@ -15,7 +15,10 @@
     "remotion": "^4.0.0"
   },
   "devDependencies": {
+    "@remotion/bundler": "^4.0.539",
+    "@remotion/renderer": "^4.0.539",
     "@types/react": "^19.0.0",
+    "esbuild": "^0.28.2",
     "typescript": "^5.7.0"
   }
 }
