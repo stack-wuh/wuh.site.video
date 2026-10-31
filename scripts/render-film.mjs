@@ -99,11 +99,12 @@ function notify(msg) {
 
 /* ─── 环境纪律：内存守卫 + 渲染前清场（playbook 铁律，pkill 串只放本脚本内） ─── */
 function memoryGuard() {
+  const MIN_MEM_GB = Number(process.env.RENDER_MIN_MEM_GB ?? 4); // 操作员显式覆盖（如 RENDER_MIN_MEM_GB=2 降规格冒烟），默认坚守 playbook 4GB
   const vm = spawnSync('vm_stat', { encoding: 'utf8' }).stdout ?? '';
   const page = (name) => Number(vm.match(new RegExp(`${name}:\\s+(\\d+)`))?.[1] ?? 0);
   const availGB = ((page('Pages free') + page('Pages inactive')) * 4096) / 2 ** 30;
-  if (availGB < 4) die(`可用内存 ${availGB.toFixed(1)}GB < 4GB——按 playbook 不启动渲染`);
-  log(`内存可用 ${availGB.toFixed(1)}GB ✓`);
+  if (availGB < MIN_MEM_GB) die(`可用内存 ${availGB.toFixed(1)}GB < ${MIN_MEM_GB}GB——按 playbook 不启动渲染`);
+  log(`内存可用 ${availGB.toFixed(1)}GB ✓（阈值 ${MIN_MEM_GB}GB）`);
 }
 function cleanup() {
   spawnSync('pkill', ['-f', 'remotion-shared-memory-capture']);

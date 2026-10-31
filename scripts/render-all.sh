@@ -13,10 +13,10 @@ notify() {
   echo "[driver] $1"
 }
 
-notify "开工：bundle 预打包 + 逐镜渲染"
+notify "[START] bundle + 逐镜渲染"
 rm -rf "$BUNDLE_DIR"
 if ! npx remotion bundle src/index.ts "$BUNDLE_DIR" --log=error; then
-  notify "❌ bundle 失败，停止"
+  notify "[FAIL] bundle 失败，停止"
   exit 1
 fi
 
@@ -26,25 +26,24 @@ DONE=0
 for id in $IDS; do
   ok=0
   for attempt in 1 2 3; do
-    if node scripts/render-film.mjs --only "$id" --bundle-dir "$BUNDLE_DIR"; then
-      ok=1; break
-    fi
+    node scripts/render-film.mjs --only "$id" --bundle-dir "$BUNDLE_DIR"
     code=$?
-    notify "⚠️ $id 第 $attempt/3 次失败（exit $code），重试"
+    if [ "$code" -eq 0 ]; then ok=1; break; fi
+    notify "[WARN] $id 第 $attempt/3 次失败 exit=$code，重试"
     sleep 5
   done
   if [ "$ok" -ne 1 ]; then
-    notify "❌ $id 三轮全败，驱动器停止（已完成的镜都在缓存里，重跑即续）"
+    notify "[FAIL] $id 三轮全败，驱动器停止（已完成镜在缓存，重跑即续）"
     exit 1
   fi
   DONE=$((DONE + 1))
   echo "[driver] 进度 $DONE/$TOTAL"
 done
 
-notify "45 镜齐 → 终装（concat + 音轨 + 三重终验）"
+notify "[STAGE] 45 镜齐 → 终装"
 if node scripts/render-film.mjs --assemble --bundle-dir "$BUNDLE_DIR"; then
-  notify "✅ 出片完成 out/site-film-final.mp4"
+  notify "[DONE] 出片完成 out/site-film-final.mp4"
 else
-  notify "❌ 终装失败，查 render-status.txt"
+  notify "[FAIL] 终装失败，查 render-status.txt"
   exit 1
 fi
