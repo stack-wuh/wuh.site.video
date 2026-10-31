@@ -5,7 +5,7 @@ import type { AnimaticShot } from './shots-data';
 const serif = fontFamilies.serif;
 const mono = fontFamilies.mono;
 
-type Kind = 'console' | 'seal' | 'vinyl' | 'heat' | 'photo' | 'bars' | 'orbit' | 'timeline' | 'code' | 'list' | 'text' | 'ink' | 'paper' | 'generic';
+type Kind = 'console' | 'seal' | 'vinyl' | 'heat' | 'photo' | 'bars' | 'orbit' | 'timeline' | 'code' | 'list' | 'quote' | 'text' | 'ink' | 'paper' | 'generic';
 
 /** 画面意图关键词 → 简板类型（先命中先生效；顺序即优先级） */
 const KIND_RULES: Array<[Kind, RegExp]> = [
@@ -19,6 +19,7 @@ const KIND_RULES: Array<[Kind, RegExp]> = [
   ['timeline', /时间轴|刻度/],
   ['code', /编辑器|代码|终端|光标|提交|键入/],
   ['list', /榜单|列表|文章卡/],
+  ['quote', /金句随页|写过的话/],
   ['text', /题记|金句/],
   ['ink', /墨点|墨滴|一滴墨/],
   ['paper', /纸页|纸卡|纸山|纸笺|纸面|纸缘|信纸|纸/],
@@ -313,6 +314,31 @@ const ConsoleBoard: FC<{ active: number }> = ({ active }) => (
   </BoardFrame>
 );
 
+const QUOTE_SAMPLES = ['人生一世不过 3 万多天，实在是太短了。', '欲望，是最恐怖的东西。', '日不过三餐，夜不过一宿'];
+
+const QuoteBoard: FC = () => (
+  <BoardFrame act={3}>
+    {[3, 2, 1].map((i) => (
+      <div
+        key={i}
+        style={{ position: 'absolute', left: `${13 + i * 2}%`, top: 66 + i * 14, width: '54%', height: 420, background: colors.paper, opacity: 0.05 + i * 0.03 }}
+      />
+    ))}
+    <div style={{ position: 'absolute', left: '15%', top: 78, width: '54%', height: 420, background: colors.bgLift, border: `1px solid ${colors.hairline}` }}>
+      {QUOTE_SAMPLES.map((q, i) => (
+        <div key={q} style={{ position: 'absolute', left: 26, top: 64 + i * 96, fontFamily: serif, fontSize: 25, color: colors.paper, opacity: 0.72 - i * 0.17 }}>
+          {q}
+        </div>
+      ))}
+      <div style={{ position: 'absolute', left: 26, bottom: 26, fontFamily: mono, fontSize: 12, color: colors.muted, letterSpacing: '0.18em' }}>1 / 5</div>
+    </div>
+    <div style={{ position: 'absolute', right: '11%', top: '34%', textAlign: 'right' }}>
+      <div style={{ fontFamily: serif, fontSize: 104, lineHeight: 1, color: colors.paper, opacity: 0.88 }}>89</div>
+      <div style={{ fontFamily: mono, fontSize: 15, color: colors.muted, letterSpacing: '0.1em', marginTop: 10 }}>篇 · 2023 30 / 2024 59</div>
+    </div>
+  </BoardFrame>
+);
+
 const labelOf = (shot: AnimaticShot): string => {
   const head = shot.visual.split('。')[0] ?? shot.visual;
   return head.length > 18 ? `${head.slice(0, 18)}…` : head;
@@ -324,6 +350,8 @@ export const ShotBoard: FC<{ shot: AnimaticShot }> = ({ shot }) => {
       return <ConsoleBoard active={shot.n - 35} />;
     case 'ink':
       return <InkBoard />;
+    case 'quote':
+      return <QuoteBoard />;
     case 'text':
       return <TextBoard />;
     case 'paper':
