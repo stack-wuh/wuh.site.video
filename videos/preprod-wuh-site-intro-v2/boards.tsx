@@ -5,10 +5,11 @@ import type { AnimaticShot } from './shots-data';
 const serif = fontFamilies.serif;
 const mono = fontFamilies.mono;
 
-type Kind = 'seal' | 'vinyl' | 'heat' | 'photo' | 'bars' | 'orbit' | 'timeline' | 'code' | 'list' | 'text' | 'ink' | 'paper' | 'generic';
+type Kind = 'console' | 'seal' | 'vinyl' | 'heat' | 'photo' | 'bars' | 'orbit' | 'timeline' | 'code' | 'list' | 'text' | 'ink' | 'paper' | 'generic';
 
 /** 画面意图关键词 → 简板类型（先命中先生效；顺序即优先级） */
 const KIND_RULES: Array<[Kind, RegExp]> = [
+  ['console', /控制台|面板|功能块/],
   ['seal', /钤印|印章|印面|闲章|压印|盖下/],
   ['vinyl', /黑胶|唱片|唱针/],
   ['heat', /热力/],
@@ -272,6 +273,46 @@ const GenericBoard: FC<{ label: string }> = ({ label }) => (
   </BoardFrame>
 );
 
+const CONSOLE_TILES = ['首页', '封面', '书架', '音乐', '留言板', '热力图', '设计系统', '页面漫游'];
+
+const ConsoleBoard: FC<{ active: number }> = ({ active }) => (
+  <BoardFrame act={6}>
+    <div style={{ position: 'absolute', inset: 28, border: `1px solid ${colors.hairline}`, background: colors.terminalBg }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 16px', borderBottom: `1px solid ${colors.hairline}`, fontFamily: mono, fontSize: 14, color: colors.muted, letterSpacing: '0.2em' }}>
+        <span>WUH.SITE · FEATURES</span>
+        <span>08</span>
+      </div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 14, padding: 18 }}>
+        {CONSOLE_TILES.map((label, i) => {
+          const lit = i < active;
+          const cur = i === Math.max(0, active);
+          return (
+            <div
+              key={label}
+              style={{
+                height: 148,
+                border: `1px solid ${cur ? colors.seal : colors.hairline}`,
+                background: cur ? colors.bgLift : 'transparent',
+                opacity: cur ? 1 : lit ? 0.75 : 0.45,
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+                padding: 12,
+              }}
+            >
+              <span style={{ fontFamily: mono, fontSize: 12, color: cur ? colors.accent : colors.muted }}>0{i + 1}</span>
+              <span style={{ fontFamily: serif, fontSize: 20, color: colors.paper }}>{label}</span>
+              <span style={{ height: 3, width: '60%', background: colors.accent, opacity: lit || cur ? 0.8 : 0 }} />
+            </div>
+          );
+        })}
+      </div>
+      <div style={{ position: 'absolute', left: '50%', top: '76%', width: 10, height: 10, borderRadius: 5, background: colors.accent, boxShadow: `0 0 14px ${colors.accent}` }} />
+      <div style={{ position: 'absolute', left: 0, right: 0, top: '40%', height: 1, background: colors.accent, opacity: 0.12 }} />
+    </div>
+  </BoardFrame>
+);
+
 const labelOf = (shot: AnimaticShot): string => {
   const head = shot.visual.split('。')[0] ?? shot.visual;
   return head.length > 18 ? `${head.slice(0, 18)}…` : head;
@@ -279,6 +320,8 @@ const labelOf = (shot: AnimaticShot): string => {
 
 export const ShotBoard: FC<{ shot: AnimaticShot }> = ({ shot }) => {
   switch (boardKindOf(shot)) {
+    case 'console':
+      return <ConsoleBoard active={shot.n - 35} />;
     case 'ink':
       return <InkBoard />;
     case 'text':
