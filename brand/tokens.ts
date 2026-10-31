@@ -16,7 +16,7 @@ export const colors = {
 } as const;
 
 export const fontFamilies = {
-  serif: '"Songti SC", "Noto Serif SC", serif',
-  sans: '"PingFang SC", sans-serif',
+  serif: '"Noto Serif SC", "Songti SC", serif',
+  sans: '"Noto Sans SC", "PingFang SC", sans-serif',
   mono: 'Menlo, monospace',
 } as const;
