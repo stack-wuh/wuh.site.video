@@ -2,11 +2,13 @@
 /**
  * 渲染脚本 v2（shot-spec §5/§5.8）——镜级管线编排：
  *   bundle 一次 → 逐镜 renderMedia（缓存键 = 镜文件 hash + esbuild 依赖闭包 + 时长）→ 逐镜 ffprobe 帧数校验
- *   → concat 滤镜 trim 帧级对齐拼接 → CFR 终装 → SiteFilmAudio 音轨渲染 mux → 三重终验
+ *   → concat 滤镜 trim 帧级对齐拼接 → CFR 终装 → {Film}Audio 音轨渲染 mux → 三重终验
  * 降级链：整镜 ×4 → 120f 块 → 30f 细块（每块 ×3），全败终败通知。可见性：三层事件 →
  *   out/render-status.json（机器）+ render-status.txt（人读）+ render-progress.html（浏览器 tab 自刷新面板，零端口）
  *   + osascript 通知（开工/每幕/完成/终败；重试静默）。旧分段渲染由 30f 细块梯承接兜底。
- * 用法：node scripts/render-film.mjs [--force] [--only sNN] [--no-audio]
+ * 用法：node scripts/render-film.mjs [--unit site-film|wuh-site-intro-v2] [--force] [--only sNN] [--no-audio] [--assemble] [--bundle-only] [--bundle-dir DIR]
+ * 多片：--unit 决定视频单元、composition 前缀（site-film → SiteFilm）、音轨 id 与缓存目录；
+ *   film.config.json 声明 shell（intro/outro 帧）时，装配为「片头 + shots + 片尾」三段拼接。
  */
 import { spawn, spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
@@ -25,8 +27,6 @@ const STALL_MS = 120_000; // 心跳停更阈值（playbook：无输出 2 分钟�
 const MAX_HANGS = 3; // 同镜看门狗击杀止损轮数，超过即终败通知
 const root = join(import.meta.dirname, '..');
 const outDir = join(root, 'out');
-const filmDir = join(root, 'videos', 'site-film');
-const shotsCache = join(outDir, 'shots', 'site-film');
 const CRF = 16;
 
 const flags = process.argv.slice(2);
@@ -38,10 +38,18 @@ const bundleDirIdx = flags.indexOf('--bundle-dir');
 const bundleDir = bundleDirIdx >= 0 ? flags[bundleDirIdx + 1] : null; // 复用预打包 bundle（驱动器逐镜模式必备）
 const onlyIdx = flags.indexOf('--only');
 const only = onlyIdx >= 0 ? flags[onlyIdx + 1] : null;
+const unitIdx = flags.indexOf('--unit');
+const unit = unitIdx >= 0 ? flags[unitIdx + 1] : 'site-film'; // 多片参数化：默认 site-film，行为零变化
+const pascal = unit.split('-').map((p) => p[0].toUpperCase() + p.slice(1)).join('');
+const filmDir = join(root, 'videos', unit);
+const shotsCache = join(outDir, 'shots', unit);
 
 function die(msg) { console.error(`✗ ${msg}`); process.exit(1); }
 
 const manifest = JSON.parse(readFileSync(join(filmDir, 'shots-manifest.json'), 'utf8'));
+const configPath = join(filmDir, 'film.config.json');
+const shell = existsSync(configPath) ? (JSON.parse(readFileSync(configPath, 'utf8')).shell ?? null) : null;
+const filmTotalFrames = manifest.totalFrames + (shell ? shell.intro + shell.outro : 0);
 const shots = only ? manifest.shots.filter((s) => s.id === only) : manifest.shots;
 if (shots.length === 0) die(`--only ${only} 无匹配镜`);
 mkdirSync(shotsCache, { recursive: true });
@@ -58,7 +66,7 @@ const log = (...m) => console.log(`[render] ${new Date().toTimeString().slice(0,
 
 /* ─── 可见性：三层事件 → status.json / status.txt / 面板 HTML ─── */
 const status = {
-  film: 'site-film', stage: 'init', totalFrames: manifest.totalFrames,
+  film: unit, stage: 'init', totalFrames: filmTotalFrames,
   planFrames: shots.reduce((a, s) => a + s.durationFrames, 0),
   shotsDone: 0, shotsTotal: shots.length, cached: 0, todo: 0,
   currentShot: null, currentShotFrames: 0, degraded: null, bundleProgress: null,
@@ -89,9 +97,9 @@ function writeStatus(persistHtml) {
       const done = inAct.filter((s) => status.doneShots.has(s.id)).length;
       return `<div class="act"><span>Act ${a.act} ${a.title}</span><b>${done}/${inAct.length}</b></div>`;
     }).join('');
-    writeFileSync(join(outDir, 'render-progress.html'), `<!doctype html><meta charset="utf-8"><meta http-equiv="refresh" content="3"><title>site-film 渲染</title>
+    writeFileSync(join(outDir, 'render-progress.html'), `<!doctype html><meta charset="utf-8"><meta http-equiv="refresh" content="3"><title>${unit} 渲染</title>
 <style>body{background:#171512;color:#efe9dc;font-family:ui-monospace,Menlo,monospace;margin:40px;max-width:640px}h1{font-size:18px;color:#c9a86a}.big{font-size:72px;font-weight:700;color:#b03a2e;margin:8px 0}.row{color:#8f867a;margin:4px 0}.act{display:flex;justify-content:space-between;border-bottom:1px solid #2b2620;padding:4px 0;color:#8f867a}.act b{color:#efe9dc}.evt{color:#6f675c;font-size:12px;white-space:pre-wrap;margin:2px 0}</style>
-<h1>🎬 site-film · ${status.stage}</h1><div class="big">${pct}%</div>
+<h1>🎬 ${unit} · ${status.stage}</h1><div class="big">${pct}%</div>
 <div class="row">镜 ${status.shotsDone}/${status.shotsTotal} · 缓存命中 ${status.cached} · 重渲 ${status.todo} · 当前 ${cur}${status.degraded ? ` · <b style="color:#b03a2e">降级 ${status.degraded}</b>` : ''}</div>
 <div class="row">帧 ${status.renderedFrames}/${status.planFrames}（成片对账 ${status.totalFrames}）</div>
 <div style="margin:16px 0">${actRows}</div>
@@ -102,7 +110,7 @@ function writeStatus(persistHtml) {
 /* ─── 通知（重试静默；开工/每幕/完成/终败必达） ─── */
 function notify(msg) {
   try {
-    spawn('osascript', ['-e', `display notification "${msg}" with title "site-film 渲染" sound name "Glass"`], { stdio: 'ignore' })
+    spawn('osascript', ['-e', `display notification "${msg}" with title "${unit} 渲染" sound name "Glass"`], { stdio: 'ignore' })
       .on('error', () => {}) // Linux 无 osascript：error 事件必须吞掉，否则未捕获异常崩掉整镜进程
   } catch { /* 通知失败不阻塞渲染 */ }
 }
@@ -137,7 +145,7 @@ async function shotHash(s) {
   });
   const files = Object.keys(result.metafile.inputs).filter((k) => !k.includes('node_modules')).sort();
   const h = createHash('sha256');
-  h.update(JSON.stringify({ schema: 2, composition: `SiteFilm-${s.id}`, durationFrames: s.durationFrames, fps: manifest.fps }));
+  h.update(JSON.stringify({ schema: 2, composition: `${pascal}-${s.id}`, durationFrames: s.durationFrames, fps: manifest.fps }));
   for (const f of files) {
     const abs = join(root, f);
     if (existsSync(abs) && statSync(abs).isFile()) h.update(readFileSync(abs));
@@ -322,7 +330,7 @@ if (assemble) {
       continue;
     }
     status.currentShot = s; status.currentShotFrames = 0; writeStatus(true);
-    const res = await renderShot(s, { id: `SiteFilm-${s.id}`, width: 1920, height: 1080, fps: manifest.fps, durationInFrames: s.durationFrames }, serveUrl, s.hash);
+    const res = await renderShot(s, { id: `${pascal}-${s.id}`, width: 1920, height: 1080, fps: manifest.fps, durationInFrames: s.durationFrames }, serveUrl, s.hash);
     if (!res.out) {
       const why = res.stalled ? `卡死 ×${MAX_HANGS}（看门狗止损）` : '渲染失败（含 30f 细块降级）';
       status.stage = 'failed'; ev(`❌ ${s.id} 终败：${why}`);
@@ -352,11 +360,35 @@ if (only) {
   process.exit(0);
 }
 
+/* ─── FilmShell 三段装配：片头/片尾以 film comp 的帧段渲染，拼在 shots 两端（无 shell 声明则跳过） ─── */
+const shellPrefix = [];
+const shellSuffix = [];
+if (shell) {
+  if (!serveUrl) {
+    serveUrl = await bundle({ entryPoint: join(root, 'src', 'index.ts'), onProgress: ({ progress }) => { status.bundleProgress = Number.isFinite(progress) ? Math.round(progress * 100) : null; writeStatus(false); } });
+  }
+  cleanup();
+  const introPath = join(shotsCache, `__intro-${shell.intro}.mp4`);
+  const outroPath = join(shotsCache, `__outro-${shell.outro}.mp4`);
+  const filmComp = { id: pascal, width: 1920, height: 1080, fps: manifest.fps, durationInFrames: filmTotalFrames };
+  log(`FilmShell 三段装配：片头 ${shell.intro}f + 正片 ${manifest.totalFrames}f + 片尾 ${shell.outro}f = ${filmTotalFrames}f`);
+  await renderRange(filmComp, serveUrl, 0, shell.intro, introPath);
+  await renderRange(filmComp, serveUrl, filmTotalFrames - shell.outro, filmTotalFrames, outroPath);
+  shellPrefix.push(introPath);
+  shellSuffix.push(outroPath);
+}
+const concatFiles = [...shellPrefix, ...rendered, ...shellSuffix];
+const concatFrames = [
+  ...shellPrefix.map(() => shell.intro),
+  ...shots.map((s) => s.durationFrames),
+  ...shellSuffix.map(() => shell.outro),
+];
+
 /* ─── 拼接 + 音轨 + 终装 ─── */
 status.stage = 'concat'; ev('拼接中（concat 滤镜帧级对齐）'); writeStatus(true);
-const silent = join(outDir, 'site-film-silent.mp4');
-if (!concatFilter(rendered, shots.map((s) => s.durationFrames), silent)) die('拼接失败');
-log('拼接完成 → 音轨渲染（SiteFilmAudio）');
+const silent = join(outDir, `${unit}-silent.mp4`);
+if (!concatFilter(concatFiles, concatFrames, silent)) die('拼接失败');
+log(`拼接完成 → 音轨渲染（${pascal}Audio）`);
 status.stage = 'audio'; writeStatus(true);
 
 let finalOk = false;
@@ -371,10 +403,10 @@ const prevSeq = readdirSync(outDir)
 const finalPath = join(outDir, `${dateTag}-${String(prevSeq + 1).padStart(2, '0')}-${manifest.film}.mp4`);
 if (!noAudio) {
   const audioHash = createHash('sha256')
-    .update(readFileSync(join(filmDir, 'SiteFilmAudio.tsx')))
+    .update(readFileSync(join(filmDir, `${pascal}Audio.tsx`)))
     .update(readdirSync(join(root, 'public', 'site-film')).sort().map((f) => createHash('sha256').update(readFileSync(join(root, 'public', 'site-film', f))).digest('hex')).join(''))
     .digest('hex').slice(0, 8);
-  const wav = join(outDir, `site-film-audio-${audioHash}.wav`);
+  const wav = join(outDir, `${unit}-audio-${audioHash}.wav`);
   if (!existsSync(wav)) {
     memoryGuard();
     if (!serveUrl) {
@@ -389,7 +421,7 @@ if (!noAudio) {
     }, 5000);
     try {
       await renderMedia({
-        composition: { id: 'SiteFilmAudio', width: 1920, height: 1080, fps: manifest.fps, durationInFrames: manifest.totalFrames },
+        composition: { id: `${pascal}Audio`, width: 1920, height: 1080, fps: manifest.fps, durationInFrames: filmTotalFrames },
         serveUrl, codec: 'wav', browserExecutable: CHROME, outputLocation: wav, inputProps: {}, cancelSignal,
         onProgress: () => { lastTick = Date.now(); },
       });
@@ -412,13 +444,13 @@ const a = spawnSync('ffprobe', ['-v', 'error', '-select_streams', 'a:0', '-show_
 const vol = spawnSync('ffmpeg', ['-i', finalPath, '-af', 'volumedetect', '-f', 'null', '-'], { encoding: 'utf8', timeout: 120000 });
 const meanVol = vol.stderr?.match(/mean_volume: ([-\d.]+) dB/)?.[1] ?? '?';
 const frames = ffprobeFrames(finalPath);
-const ok = frames === manifest.totalFrames;
-log(`终验：帧数 ${frames}/${manifest.totalFrames}（${ok ? '✓' : '✗ INV-S1'}）| ${v.trim().replace('\n', ' | ')} | audio ${a.trim()} | mean_volume ${meanVol} dB`);
+const ok = frames === filmTotalFrames;
+log(`终验：帧数 ${frames}/${filmTotalFrames}（${ok ? '✓' : '✗ INV-S1'}）| ${v.trim().replace('\n', ' | ')} | audio ${a.trim()} | mean_volume ${meanVol} dB`);
 status.stage = ok ? 'done' : 'failed';
 status.final = { path: finalPath, frames, meanVolumeDb: meanVol };
 if (ok && chromeVersion) writeFileSync(chromeStamp, JSON.stringify({ chrome: chromeVersion, at: new Date().toISOString() }));
 ev(ok ? `✅ 出片完成 ${finalPath}（${frames} 帧）` : `❌ 终验帧数不符 ${frames}`);
 writeStatus(true);
-notify(ok ? `✅ 出片完成：${frames} 帧` : `❌ 终验失败：帧数 ${frames} ≠ ${manifest.totalFrames}`);
+notify(ok ? `✅ 出片完成：${frames} 帧` : `❌ 终验失败：帧数 ${frames} ≠ ${filmTotalFrames}`);
 rmSync(silent, { force: true });
 process.exit(ok ? 0 : 1);

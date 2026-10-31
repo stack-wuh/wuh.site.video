@@ -1,0 +1,516 @@
+/* 由 scripts/shots.mjs sync 生成——勿手改；真源 shots-manifest.json（类型化视图） */
+export type Manifest = { film: string; fps: number; totalFrames: number; acts: Array<{ act: number; title: string; startFrame: number; endFrame: number }>; shots: Array<{ id: string; act: number; title: string; startFrame: number; durationFrames: number; source: string }> };
+
+export const manifest: Manifest = {
+  "film": "wuh-site-intro-v2",
+  "fps": 30,
+  "totalFrames": 7658,
+  "acts": [
+    {
+      "act": 1,
+      "title": "墨点",
+      "startFrame": 0,
+      "endFrame": 720
+    },
+    {
+      "act": 2,
+      "title": "旧屋",
+      "startFrame": 720,
+      "endFrame": 1872
+    },
+    {
+      "act": 3,
+      "title": "第一行",
+      "startFrame": 1872,
+      "endFrame": 2862
+    },
+    {
+      "act": 4,
+      "title": "留白",
+      "startFrame": 2862,
+      "endFrame": 3642
+    },
+    {
+      "act": 5,
+      "title": "灯亮",
+      "startFrame": 3642,
+      "endFrame": 4440
+    },
+    {
+      "act": 6,
+      "title": "入院",
+      "startFrame": 4440,
+      "endFrame": 5364
+    },
+    {
+      "act": 7,
+      "title": "坐忘",
+      "startFrame": 5364,
+      "endFrame": 6432
+    },
+    {
+      "act": 8,
+      "title": "此刻",
+      "startFrame": 6432,
+      "endFrame": 7658
+    }
+  ],
+  "shots": [
+    {
+      "id": "s01",
+      "act": 1,
+      "title": "无（开场留白）",
+      "startFrame": 0,
+      "durationFrames": 120,
+      "source": "shots/s01.tsx"
+    },
+    {
+      "id": "s02",
+      "act": 1,
+      "title": "「wuh.site · 朝朝如念」",
+      "startFrame": 120,
+      "durationFrames": 180,
+      "source": "shots/s02.tsx"
+    },
+    {
+      "id": "s03",
+      "act": 1,
+      "title": "「2019 年，博客有了第一篇。」",
+      "startFrame": 300,
+      "durationFrames": 96,
+      "source": "shots/s03.tsx"
+    },
+    {
+      "id": "s04",
+      "act": 1,
+      "title": "「2020 年 4 月，他用 30 天」",
+      "startFrame": 396,
+      "durationFrames": 72,
+      "source": "shots/s04.tsx"
+    },
+    {
+      "id": "s05",
+      "act": 1,
+      "title": "「搭起第一代个人站。」",
+      "startFrame": 468,
+      "durationFrames": 102,
+      "source": "shots/s05.tsx"
+    },
+    {
+      "id": "s06",
+      "act": 1,
+      "title": "无（呼吸镜）",
+      "startFrame": 570,
+      "durationFrames": 60,
+      "source": "shots/s06.tsx"
+    },
+    {
+      "id": "s07",
+      "act": 1,
+      "title": "无（留白，身份由资料卡自然流露）",
+      "startFrame": 630,
+      "durationFrames": 90,
+      "source": "shots/s07.tsx"
+    },
+    {
+      "id": "s08",
+      "act": 2,
+      "title": "无（幕首留白）",
+      "startFrame": 720,
+      "durationFrames": 96,
+      "source": "shots/s08.tsx"
+    },
+    {
+      "id": "s09",
+      "act": 2,
+      "title": "「代码写诗，工具作画。」",
+      "startFrame": 816,
+      "durationFrames": 150,
+      "source": "shots/s09.tsx"
+    },
+    {
+      "id": "s10",
+      "act": 2,
+      "title": "「2021 年，旧站长出手艺：PM2 换成 Do",
+      "startFrame": 966,
+      "durationFrames": 126,
+      "source": "shots/s10.tsx"
+    },
+    {
+      "id": "s11",
+      "act": 2,
+      "title": "「Nginx 一直没离开。」",
+      "startFrame": 1092,
+      "durationFrames": 108,
+      "source": "shots/s11.tsx"
+    },
+    {
+      "id": "s12",
+      "act": 2,
+      "title": "「五月，他写《搬山计划》：『除了工作就是工作，是",
+      "startFrame": 1200,
+      "durationFrames": 180,
+      "source": "shots/s12.tsx"
+    },
+    {
+      "id": "s13",
+      "act": 2,
+      "title": "「十月，他用 TypeScript 重写博客前端",
+      "startFrame": 1380,
+      "durationFrames": 144,
+      "source": "shots/s13.tsx"
+    },
+    {
+      "id": "s14",
+      "act": 2,
+      "title": "「十二月，GitHub Actions 第一次替",
+      "startFrame": 1524,
+      "durationFrames": 132,
+      "source": "shots/s14.tsx"
+    },
+    {
+      "id": "s15",
+      "act": 2,
+      "title": "无（幕间呼吸）",
+      "startFrame": 1656,
+      "durationFrames": 216,
+      "source": "shots/s15.tsx"
+    },
+    {
+      "id": "s16",
+      "act": 3,
+      "title": "无（入页留白）",
+      "startFrame": 1872,
+      "durationFrames": 90,
+      "source": "shots/s16.tsx"
+    },
+    {
+      "id": "s17",
+      "act": 3,
+      "title": "「2022 年 2 月，他写《2022 年度总结",
+      "startFrame": 1962,
+      "durationFrames": 156,
+      "source": "shots/s17.tsx"
+    },
+    {
+      "id": "s18",
+      "act": 3,
+      "title": "「他还是继续写。2023 年 30 篇，2024",
+      "startFrame": 2118,
+      "durationFrames": 234,
+      "source": "shots/s18.tsx"
+    },
+    {
+      "id": "s19",
+      "act": 3,
+      "title": "无（重音前摇）",
+      "startFrame": 2352,
+      "durationFrames": 72,
+      "source": "shots/s19.tsx"
+    },
+    {
+      "id": "s20",
+      "act": 3,
+      "title": "「2024 年 12 月 8 日，新站落下第一行",
+      "startFrame": 2424,
+      "durationFrames": 132,
+      "source": "shots/s20.tsx"
+    },
+    {
+      "id": "s21",
+      "act": 3,
+      "title": "无（画面文字：feat(init): 基于nex",
+      "startFrame": 2556,
+      "durationFrames": 96,
+      "source": "shots/s21.tsx"
+    },
+    {
+      "id": "s22",
+      "act": 3,
+      "title": "「同一天，七次初始化提交。」",
+      "startFrame": 2652,
+      "durationFrames": 210,
+      "source": "shots/s22.tsx"
+    },
+    {
+      "id": "s23",
+      "act": 4,
+      "title": "无（先看，后说）",
+      "startFrame": 2862,
+      "durationFrames": 108,
+      "source": "shots/s23.tsx"
+    },
+    {
+      "id": "s24",
+      "act": 4,
+      "title": "「2025 年，新站只走了四步，然后长久地安静。",
+      "startFrame": 2970,
+      "durationFrames": 156,
+      "source": "shots/s24.tsx"
+    },
+    {
+      "id": "s25",
+      "act": 4,
+      "title": "「那一年，站点的年度浏览量是 0。」",
+      "startFrame": 3126,
+      "durationFrames": 120,
+      "source": "shots/s25.tsx"
+    },
+    {
+      "id": "s26",
+      "act": 4,
+      "title": "「可日子没有停：八月，杨梅坑；」",
+      "startFrame": 3246,
+      "durationFrames": 132,
+      "source": "shots/s26.tsx"
+    },
+    {
+      "id": "s27",
+      "act": 4,
+      "title": "「九月，梧桐山。」",
+      "startFrame": 3378,
+      "durationFrames": 132,
+      "source": "shots/s27.tsx"
+    },
+    {
+      "id": "s28",
+      "act": 4,
+      "title": "「十二月，他回来了：21 个提交。」",
+      "startFrame": 3510,
+      "durationFrames": 132,
+      "source": "shots/s28.tsx"
+    },
+    {
+      "id": "s29",
+      "act": 5,
+      "title": "「2026 年春天，提交变密；」",
+      "startFrame": 3642,
+      "durationFrames": 126,
+      "source": "shots/s29.tsx"
+    },
+    {
+      "id": "s30",
+      "act": 5,
+      "title": "「旧文一篇篇迁进新家。」",
+      "startFrame": 3768,
+      "durationFrames": 132,
+      "source": "shots/s30.tsx"
+    },
+    {
+      "id": "s31",
+      "act": 5,
+      "title": "「六月十四日，流量切到新站。」",
+      "startFrame": 3900,
+      "durationFrames": 96,
+      "source": "shots/s31.tsx"
+    },
+    {
+      "id": "s32",
+      "act": 5,
+      "title": "「灯，次第亮起。」",
+      "startFrame": 3996,
+      "durationFrames": 120,
+      "source": "shots/s32.tsx"
+    },
+    {
+      "id": "s33",
+      "act": 5,
+      "title": "「一周后，他写下《重启计划》：」",
+      "startFrame": 4116,
+      "durationFrames": 144,
+      "source": "shots/s33.tsx"
+    },
+    {
+      "id": "s34",
+      "act": 5,
+      "title": "「『……每周发布一篇博客，无限进步，开始重启计划",
+      "startFrame": 4260,
+      "durationFrames": 180,
+      "source": "shots/s34.tsx"
+    },
+    {
+      "id": "s35",
+      "act": 6,
+      "title": "「四十六篇文章，一枚枚墨点。」",
+      "startFrame": 4440,
+      "durationFrames": 114,
+      "source": "shots/s35.tsx"
+    },
+    {
+      "id": "s36",
+      "act": 6,
+      "title": "「每一篇，都有一幅只属于它的山水。」",
+      "startFrame": 4554,
+      "durationFrames": 114,
+      "source": "shots/s36.tsx"
+    },
+    {
+      "id": "s37",
+      "act": 6,
+      "title": "「读过的书，都站在这里。」",
+      "startFrame": 4668,
+      "durationFrames": 114,
+      "source": "shots/s37.tsx"
+    },
+    {
+      "id": "s38",
+      "act": 6,
+      "title": "「时间的年轮，刻着每一年的歌。」／「黑胶还在转，",
+      "startFrame": 4782,
+      "durationFrames": 120,
+      "source": "shots/s38.tsx"
+    },
+    {
+      "id": "s39",
+      "act": 6,
+      "title": "「两种人格，一间屋子。」",
+      "startFrame": 4902,
+      "durationFrames": 114,
+      "source": "shots/s39.tsx"
+    },
+    {
+      "id": "s40",
+      "act": 6,
+      "title": "「三百六十五天，逐格真实。」／「此乐何极~」",
+      "startFrame": 5016,
+      "durationFrames": 120,
+      "source": "shots/s40.tsx"
+    },
+    {
+      "id": "s41",
+      "act": 6,
+      "title": "「换一种墨色，换一种心情。」",
+      "startFrame": 5136,
+      "durationFrames": 114,
+      "source": "shots/s41.tsx"
+    },
+    {
+      "id": "s42",
+      "act": 6,
+      "title": "「每一页，都在呼吸。」／「代码写诗，工具作画。」",
+      "startFrame": 5250,
+      "durationFrames": 114,
+      "source": "shots/s42.tsx"
+    },
+    {
+      "id": "s43",
+      "act": 7,
+      "title": "无（留白，留给音乐与窗）",
+      "startFrame": 5364,
+      "durationFrames": 132,
+      "source": "shots/s43.tsx"
+    },
+    {
+      "id": "s44",
+      "act": 7,
+      "title": "「七月，全站阅读最多的一篇不是技术，是《再读〈坐",
+      "startFrame": 5496,
+      "durationFrames": 168,
+      "source": "shots/s44.tsx"
+    },
+    {
+      "id": "s45",
+      "act": 7,
+      "title": "「常默元气不伤，少思慧烛内光。」",
+      "startFrame": 5664,
+      "durationFrames": 180,
+      "source": "shots/s45.tsx"
+    },
+    {
+      "id": "s46",
+      "act": 7,
+      "title": "「不怒百神和畅，不恼心地清凉。」",
+      "startFrame": 5844,
+      "durationFrames": 180,
+      "source": "shots/s46.tsx"
+    },
+    {
+      "id": "s47",
+      "act": 7,
+      "title": "画面落款：——司马承祯《坐忘歌》",
+      "startFrame": 6024,
+      "durationFrames": 108,
+      "source": "shots/s47.tsx"
+    },
+    {
+      "id": "s48",
+      "act": 7,
+      "title": "「清晨，他随口念起两句，临时把游戏日改成了读书日",
+      "startFrame": 6132,
+      "durationFrames": 168,
+      "source": "shots/s48.tsx"
+    },
+    {
+      "id": "s49",
+      "act": 7,
+      "title": "无（交接 八月）",
+      "startFrame": 6300,
+      "durationFrames": 132,
+      "source": "shots/s49.tsx"
+    },
+    {
+      "id": "s50",
+      "act": 8,
+      "title": "「八月，发布脚本落地。」",
+      "startFrame": 6432,
+      "durationFrames": 96,
+      "source": "shots/s50.tsx"
+    },
+    {
+      "id": "s51",
+      "act": 8,
+      "title": "「两个月，116 个版本。」",
+      "startFrame": 6528,
+      "durationFrames": 122,
+      "source": "shots/s51.tsx"
+    },
+    {
+      "id": "s52",
+      "act": 8,
+      "title": "「九月，音乐播放器能用了——自己接的网易云 AP",
+      "startFrame": 6650,
+      "durationFrames": 150,
+      "source": "shots/s52.tsx"
+    },
+    {
+      "id": "s53",
+      "act": 8,
+      "title": "「十月，他写道：『工作流存在的意义不是当加速器，",
+      "startFrame": 6800,
+      "durationFrames": 190,
+      "source": "shots/s53.tsx"
+    },
+    {
+      "id": "s54",
+      "act": 8,
+      "title": "「博客是根——碎片的知识，先写在 Issue 里",
+      "startFrame": 6990,
+      "durationFrames": 300,
+      "source": "shots/s54.tsx"
+    },
+    {
+      "id": "s55",
+      "act": 8,
+      "title": "「写作是根，代码是干；方法、工具、桌面与影像，是",
+      "startFrame": 7290,
+      "durationFrames": 140,
+      "source": "shots/s55.tsx"
+    },
+    {
+      "id": "s56",
+      "act": 8,
+      "title": "「写作是抵抗遗忘的方式，代码是构建世界的语言。」",
+      "startFrame": 7430,
+      "durationFrames": 132,
+      "source": "shots/s56.tsx"
+    },
+    {
+      "id": "s57",
+      "act": 8,
+      "title": "「吴尒红 · stack-wuh · a boy",
+      "startFrame": 7562,
+      "durationFrames": 96,
+      "source": "shots/s57.tsx"
+    }
+  ]
+};

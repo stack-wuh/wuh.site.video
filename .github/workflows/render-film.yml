@@ -8,13 +8,20 @@ name: render-film
 on:
   workflow_dispatch:
     inputs:
+      film:
+        description: '视频单元（默认 site-film；如 wuh-site-intro-v2）'
+        required: false
+        default: 'site-film'
       shots:
-        description: '镜号子集（空格分隔，如 "s03 s17"；空 = 全部 45 镜 + 汇总）'
+        description: '镜号子集（空格分隔，如 "s03 s17"；空 = 全部镜 + 汇总）'
         required: false
         default: ''
 
+env:
+  FILM: ${{ github.event.inputs.film || 'site-film' }}
+
 concurrency:
-  group: render-film
+  group: render-film-${{ github.event.inputs.film || 'site-film' }}
   cancel-in-progress: false
 
 jobs:
@@ -35,10 +42,10 @@ jobs:
         env:
           SHOTS_INPUT: ${{ github.event.inputs.shots }}
         run: |
-          LIST=$(node -e "const m=require('./videos/site-film/shots-manifest.json');const i=process.env.SHOTS_INPUT||'';process.stdout.write(JSON.stringify(i?i.split(/\s+/).filter(Boolean):m.shots.map(s=>s.id)))")
+          LIST=$(node -e "const m=require('./videos/'+process.env.FILM+'/shots-manifest.json');const i=process.env.SHOTS_INPUT||'';process.stdout.write(JSON.stringify(i?i.split(/\s+/).filter(Boolean):m.shots.map(s=>s.id)))")
           echo "shots=$LIST" >> "$GITHUB_OUTPUT"
           echo "镜任务清单: $LIST"
-      - run: node scripts/render-film.mjs --bundle-only
+      - run: node scripts/render-film.mjs --bundle-only --unit "$FILM"
       - name: Read bundle path
         id: bundepath
         run: echo "dir=$(cat out/bundle-path.txt)" >> "$GITHUB_OUTPUT"
@@ -81,11 +88,11 @@ jobs:
       - name: Locate bundle
         id: loc
         run: echo "dir=$(dirname "$(find ci-bundle -name index.html | head -1)")" >> "$GITHUB_OUTPUT"
-      - run: node scripts/render-film.mjs --only ${{ matrix.shot }} --bundle-dir "${{ steps.loc.outputs.dir }}"
+      - run: node scripts/render-film.mjs --only ${{ matrix.shot }} --bundle-dir "${{ steps.loc.outputs.dir }}" --unit "$FILM"
       - uses: actions/upload-artifact@v4
         with:
           name: shot-${{ matrix.shot }}
-          path: out/shots/site-film/${{ matrix.shot }}-*.mp4
+          path: out/shots/${{ env.FILM }}/${{ matrix.shot }}-*.mp4
           retention-days: 90 # 仓库上限
           if-no-files-found: error
 
@@ -106,18 +113,21 @@ jobs:
       - run: sudo apt-get update && sudo apt-get install -y ffmpeg
       - run: google-chrome-stable --version
       - uses: actions/download-artifact@v4
-        with: { pattern: 'shot-*', path: out/shots/site-film, merge-multiple: true }
+        with:
+          pattern: 'shot-*'
+          path: out/shots/${{ env.FILM }}
+          merge-multiple: true
       - uses: actions/download-artifact@v4
         with: { name: remotion-bundle, path: ci-bundle }
       - name: Locate bundle
         id: loc
         run: echo "dir=$(dirname "$(find ci-bundle -name index.html | head -1)")" >> "$GITHUB_OUTPUT"
       - name: Count collected shots
-        run: echo "已收镜产物 $(ls out/shots/site-film/*.mp4 2>/dev/null | wc -l) 个"
-      - run: node scripts/render-film.mjs --assemble --bundle-dir "${{ steps.loc.outputs.dir }}" # 缺镜在此明确列出
+        run: echo "已收镜产物 $(ls out/shots/$FILM/*.mp4 2>/dev/null | wc -l) 个"
+      - run: node scripts/render-film.mjs --assemble --bundle-dir "${{ steps.loc.outputs.dir }}" --unit "$FILM" # 缺镜在此明确列出
       - uses: actions/upload-artifact@v4
         with:
-          name: site-film-final
-          path: out/*-site-film.mp4 # 规范名 {yyyyMMdd}-{序号}-{项目名}.mp4（artifact 名保持稳定便于 download）
+          name: ${{ env.FILM }}-final
+          path: out/*-${{ env.FILM }}.mp4 # 规范名 {yyyyMMdd}-{序号}-{项目名}.mp4（artifact 名保持稳定便于 download）
           retention-days: 90 # 仓库上限
           if-no-files-found: error
