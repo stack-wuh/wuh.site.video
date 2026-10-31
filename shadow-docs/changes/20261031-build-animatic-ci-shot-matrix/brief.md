@@ -4,7 +4,7 @@
   "name": "20261031-build-animatic-ci-shot-matrix",
   "type": "build",
   "scope": "video-materials",
-  "status": "reviewed",
+  "status": "published",
   "baseBranch": "main",
   "branch": "build/20261031-build-animatic-ci-shot-matrix",
   "files": [
@@ -15,8 +15,8 @@
     "repository": null,
     "issue": null,
     "issueUrl": null,
-    "pullRequest": null,
-    "pullRequestUrl": null
+    "pullRequest": 29,
+    "pullRequestUrl": "https://github.com/stack-wuh/wuh.site.video/pull/29"
   },
   "review": {
     "conclusion": "passed",
@@ -25,7 +25,7 @@
   },
   "workflow": {
     "operation": null,
-    "checkpoint": null,
+    "checkpoint": "pr:29",
     "planHash": "359065548eea032efb011ec2a57f175b9e5b7d22a2a5d67fce5bab95dfa26a4f",
     "updatedAt": null,
     "lastError": null,
