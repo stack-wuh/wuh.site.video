@@ -4,7 +4,7 @@
   "name": "20261031-fix-ci-cjk-fonts",
   "type": "fix",
   "scope": "ci-render",
-  "status": "reviewed",
+  "status": "published",
   "baseBranch": "main",
   "branch": "fix/20261031-fix-ci-cjk-fonts",
   "files": [
@@ -16,8 +16,8 @@
     "repository": null,
     "issue": null,
     "issueUrl": null,
-    "pullRequest": null,
-    "pullRequestUrl": null
+    "pullRequest": 33,
+    "pullRequestUrl": "https://github.com/stack-wuh/wuh.site.video/pull/33"
   },
   "review": {
     "conclusion": "passed",
@@ -26,7 +26,7 @@
   },
   "workflow": {
     "operation": null,
-    "checkpoint": null,
+    "checkpoint": "pr:33",
     "planHash": "c65542263f7f55e797f8552d068350b37715e8281ff996ffab35475fd86192e8",
     "updatedAt": null,
     "lastError": null,
