@@ -4,7 +4,7 @@
   "name": "20261031-docs-intro-v2-s18-quotes",
   "type": "docs",
   "scope": "video-materials",
-  "status": "reviewed",
+  "status": "published",
   "baseBranch": "main",
   "branch": "docs/20261031-docs-intro-v2-s18-quotes",
   "files": [
@@ -21,8 +21,8 @@
     "repository": null,
     "issue": null,
     "issueUrl": null,
-    "pullRequest": null,
-    "pullRequestUrl": null
+    "pullRequest": 32,
+    "pullRequestUrl": "https://github.com/stack-wuh/wuh.site.video/pull/32"
   },
   "review": {
     "conclusion": "passed",
@@ -31,7 +31,7 @@
   },
   "workflow": {
     "operation": null,
-    "checkpoint": null,
+    "checkpoint": "pr:32",
     "planHash": "e5e9749ec72af2bed5cea7fe89e40e02f3d6818e8249f8fbc59cdf6320b5db4a",
     "updatedAt": null,
     "lastError": null,
