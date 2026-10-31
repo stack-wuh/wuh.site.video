@@ -4,21 +4,27 @@
  *   import  分镜定稿后一次性导入：解析 storyboard 逐镜表 → shots-manifest.json（此后改帧只改 manifest）
  *   sync    manifest → 生成 TS 视图（shots/manifest.ts）+ 镜注册表（shots/registry.ts）+ routes.tsx
  *   check   INV-S1/S2/S6 契约探针：对账、文件存在、生成物一致、与 storyboard 交叉核对（只读）
+ * 用法：node scripts/shots.mjs <import|sync|check> [--unit <slug>]（--unit 缺省 site-film，多片共用）
  */
 import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 const root = join(import.meta.dirname, '..');
-const filmDir = join(root, 'videos', 'site-film');
-const storyboardPath = join(root, 'videos', 'preprod-site-film', 'assets', 'storyboard.md');
-const manifestPath = join(filmDir, 'shots-manifest.json');
-const FPS = 30;
-
-const cmd = process.argv[2];
+const argv = process.argv.slice(2);
+const cmd = argv[0];
 const die = (msg) => {
   console.error(`✗ ${msg}`);
   process.exit(1);
 };
+const unitIdx = argv.indexOf('--unit');
+const unit = unitIdx >= 0 ? argv[unitIdx + 1] : 'site-film';
+if (!unit || unit.startsWith('--')) die('--unit 需要 slug，例如 --unit wuh-site-intro-v2');
+const pascal = unit.split('-').map((p) => p[0].toUpperCase() + p.slice(1)).join('');
+const camel = unit.split('-').map((p, i) => (i === 0 ? p : p[0].toUpperCase() + p.slice(1))).join('');
+const filmDir = join(root, 'videos', unit);
+const storyboardPath = join(root, 'videos', `preprod-${unit}`, 'assets', 'storyboard.md');
+const manifestPath = join(filmDir, 'shots-manifest.json');
+const FPS = 30;
 
 /* ─── storyboard 解析（import 一次性入口 + check 交叉核对共用） ─── */
 function parseStoryboard(path) {
@@ -90,9 +96,10 @@ function doImport() {
     cursor = s.cellEnd;
     return { id: s.id, act: s.act, title: s.title, startFrame: s.cellStart, durationFrames: s.durationFrames, source: s.source };
   });
-  const manifest = { film: 'site-film', fps: FPS, totalFrames: cursor, acts: parsed.acts, shots };
+  const manifest = { film: unit, fps: FPS, totalFrames: cursor, acts: parsed.acts, shots };
   const errs = validate(manifest, parsed);
   if (errs.length > 0) die(`对账失败 ${errs.length} 处:\n  ${errs.join('\n  ')}`);
+  mkdirSync(filmDir, { recursive: true });
   writeFileSync(manifestPath, JSON.stringify(manifest, null, 2) + '\n');
   console.log(`✅ import: ${shots.length} 镜 / ${parsed.acts.length} 幕 / ${manifest.totalFrames} 帧 → shots-manifest.json`);
 }
@@ -117,9 +124,9 @@ function doSync() {
   writeFileSync(
     join(filmDir, 'routes.tsx'),
     header('视频单元路由')
-      + `import type { FC } from 'react';\nimport type { VideoRoute } from '../../src/route';\nimport { SiteFilm } from './SiteFilm';\nimport { SiteFilmAudio } from './SiteFilmAudio';\nimport { ShotShell } from './components/ShotShell';\nimport { shotRegistry } from './shots/registry';\nimport { manifest } from './shots/manifest';\n\n`
-      + `const shotRoute = (id: string): VideoRoute => {\n  const entry = manifest.shots.find((s) => s.id === id);\n  if (!entry) throw new Error(\`manifest 缺镜 \${id}\`);\n  const Shot = shotRegistry[id];\n  const ShotComposition: FC = () => (\n    <ShotShell>\n      <Shot />\n    </ShotShell>\n  );\n  return { id: \`SiteFilm-\${id}\`, component: ShotComposition, durationInFrames: entry.durationFrames };\n};\n\n`
-      + `export const siteFilmRoutes: VideoRoute[] = [\n  { id: 'SiteFilm', component: SiteFilm, durationInFrames: manifest.totalFrames },\n  { id: 'SiteFilmAudio', component: SiteFilmAudio, durationInFrames: manifest.totalFrames },\n  ...manifest.shots.map((s) => shotRoute(s.id)),\n];\n`,
+      + `import type { FC } from 'react';\nimport type { VideoRoute } from '../../src/route';\nimport { ${pascal} } from './${pascal}';\nimport { ${pascal}Audio } from './${pascal}Audio';\nimport { ShotShell } from './components/ShotShell';\nimport { shotRegistry } from './shots/registry';\nimport { manifest } from './shots/manifest';\n\n`
+      + `const shotRoute = (id: string): VideoRoute => {\n  const entry = manifest.shots.find((s) => s.id === id);\n  if (!entry) throw new Error(\`manifest 缺镜 \${id}\`);\n  const Shot = shotRegistry[id];\n  const ShotComposition: FC = () => (\n    <ShotShell>\n      <Shot />\n    </ShotShell>\n  );\n  return { id: \`${pascal}-\${id}\`, component: ShotComposition, durationInFrames: entry.durationFrames };\n};\n\n`
+      + `export const ${camel}Routes: VideoRoute[] = [\n  { id: '${pascal}', component: ${pascal}, durationInFrames: manifest.totalFrames },\n  { id: '${pascal}Audio', component: ${pascal}Audio, durationInFrames: manifest.totalFrames },\n  ...manifest.shots.map((s) => shotRoute(s.id)),\n];\n`,
   );
   rmSync(join(filmDir, 'routes.ts'), { force: true });
   console.log(`✅ sync: manifest.ts + registry.ts + routes.tsx（${manifest.shots.length} 镜）`);
@@ -144,10 +151,12 @@ function doCheck() {
   const routesPath = join(filmDir, 'routes.tsx');
   if (existsSync(routesPath)) {
     const routes = readFileSync(routesPath, 'utf8');
-    for (const s of manifest.shots) {
-      if (!routes.includes(`SiteFilm-${s.id}`)) errs.push(`routes.tsx 缺 SiteFilm-${s.id}（跑 sync 重生成）`);
-    }
-    if (!routes.includes(`durationInFrames: manifest.totalFrames`)) errs.push('routes.tsx 缺 totalFrames 对账');
+    // 生成物以 shotRoute(s.id) 模板聚合全部镜级 comp，镜号字面量不在文件内——校验生成器模式本身
+    if (!routes.includes(`id: \`${pascal}-\${id}\``)) errs.push(`routes.tsx 缺镜级 comp 前缀 ${pascal}-（跑 sync 重生成）`);
+    if (!routes.includes(`component: ${pascal},`)) errs.push(`routes.tsx 缺 film comp ${pascal}（跑 sync 重生成）`);
+    if (!routes.includes(`component: ${pascal}Audio,`)) errs.push(`routes.tsx 缺 audio comp ${pascal}Audio（跑 sync 重生成）`);
+    if (!routes.includes('...manifest.shots.map((s) => shotRoute(s.id))')) errs.push('routes.tsx 缺 manifest 逐镜遍历（跑 sync 重生成）');
+    if (!routes.includes('durationInFrames: manifest.totalFrames')) errs.push('routes.tsx 缺 totalFrames 对账');
   }
   if (errs.length > 0) die(`INV 对账失败 ${errs.length} 处:\n  ${errs.join('\n  ')}`);
   console.log(`✅ check: INV-S1/S2/S6 全绿 —— ${manifest.shots.length} 镜 Σ=${manifest.totalFrames} 帧，与分镜表/幕表/生成物一致`);
@@ -157,5 +166,5 @@ switch (cmd) {
   case 'import': doImport(); break;
   case 'sync': doSync(); break;
   case 'check': doCheck(); break;
-  default: die('用法: node scripts/shots.mjs <import|sync|check>');
+  default: die('用法: node scripts/shots.mjs <import|sync|check> [--unit <slug>]');
 }

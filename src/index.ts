@@ -1,4 +1,4 @@
-import './brand/fonts';
+import '../brand/fonts';
 import { registerRoot } from 'remotion';
 import { RemotionRoot } from './Root';
 
