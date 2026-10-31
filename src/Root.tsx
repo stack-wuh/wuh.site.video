@@ -4,6 +4,7 @@ import { selfIntroRoutes } from '../videos/self-intro/routes';
 import { siteFilmRoutes } from '../videos/site-film/routes';
 import { preprodRoutes } from '../videos/preprod-site-film/routes';
 import { wuhSiteIntroV2PreprodRoutes } from '../videos/preprod-wuh-site-intro-v2/routes';
+import { wuhSiteIntroV2Routes } from '../videos/wuh-site-intro-v2/routes';
 import { identRoutes } from '../brand/ident/routes';
 import type { VideoRoute } from './route';
 
@@ -12,7 +13,7 @@ import type { VideoRoute } from './route';
  * 新增视频：在 videos/<slug>/routes.ts 声明路由数组，在此加一行 import 并 spread 进对应分组。
  * Remotion <Folder> 按 brand / films 分组，Studio 侧边栏分层显示。
  */
-const filmRoutes: VideoRoute[] = [...selfIntroRoutes, ...siteFilmRoutes, ...preprodRoutes, ...wuhSiteIntroV2PreprodRoutes];
+const filmRoutes: VideoRoute[] = [...selfIntroRoutes, ...siteFilmRoutes, ...preprodRoutes, ...wuhSiteIntroV2PreprodRoutes, ...wuhSiteIntroV2Routes];
 
 const toComposition = (r: VideoRoute) => (
   <Composition

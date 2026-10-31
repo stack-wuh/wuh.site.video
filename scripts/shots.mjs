@@ -24,6 +24,9 @@ const camel = unit.split('-').map((p, i) => (i === 0 ? p : p[0].toUpperCase() + 
 const filmDir = join(root, 'videos', unit);
 const storyboardPath = join(root, 'videos', `preprod-${unit}`, 'assets', 'storyboard.md');
 const manifestPath = join(filmDir, 'shots-manifest.json');
+const configPath = join(filmDir, 'film.config.json');
+/** film.config.json 的 shell 声明（intro/outro 帧）：有则 film/audio 路由时长含片头片尾；无则维持 site-film 既有口径 */
+const readShell = () => (existsSync(configPath) ? (JSON.parse(readFileSync(configPath, 'utf8')).shell ?? null) : null);
 const FPS = 30;
 
 /* ─── storyboard 解析（import 一次性入口 + check 交叉核对共用） ─── */
@@ -108,6 +111,8 @@ function doImport() {
 function doSync() {
   if (!existsSync(manifestPath)) die('shots-manifest.json 不存在——先跑 import');
   const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'));
+  const shell = readShell();
+  const filmDurationExpr = shell ? String(manifest.totalFrames + shell.intro + shell.outro) : 'manifest.totalFrames';
   mkdirSync(join(filmDir, 'shots'), { recursive: true });
   const header = (what) => `/* 由 scripts/shots.mjs sync 生成——勿手改；真源 shots-manifest.json（${what}） */\n`;
   const tsType = `{ film: string; fps: number; totalFrames: number; acts: Array<{ act: number; title: string; startFrame: number; endFrame: number }>; shots: Array<{ id: string; act: number; title: string; startFrame: number; durationFrames: number; source: string }> }`;
@@ -126,7 +131,7 @@ function doSync() {
     header('视频单元路由')
       + `import type { FC } from 'react';\nimport type { VideoRoute } from '../../src/route';\nimport { ${pascal} } from './${pascal}';\nimport { ${pascal}Audio } from './${pascal}Audio';\nimport { ShotShell } from './components/ShotShell';\nimport { shotRegistry } from './shots/registry';\nimport { manifest } from './shots/manifest';\n\n`
       + `const shotRoute = (id: string): VideoRoute => {\n  const entry = manifest.shots.find((s) => s.id === id);\n  if (!entry) throw new Error(\`manifest 缺镜 \${id}\`);\n  const Shot = shotRegistry[id];\n  const ShotComposition: FC = () => (\n    <ShotShell>\n      <Shot />\n    </ShotShell>\n  );\n  return { id: \`${pascal}-\${id}\`, component: ShotComposition, durationInFrames: entry.durationFrames };\n};\n\n`
-      + `export const ${camel}Routes: VideoRoute[] = [\n  { id: '${pascal}', component: ${pascal}, durationInFrames: manifest.totalFrames },\n  { id: '${pascal}Audio', component: ${pascal}Audio, durationInFrames: manifest.totalFrames },\n  ...manifest.shots.map((s) => shotRoute(s.id)),\n];\n`,
+      + `export const ${camel}Routes: VideoRoute[] = [\n  { id: '${pascal}', component: ${pascal}, durationInFrames: ${filmDurationExpr} },\n  { id: '${pascal}Audio', component: ${pascal}Audio, durationInFrames: ${filmDurationExpr} },\n  ...manifest.shots.map((s) => shotRoute(s.id)),\n];\n`,
   );
   rmSync(join(filmDir, 'routes.ts'), { force: true });
   console.log(`✅ sync: manifest.ts + registry.ts + routes.tsx（${manifest.shots.length} 镜）`);
@@ -137,6 +142,8 @@ function doCheck() {
   if (!existsSync(manifestPath)) die('shots-manifest.json 不存在——先跑 import');
   const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'));
   const parsed = parseStoryboard(storyboardPath);
+  const shell = readShell();
+  const filmDurationExpr = shell ? String(manifest.totalFrames + shell.intro + shell.outro) : 'manifest.totalFrames';
   const errs = validate(manifest, parsed);
   for (const s of manifest.shots) {
     if (!existsSync(join(filmDir, s.source))) errs.push(`${s.source} 不存在`);
@@ -156,7 +163,7 @@ function doCheck() {
     if (!routes.includes(`component: ${pascal},`)) errs.push(`routes.tsx 缺 film comp ${pascal}（跑 sync 重生成）`);
     if (!routes.includes(`component: ${pascal}Audio,`)) errs.push(`routes.tsx 缺 audio comp ${pascal}Audio（跑 sync 重生成）`);
     if (!routes.includes('...manifest.shots.map((s) => shotRoute(s.id))')) errs.push('routes.tsx 缺 manifest 逐镜遍历（跑 sync 重生成）');
-    if (!routes.includes('durationInFrames: manifest.totalFrames')) errs.push('routes.tsx 缺 totalFrames 对账');
+    if (!routes.includes(`durationInFrames: ${filmDurationExpr}`)) errs.push('routes.tsx 缺时长对账（跑 sync 重生成）');
   }
   if (errs.length > 0) die(`INV 对账失败 ${errs.length} 处:\n  ${errs.join('\n  ')}`);
   console.log(`✅ check: INV-S1/S2/S6 全绿 —— ${manifest.shots.length} 镜 Σ=${manifest.totalFrames} 帧，与分镜表/幕表/生成物一致`);
