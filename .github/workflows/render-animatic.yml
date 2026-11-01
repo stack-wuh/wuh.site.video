@@ -1,13 +1,38 @@
 name: render-animatic
 # 云端渲染 animatic（workflow_dispatch）——bundle 一次 → 分段矩阵 → concat 帧级对齐 → 终验
-# 分段 = 片头 120f + 57 镜（内容帧 +120 偏移）+ 片尾 180f，单段失败只重跑单段
+# 分段 = 片头 120f + N 镜（内容帧 +120 偏移）+ 片尾 180f，单段失败只重跑单段
 on:
   workflow_dispatch:
     inputs:
+      scope:
+        description: '渲染范围：all = 全片 + 汇总；actN = 只渲该幕；intro-outro = 只渲片头片尾'
+        type: choice
+        required: false
+        default: all
+        options:
+          - all
+          - intro-outro
+          - act1
+          - act2
+          - act3
+          - act4
+          - act5
+          - act6
+          - act7
+          - act8
       shots:
-        description: '镜号子集（空格分隔，如 "s03 s17"；空 = 全部 59 段 + 汇总）'
+        description: '高级：镜号子集（空格分隔，如 "s03 s17"）；留空 = 按 scope'
         required: false
         default: ''
+      unit:
+        description: '影片 slug'
+        type: choice
+        required: false
+        default: 'wuh-site-intro-v2'
+        options:
+          - wuh-site-intro-v2
+          - zhi-guo-xiang
+          - site-film
 
 concurrency:
   group: render-animatic
@@ -18,6 +43,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     outputs:
+      unit: ${{ steps.plan.outputs.unit }}
       segments: ${{ steps.plan.outputs.segments }}
       full: ${{ steps.plan.outputs.full }}
     steps:
@@ -25,23 +51,35 @@ jobs:
       - id: plan
         env:
           SHOTS_INPUT: ${{ github.event.inputs.shots }}
+          SCOPE_INPUT: ${{ github.event.inputs.scope }}
+          UNIT_INPUT: ${{ github.event.inputs.unit }}
         run: |
           node - <<'NODE'
           const fs = require('fs');
-          const m = JSON.parse(fs.readFileSync('videos/wuh-site-intro-v2/shots-manifest.json', 'utf8'));
+          const unit = (process.env.UNIT_INPUT || 'wuh-site-intro-v2').trim() || 'wuh-site-intro-v2';
+          const scope = (process.env.SCOPE_INPUT || 'all').trim() || 'all';
+          const m = JSON.parse(fs.readFileSync(`videos/${unit}/shots-manifest.json`, 'utf8'));
           const INTRO = 120, OUTRO = 180;
-          const input = (process.env.SHOTS_INPUT || '').split(/\s+/).filter(Boolean);
-          const pick = (id) => input.length === 0 || input.includes(id);
+          const custom = (process.env.SHOTS_INPUT || '').split(/\s+/).filter(Boolean);
+          const actMatch = scope.match(/^act(\d+)$/);
+          const pick = custom.length > 0
+            ? (s) => custom.includes(s.id)
+            : scope === 'all'
+              ? () => true
+              : actMatch
+                ? (s) => s.act === Number(actMatch[1])
+                : () => false;
           const segments = [{ id: 'intro', start: 0, end: INTRO - 1 }];
           for (const s of m.shots) {
-            if (!pick(s.id)) continue;
+            if (!pick(s)) continue;
             segments.push({ id: s.id, start: s.startFrame + INTRO, end: s.startFrame + s.durationFrames + INTRO - 1 });
           }
           segments.push({ id: 'outro', start: m.totalFrames + INTRO, end: m.totalFrames + INTRO + OUTRO - 1 });
-          const full = input.length === 0;
-          fs.writeFileSync('segments.json', JSON.stringify({ segments, full, total: m.totalFrames + INTRO + OUTRO }, null, 2));
-          console.log(`segments=${segments.length} full=${full} total=${m.totalFrames + INTRO + OUTRO}`);
+          const full = custom.length === 0 && scope === 'all';
+          fs.writeFileSync('segments.json', JSON.stringify({ unit, scope, segments, full, total: m.totalFrames + INTRO + OUTRO }, null, 2));
+          console.log(`unit=${unit} scope=${scope} segments=${segments.length} full=${full} total=${m.totalFrames + INTRO + OUTRO}`);
           NODE
+          echo "unit=$(jq -r .unit segments.json)" >> "$GITHUB_OUTPUT"
           echo "segments=$(jq -c .segments segments.json)" >> "$GITHUB_OUTPUT"
           echo "full=$(jq -r .full segments.json)" >> "$GITHUB_OUTPUT"
       - uses: actions/upload-artifact@v7
@@ -101,6 +139,7 @@ jobs:
         with: { name: remotion-bundle, path: ci-bundle }
       - name: Render segment
         env:
+          UNIT: ${{ needs.plan.outputs.unit }}
           SEG: ${{ matrix.seg.id }}
           START: ${{ matrix.seg.start }}
           END: ${{ matrix.seg.end }}
@@ -110,10 +149,12 @@ jobs:
           import { readFileSync } from 'node:fs';
           import { renderMedia } from '@remotion/renderer';
           const [seg, start, end] = process.argv.slice(2);
-          const m = JSON.parse(readFileSync('videos/wuh-site-intro-v2/shots-manifest.json', 'utf8'));
+          const unit = process.env.UNIT;
+          const pascal = unit.split('-').map((p) => p[0].toUpperCase() + p.slice(1)).join('');
+          const m = JSON.parse(readFileSync(`videos/${unit}/shots-manifest.json`, 'utf8'));
           const total = m.totalFrames + 120 + 180;
           await renderMedia({
-            composition: { id: 'WuhSiteIntroV2Animatic', width: 1920, height: 1080, fps: 30, durationInFrames: total },
+            composition: { id: `${pascal}Animatic`, width: 1920, height: 1080, fps: 30, durationInFrames: total },
             serveUrl: 'ci-bundle',
             codec: 'h264',
             crf: 16,
@@ -140,6 +181,8 @@ jobs:
     if: needs.plan.outputs.full == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    env:
+      UNIT: ${{ needs.plan.outputs.unit }}
     steps:
       - uses: actions/checkout@v7
       - run: sudo apt-get update && sudo apt-get install -y ffmpeg
@@ -153,6 +196,7 @@ jobs:
           import { execFileSync } from 'node:child_process';
           import { existsSync, readdirSync, readFileSync } from 'node:fs';
           const { segments } = JSON.parse(readFileSync('plan/segments.json', 'utf8'));
+          const unit = process.env.UNIT;
           const files = segments.map((s) => `out/segs/seg-${s.id}.mp4`);
           const missing = files.filter((f) => !existsSync(f));
           if (missing.length) { console.error('缺段:', missing.join(', ')); process.exit(1); }
@@ -162,19 +206,24 @@ jobs:
           const graph = `${chains};${files.map((_, i) => `[v${i}]`).join('')}concat=n=${files.length}:v=1:a=0[cat]`;
           const d = new Date();
           const dateTag = `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}${String(d.getDate()).padStart(2, '0')}`;
-          const prev = readdirSync('out').map((f) => f.match(/^A\d{8}(\d{2})-wuh-site-intro-v2\.mp4$/)).filter(Boolean).map((m) => Number(m[1])).reduce((a, b) => Math.max(a, b), 0);
-          const out = `out/A${dateTag}${String(prev + 1).padStart(2, '0')}-wuh-site-intro-v2.mp4`;
+          const prev = readdirSync('out')
+            .filter((f) => f.startsWith('A') && f.endsWith(`-${unit}.mp4`))
+            .map((f) => f.match(/^A\d{8}(\d{2})-/))
+            .filter(Boolean)
+            .map((m) => Number(m[1]))
+            .reduce((a, b) => Math.max(a, b), 0);
+          const out = `out/A${dateTag}${String(prev + 1).padStart(2, '0')}-${unit}.mp4`;
           args.push('-filter_complex', graph, '-map', '[cat]', '-r', '30', '-vsync', 'cfr', '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '16', '-pix_fmt', 'yuv420p', out);
           execFileSync('ffmpeg', ['-y', ...args], { stdio: 'inherit' });
           const frames = Number(execFileSync('ffprobe', ['-v', 'error', '-select_streams', 'v:0', '-show_entries', 'stream=nb_frames', '-of', 'default=noprint_wrappers=1:nokey=1', out], { encoding: 'utf8' }).trim());
-          const total = Number(JSON.parse(readFileSync('videos/wuh-site-intro-v2/shots-manifest.json', 'utf8')).totalFrames) + 120 + 180;
+          const total = Number(JSON.parse(readFileSync(`videos/${unit}/shots-manifest.json`, 'utf8')).totalFrames) + 120 + 180;
           console.log(`final frames=${frames} total=${total}`);
           if (frames !== total) process.exit(1);
           EOF
           node assemble.mjs
       - uses: actions/upload-artifact@v7
         with:
-          name: wuh-site-intro-v2-animatic
-          path: out/A*-wuh-site-intro-v2.mp4
+          name: ${{ needs.plan.outputs.unit }}-animatic
+          path: out/A*-${{ needs.plan.outputs.unit }}.mp4
           retention-days: 90
           if-no-files-found: error
