@@ -1,7 +1,7 @@
 ---
 title: 视频工作室结构与渲染工具链
 domain: video-materials
-keywords: [工作室结构, 分镜, 视频, 脚手架, new-video, 渲染, render, chrome, 端口, 段错误, 崩溃, 沙箱, node22, staticFile, 分块渲染, 清场, animatic, storyboard, motion-spec, 片头, 片尾, ident, FilmShell, 家族标识, 时长公式]
+keywords: [工作室结构, 分镜, 视频, 脚手架, new-video, 渲染, render, chrome, 端口, 段错误, 崩溃, 沙箱, node22, staticFile, 分块渲染, 清场, animatic, storyboard, motion-spec, 片头, 片尾, ident, FilmShell, 家族标识, 时长公式, render-animatic, unit, scope, choice, A 前缀, preprod, animatic CI, zhi-guo-xiang]
 scope: [brand/, brand/ident/, videos/, scripts/, src/Root.tsx, package.json, public/]
 status: active
 source:
@@ -9,9 +9,10 @@ source:
   - changes/20261025-feature-site-film-preprod/brief.md
   - changes/20261029-feature-film-identity/brief.md
   - changes/20261031-docs-scaffold-knowledge-fix/brief.md
-verified: 2026-10-31
+  - changes/archive/20261101-feature-zhi-guo-xiang-preprod/brief.md
+verified: 2026-11-01
 verified-depth: runtime
-verified-scope: 2026-10-24/25 两日实测：v5《朝朝如念》2:30 成片 + v6 前期 animatic 4:00 分镜板（7200 帧）出片。实证：分段+轮转编排+渲染前清场+分块重试的收敛策略；Composition 越界拒绝（getRealFrameRanges）；staticFile 以 public/ 为根；Chrome 对部分透明度叠渲染的确定性崩溃及 3 帧跳变规避；前期三件套（素材库→storyboard→motion-spec→animatic）+ 分镜师/UE 大师 subagent 协作出品。2026-10-29 家族片头片尾套件实证：BrandIdent 420f 与 self-intro 630f 出片、时长公式对账、令牌再导出零视觉变化。2026-10-31 脚手架口径修正（生成器产出 routes.ts、以临时 slug + typecheck 验证）经代码走查对齐。硬件内存嫌疑仍未做诊断，标注待验证。
+verified-scope: 2026-10-24/25 两日实测：v5《朝朝如念》2:30 成片 + v6 前期 animatic 4:00 分镜板（7200 帧）出片。实证：分段+轮转编排+渲染前清场+分块重试的收敛策略；Composition 越界拒绝（getRealFrameRanges）；staticFile 以 public/ 为根；Chrome 对部分透明度叠渲染的确定性崩溃及 3 帧跳变规避；前期三件套（素材库→storyboard→motion-spec→animatic）+ 分镜师/UE 大师 subagent 协作出品。2026-10-29 家族片头片尾套件实证：BrandIdent 420f 与 self-intro 630f 出片、时长公式对账、令牌再导出零视觉变化。2026-10-31 脚手架口径修正（生成器产出 routes.ts、以临时 slug + typecheck 验证）经代码走查对齐。2026-11-01 致郭襄前期：preprod-zhi-guo-xiang 单元 + render-animatic 的 unit/scope choice + 52 镜 animatic 7500f CI 出片（run 41260324683）+ A{yyyyMMdd}{index}-{film}.mp4 产物。硬件内存嫌疑仍未做诊断，标注待验证。
 ---
 
 # 视频工作室结构与渲染工具链
@@ -24,7 +25,9 @@ verified-scope: 2026-10-24/25 两日实测：v5《朝朝如念》2:30 成片 + v
 
 **素材路径约定**：Remotion `staticFile()` 以 `public/` 为根——音频等静态资产放 `public/<slug>/`（如 `public/site-journey/bgm.mp3`），母带留存 `videos/<slug>/assets/`；**Composition 一致性**：`src/Root.tsx` 的 `durationInFrames` 必须与分段时间轴一致，分段渲染 `--frames` 越界会在启动期被 `getRealFrameRanges` 确定性拒绝（报错在 stderr，易被空日志掩盖）。
 
-**前期制作三件套**（长片预流程）：素材库（materials.md，全条目标注真实数据源）→ 分镜脚本（storyboard.md，逐镜表 + 帧数对账表）→ 动效规范（motion-spec.md，令牌化 + 全镜覆盖矩阵）→ animatic 分镜板（灰盒/单色简板，构图+节拍+字幕，评审节奏后再正式制作）。分镜师、UE 动效大师以专职 subagent 并行产出，协调方负责对账与整合。
+**前期五件套 + 人物视觉设定**（长片预流程）：素材库（materials.md，全条目标注真实数据源）→ 剧本（script.md，用户与编剧评审）→ 分镜（storyboard.md，逐镜表 + 帧数对账表）→ 动效规范（motion-spec.md，令牌化 + 全镜覆盖矩阵）→ animatic 分镜板（单色简板，构图+节拍+字幕）；人物视觉设定（character-design.md）与分镜并行。分镜师、UE 动效大师、人物设计师以专职 subagent 并行产出，协调方负责对账与整合。
+
+**Animatic CI 多片（2026-11-01）**：`render-animatic.yml`（workflow_dispatch）输入 `unit` choice（wuh-site-intro-v2 / zhi-guo-xiang / site-film）、`scope` choice（all / intro-outro / act1–act8）、`shots` 高级子集（空格分隔镜号，空 = 按 scope）。plan 读 `videos/<unit>/shots-manifest.json`；Composition `${Pascal}Animatic`；产物 `out/A{yyyyMMdd}{index}-<unit>.mp4`，artifact `<unit>-animatic`。`scope=all` 且 `shots` 空才汇总拼接；act / intro-outro / 自定义子集只渲对应段。
 
 ## 执行约束
 
@@ -56,11 +59,11 @@ verified-scope: 2026-10-24/25 两日实测：v5《朝朝如念》2:30 成片 + v
 
 接入方式：`<FilmShell meta={{ title, subtitle, episode, credits }} contentFrames={N}>正片</FilmShell>`。Composition 的 `durationInFrames` 必须用 `totalFilmFrames(N)` 计算（120 + N + 180），routes.ts 与组件共用同一公式；`new-video.mjs` 生成的骨架已默认接入。
 
-音频口径：套件不带音效资产；BGM 在影片组件层声明——片头静音、正片首帧淡入、片尾接续并末 30f 淡出。不要用 `<Audio loop>` 收尾（音量回调按轮重置，见 [[render-stability-playbook]]），用显式两遍播放 + 独立尾段 Sequence。
+音频口径：套件不带音效资产；BGM 在影片组件层声明——片头静音、正片首帧淡入、片尾接续并末 30f 淡出。不要用 `<Audio loop>` 收尾（音量回调按轮重置，见 [[render-stability-playbook]]），用显式两遍播放 + 独立尾段 Sequence。版权曲目改走本地 mux，不进此链路。
 
 ## 关联知识
 
-- 无（本仓首批卡片）
+- [[video-production-flow]]、[[render-stability-playbook]]
 
 ## 文件存放与版本管理（Remotion 项目规范）
 
@@ -69,8 +72,9 @@ verified-scope: 2026-10-24/25 两日实测：v5《朝朝如念》2:30 成片 + v
 | `brand/ident/*.tsx`、`brand/motion.ts` | ✅ | 家族片头片尾套件与品牌动效基元 |
 | `videos/<slug>/*.tsx`、`motion-tokens.ts`、`components/` | ✅ | 场景源码，核心资产 |
 | `videos/<slug>/assets/*.md`（素材库/分镜/规范/选曲文档） | ✅ | 施工图，评审与复用依赖 |
+| `videos/preprod-<film>/assets/*.md`（素材库/剧本/分镜/动效/人物/配乐决策） | ✅ | 前期施工图与评审依赖 |
 | `videos/<slug>/assets/bgm*-candidate-*` | ❌ gitignore | 试听候选（本地文件，单首 4–13MB），选中的转为正式轨入 `public/` |
-| `public/<slug>/*.m4a` | ✅ | 渲染依赖（staticFile 以 public/ 为根），其他机器/CI 出片必需；单轨 AAC ≤8MB 可接受，>50MB 考虑 LFS |
+| `public/<slug>/*.m4a` | ✅ | 渲染依赖（staticFile 以 public/ 为根），其他机器/CI 出片必需；单轨 AAC ≤8MB 可接受，>50MB 考虑 LFS；版权曲目例外——本地 mux，不入 public/ |
 | `out/`（成片/分段/微块/日志/一次性攻坚脚本） | ❌ gitignore | 渲染产物与临时物；可重生成的都不进 |
 | `*.log` | ❌ | 渲染日志 |
 | 落选音频候选 | ❌ | 选曲定稿后随变更清理 |
