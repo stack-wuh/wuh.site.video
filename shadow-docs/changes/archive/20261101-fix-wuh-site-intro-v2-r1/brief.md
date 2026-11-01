@@ -4,7 +4,7 @@
   "name": "20261101-fix-wuh-site-intro-v2-r1",
   "type": "fix",
   "scope": "video-studio",
-  "status": "published",
+  "status": "archived",
   "baseBranch": "main",
   "branch": "fix/20261101-fix-wuh-site-intro-v2-r1",
   "files": [
@@ -23,13 +23,13 @@
   },
   "review": {
     "conclusion": "passed",
-    "verifiedCommit": "a229d6a586e31812f058fa77cf3ffcd1805a9046",
-    "verifiedAt": "2026-10-31T17:22:54.842Z"
+    "verifiedCommit": "81f11bce230f5cd102871c56df6b11647a7fd004",
+    "verifiedAt": "2026-11-01T00:41:51.314Z"
   },
   "workflow": {
     "operation": null,
-    "checkpoint": "pr:35",
-    "planHash": "8f374cbe08908b813c3dee14b5f0cf3153dbb043147d775b2239d4bb14521331",
+    "checkpoint": "merged-pr:35",
+    "planHash": "4437c9cbae6ca2e12b0542f19d16c66e62b153051923c9395888d4864d6a1707",
     "updatedAt": null,
     "lastError": null,
     "release": {
