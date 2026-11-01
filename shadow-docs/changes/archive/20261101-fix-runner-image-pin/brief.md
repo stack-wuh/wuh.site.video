@@ -4,7 +4,7 @@
   "name": "20261101-fix-runner-image-pin",
   "type": "fix",
   "scope": "ci-render",
-  "status": "published",
+  "status": "archived",
   "baseBranch": "main",
   "branch": "fix/20261101-fix-runner-image-pin",
   "files": [
@@ -21,13 +21,13 @@
   },
   "review": {
     "conclusion": "passed",
-    "verifiedCommit": "09849501f939ad230b12b20fbc984bc9e4bf9c51",
-    "verifiedAt": "2026-11-01T02:10:43.862Z"
+    "verifiedCommit": "004dee5da1cdeff5a193fdbb5e0a8e0c88fa2e16",
+    "verifiedAt": "2026-11-01T02:16:52.445Z"
   },
   "workflow": {
     "operation": null,
-    "checkpoint": "pr:38",
-    "planHash": "30b3db4d09e8de9cb6bdbbdbc5efeb236ef4ff897f862d7715f291ee3c5f5e3c",
+    "checkpoint": "merged-pr:38",
+    "planHash": "f66bf1b89d6b672567d3adefafefbc24c8161255f25ddf18a5776c46c11ba4f5",
     "updatedAt": null,
     "lastError": null,
     "release": {
