@@ -1,12 +1,13 @@
-/* 镜 56 · Act 8 此刻 · 局部帧 [0,132) · 132f
-   总结纸页翻起、回到开篇的纸面：打字机标语逐字打出
-   「写作是抵抗遗忘的方式，代码是构建世界的语言。」（FN-03 typeCharsAt，5f/字，10–120f），
-   笔尖 28px 径向微光（FN-22）跟随，每字溅 2–3 颗 3px 墨点（PT-04，seed=s56-speck-c-i）；
-   末字落定后 100→104% 缓推（CM-03）；与 S2 题记同一张纸；GR-02。 */
+/* 镜 56 · Act 8 此刻 · 局部帧 [0,140) · 140f
+   总结纸页铺满画幅（白边自 s55 收束溶解）：六母题——墨点、纸页、代码行、黑胶、灯、钤印——
+   以 ≤12% 低透明度浮雕逐个叠印在同一张纸上（overlay + motif-still，每个约 15f）；
+   镜头自纸面一角缓移到整页（CM-06）；右下极小等宽脚注于末 30f 浮现（数字不占字幕）；
+   尾帧纸页翻起、打字机光标在纸面亮起；GR-02。 */
 import type { FC } from 'react';
-import { AbsoluteFill, interpolate, random, useCurrentFrame } from 'remotion';
+import type { CSSProperties } from 'react';
+import { AbsoluteFill, interpolate, useCurrentFrame } from 'remotion';
 import { colors, fontFamilies } from '../../../brand/tokens';
-import { CURVES, penGlow, typeCharsAt } from '../motion-tokens';
+import { CURVES, FILM_COLORS, penGlow, writeFade } from '../motion-tokens';
 import { CameraRig } from '../components/CameraRig';
 import { DustField } from '../components/DustField';
 import { PaperGrain } from '../components/PaperGrain';
@@ -14,99 +15,119 @@ import { Grade } from '../components/Grade';
 import { Caption } from '../components/Caption';
 
 const CLAMP = { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' } as const;
-const TEXT1 = '写作是抵抗遗忘的方式，';
-const TEXT2 = '代码是构建世界的语言。';
-const LINE1_Y = 380;
-const LINE2_Y = 523;
-const CHAR_W = 84;
-const X0 = 498;
-const START = 10;
-const FPC = 5;
-const TOTAL = TEXT1.length + TEXT2.length;
+const MONO = fontFamilies.mono;
+const SERIF = fontFamilies.serif;
+const CURSOR = { x: 498, y: 451 };
 
-const serif = fontFamilies.serif;
-
-/* PT-04 打字机溅墨：每字 2–3 颗 3px，初速向上外侧 + 微重力，life 18f */
-const SPECKS = Array.from({ length: TOTAL }).flatMap((_, c) => {
-  const count = 2 + (random(`s56-speck-${c}-n`) > 0.5 ? 1 : 0);
-  return Array.from({ length: count }).map((__, s) => {
-    const seed = `s56-speck-${c}-${s}`;
-    return {
-      c,
-      seed,
-      vx: (random(`${seed}-vx`) - 0.5) * 34,
-      vy: -(16 + random(`${seed}-vy`) * 22),
-      x: X0 + (c % 11) * CHAR_W + 42,
-      y: (c < 11 ? LINE1_Y : LINE2_Y) + 24,
-    };
-  });
-});
-
-const ShotTypewriter: FC = () => {
+const ShotSummaryPage: FC = () => {
   const frame = useCurrentFrame();
-  const typed = typeCharsAt(frame, TOTAL, START, FPC);
+  /* 镜头：自纸面一角缓移到整页 */
+  const cam = {
+    scale: interpolate(frame, [0, 120], [1.05, 1], { ...CLAMP, easing: CURVES.cineEaseInOut }),
+    x: interpolate(frame, [0, 120], [-26, 0], { ...CLAMP, easing: CURVES.cineEaseInOut }),
+    y: interpolate(frame, [0, 120], [-18, 0], { ...CLAMP, easing: CURVES.cineEaseInOut }),
+    rot: 0,
+  };
+  const edge = interpolate(frame, [0, 24], [0.85, 0], { ...CLAMP, easing: CURVES.cineEaseOut });
+  const footnote = writeFade(frame, 110);
+  const flipP = interpolate(frame, [126, 140], [0, 1], { ...CLAMP, easing: CURVES.cineEaseInOut });
+  const cursorIn = interpolate(frame, [128, 136], [0, 1], { ...CLAMP, easing: CURVES.cineEaseOut });
 
-  /* 笔尖位置：字格中心（逐字右移，跨行折返） */
-  const t = Math.min(TOTAL, typed);
-  const row = t < TEXT1.length ? 0 : 1;
-  const col = row === 0 ? t : t - TEXT1.length;
-  const penX = X0 + col * CHAR_W;
-  const penY = (row === 0 ? LINE1_Y : LINE2_Y) + 71;
-  const glowAmp = frame < 118 ? 1 : interpolate(frame, [118, 132], [0.9, 0.4], CLAMP);
-  const pg = penGlow(frame, penX, penY);
-  /* 末字落定后缓推 104%（CM-03） */
-  const push = interpolate(frame, [120, 132], [1, 1.04], { ...CLAMP, easing: CURVES.cineEaseOut });
-  const follow = -(penX - 960) * 0.045;
+  /* 母题浮雕：写入口味不高于 12%，逐个叠印 */
+  const motif = (delay: number): CSSProperties => {
+    const wf = writeFade(frame, delay);
+    return { ...wf, opacity: 0.12 * Number(wf.opacity ?? 1) };
+  };
 
   return (
     <AbsoluteFill style={{ background: colors.paper }}>
-      <CameraRig cam={{ scale: push, x: follow, y: 0, rot: 0 }}>
-        <AbsoluteFill>
+      <CameraRig cam={cam}>
+        <AbsoluteFill style={{ transform: `rotateY(${-4 * flipP}deg)`, transformOrigin: 'left center' }}>
           <DustField act={8} seedBase="s56" />
-          <div style={{ position: 'absolute', left: 0, right: 0, top: LINE1_Y, textAlign: 'center', fontFamily: serif, fontSize: 84, lineHeight: '143px', color: colors.ink, whiteSpace: 'pre' }}>
-            {Array.from(TEXT1).map((ch, i) => (
-              <span key={i} style={{ opacity: i < typed ? 1 : 0 }}>{ch}</span>
+          {/* 1 墨点 */}
+          <div style={{ ...motif(16), position: 'absolute', left: 320, top: 300, width: 80, height: 74, borderRadius: '50%', background: colors.ink, filter: 'blur(7px)' }} />
+          {/* 2 纸页 */}
+          <svg width={1920} height={1080} style={{ position: 'absolute', inset: 0 }}>
+            <g style={motif(31)}>
+              <g transform="translate(700 250)">
+                <rect x={36} y={30} width={150} height={202} fill="none" stroke={colors.ink} strokeWidth={1.6} transform="rotate(-5 111 131)" />
+                <rect x={70} y={18} width={150} height={202} fill="none" stroke={colors.ink} strokeWidth={1.6} transform="rotate(4 145 119)" />
+              </g>
+            </g>
+          </svg>
+          {/* 3 代码行 */}
+          <div style={{ ...motif(46), position: 'absolute', left: 1180, top: 300 }}>
+            {[220, 170, 240, 130, 190, 110].map((w) => (
+              <div key={w} style={{ width: w, height: 3, borderRadius: 1.5, background: colors.ink, marginBottom: 16 }} />
             ))}
           </div>
-          <div style={{ position: 'absolute', left: 0, right: 0, top: LINE2_Y, textAlign: 'center', fontFamily: serif, fontSize: 84, lineHeight: '143px', color: colors.ink, whiteSpace: 'pre' }}>
-            {Array.from(TEXT2).map((ch, j) => (
-              <span key={j} style={{ opacity: TEXT1.length + j < typed ? 1 : 0 }}>{ch}</span>
-            ))}
+          {/* 4 黑胶（母题静帧，非特写运镜） */}
+          <svg width={1920} height={1080} style={{ position: 'absolute', inset: 0 }}>
+            <g style={motif(61)}>
+              <g transform="translate(1480 400)">
+                <circle cx={86} cy={86} r={78} fill="none" stroke={colors.ink} strokeWidth={1.4} />
+                <circle cx={86} cy={86} r={58} fill="none" stroke={colors.ink} strokeWidth={1.1} />
+                <circle cx={86} cy={86} r={36} fill="none" stroke={colors.ink} strokeWidth={1} />
+                <circle cx={86} cy={86} r={7} fill={colors.ink} />
+                <line x1={86} y1={8} x2={86} y2={26} stroke={colors.ink} strokeWidth={1.4} />
+              </g>
+            </g>
+          </svg>
+          {/* 5 灯 */}
+          <svg width={1920} height={1080} style={{ position: 'absolute', inset: 0 }}>
+            <g style={motif(76)}>
+              <g transform="translate(470 640)">
+                <path d="M 30 74 L 110 74 L 90 30 L 50 30 Z" fill="none" stroke={colors.ink} strokeWidth={1.8} />
+                <line x1={70} y1={74} x2={70} y2={150} stroke={colors.ink} strokeWidth={1.8} />
+                <line x1={40} y1={152} x2={100} y2={152} stroke={colors.ink} strokeWidth={1.8} />
+                {[38, 62, 86].map((x) => (
+                  <line key={x} x1={x} y1={162} x2={x} y2={176} stroke={colors.ink} strokeWidth={1} opacity={0.8} />
+                ))}
+              </g>
+            </g>
+          </svg>
+          {/* 6 钤印 */}
+          <div style={{ ...motif(91), position: 'absolute', left: 780, top: 720 }}>
+            <div style={{ width: 70, height: 70, border: `2px solid ${colors.seal}`, borderRadius: 3, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <div style={{ width: 46, height: 46, border: `1px solid ${colors.seal}`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <span style={{ fontFamily: SERIF, fontSize: 24, color: colors.seal }}>忘</span>
+              </div>
+            </div>
           </div>
-          {/* 每字 2–3 颗 3px 墨点（PT-04） */}
-          {SPECKS.map((p) => {
-            const age = frame - (START + p.c * FPC);
-            if (age < 0 || age > 18) return null;
-            const prog = age / 18;
-            const t6 = age / 6;
-            return (
-              <div
-                key={p.seed}
-                style={{
-                  position: 'absolute',
-                  left: p.x - 1.5,
-                  top: p.y - 1.5,
-                  width: 3,
-                  height: 3,
-                  borderRadius: 1.5,
-                  background: colors.ink,
-                  opacity: (1 - prog) * 0.75,
-                  transform: `translate(${p.vx * t6}px, ${p.vy * t6 + 7 * t6 * t6}px)`,
-                }}
-              />
-            );
-          })}
-          {/* 起笔前光标（承接 s55 尾帧），首字落纸即让位 */}
-          <div style={{ position: 'absolute', left: penX - 1.5, top: penY - 30, width: 3, height: 60, background: colors.ink, opacity: typed === 0 ? 0.9 : 0 }} />
-          {/* 笔尖微光 */}
-          <div style={{ ...pg, opacity: Number(pg.opacity ?? 1) * glowAmp }} />
+          {/* 右下脚注：数字退成最小号等宽 */}
+          <div
+            style={{
+              ...footnote,
+              position: 'absolute',
+              right: 140,
+              bottom: 96,
+              fontFamily: MONO,
+              fontSize: 14,
+              letterSpacing: '0.08em',
+              color: colors.muted,
+              fontVariantNumeric: 'tabular-nums',
+              opacity: Number(footnote.opacity ?? 0) * 0.85,
+            }}
+          >
+            1,190 提交 · 46 篇文章 · 117 版本 · 12,651 格 · 257 归档 · 39 知识卡
+          </div>
+          {/* 出场：打字机光标在纸面亮起 */}
+          <div style={{ position: 'absolute', left: CURSOR.x - 1.5, top: CURSOR.y - 30, width: 3, height: 60, background: colors.ink, opacity: cursorIn * 0.9 }} />
+          <div style={{ ...penGlow(frame, CURSOR.x, CURSOR.y), opacity: 0.8 * cursorIn }} />
         </AbsoluteFill>
       </CameraRig>
+      {/* 入场：s55 的总结纸页白边溶解 */}
+      <AbsoluteFill style={{ pointerEvents: 'none' }}>
+        <div style={{ position: 'absolute', left: 0, top: 0, right: 0, height: 14, background: FILM_COLORS.flashWhite, opacity: edge }} />
+        <div style={{ position: 'absolute', left: 0, bottom: 0, right: 0, height: 14, background: FILM_COLORS.flashWhite, opacity: edge }} />
+        <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 12, background: FILM_COLORS.flashWhite, opacity: edge }} />
+        <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: 12, background: FILM_COLORS.flashWhite, opacity: edge }} />
+      </AbsoluteFill>
       <PaperGrain opacity={0.06} />
       <Grade id="GR-02" />
-      <Caption text="写作是抵抗遗忘的方式，代码是构建世界的语言。" appearAt={14} />
+      <Caption text="写作是根，代码是干；方法、工具、桌面与影像，是后来长出的枝。" appearAt={20} />
     </AbsoluteFill>
   );
 };
 
-export default ShotTypewriter;
+export default ShotSummaryPage;

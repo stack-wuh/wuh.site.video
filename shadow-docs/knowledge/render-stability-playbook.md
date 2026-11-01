@@ -33,6 +33,7 @@ verified-scope: site-film 正式制作全天实战（十数小时渲染攻坚）
 - **ReferenceError 漏网**：改 N 处引用必须 `grep` 清零；typecheck 必须跑出**明确绿/红**（静默失败=没验证，不算数）
 - **全屏动画 radial-gradient 崩溃**：动画的 `radial-gradient` + screen/soft-light 混合在本机 Chrome 确定性崩溃（Act3 红晕、Act7 光圈都栽过）。改用纯色 opacity 渐隐；样片级半透明渐变用 2-3 帧硬切
 - **Audio startFrom 超出曲长** → 尾段静音。`startFrom ≤ 曲长 − 段时长`；出片后 ffprobe 对比 video/audio 两路时长
+- **分段音量必须扫到片尾**（2026-11-01 wuh-site-intro-v2 r1 实证）：终章 `startFrom=8100` 越过 `lead.m4a` 实际曲长 224.6s，最后 46.9s 全静音；`volumedetect` 的 5s 窗必须覆盖到末帧（含片尾），末窗 mean_volume 不得 ≤ −80dB；`startFrom` 先按曲长校验再进编排，不能只看 ffprobe 两路时长（静音段不影响时长）
 - **`<Audio loop>` 的 `volume` 回调按轮重置**（2026-10-29 实证）：每轮循环音量从起点重新求值——循环点出现 1s 淡入凹陷（实测 15.5s 处 −28.7dB vs 稳态 −24.5dB），依赖序列末尾的淡出永不触发（末 30f 仍 −24.5dB）。对策：不用 loop；显式两遍播放（第一遍播满曲目、第二遍续播）+ 独立尾段 Sequence 做淡出，尾段 `startFrom = 主段帧数 % 曲目帧数`；音量曲线用 440Hz 测试音整片渲染 + 分段 `volumedetect` 验证
 
 ### 流程纪律

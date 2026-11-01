@@ -26,8 +26,11 @@ const ANCHORS = [
   { frame: 5600, label: '联系钤印' },
   { frame: 6896, label: '版本雨满' },
   { frame: 7236, label: '方法论' },
-  { frame: 7266, label: '树起' },
-  { frame: 7566, label: '总结' },
+  { frame: 7266, label: '知识库' },
+  { frame: 7446, label: '树起' },
+  { frame: 7746, label: '总结' },
+  { frame: 7886, label: '打字机' },
+  { frame: 8114, label: '归零' },
 ];
 
 /** 剧本用「」标记字幕，展示时剥掉最外层一对，避免与内层引号叠成「『…』」 */
@@ -138,7 +141,7 @@ const AnimaticBody: FC = () => {
         <p style={{ fontFamily: mono, fontSize: 16, color: colors.muted, marginTop: 10, display: 'flex', justifyContent: 'space-between' }}>
           <span>preprod board-film · WuhSiteIntroV2Animatic</span>
           <span>
-            Act {act.act}/{ACTS.length} {act.title} · 帧 {frame} / {TOTAL_FRAMES} · {(frame / 30).toFixed(1)}s / 240s
+            Act {act.act}/{ACTS.length} {act.title} · 帧 {frame} / {TOTAL_FRAMES} · {(frame / 30).toFixed(1)}s / {(TOTAL_FRAMES / 30).toFixed(1)}s
           </span>
         </p>
       </div>
@@ -146,7 +149,7 @@ const AnimaticBody: FC = () => {
   );
 };
 
-/** Animatic 分镜板：FilmShell（120f 片头 + 7200f 正片 + 180f 片尾 = 7500f），正片为单色简板预演 */
+/** Animatic 分镜板：FilmShell（120f 片头 + 8114f 正片 + 180f 片尾 = 8414f），正片为单色简板预演 */
 export const WuhSiteIntroV2Animatic: FC = () => (
   <FilmShell meta={META} contentFrames={TOTAL_FRAMES}>
     <AnimaticBody />

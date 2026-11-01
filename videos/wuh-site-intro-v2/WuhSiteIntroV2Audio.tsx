@@ -2,45 +2,51 @@ import type { FC } from 'react';
 import { Audio, Sequence, interpolate, staticFile } from 'remotion';
 
 /**
- * 配乐分段编排 v2（8234f 新时间轴；90 BPM 对拍，无 SFX）：
- * 片头 120f 静默 → Act1–2 静（meditation）→ Act3 扬（lead 0–990）
- * → Act4 回捞（meditation 低音）→ Act5 复燃（prelude：前奏+行动两段式，3976–4015 白闪真空音量下沉）
- * → Act6 机械（clash）→ Act7 深缓（meditation 尾段）→ Act8 + 片尾归主题（lead 270s 起，末 180f 淡出）。
- * 全片绝对帧 0–8234；交叉淡化 45f；禁用 <Audio loop>（playbook 实证：loop 音量按轮重置）。
+ * 配乐分段编排 v3（8414f 新时间轴；90 BPM 对拍，无 SFX）：
+ * 主题回归·钢琴叙事——
+ *   Act1–2 静（Meditation 01）→ Act3 温（Meditation 02）→ Act4 痛（Heartbreaking）
+ *   → Act5 燃（Prelude and Action，白闪真空对齐渲染帧 4120）→ Act6 奇（Dreams Become Real）
+ *   → Act7 深（Meditation 01 回捞）→ Act8 扬（Take the Lead）→ 终章归（Heartbreaking 再起，末 120f 淡出）。
+ * 全片绝对帧 0–8414；段间 30f 真交叉淡化（后段提前 30f 进入，前段同步淡出）；
+ * 每首曲目已预先归一到 -17 LUFS / 限幅 0.85（assets/bgm 与 public/wuh-site-intro-v2/score）。
+ * 禁用 <Audio loop>（playbook 实证：loop 音量按轮重置）。
  */
-const fade = (dur: number, peak = 1) => (f: number) =>
-  interpolate(f, [0, 45, dur - 45, dur], [0, peak, peak, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
 
-/* Act5：白闪前 20f 骤停到 0.15，真空 20f，白闪释放后 10f 回到 0.85 */
+const FADE = 30;
+const CLAMP = { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' } as const;
+
+const fadeVol = (dur: number, peak: number, fadeIn = FADE, fadeOut = FADE) => (f: number) =>
+  interpolate(f, [0, fadeIn, dur - fadeOut, dur], [0, peak, peak, 0], CLAMP);
+
+/* Act5：白闪前 20f 压低、真空 20f、释放后 30f 回到 0.9；白闪峰值在渲染帧 4120（本段局部 388） */
 const preludeVol = (f: number) =>
-  interpolate(f, [0, 45, 214, 234, 254, 264, 753, 798], [0, 0.85, 0.85, 0.15, 0.15, 0.85, 0.85, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  interpolate(f, [0, FADE, 358, 378, 398, 428, 798, 828], [0, 0.85, 0.85, 0.12, 0.12, 0.9, 0.9, 0], CLAMP);
 
-/* 终章：全段 0.95，最后 180f（= 片尾）淡出 */
-const finaleVol = (f: number) =>
-  interpolate(f, [0, 45, 1226, 1406], [0, 0.95, 0.95, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+type Segment = {
+  from: number;
+  dur: number;
+  src: string;
+  startFrom: number;
+  volume: (f: number) => number;
+};
+
+const SEGMENTS: Segment[] = [
+  { from: 120, dur: 1872, src: 'meditation-01.m4a', startFrom: 0, volume: fadeVol(1872, 0.85) },
+  { from: 1962, dur: 1020, src: 'meditation-02.m4a', startFrom: 0, volume: fadeVol(1020, 0.82) },
+  { from: 2952, dur: 810, src: 'heartbreaking.m4a', startFrom: 900, volume: fadeVol(810, 0.9) },
+  { from: 3732, dur: 828, src: 'prelude-and-action.m4a', startFrom: 0, volume: preludeVol },
+  { from: 4530, dur: 1230, src: 'dreams-become-real.m4a', startFrom: 0, volume: fadeVol(1230, 0.78) },
+  { from: 5730, dur: 1098, src: 'meditation-01.m4a', startFrom: 2400, volume: fadeVol(1098, 0.8) },
+  { from: 6798, dur: 1068, src: 'take-the-lead.m4a', startFrom: 3600, volume: fadeVol(1068, 0.88) },
+  { from: 7836, dur: 578, src: 'heartbreaking.m4a', startFrom: 0, volume: fadeVol(578, 0.92, FADE, 120) },
+];
 
 export const WuhSiteIntroV2Audio: FC = () => (
   <>
-    <Sequence from={120} durationInFrames={1872}>
-      <Audio src={staticFile('site-film/meditation.m4a')} volume={fade(1872)} />
-    </Sequence>
-    <Sequence from={1992} durationInFrames={990}>
-      <Audio src={staticFile('site-film/lead.m4a')} volume={fade(990, 0.9)} />
-    </Sequence>
-    <Sequence from={2982} durationInFrames={780}>
-      <Audio src={staticFile('site-film/meditation.m4a')} startFrom={4200} volume={fade(780, 0.55)} />
-    </Sequence>
-    <Sequence from={3762} durationInFrames={798}>
-      <Audio src={staticFile('wuh-site-intro-v2/prelude.m4a')} volume={preludeVol} />
-    </Sequence>
-    <Sequence from={4560} durationInFrames={1200}>
-      <Audio src={staticFile('site-film/clash.m4a')} volume={fade(1200, 0.9)} />
-    </Sequence>
-    <Sequence from={5760} durationInFrames={1068}>
-      <Audio src={staticFile('site-film/meditation.m4a')} startFrom={2400} volume={fade(1068, 0.7)} />
-    </Sequence>
-    <Sequence from={6828} durationInFrames={1406}>
-      <Audio src={staticFile('site-film/lead.m4a')} startFrom={8100} volume={finaleVol} />
-    </Sequence>
+    {SEGMENTS.map((seg) => (
+      <Sequence key={`${seg.from}-${seg.src}`} from={seg.from} durationInFrames={seg.dur}>
+        <Audio src={staticFile(`wuh-site-intro-v2/score/${seg.src}`)} startFrom={seg.startFrom} volume={seg.volume} />
+      </Sequence>
+    ))}
   </>
 );
