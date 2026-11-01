@@ -4,7 +4,7 @@
   "name": "20261101-fix-runner-image-pin",
   "type": "fix",
   "scope": "ci-render",
-  "status": "reviewed",
+  "status": "published",
   "baseBranch": "main",
   "branch": "fix/20261101-fix-runner-image-pin",
   "files": [
@@ -13,11 +13,11 @@
     "shadow-docs/changes/20261101-fix-runner-image-pin"
   ],
   "github": {
-    "repository": null,
+    "repository": "stack-wuh/wuh.site.video",
     "issue": null,
     "issueUrl": null,
-    "pullRequest": null,
-    "pullRequestUrl": null
+    "pullRequest": 38,
+    "pullRequestUrl": "https://github.com/stack-wuh/wuh.site.video/pull/38"
   },
   "review": {
     "conclusion": "passed",
@@ -26,7 +26,7 @@
   },
   "workflow": {
     "operation": null,
-    "checkpoint": null,
+    "checkpoint": "pr:38",
     "planHash": "30b3db4d09e8de9cb6bdbbdbc5efeb236ef4ff897f862d7715f291ee3c5f5e3c",
     "updatedAt": null,
     "lastError": null,
