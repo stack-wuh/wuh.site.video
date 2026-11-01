@@ -4,7 +4,7 @@
   "name": "20261101-docs-zhi-guo-xiang-wrapup",
   "type": "docs",
   "scope": "video-materials",
-  "status": "published",
+  "status": "archived",
   "baseBranch": "main",
   "branch": "docs/20261101-docs-zhi-guo-xiang-wrapup",
   "files": [
@@ -21,14 +21,14 @@
     "pullRequestUrl": "https://github.com/stack-wuh/wuh.site.video/pull/39"
   },
   "review": {
-    "conclusion": "pending",
-    "verifiedCommit": null,
-    "verifiedAt": null
+    "conclusion": "passed",
+    "verifiedCommit": "481a6311e20adcb8e7eb8529a7252e1b1ef990c2",
+    "verifiedAt": "2026-11-01T02:39:45.333Z"
   },
   "workflow": {
     "operation": null,
-    "checkpoint": "pr:39",
-    "planHash": "5d35d86467e9b44732b9c5bed5cdc512b1dad92f983e2c5fe75cd72d1b711c47",
+    "checkpoint": "merged-pr:39",
+    "planHash": "1b7b3380ec7e653efdf77334ffe00bc155ea2d6412381ca5c0fe082e5ef899db",
     "updatedAt": null,
     "lastError": null,
     "release": {
@@ -42,6 +42,11 @@
       "title": "docs(video-materials): 致郭襄收尾——配乐决策入仓 · 知识卡回写",
       "body": "## 变更\n\n- 新增 `videos/preprod-zhi-guo-xiang/assets/music.md`：陈致逸《爱意（金风玉露变奏）》2:19.46；4320 断点重启；本地 mux；版权口径。\n- 更新 `shadow-docs/knowledge/video-production-flow.md`：前期五件套 + 人物视觉设定；文学改编 / 诗电影；animatic CI 多片；本地 BGM mux；`verified-scope` 更新。\n- 更新 `shadow-docs/knowledge/video-studio-structure.md`：`render-animatic.yml` 的 `unit`/`scope` choice；`A{yyyyMMdd}{index}-{film}.mp4`；`preprod-<film>` 单元；版权音频例外；`verified-scope` 更新。\n\n## 验证\n\n- 两卡 frontmatter / source / verified 走查；关键词 grep 命中。\n- `node scripts/shots.mjs check` → 45 镜 Σ=7200 全绿。\n- 无代码改动。\n\n## 说明\n\n- 音频不入仓；`music.md` 仅记录决策与本地 mux。\n- review / archive 在 PR 合并后于 main 上补跑（与 PR #37 同口径）。"
     }
+  },
+  "knowledge": {
+    "action": "更新",
+    "target": "shadow-docs/knowledge/video-production-flow.md",
+    "reason": "docs change 已完成 music.md 入仓与两卡回写；S 级文档字段/来源/关键词走查 + shots check 回归全绿；PR #39 已合并（481a631）。"
   }
 }
 ---
