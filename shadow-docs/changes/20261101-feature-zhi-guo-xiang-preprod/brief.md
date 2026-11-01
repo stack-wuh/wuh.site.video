@@ -4,7 +4,7 @@
   "name": "20261101-feature-zhi-guo-xiang-preprod",
   "type": "feature",
   "scope": "video-materials",
-  "status": "published",
+  "status": "committed",
   "baseBranch": "main",
   "branch": "feature/20261101-feature-zhi-guo-xiang-preprod",
   "files": [
@@ -28,20 +28,16 @@
   },
   "workflow": {
     "operation": null,
-    "checkpoint": "pr:37",
-    "planHash": "f04b11f88f9e9097c551d981fa4ab0225f9a66c7c684d02a83169feed38c7dab",
+    "checkpoint": "9debd2b507135edcbd5a0b8a810b1f37846ea165",
+    "planHash": "6adb62faa7a6afaa68a87295cd6cd797eb9813335437bd263b9e7b64d2ba97c1",
     "updatedAt": null,
     "lastError": null,
     "worktree": "/Users/wuhong/shadow-desktop/github/wuh.site.video/.worktrees/20261101-feature-zhi-guo-xiang-preprod",
     "commit": {
       "files": [
-        ".github/workflows/render-animatic.yml",
-        "shadow-docs/changes/20261101-feature-zhi-guo-xiang-preprod",
-        "src/Root.tsx",
-        "videos/preprod-zhi-guo-xiang",
-        "videos/zhi-guo-xiang"
+        ".github/workflows/render-animatic.yml"
       ],
-      "message": "feat(video-materials): 致郭襄前期——五件套 · 52 镜 · 106 令牌 · animatic"
+      "message": "ci(render-animatic): scope/unit 改 choice 下拉，shots 保留高级子集"
     }
   }
 }
