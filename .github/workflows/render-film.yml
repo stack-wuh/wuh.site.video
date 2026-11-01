@@ -38,6 +38,10 @@ jobs:
       - uses: actions/setup-node@v7
         with: { node-version: 22, cache: pnpm }
       - run: pnpm install --frozen-lockfile
+      # 类型门：bundle 是最早的失败点，类型错在此拦下，不浪费数十个矩阵渲镜 job。
+      # 只查在制单元（tsconfig.ci.json）——全仓 pnpm typecheck 会被 videos/wuh-site-intro-v2 的
+      # 8 处存量 TS2339（调色键名不存在）顶红，属该单元既有问题；其修好后换回 pnpm typecheck。
+      - run: pnpm typecheck:ci
       - run: google-chrome-stable --version
       - id: plan
         env:
