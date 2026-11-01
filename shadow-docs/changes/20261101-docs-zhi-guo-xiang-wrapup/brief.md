@@ -4,7 +4,7 @@
   "name": "20261101-docs-zhi-guo-xiang-wrapup",
   "type": "docs",
   "scope": "video-materials",
-  "status": "branched",
+  "status": "published",
   "baseBranch": "main",
   "branch": "docs/20261101-docs-zhi-guo-xiang-wrapup",
   "files": [
@@ -17,8 +17,8 @@
     "repository": null,
     "issue": null,
     "issueUrl": null,
-    "pullRequest": null,
-    "pullRequestUrl": null
+    "pullRequest": 39,
+    "pullRequestUrl": "https://github.com/stack-wuh/wuh.site.video/pull/39"
   },
   "review": {
     "conclusion": "pending",
@@ -27,7 +27,7 @@
   },
   "workflow": {
     "operation": null,
-    "checkpoint": null,
+    "checkpoint": "pr:39",
     "planHash": "5d35d86467e9b44732b9c5bed5cdc512b1dad92f983e2c5fe75cd72d1b711c47",
     "updatedAt": null,
     "lastError": null,
