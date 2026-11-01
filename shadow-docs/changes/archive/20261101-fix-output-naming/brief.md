@@ -4,7 +4,7 @@
   "name": "20261101-fix-output-naming",
   "type": "fix",
   "scope": "ci-render",
-  "status": "published",
+  "status": "archived",
   "baseBranch": "main",
   "branch": "fix/20261101-fix-output-naming",
   "files": [
@@ -22,13 +22,13 @@
   },
   "review": {
     "conclusion": "passed",
-    "verifiedCommit": "01e770cacd12a2b70bfe69b90fe3021897a552c3",
-    "verifiedAt": "2026-11-01T01:13:12.370Z"
+    "verifiedCommit": "1e806524a24b7e06cddda3827cc167d6835b46ce",
+    "verifiedAt": "2026-11-01T01:15:47.842Z"
   },
   "workflow": {
     "operation": null,
-    "checkpoint": "pr:36",
-    "planHash": "7323b80235e710b0974cbdf4413a4dd16332be383af6bf8f6295c9dc088570f1",
+    "checkpoint": "merged-pr:36",
+    "planHash": "3169ecad1787e482e1787562ff8cc6f8a70e9cadbb62db52746ce4e3ba879e1a",
     "updatedAt": null,
     "lastError": null,
     "release": {
