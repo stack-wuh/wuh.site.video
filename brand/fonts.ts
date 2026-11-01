@@ -5,3 +5,5 @@ import '@fontsource/noto-serif-sc/400.css';
 import '@fontsource/noto-serif-sc/700.css';
 import '@fontsource/noto-sans-sc/400.css';
 import '@fontsource/noto-sans-sc/700.css';
+/* 楷书：纸上的字（霞鹜文楷，OFL）。诗由它写，不用字幕字体。 */
+import 'lxgw-wenkai-webfont/lxgwwenkai-regular.css';

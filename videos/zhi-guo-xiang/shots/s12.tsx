@@ -1,7 +1,7 @@
-/* S12 · 剑挂上墙 180f——剑穗晃到静止（底图缓推即可） */
+/* S12 · 剑被挂上墙钉，手退出画面 210f */
 import type { FC } from 'react';
 import { Scene } from '../components/SceneKit';
 
-const S12: FC = () => <Scene name="u-g16-wall" zoom={[1.0, 1.05]} warm={0.05} />;
+const S12: FC = () => <Scene name="p-sword-wall" zoom={[1.05, 1.0]} dim={0.03} />;
 
 export default S12;

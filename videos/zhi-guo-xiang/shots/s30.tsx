@@ -1,18 +1,15 @@
-/* S30 · 独臂人解围 300f——逆光剪影 */
+/* S30 · 掌心摊开，三枚金针。赠予者不在画里 240f */
 import type { FC } from 'react';
-import { AbsoluteFill, useCurrentFrame } from 'remotion';
+import { interpolate, useCurrentFrame } from 'remotion';
 import { Scene } from '../components/SceneKit';
-import { FILM } from '../motion-tokens';
+import { Needles } from '../components/Needles';
 
 const S30: FC = () => {
   const f = useCurrentFrame();
-  const rim = interpolate0(f);
-  function interpolate0(x: number) {
-    return x < 40 ? x / 40 : Math.max(0, 1 - (x - 220) / 80);
-  }
+  const t = interpolate(f, [10, 70], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
   return (
-    <Scene name="u-guest-out" zoom={[1.1, 1.16]} dim={0.3}>
-      <AbsoluteFill style={{ background: FILM.fireGold, opacity: 0.1 * rim, mixBlendMode: 'screen' }} />
+    <Scene name="p-palm2" zoom={[1.04, 1.1]}>
+      <Needles count={3} origin={[640, 620]} len={620} spread={150} tilt={-5} opacity={t} />
     </Scene>
   );
 };

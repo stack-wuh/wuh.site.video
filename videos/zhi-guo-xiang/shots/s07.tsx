@@ -1,7 +1,7 @@
-/* S7 · 写到霞字停笔 210f——笔尖特写，诗行5的伏笔 */
+/* S7 · 写到最后一行，笔停住，悬着不落 240f */
 import type { FC } from 'react';
 import { Scene } from '../components/SceneKit';
 
-const S07: FC = () => <Scene name="u-lamp" zoom={[1.08, 1.14]} driftY={[8, -4]} dim={0.1} />;
+const S07: FC = () => <Scene name="p-daogu" zoom={[1.0, 1.03]} warm={0.08} />;
 
 export default S07;

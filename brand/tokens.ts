@@ -19,4 +19,5 @@ export const fontFamilies = {
   serif: '"Noto Serif SC", "Songti SC", serif',
   sans: '"Noto Sans SC", "PingFang SC", sans-serif',
   mono: 'Menlo, monospace',
+  kai: '"LXGW WenKai", "Noto Serif SC", serif',
 } as const;

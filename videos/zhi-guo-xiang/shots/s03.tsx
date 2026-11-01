@@ -1,11 +1,21 @@
-/* S3 · 六行诗微距 180f——诗行1落点 */
+/* S3 · 他读：前四行墨旧，第五行只剩「其」 210f——读下去 */
 import type { FC } from 'react';
-import { Scene, Poem } from '../components/SceneKit';
+import { Slide } from '../components/SceneKit';
+import { InkPaper, POEM_COLS } from '../components/InkPaper';
 
 const S03: FC = () => (
-  <Scene name="u-paper" zoom={[1.0, 1.05]} driftX={[8, -8]}>
-    <Poem text="我走过山时，山不说话，" start={30} end={170} />
-  </Scene>
+  <Slide zoom={[1.0, 1.035]} driftY={[0, 26]} dim={0.03}>
+    <InkPaper
+      base="p-paper-close-dusk"
+      lines={[...POEM_COLS.slice(0, 6), '其']}
+      progress={1}
+      size={54}
+      right="14%"
+      top="9%"
+      blot={0.5}
+      blotOn={6}
+    />
+  </Slide>
 );
 
 export default S03;

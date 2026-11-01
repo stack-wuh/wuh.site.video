@@ -1,7 +1,7 @@
-/* S15 · 手握剑柄拔出 210f——特写（雪底图放大即成特写） */
+/* S15 · 驴蹄踩过水洼，一行蹄印 210f */
 import type { FC } from 'react';
 import { Scene } from '../components/SceneKit';
 
-const S15: FC = () => <Scene name="u-g13-snow" zoom={[1.14, 1.2]} driftX={[-14, -14]} dim={0.1} />;
+const S15: FC = () => <Scene name="p-hoof" zoom={[1.06, 1.0]} driftX={[-20, 20]} />;
 
 export default S15;

@@ -46,6 +46,34 @@ export const Scene: FC<{
   );
 };
 
+/** 推拉与调色，不绑底图——给纸、给代码画的物件用。 */
+export const Slide: FC<{
+  zoom?: [number, number];
+  driftX?: [number, number];
+  driftY?: [number, number];
+  dim?: number;
+  warm?: number;
+  children: ReactNode;
+}> = ({ zoom = [1.0, 1.045], driftX = [0, 0], driftY = [0, 0], dim = 0, warm = 0, children }) => {
+  const frame = useCurrentFrame();
+  const { durationInFrames } = useVideoConfig();
+  const t = durationInFrames > 1 ? frame / (durationInFrames - 1) : 0;
+  const clamp = { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' } as const;
+  const scale = interpolate(t, [0, 1], zoom, clamp);
+  const x = interpolate(t, [0, 1], driftX, clamp);
+  const y = interpolate(t, [0, 1], driftY, clamp);
+  return (
+    <AbsoluteFill style={{ overflow: 'hidden', background: colors.paper }}>
+      <AbsoluteFill style={{ transform: `scale(${scale}) translate(${x}px, ${y}px)` }}>
+        {children}
+        {warm > 0 ? <AbsoluteFill style={{ background: '#e9d9ae', mixBlendMode: 'soft-light', opacity: warm }} /> : null}
+        {dim > 0 ? <AbsoluteFill style={{ background: colors.ink, opacity: dim }} /> : null}
+        <InkGrade />
+      </AbsoluteFill>
+    </AbsoluteFill>
+  );
+};
+
 /** 淡入淡出包裹（2-3 帧级硬切韵律，遵循渲染稳定 playbook：不做长渐变）。 */
 export const Fade: FC<{ inF?: number; outF?: number; children: ReactNode }> = ({ inF = 8, outF = 8, children }) => {
   const f = useCurrentFrame();

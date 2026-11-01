@@ -1,7 +1,7 @@
-/* S21 · 抄书纸摞高 210f——判词（无声的版本） */
+/* S21 · 一叠抄本越摞越高 270f */
 import type { FC } from 'react';
 import { Scene } from '../components/SceneKit';
 
-const S21: FC = () => <Scene name="u-copying" zoom={[1.02, 1.08]} driftX={[-8, 8]} />;
+const S21: FC = () => <Scene name="p-copy" zoom={[1.0, 1.07]} dim={0.03} />;
 
 export default S21;

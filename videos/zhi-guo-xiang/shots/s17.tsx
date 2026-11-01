@@ -1,11 +1,17 @@
-/* S17 · 驴与剑过渡口 270f——诗行3落点，驴蹄四拍 */
+/* S17 · 说书人的醒木落下 270f */
 import type { FC } from 'react';
-import { Scene, Poem } from '../components/SceneKit';
+import { interpolate, useCurrentFrame } from 'remotion';
+import { AbsoluteFill } from 'remotion';
+import { Scene } from '../components/SceneKit';
 
-const S17: FC = () => (
-  <Scene name="u-g04-ferry" zoom={[1.02, 1.07]} driftX={[-8, 10]}>
-    <Poem text="小毛驴滴滴答答，倚天剑伴我走天涯。" start={30} end={250} />
-  </Scene>
-);
+const S17: FC = () => {
+  const f = useCurrentFrame();
+  const hit = interpolate(f, [0, 8, 10], [0, 0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  return (
+    <Scene name="p-stall" zoom={[1.0, 1.04]} dim={0.06}>
+      <AbsoluteFill style={{ background: '#fff6e0', opacity: 0.22 * hit, mixBlendMode: 'screen' }} />
+    </Scene>
+  );
+};
 
 export default S17;

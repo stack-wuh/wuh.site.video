@@ -1,7 +1,7 @@
-/* S10 · 回海边·海面亮一线 90f——2-4s 的他在场 */
+/* S10 · 把纸对折，压进一本书里 150f */
 import type { FC } from 'react';
 import { Scene } from '../components/SceneKit';
 
-const S10: FC = () => <Scene name="u-him" zoom={[1.04, 1.06]} warm={0.14} />;
+const S10: FC = () => <Scene name="p-fold" zoom={[1.04, 1.1]} dim={0.04} />;
 
 export default S10;

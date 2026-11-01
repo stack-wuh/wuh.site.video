@@ -1,7 +1,7 @@
-/* S22 · 茶棚锣声 270f——她想开口，没人听 */
+/* S22 · 茶棚，她张了一下口；锣响；那碗茶喝完 270f */
 import type { FC } from 'react';
 import { Scene } from '../components/SceneKit';
 
-const S22: FC = () => <Scene name="u-tea-stall" zoom={[1.0, 1.05]} dim={0.04} />;
+const S22: FC = () => <Scene name="p-teastall" zoom={[1.0, 1.05]} dim={0.05} />;
 
 export default S22;

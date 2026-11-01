@@ -1,22 +1,16 @@
-/* S36 · 烟灰落肩 240f */
+/* S36 · 他把纸翻过来。背面有字，墨色如新 150f */
 import type { FC } from 'react';
-import { random, useCurrentFrame } from 'remotion';
-import { Scene } from '../components/SceneKit';
-import { colors } from '../../../brand/tokens';
-
-const ASH = Array.from({ length: 30 }, (_, i) => i);
+import { interpolate, useCurrentFrame } from 'remotion';
+import { Slide } from '../components/SceneKit';
+import { InkPaper, POEM_COLS } from '../components/InkPaper';
 
 const S36: FC = () => {
   const f = useCurrentFrame();
+  const t = interpolate(f, [10, 80], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
   return (
-    <Scene name="u-fireworks-v2" zoom={[1.16, 1.22]} dim={0.3}>
-      {ASH.map((i) => {
-        const s = `s36-${i}`;
-        const y = ((random(`${s}-y`) * 1000 + f * (0.6 + random(`${s}-v`))) % 1000);
-        const drift = Math.sin((f + random(`${s}-p`) * 80) / 40) * 14;
-        return <div key={s} style={{ position: 'absolute', left: random(`${s}-x`) * 1920 + drift, top: y, width: 2, height: 1, background: colors.paperMuted, opacity: 0.3 }} />;
-      })}
-    </Scene>
+    <Slide zoom={[1.06, 1.0]}>
+      <InkPaper base="p-paper-back" lines={[POEM_COLS[6], POEM_COLS[7], POEM_COLS[8]]} progress={t} size={44} right="22%" top="12%" />
+    </Slide>
   );
 };
 

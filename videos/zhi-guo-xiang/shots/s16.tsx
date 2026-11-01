@@ -1,7 +1,7 @@
-/* S16 · 收鞘雪落回 180f */
+/* S16 · 渡口的船靠岸，她上船 240f */
 import type { FC } from 'react';
 import { Scene } from '../components/SceneKit';
 
-const S16: FC = () => <Scene name="u-g13-snow" zoom={[1.2, 1.14]} dim={0.14} />;
+const S16: FC = () => <Scene name="p-ferry" zoom={[1.0, 1.06]} driftX={[20, -20]} warm={0.08} />;
 
 export default S16;

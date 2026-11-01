@@ -1,10 +1,11 @@
-/* S18 · 茶楼说书人 240f——判词第一次（善意的误读） */
+/* S18 · 同一时刻：一枚针按进一个落水者的穴道 240f */
 import type { FC } from 'react';
-import { Scene, Poem } from '../components/SceneKit';
+import { Scene } from '../components/SceneKit';
+import { Needles } from '../components/Needles';
 
 const S18: FC = () => (
-  <Scene name="u-g10-teahouse" zoom={[1.0, 1.06]}>
-    <Poem text="大家都说我因为爱着杨过大侠，才在峨嵋山上出了家，" start={40} end={220} />
+  <Scene name="p-rescue" zoom={[1.02, 1.08]} dim={0.04}>
+    <Needles count={1} origin={[430, 700]} len={300} tilt={-58} shadow={false} />
   </Scene>
 );
 

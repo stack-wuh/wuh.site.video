@@ -1,11 +1,12 @@
-/* S37 · 字幕·满城烟火本是军情 300f */
+/* S37 · 背面最后一行 180f——全片最后一句 */
 import type { FC } from 'react';
-import { Scene, Poem } from '../components/SceneKit';
+import { Slide } from '../components/SceneKit';
+import { InkPaper, POEM_COLS } from '../components/InkPaper';
 
 const S37: FC = () => (
-  <Scene name="u-fireworks-v2" zoom={[1.04, 1.1]} dim={0.24}>
-    <Poem text="满城烟火，本是军情。" start={40} end={270} />
-  </Scene>
+  <Slide zoom={[1.02, 1.08]} driftY={[0, -30]}>
+    <InkPaper base="p-paper-back" lines={[POEM_COLS[8]]} progress={1} size={68} right="28%" top="7%" />
+  </Slide>
 );
 
 export default S37;

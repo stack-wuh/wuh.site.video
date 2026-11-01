@@ -1,7 +1,7 @@
-/* S19 · 她坐角落听 240f——判词第二次（诗行4延续） */
+/* S19 · 她听见了，没有回头 240f */
 import type { FC } from 'react';
 import { Scene } from '../components/SceneKit';
 
-const S19: FC = () => <Scene name="u-g05-fire" zoom={[1.04, 1.08]} dim={0.08} />;
+const S19: FC = () => <Scene name="p-noturn" zoom={[1.06, 1.0]} dim={0.05} />;
 
 export default S19;
