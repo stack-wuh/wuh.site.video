@@ -1,7 +1,7 @@
-/* 镜 38 · Act 6 入院 · 局部帧 [0,150) · 150f
-   18+114+18：面板（litSet={1,2,3}）→ 光标点开块 4「音乐」→ 窗口最大化；
-   持续：黑胶 5s/圈（150f 恰好整圈，线性）、唱针 12f 落定（局部 30f = 4920f，第 247 拍）、
-   年份刻度环从 2018 走到 2025（每 13f 一年），每到一年亮出该年年度最爱（歌名 + 演唱者，八年真实数据）；
+/* 镜 38 · Act 6 入院 · 局部帧 [0,230) · 230f
+   18+194+18：面板（litSet={1,2,3}）→ 光标点开块 4「音乐」→ 窗口最大化；
+   持续：黑胶 5s/圈（150f 一圈，线性）、唱针 12f 落定（局部 30f）、
+   年份刻度环从 2018 走到 2025（每 24f 一年，约 0.8s），每到一年亮出该年年度最爱（歌名 + 演唱者，八年真实数据）；
    三墨柱 EQ 相位差 + 440px 迷你播放器跑马灯同步曲名；
    出场：唱针抬起、碟面退暗，反向收束回块 4（点亮），光标移向块 5。 */
 import type { FC } from 'react';
@@ -14,9 +14,9 @@ import { DustField } from '../components/DustField';
 import { Grade } from '../components/Grade';
 import { PaperGrain } from '../components/PaperGrain';
 
-const DUR = 150;
+const DUR = 230;
 const IN = 18;
-const OUT = DUR - IN; // 132
+const OUT = DUR - IN; // 212
 const CLICK = 11;
 const TILE = 3;
 const CLAMP = { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' } as const;
@@ -38,7 +38,7 @@ const YEAR_FAVS: Array<{ year: string; song: string; artist: string }> = [
   { year: '2025', song: '爱意（金风玉露变奏）', artist: '陈致逸' },
 ];
 const YEAR_START = 18;
-const YEAR_STEP = 13;
+const YEAR_STEP = 24;
 
 const DISC = { x: 600, y: 520, r: 224 };
 
@@ -89,7 +89,7 @@ const ShotYearDisc: FC = () => {
   const songKey = `song-${activeYear}`;
 
   const spin = vinylSpin(frame, 150); // 5s/圈，150f 整圈
-  const needle = needleSettle(frame, 30); // 局部 30f = 4920f 落定
+  const needle = needleSettle(frame, 30); // 局部 30f 落定
   const arm = interpolate(frame, [26, 30], [-6, 0], { ...CLAMP, easing: CURVES.cineEaseOut });
   const up = interpolate(frame, [OUT - 2, OUT + 8], [0, 1], { ...CLAMP, easing: CURVES.cineEaseInOut });
   const discDim = interpolate(frame, [OUT, OUT + 10], [1, 0.6], { ...CLAMP, easing: CURVES.cineEaseInOut });
@@ -191,7 +191,7 @@ const ShotYearDisc: FC = () => {
             <div style={{ fontFamily: serif, fontSize: 150, lineHeight: 1, color: colors.paperDeep, marginTop: 4, opacity: 0.32, fontVariantNumeric: 'tabular-nums', ...writeFade(frame, 22) }}>
               {fav.year}
             </div>
-            <div key={songKey} style={{ marginTop: 6, ...writeFade(frame, YEAR_START + activeYear * YEAR_STEP, true) }}>
+            <div key={songKey} style={{ marginTop: 6, ...writeFade(frame, YEAR_START + activeYear * YEAR_STEP) }}>
               <div style={{ fontFamily: serif, fontSize: 46, lineHeight: 1.35, color: colors.ink }}>{fav.song}</div>
               <div style={{ fontFamily: mono, fontSize: 19, color: colors.muted, marginTop: 10, letterSpacing: '0.08em' }}>{fav.artist}</div>
               <div style={{ display: 'inline-block', marginTop: 16, padding: '4px 12px', borderRadius: 3, background: colors.seal, fontFamily: serif, fontSize: 14, color: colors.paper, letterSpacing: '0.24em' }}>当年最爱</div>

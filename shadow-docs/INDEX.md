@@ -17,8 +17,14 @@
 | 20261031-feature-wuh-site-intro-v2-preprod | ✅ 完成 | shadow-docs/changes/archive/20261031-feature-wuh-site-intro-v2-preprod/brief.md |
 | 20261031-feature-wuh-site-intro-v2-production | ✅ 完成 | shadow-docs/changes/archive/20261031-feature-wuh-site-intro-v2-production/brief.md |
 | 20261031-fix-ci-cjk-fonts | ✅ 完成 | shadow-docs/changes/archive/20261031-fix-ci-cjk-fonts/brief.md |
+| 20261101-build-quality-gate | ✅ 完成 | shadow-docs/changes/archive/20261101-build-quality-gate/brief.md |
 | 20261101-docs-zhi-guo-xiang-wrapup | ✅ 完成 | shadow-docs/changes/archive/20261101-docs-zhi-guo-xiang-wrapup/brief.md |
 | 20261101-feature-zhi-guo-xiang-preprod | ✅ 完成 | shadow-docs/changes/archive/20261101-feature-zhi-guo-xiang-preprod/brief.md |
 | 20261101-fix-output-naming | ✅ 完成 | shadow-docs/changes/archive/20261101-fix-output-naming/brief.md |
+| 20261101-fix-render-artifact-s58 | ✅ 完成 | shadow-docs/changes/archive/20261101-fix-render-artifact-s58/brief.md |
 | 20261101-fix-runner-image-pin | ✅ 完成 | shadow-docs/changes/archive/20261101-fix-runner-image-pin/brief.md |
 | 20261101-fix-wuh-site-intro-v2-r1 | ✅ 完成 | shadow-docs/changes/archive/20261101-fix-wuh-site-intro-v2-r1/brief.md |
+| 20261101-fix-wuh-site-intro-v2-r2 | ✅ 完成 | shadow-docs/changes/archive/20261101-fix-wuh-site-intro-v2-r2/brief.md |
+| 20261101-fix-wuh-site-intro-v2-r3 | ✅ 完成 | shadow-docs/changes/archive/20261101-fix-wuh-site-intro-v2-r3/brief.md |
+| 20261101-fix-wuh-site-intro-v2-r4 | published | shadow-docs/changes/20261101-fix-wuh-site-intro-v2-r4/brief.md |
+| 20261101-refactor-film-kit | ✅ 完成 | shadow-docs/changes/archive/20261101-refactor-film-kit/brief.md |

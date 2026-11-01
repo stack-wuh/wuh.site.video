@@ -10,9 +10,6 @@ const sans = fontFamilies.sans;
 const RED = SEAL_RED; // 红晕（约束允许的例外色）
 const FPS = 30; // 与全片一致（shots/manifest fps: 30）；镜文件不引视频配置 hook，fps 用常量
 
-const fade = (f: number, at: number) =>
-  interpolate(f, [at, at + 14], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
-
 /* 联系钤印：纸卡 spring-pop 展开 + 8 社交图标围合 cascade + 22px 方形钤印落章（seal-stamp），
    cam-dolly-in 俯拍轻急推；red-blaze 晕起渐衰入暖纸（tr-blaze-spread 晕开变体，grade 交叉入 Act 5）
    （原 Act4 镜 31，幕局部 1780–1900 → 镜局部 0–120；const f = frame - 1780 换算为 const f = frame；

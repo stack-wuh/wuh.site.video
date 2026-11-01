@@ -4,7 +4,7 @@
 import type { FC } from 'react';
 import { AbsoluteFill, interpolate, useCurrentFrame } from 'remotion';
 import { colors, fontFamilies } from '../../../brand/tokens';
-import { CURVES, inkRise, lightOn, lineReplace } from '../motion-tokens';
+import { CURVES, FILM_COLORS, inkRise, lightOn, lineReplace } from '../motion-tokens';
 import { CameraRig } from '../components/CameraRig';
 import { Caption } from '../components/Caption';
 import { DustField } from '../components/DustField';
@@ -99,7 +99,7 @@ const ShotRewriteTs: FC = () => {
                   </span>
                   <div style={{ position: 'relative', flex: 1, height: 50 }}>
                     {flash > 0 ? (
-                      <div style={{ position: 'absolute', left: -10, right: 0, top: 4, height: 42, background: colors.paperMist, opacity: flash * 0.9, mixBlendMode: 'screen' }} />
+                      <div style={{ position: 'absolute', left: -10, right: 0, top: 4, height: 42, background: FILM_COLORS.paperMist, opacity: flash * 0.9, mixBlendMode: 'screen' }} />
                     ) : null}
                     <span style={{ position: 'absolute', left: 0, top: 0, lineHeight: '50px', whiteSpace: 'pre', fontFamily: fontFamilies.mono, fontSize: 25, color: colors.terminalText, opacity: oldOpacity }}>
                       {line.js.map((tok, j) => (

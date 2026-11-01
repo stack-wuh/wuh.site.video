@@ -104,14 +104,15 @@ const ShotTerminal: FC = () => {
               <p style={{ position: 'absolute', left: 48, top: 118, fontFamily: mono, fontSize: 17, color: ELECTRIC_SOFT, margin: 0, opacity: fade(f, 62) }}>{L2}</p>
               {/* L3 逐字符：tr-char-morph —— 前 10 字符重排至 5×2 舰位，其余由 data-stream 光点替补 */}
               {(() => {
-                let k = -1;
-                return L3.split('').map((c, i) => {
+                const chars = L3.split('');
+                const nonSpaceBefore = chars.map((_, i) => chars.slice(0, i).filter((ch) => ch !== ' ').length);
+                return chars.map((c, i) => {
                   const x0 = 48 + i * CHAR_W;
                   const typed = f >= 74 + i * 2.5;
                   if (c === ' ') {
                     return <span key={i} style={{ position: 'absolute', left: x0, top: 160, opacity: 0, fontFamily: mono, fontSize: 22 }}>{c}</span>;
                   }
-                  k += 1;
+                  const k = nonSpaceBefore[i];
                   const going = k < 10;
                   const { gx, gy } = slot(k);
                   return (

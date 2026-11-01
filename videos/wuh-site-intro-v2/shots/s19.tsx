@@ -46,7 +46,7 @@ const ShotDateFocus: FC = () => {
           {/* 纸山（TR-23 入场侧横移出画） */}
           <div style={{ position: 'absolute', inset: 0, transform: `translateX(${slide * 1500}px) rotate(${slide * 5}deg)`, transformOrigin: '50% 70%', opacity: 1 - slide * 0.15 }}>
             {MOUNTAIN.map((m, i) => (
-              <div key={i} style={{ position: 'absolute', left: m.x - 260, top: m.y - 170, width: 520, height: 340, background: i % 2 === 0 ? FILM_COLORS.paperMist : FILM_COLORS.paperDeep, transform: `rotate(${m.rot}deg)`, boxShadow: `0 22px 50px ${colors.bg}`, opacity: 0.92 }} />
+              <div key={i} style={{ position: 'absolute', left: m.x - 260, top: m.y - 170, width: 520, height: 340, background: i % 2 === 0 ? FILM_COLORS.paperMist : colors.paperDeep, transform: `rotate(${m.rot}deg)`, boxShadow: `0 22px 50px ${colors.bg}`, opacity: 0.92 }} />
             ))}
             <div style={{ position: 'absolute', left: 790, top: 250, width: 780, height: 440, background: FILM_COLORS.blankPaper, boxShadow: `0 30px 80px ${colors.bg}` }}>
               <div style={{ position: 'absolute', left: 70, top: 96, fontFamily: fontFamilies.serif, fontSize: 96, lineHeight: 1, color: colors.ink, fontVariantNumeric: 'tabular-nums' }}>89<span style={{ fontSize: 40, marginLeft: 8 }}>篇</span></div>

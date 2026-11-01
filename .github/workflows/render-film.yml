@@ -141,9 +141,12 @@ jobs:
       - name: Count collected shots
         run: echo "已收镜产物 $(ls out/shots/$FILM/*.mp4 2>/dev/null | wc -l) 个"
       - run: node scripts/render-film.mjs --assemble --bundle-dir "${{ steps.loc.outputs.dir }}" --unit "$FILM" # 缺镜在此明确列出
+      - name: Resolve final artifact name
+        id: final
+        run: echo "name=$(basename "$(ls out/*-${FILM}.mp4 | head -1)" .mp4)" >> "$GITHUB_OUTPUT"
       - uses: actions/upload-artifact@v7
         with:
-          name: ${{ env.FILM }}-final
-          path: out/*-${{ env.FILM }}.mp4 # 规范名 {yyyyMMdd}{index}-{项目名}.mp4（artifact 名保持稳定便于 download）
+          name: ${{ steps.final.outputs.name }}
+          path: out/*-${{ env.FILM }}.mp4 # 规范名 {yyyyMMdd}{index}-{项目名}.mp4；artifact 名与成片同名（不含 .mp4）
           retention-days: 90 # 仓库上限
           if-no-files-found: error

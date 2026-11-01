@@ -4,7 +4,7 @@
 import type { FC } from 'react';
 import { AbsoluteFill, interpolate, useCurrentFrame } from 'remotion';
 import { colors, fontFamilies } from '../../../brand/tokens';
-import { CURVES, cursorBlink, paperShake, typeCharsAt } from '../motion-tokens';
+import { CURVES, FILM_COLORS, cursorBlink, paperShake, typeCharsAt } from '../motion-tokens';
 import { Caption } from '../components/Caption';
 import { DustField } from '../components/DustField';
 import { PaperGrain } from '../components/PaperGrain';
@@ -61,7 +61,7 @@ const ShotFirstLine: FC = () => {
         {/* 界面元素：尾段退场，只留代码行 */}
         <div style={{ position: 'absolute', left: 0, right: 0, top: 0, height: 64, background: colors.bgLift, borderBottom: `1px solid ${colors.hairline}`, opacity: chrome }}>
           <div style={{ position: 'absolute', left: 26, top: 27, display: 'flex' }}>
-            {[colors.seal, colors.lampAmber, colors.statusGreen].map((c) => (
+            {[colors.seal, FILM_COLORS.lampAmber, FILM_COLORS.statusGreen].map((c) => (
               <span key={c} style={{ display: 'inline-block', width: 11, height: 11, borderRadius: 6, background: c, opacity: 0.75, marginRight: 9 }} />
             ))}
           </div>

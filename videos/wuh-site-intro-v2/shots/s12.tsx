@@ -167,7 +167,7 @@ const ShotDeskPlan: FC = () => {
             <div style={{ position: 'absolute', left: 24, top: 66, width: 372, height: 8, borderRadius: 2, background: colors.paper, opacity: 0.08 }} />
             <div style={{ position: 'absolute', left: 34, top: -104, width: 352, height: 120, transform: `scaleY(${0.1 + lidOpen * 0.9})`, transformOrigin: 'bottom center' }}>
               <div style={{ position: 'absolute', inset: 0, borderRadius: 8, background: colors.bgLift, border: `1px solid ${colors.hairline}` }} />
-              <div style={{ position: 'absolute', inset: 10, borderRadius: 4, background: colors.paperMist, opacity: 0.16 + lidOpen * 0.5 }} />
+              <div style={{ position: 'absolute', inset: 10, borderRadius: 4, background: FILM_COLORS.paperMist, opacity: 0.16 + lidOpen * 0.5 }} />
             </div>
           </div>
         </AbsoluteFill>

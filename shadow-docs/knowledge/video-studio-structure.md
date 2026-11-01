@@ -1,7 +1,7 @@
 ---
 title: 视频工作室结构与渲染工具链
 domain: video-materials
-keywords: [工作室结构, 分镜, 视频, 脚手架, new-video, 渲染, render, chrome, 端口, 段错误, 崩溃, 沙箱, node22, staticFile, 分块渲染, 清场, animatic, storyboard, motion-spec, 片头, 片尾, ident, FilmShell, 家族标识, 时长公式, render-animatic, unit, scope, choice, A 前缀, preprod, animatic CI, zhi-guo-xiang]
+keywords: [工作室结构, 分镜, 视频, film-kit, 组件层, 垫片, re-export, CameraRig, DustField, 脚手架, new-video, 渲染, render, chrome, 端口, 段错误, 崩溃, 沙箱, node22, staticFile, 分块渲染, 清场, animatic, storyboard, motion-spec, 片头, 片尾, ident, FilmShell, 家族标识, 时长公式, render-animatic, unit, scope, choice, A 前缀, preprod, animatic CI, zhi-guo-xiang, oxlint, TypeScript 7, 质量门, pnpm check, tsc]
 scope: [brand/, brand/ident/, videos/, scripts/, src/Root.tsx, package.json, public/]
 status: active
 source:
@@ -11,9 +11,11 @@ source:
   - changes/20261031-docs-scaffold-knowledge-fix/brief.md
   - changes/archive/20261101-feature-zhi-guo-xiang-preprod/brief.md
   - changes/20261101-feature-zhi-guo-xiang-production/brief.md
+  - changes/20261101-build-quality-gate/brief.md
+  - changes/20261101-refactor-film-kit/brief.md
 verified: 2026-11-01
 verified-depth: runtime
-verified-scope: 2026-10-24/25 两日实测：v5《朝朝如念》2:30 成片 + v6 前期 animatic 4:00 分镜板（7200 帧）出片。实证：分段+轮转编排+渲染前清场+分块重试的收敛策略；Composition 越界拒绝（getRealFrameRanges）；staticFile 以 public/ 为根；Chrome 对部分透明度叠渲染的确定性崩溃及 3 帧跳变规避；前期三件套（素材库→storyboard→motion-spec→animatic）+ 分镜师/UE 大师 subagent 协作出品。2026-10-29 家族片头片尾套件实证：BrandIdent 420f 与 self-intro 630f 出片、时长公式对账、令牌再导出零视觉变化。2026-10-31 脚手架口径修正（生成器产出 routes.ts、以临时 slug + typecheck 验证）经代码走查对齐。2026-11-01 致郭襄前期：preprod-zhi-guo-xiang 单元 + render-animatic 的 unit/scope choice + 52 镜 animatic 7500f CI 出片（run 41260324683）+ A{yyyyMMdd}{index}-{film}.mp4 产物。2026-11-01 致郭襄正式制作：52 镜矩阵 job 全部 success（run 41270162934，bundle 41s → 52 镜并发 → assemble 4m17s），artifact `zhi-guo-xiang-final` 18.7MB，成片 7500f / 250s / 1920×1080；同一分支新建 CI 的 `pnpm typecheck` 门会暴露 intro-v2 存量类型错误（`colors.paperMist` 等未定义键），门需待其修复后再加。硬件内存嫌疑仍未做诊断，标注待验证。
+verified-scope: 2026-10-24/25 两日实测：v5《朝朝如念》2:30 成片 + v6 前期 animatic 4:00 分镜板（7200 帧）出片。实证：分段+轮转编排+渲染前清场+分块重试的收敛策略；Composition 越界拒绝（getRealFrameRanges）；staticFile 以 public/ 为根；Chrome 对部分透明度叠渲染的确定性崩溃及 3 帧跳变规避；前期三件套（素材库→storyboard→motion-spec→animatic）+ 分镜师/UE 大师 subagent 协作出品。2026-10-29 家族片头片尾套件实证：BrandIdent 420f 与 self-intro 630f 出片、时长公式对账、令牌再导出零视觉变化。2026-10-31 脚手架口径修正（生成器产出 routes.ts、以临时 slug + typecheck 验证）经代码走查对齐。2026-11-01 致郭襄前期：preprod-zhi-guo-xiang 单元 + render-animatic 的 unit/scope choice + 52 镜 animatic 7500f CI 出片（run 41260324683）+ A{yyyyMMdd}{index}-{film}.mp4 产物。2026-11-01 致郭襄正式制作：52 镜矩阵 job 全部 success（run 41270162934，bundle 41s → 52 镜并发 → assemble 4m17s），artifact `zhi-guo-xiang-final` 18.7MB，成片 7500f / 250s / 1920×1080。2026-11-01 质量门：`pnpm check`（oxlint 1.90.0 + TypeScript 7.0.2 原生编译器）零告警零错误；TS7 类型检查约 1s，且不受本机 V8 段错误风暴影响；Remotion bundling 仍受风暴影响（`remotion still` 连续 4 次 SIGSEGV），intro-v2 像素走查留为 release 观察点。硬件内存嫌疑仍未做诊断，标注待验证。2026-11-01 组件层 film-kit 上收：pnpm check 绿 + 双单元 shots check 绿（代码级，unit）；CI 出片像素对账列为观察点，未在本机渲染验证。2026-11-01 致郭襄水墨底图样片：`shots="s06 s21"` 子集出片（run 41285587793，两镜 success）；assemble 要求全镜缓存，子集跑改为跳过。
 ---
 
 # 视频工作室结构与渲染工具链
@@ -32,6 +34,8 @@ verified-scope: 2026-10-24/25 两日实测：v5《朝朝如念》2:30 成片 + v
 
 **正式制作 CI（2026-11-01 实证）**：`render-film.yml` 一镜一 job——bundle 预打包（约 41s）+ 52 镜矩阵（`max-parallel: 20`，每镜 40–100s）+ assemble 汇总（约 4m17s）。分支 workflow 的 artifact 名为 `<film>-final`；main 上已改为与成片同名的 `A{yyyyMMdd}{index}-<film>`（PR #41），两条分支合并后以新规为准。bundle 任务当前**没有** `pnpm typecheck` 门：intro-v2 存在存量类型错误，加门会阻断出片。
 
+**质量门（2026-11-01）**：`pnpm check` = `pnpm lint`（oxlint 1.90.0，react 插件 + `--deny-warnings`）+ `pnpm typecheck`（TypeScript 7.0.2 原生 Go 编译器，`tsc --noEmit`）。PR 与 `push main` 由 `.github/workflows/quality-gate.yml` 同源执行；本地与 CI 必须使用同一 lockfile 与 node 22。TS7 类型检查是原生二进制，不踩 V8 段错误；Remotion bundling 仍是 node/webpack，风暴期照旧会崩。
+
 ## 执行约束
 
 - 分镜组件禁止内联色值/字体字面量，一律引用 `brand/tokens`；白名单仅 SplitScreen 的 macOS 红绿灯 3 色（#e06c60/#e0b050/#7db27a）
@@ -42,7 +46,7 @@ verified-scope: 2026-10-24/25 两日实测：v5《朝朝如念》2:30 成片 + v
 - 不用 node 24 跑重 JS 任务（V8 堆随机段错误，崩溃报告实证）；若换机器，本卡工具链口径需重验后再沿用
 - **长片渲染编排（2026-10-25 实证）**：多段轮转制（各段独立重试，一段卡死不阻塞他段）优于顺序重试；**每次尝试前清场孤儿 Chrome**（`pkill -f "remotion-shared-memory-capture"` + `pkill -f "headless=old"`，两次实证清场后首试即过）；长流累积崩溃时**分块化**（360 帧→60 帧微块逐块重试）必然收敛，块齐按 concat 清单三级拼接
 - **半透明渐变崩溃规避**：本机 Chrome 对「部分透明度叠渲染」存在确定性崩溃（多板面同型实证）——样片/分镜板的元素 fade 一律用 2–3 帧硬切跳变，规避渐变中途帧
-- **tsc/CLI 亦会静默段错误或挂起**（空诊断退出码非零）：重试口径同上；关键长任务日志落文件防覆盖丢证据
+- **tsc/CLI 亦会静默段错误或挂起**（空诊断退出码非零）：重试口径同上；关键长任务日志落文件防覆盖丢证据。TypeScript 7 类型检查为原生二进制，实测不受 V8 段错误影响；Remotion bundling（node/webpack）仍在风暴期崩溃
 
 ## 适用边界
 
@@ -50,10 +54,10 @@ verified-scope: 2026-10-24/25 两日实测：v5《朝朝如念》2:30 成片 + v
 
 ## 验证方式
 
-- `pnpm typecheck`（node 22 下）零错误
+- `pnpm check`（node 22 下）零 oxlint 告警、零 tsc 错误
 - `grep -rn "#[0-9a-fA-F]{6}" videos src`（排除 tokens.ts 与 assets/*.md 规范文档）仅剩红绿灯白名单；`grep "Songti\|PingFang\|Menlo" videos src` 零命中
 - `pnpm render:<slug>` 出片且时长帧数正确；分段渲染逐段 ffprobe 对账 + 拼接后总帧数对账
-- `node scripts/new-video.mjs <slug>` 生成后用临时 slug 走一遍 `pnpm typecheck`（`node --check` 对 `.tsx` 无效），通过后移除临时目录并走查产物
+- `node scripts/new-video.mjs <slug>` 生成后用临时 slug 走一遍 `pnpm check`（`node --check` 对 `.tsx` 无效），通过后移除临时目录并走查产物
 - 前期三件套：storyboard 帧数对账表合计 = animatic `durationInFrames` = 成片 ffprobe 帧数
 
 ## 家族片头片尾（FilmShell）
@@ -63,6 +67,14 @@ verified-scope: 2026-10-24/25 两日实测：v5《朝朝如念》2:30 成片 + v
 接入方式：`<FilmShell meta={{ title, subtitle, episode, credits }} contentFrames={N}>正片</FilmShell>`。Composition 的 `durationInFrames` 必须用 `totalFilmFrames(N)` 计算（120 + N + 180），routes.ts 与组件共用同一公式；`new-video.mjs` 生成的骨架已默认接入。
 
 音频口径：套件不带音效资产；BGM 在影片组件层声明——片头静音、正片首帧淡入、片尾接续并末 30f 淡出。不要用 `<Audio loop>` 收尾（音量回调按轮重置，见 [[render-stability-playbook]]），用显式两遍播放 + 独立尾段 Sequence。版权曲目改走本地 mux，不进此链路。
+
+## 跨单元组件层（film-kit）
+
+`brand/film-kit/` 是跨单元可复用分镜组件的唯一维护地（与 `brand/ident/` 平级）：`CameraRig`（含 ParallaxLayer/CamState）、`ShotShell`、`Caption`、`PaperGrain`、`DustField`（密度表由调用方 `acts` 注入，影片私有数据留在单元）。
+
+接入方式：单元 `components/` 同名文件保留为垫片——无影片私有依赖的单行 `export * from '../../../brand/film-kit/X'`；带私有配置的（如 wuh-site-intro-v2 的 DustField）留适配器注入本地密度表。既有 shots 的 import 一律不改。
+
+不抽口径：`Grade`（绑定各家私有 GRADES 数据形状）、`Console` 套件（TILE_LABELS 是影片内容）、音轨编排（数据全私有）、motion-tokens 通用令牌（已在 `brand/motion` 上收、单元 re-export）；site-film `components/DustField.tsx` 是旧分叉（算术 seed，随机源不同），保留不动。
 
 ## 关联知识
 

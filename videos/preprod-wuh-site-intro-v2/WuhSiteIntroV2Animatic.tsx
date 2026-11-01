@@ -20,14 +20,17 @@ const META: FilmMeta = {
 /** 节奏锚点（来自 storyboard 4.1，评审时以脉冲圈提示） */
 const ANCHORS = [
   { frame: 80, label: '墨落' },
-  { frame: 2520, label: '第一记重音' },
-  { frame: 4000, label: '白闪' },
-  { frame: 4380, label: '重启钤印' },
-  { frame: 5600, label: '联系钤印' },
-  { frame: 6896, label: '版本雨满' },
-  { frame: 7236, label: '方法论' },
-  { frame: 7266, label: '树起' },
-  { frame: 7566, label: '总结' },
+  { frame: 2586, label: '第一记重音' },
+  { frame: 4066, label: '白闪' },
+  { frame: 4446, label: '重启钤印' },
+  { frame: 5746, label: '联系钤印' },
+  { frame: 7042, label: '版本雨满' },
+  { frame: 7382, label: '方法论' },
+  { frame: 7412, label: '知识库' },
+  { frame: 7592, label: '树起' },
+  { frame: 7892, label: '总结' },
+  { frame: 8032, label: '打字机' },
+  { frame: 8260, label: '归零' },
 ];
 
 /** 剧本用「」标记字幕，展示时剥掉最外层一对，避免与内层引号叠成「『…』」 */
@@ -138,7 +141,7 @@ const AnimaticBody: FC = () => {
         <p style={{ fontFamily: mono, fontSize: 16, color: colors.muted, marginTop: 10, display: 'flex', justifyContent: 'space-between' }}>
           <span>preprod board-film · WuhSiteIntroV2Animatic</span>
           <span>
-            Act {act.act}/{ACTS.length} {act.title} · 帧 {frame} / {TOTAL_FRAMES} · {(frame / 30).toFixed(1)}s / 240s
+            Act {act.act}/{ACTS.length} {act.title} · 帧 {frame} / {TOTAL_FRAMES} · {(frame / 30).toFixed(1)}s / {(TOTAL_FRAMES / 30).toFixed(1)}s
           </span>
         </p>
       </div>
@@ -146,9 +149,9 @@ const AnimaticBody: FC = () => {
   );
 };
 
-/** Animatic 分镜板：FilmShell（120f 片头 + 7200f 正片 + 180f 片尾 = 7500f），正片为单色简板预演 */
+/** Animatic 分镜板：FilmShell（150f 片头 + 8260f 正片 + 180f 片尾 = 8590f），正片为单色简板预演 */
 export const WuhSiteIntroV2Animatic: FC = () => (
-  <FilmShell meta={META} contentFrames={TOTAL_FRAMES}>
+  <FilmShell meta={META} contentFrames={TOTAL_FRAMES} intro={150}>
     <AnimaticBody />
   </FilmShell>
 );

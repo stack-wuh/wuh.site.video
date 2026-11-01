@@ -188,7 +188,7 @@ const ShotMusicPlayer: FC = () => {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                ...(drain ?? {}),
+                ...drain,
               }}
             >
               <div style={{ width: 0, height: 0, borderTop: '9px solid transparent', borderBottom: '9px solid transparent', borderLeft: `15px solid ${colors.paper}`, marginLeft: 4 }} />
