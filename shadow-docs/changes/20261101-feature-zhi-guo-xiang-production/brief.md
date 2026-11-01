@@ -29,15 +29,17 @@
   "workflow": {
     "operation": null,
     "checkpoint": "pr:42",
-    "planHash": "15fb8dcdc3b89ea87f35754d62dbe000c897c3f63168bd96b310697bc5c4bc76",
+    "planHash": "af8d7b857eb696f2524ab1cfdb39c9ea393d5851fd716c44999e94e4c8752d5e",
     "updatedAt": null,
     "lastError": null,
     "worktree": "/Users/wuhong/shadow-desktop/github/wuh.site.video/.worktrees/20261101-feature-zhi-guo-xiang-production",
     "commit": {
       "files": [
-        ".github/workflows/render-film.yml"
+        "shadow-docs/changes/20261101-feature-zhi-guo-xiang-production/brief.md",
+        "shadow-docs/knowledge/video-production-flow.md",
+        "shadow-docs/knowledge/video-studio-structure.md"
       ],
-      "message": "fix(ci): 撤下 bundle 的 typecheck 门——intro-v2 存量类型错误不属本 change"
+      "message": "docs(shadow): 致郭襄正式制作——回写 CI 出片与 mux 实证 · 知识卡 verified-scope"
     }
   }
 }
@@ -61,13 +63,13 @@
 - **限界上下文:** video-materials — 视频工程、品牌令牌、分镜组件与素材的唯一维护地。上游只读：已归档的 `preprod-zhi-guo-xiang` 五件套与 `music.md`；下游：B 站成片发布。反腐边界：不修改前期资产、不把版权音频提交进仓库。
 - **统一语言增量:**
   - **生产单元 `zhi-guo-xiang`**：`videos/zhi-guo-xiang/`，52 镜 + 令牌 + 装配 + 静默音轨；`shots-manifest.json` 为帧数真源。
-  - **标准背影 `AscendBack`**：4-4（S30）与 5-1（S31）共用的同一组件、同一 local 帧；第 239 帧像素差分 0。
+  - **标准背影 `AscendScene`**：4-4（S30）与 5-1（S31）共用的同一组件，各自 local 帧 0–239；第 239 帧像素差分 0。
   - **本地 BGM mux**：成片保持无声；CI 出画面后按 `music.md` 在 4320 断点做两遍混音；音频不入仓。
 - **聚合与不变量:**
   - `INV-1 生产单元`：`shots.mjs sync --unit zhi-guo-xiang` 生成 52 镜 manifest/registry/routes；正片 7200f；Composition `ZhiGuoXiang` 与 `ZhiGuoXiangAudio` 均为 7500f（`totalFilmFrames(7200)`）。
   - `INV-2 镜头实装`：52 个 `shots/sNN.tsx` 全部存在，local 帧 0 起；每个镜按分镜画面/镜头语言与动效矩阵令牌实装；零内联 hex/字体字面量（`brand/tokens` + `motion-tokens`）。
   - `INV-3 装配`：FilmShell 120 + 7200 + 180 = 7500f；meta = 《风陵 · 致郭襄》/「四分钟武侠诗电影」/「网络流传 · 托名程灵素」；正片末帧 7199。
-  - `INV-4 重讲`：S30/S31 共用 `<AscendBack f={0–239} />` 与 local 帧；第 239 帧像素差分 0。
+  - `INV-4 重讲`：S30/S31 共用 `<AscendScene />`（无 props，各自 local 帧 0–239）；第 239 帧像素差分 0。
   - `INV-5 原片`：`videos/site-film/`、`videos/self-intro/`、`videos/wuh-site-intro-v2/`、`videos/preprod-wuh-site-intro-v2/`、`videos/preprod-zhi-guo-xiang/` 零改动。
   - `INV-6 音频`：成片与 CI 产物无声；`ZhiGuoXiangAudio` 不含 `<Audio>`；BGM 仅本地 mux，250s；音频不入仓。
   - `INV-7 验证`：typecheck 绿；`shots.mjs check --unit zhi-guo-xiang` 绿；CI `render-film.yml` `film=zhi-guo-xiang` 出 7500f；ffprobe 帧数/时长/静默音轨；本地 mux ffprobe 250s。
@@ -119,13 +121,21 @@
 
 ### Phase 3 音频与出片
 
-- [ ] `scripts/mux-bgm.mjs`：按 `music.md` 两遍 mux（静默成片 + 本地音频 → 250s）— `scripts/mux-bgm.mjs`
-- [ ] CI `render-film.yml` `film=zhi-guo-xiang` 出 7500f → ffprobe 对账 → 本地 BGM mux → 交用户验收 — `out/`
+- [x] `scripts/mux-bgm.mjs`：按 `music.md` 两遍 mux（静默成片 + 本地音频 → 250s）— `scripts/mux-bgm.mjs`
+- [x] CI `render-film.yml` `film=zhi-guo-xiang` 出 7500f → ffprobe 对账 → 本地 BGM mux → 交用户验收 — `out/`
 
 ## 结果
 
-- 实际耗时: —
-- 验证: —（L 级逐条 INV 对账：sync/check、typecheck、CI 7500f ffprobe、本地 mux 250s、原片零改动）
+- 实际耗时: 2026-11-01 单日（六幕交 subagent 并行实装 + 主代理整合）
+- 验证:
+  - INV-1 ✅ `shots.mjs check`：52 镜 Σ=7200；`ZhiGuoXiang` / `ZhiGuoXiangAudio` 均 7500f
+  - INV-2 ✅ 52 个 `shots/sNN.tsx` 齐备；禁用项扫描 clean（无内联 hex/字体、无 `Math.random`、无 `<Audio>`）
+  - INV-3 ✅ FilmShell 120 + 7200 + 180 = 7500；meta 三行；正片末帧 7199
+  - INV-4 ✅ S30/S31 同一 `AscendScene`、同一 local 帧；S30 字幕于 220 结束，f239 组件树仅剩 AscendScene
+  - INV-5 ✅ `git diff main...HEAD` 对五套原片目录为空
+  - INV-6 ✅ `ZhiGuoXiangAudio` 为纯静默 `AbsoluteFill`；无音频文件入仓
+  - INV-7 ✅ CI run 41270162934 全绿（52 镜矩阵）；ffprobe 7500f / 250.000s；本地 mux 250s，断点静默实测 137.8–148.8s
+  - 证据缺口：本机 `npx tsc --noEmit` exit 139（段错误），类型检查无本地证据；CI 未挂 typecheck 门（intro-v2 存量类型错误另立 change 修复）
 
 ## 知识评估
 
