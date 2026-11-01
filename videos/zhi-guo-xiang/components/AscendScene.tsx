@@ -30,15 +30,10 @@ export const AscendScene: FC = () => {
         />
       </AbsoluteFill>
 
-      {/* 山门：灭点 960,300；门缝 1→6px，光只落阶不扩散 */}
+      {/* 山门：只留一线门缝光（整幅构图到位前不画门体，避免黑块压在山上） */}
       <svg viewBox="0 0 1920 1080" style={{ position: 'absolute', inset: 0 }} preserveAspectRatio="none">
-        <path d="M812 300 L1108 300 L1128 226 L792 226 Z" fill={colors.ink} opacity={0.86} />
-        <rect x={812} y={300} width={130} height={190} fill={colors.ink} opacity={0.9} />
-        <rect x={978} y={300} width={130} height={190} fill={colors.ink} opacity={0.9} />
-        <rect x={942 - gap / 2} y={300} width={gap} height={190} fill={colors.paper} opacity={0.9} />
-        {/* 缝光落阶：宽 ≤6px，不扩散 */}
-        <rect x={960 - gap / 2} y={490} width={gap} height={300} fill={colors.paper} opacity={0.16} />
-        {/* 雾三条缓流 */}
+        <rect x={960 - gap / 2} y={300} width={gap} height={190} fill={colors.paper} opacity={0.35} />
+        <rect x={960 - gap / 2} y={490} width={gap} height={300} fill={colors.paper} opacity={0.12} />
         <g transform={`translate(${-cloudX * 0.4}, 0)`}>
           <ellipse cx={960} cy={640} rx={520} ry={26} fill={colors.paper} opacity={0.07} />
           <ellipse cx={960} cy={720} rx={620} ry={20} fill={colors.paper} opacity={0.05} />

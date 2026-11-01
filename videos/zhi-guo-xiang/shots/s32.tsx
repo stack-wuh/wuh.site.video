@@ -25,12 +25,9 @@ const S32: FC = () => {
         />
       </AbsoluteFill>
 
-      {/* 门与光：门扇向外开，暖白从门内铺到石阶 */}
+      {/* 门与光：只留铺出的暖白光，不画门体（整幅构图到位前） */}
       <svg viewBox="0 0 1920 1080" style={{ position: 'absolute', inset: 0 }} preserveAspectRatio="none">
-        <path d="M812 300 L1108 300 L1128 226 L792 226 Z" fill={colors.ink} opacity={0.86} />
-        <rect x={812} y={300} width={130} height={190} fill={colors.ink} opacity={0.9} />
-        <rect x={978} y={300} width={130} height={190} fill={colors.ink} opacity={0.9} />
-        <rect x={942 - open * 12} y={300} width={4 + open * 70} height={190} fill={colors.paper} opacity={0.55 + 0.45 * open} />
+        <rect x={942 - open * 12} y={300} width={4 + open * 70} height={190} fill={colors.paper} opacity={0.45 + 0.45 * open} />
         <rect x={960 - 40 * open} y={490} width={80 * open} height={330} fill={colors.paper} opacity={0.22 * open} />
         <g transform={`translate(${-cloudX * 0.4}, 0)`}>
           <ellipse cx={960} cy={640} rx={520} ry={26} fill={colors.paper} opacity={0.06} />
