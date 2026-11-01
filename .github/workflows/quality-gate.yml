@@ -1,0 +1,29 @@
+# ⚠️ Runner 钉版：ubuntu-24.04（当前渲染链路已验证的镜像）；ubuntu-latest 自 2026-10-19 起迁移 Ubuntu 26（actions/runner-images#14748），升级前勿改回
+name: quality-gate
+# 本地 pnpm check 的云端同源门：oxlint（AST 级规则）+ TypeScript 7（原生 Go 编译器）。
+# PR 与 main push 都跑；与渲染 workflow 解耦，不触发任何渲染。
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: quality-gate-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+        with: { version: 10 }
+      - uses: actions/setup-node@v7
+        with: { node-version: 22, cache: pnpm }
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+      - run: pnpm typecheck

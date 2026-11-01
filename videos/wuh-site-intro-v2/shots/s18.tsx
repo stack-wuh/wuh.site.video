@@ -68,7 +68,7 @@ const ShotQuoteTurn: FC = () => {
                   top: s.fy - SHEET_H / 2,
                   width: SHEET_W,
                   height: SHEET_H,
-                  background: [FILM_COLORS.blankPaper, FILM_COLORS.paperMist, FILM_COLORS.paperDeep][i % 3],
+                  background: [FILM_COLORS.blankPaper, FILM_COLORS.paperMist, colors.paperDeep][i % 3],
                   boxShadow: `0 22px 50px ${colors.bg}`,
                   opacity: appear,
                   transform: `translate(${s.dx * (1 - p)}px, ${s.dy * (1 - p)}px) rotate(${s.frot + s.drot * (1 - p)}deg) scale(${1 + (1 - p) * 0.06})`,

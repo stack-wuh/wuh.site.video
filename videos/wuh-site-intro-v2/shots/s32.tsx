@@ -85,7 +85,7 @@ const ShotLightsOn: FC = () => {
         {/* 灯 5 · 文章列表 */}
         <div style={{ position: 'absolute', left: 130, top: 440, width: 960, ...on(55) }}>
           {lamp(55)}
-          {ROWS.map((r, i) => (
+          {ROWS.map((r, _i) => (
             <div key={r.title} style={{ position: 'relative', height: 56, display: 'flex', alignItems: 'center', borderBottom: `1px solid ${colors.hairline}` }}>
               <span style={{ fontFamily: serif, fontSize: 21, color: colors.paperMuted }}>{r.title}</span>
               <span style={{ marginLeft: 'auto', fontFamily: mono, fontSize: 13, color: colors.muted, fontVariantNumeric: 'tabular-nums' }}>{r.date}</span>
