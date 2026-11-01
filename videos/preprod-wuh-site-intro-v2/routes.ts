@@ -1,9 +1,8 @@
 import type { VideoRoute } from '../../src/route';
-import { totalFilmFrames } from '../../brand/ident/identity';
 import { WuhSiteIntroV2Animatic } from './WuhSiteIntroV2Animatic';
 import { TOTAL_FRAMES } from './shots-data';
 
-/** Animatic 分镜板路由：FilmShell 包 8114f 正片，总 8414f = 120 + 8114 + 180 */
+/** Animatic 分镜板路由：FilmShell 包 8260f 正片，总 8590f = 150 + 8260 + 180（v2 片头 150f） */
 export const wuhSiteIntroV2PreprodRoutes: VideoRoute[] = [
-  { id: 'WuhSiteIntroV2Animatic', component: WuhSiteIntroV2Animatic, durationInFrames: totalFilmFrames(TOTAL_FRAMES) },
+  { id: 'WuhSiteIntroV2Animatic', component: WuhSiteIntroV2Animatic, durationInFrames: 150 + TOTAL_FRAMES + 180 },
 ];

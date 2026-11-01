@@ -1,5 +1,6 @@
 /* 镜 46 · Act 7 坐忘 · 局部帧 [0,180) · 180f
-   后两句在下半留白处落下（半拍/字），与前两句合成完整四句；
+   同一行四列、右起：常默（最右）→ 少思 → 不怒 → 不恼（最左）；
+   右二列承接 s45 已落定，本镜续写左二列（半拍/字），不再另起下排；
    仍为零运镜（CM-01，禁 CM-02/CM-14），末 20f 极轻 1% 下移（CM-03）引向落款位；
    纸页底部浮出空落款位；GR-02。 */
 import type { CSSProperties, FC } from 'react';
@@ -11,11 +12,11 @@ import { PaperGrain } from '../components/PaperGrain';
 import { Grade } from '../components/Grade';
 
 const UPPER_TOP = 96;
-const LOWER_TOP = 486;
 const COLUMN_GAP = 130;
 
 const COLUMN_STYLE: CSSProperties = {
   writingMode: 'vertical-rl',
+  width: 48,
   fontFamily: fontFamilies.serif,
   fontSize: 34,
   lineHeight: 1,
@@ -43,15 +44,12 @@ const ShotPoemSecondHalf: FC = () => {
     <AbsoluteFill style={{ background: colors.paper }}>
       <AbsoluteFill style={{ backgroundImage: `linear-gradient(180deg, ${colors.gold} 0%, transparent 58%)`, opacity: 0.12 + light * 0.08, mixBlendMode: 'screen' }} />
       <div style={{ position: 'absolute', inset: 0, transform: `translateY(${shift}px)` }}>
-        {/* 上阕：承接 s45 已落定 */}
+        {/* 同一行四列、右起：左二列本镜续写，右二列承接 s45 */}
         <div style={{ position: 'absolute', left: 0, right: 0, top: UPPER_TOP, display: 'flex', justifyContent: 'center', gap: COLUMN_GAP }}>
-          <PageColumn frame={frame} text="少思慧烛内光。" start={0} landed />
-          <PageColumn frame={frame} text="常默元气不伤，" start={0} landed />
-        </div>
-        {/* 下阕：在下半留白处落下 */}
-        <div style={{ position: 'absolute', left: 0, right: 0, top: LOWER_TOP, display: 'flex', justifyContent: 'center', gap: COLUMN_GAP }}>
           <PageColumn frame={frame} text="不恼心地清凉。" start={90} />
           <PageColumn frame={frame} text="不怒百神和畅，" start={10} />
+          <PageColumn frame={frame} text="少思慧烛内光。" start={0} landed />
+          <PageColumn frame={frame} text="常默元气不伤，" start={0} landed />
         </div>
         {/* 空落款位 */}
         <div style={{ position: 'absolute', right: 220, bottom: 118, width: 330, height: 2, background: colors.ink, opacity: 0.14 * slot }} />

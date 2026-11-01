@@ -44,43 +44,43 @@ export const FILM_COLORS = {
   wireGrey: '#B9B4A8',
 } as const;
 
-/* ─── §5 节奏锚点（storyboard v5 · 8114 时间轴） ─── */
+/* ─── §5 节奏锚点（storyboard v6 · 8260 时间轴） ─── */
 export const ANCHORS = {
   firstInk: 80, // 第一滴墨触纸（第 5 拍）
   inscription: 240, // 题记落定（第 13 拍）
   countdownZero: 468, // 30 天倒计时归零
   act2: 720, // 第 37 拍 · 纸缝穿越
   act3: 1872,
-  firstLine: 2520, // 第一记重音：提交回车（第 127 拍）
-  act4: 2862,
-  act5: 3642,
-  whiteFlash: 4000, // 唯一纯白峰值（第 201 拍）
-  sealRestart: 4380, // 重启钤印（第 220 拍）
-  act6: 4440, // 入院（第 223 拍）
-  needle: 4920, // 唱针落定（第 247 拍）
-  sealContact: 5600, // 联系钤印（第 279 拍）
-  act7: 5640,
-  act8: 6708,
-  versionRain: 6896, // 116 点落满（第 345.8 拍）
-  playerOn: 7036, // 播放器可用（第 352.8 拍）
-  quoteSettle: 7236, // 方法论金句（第 362.8 拍）
-  knowledgeBase: 7266, // 知识库起（第 364.3 拍）
-  treeStart: 7446, // 衍生树起（第 373.3 拍）
-  pageSettle: 7746, // 总结纸页（第 388.3 拍）
-  typewriter: 7886, // 打字机起（第 395.3 拍）
-  zero: 8114, // 归零（第 406.7 拍）
+  firstLine: 2586, // 第一记重音：提交回车（第 130.3 拍）
+  act4: 2928,
+  act5: 3708,
+  whiteFlash: 4066, // 唯一纯白峰值（第 204.3 拍）
+  sealRestart: 4446, // 重启钤印（第 223.3 拍）
+  act6: 4506, // 入院（第 226.3 拍）
+  needle: 4986, // 唱针落定（第 250.3 拍）
+  sealContact: 5746, // 联系钤印（第 288.3 拍）
+  act7: 5786,
+  act8: 6854,
+  versionRain: 7042, // 116 点落满（第 353.1 拍）
+  playerOn: 7182, // 播放器可用（第 360.1 拍）
+  quoteSettle: 7382, // 方法论金句（第 370.1 拍）
+  knowledgeBase: 7412, // 知识库起（第 371.6 拍）
+  treeStart: 7592, // 衍生树起（第 380.6 拍）
+  pageSettle: 7892, // 总结纸页（第 395.6 拍）
+  typewriter: 8032, // 打字机起（第 402.6 拍）
+  zero: 8260, // 归零（第 414.0 拍）
 } as const;
 
 /* ─── 幕界（帧号不动） ─── */
 export const ACT_FRAMES = [
   { act: 1, start: 0, end: 720 },
   { act: 2, start: 720, end: 1872 },
-  { act: 3, start: 1872, end: 2862 },
-  { act: 4, start: 2862, end: 3642 },
-  { act: 5, start: 3642, end: 4440 },
-  { act: 6, start: 4440, end: 5640 },
-  { act: 7, start: 5640, end: 6708 },
-  { act: 8, start: 6708, end: 8114 },
+  { act: 3, start: 1872, end: 2928 },
+  { act: 4, start: 2928, end: 3708 },
+  { act: 5, start: 3708, end: 4506 },
+  { act: 6, start: 4506, end: 5786 },
+  { act: 7, start: 5786, end: 6854 },
+  { act: 8, start: 6854, end: 8260 },
 ] as const;
 
 /* ─── §3.7 八幕调色（GRADES：底色层 + 雾光层 + 全局滤镜） ─── */

@@ -1,7 +1,7 @@
-/* 镜 18 · Act 3 第一行 · 局部帧 [0,234) · 234f
-   TR-03 承接纸页流；FN-42 五句金句随页翻出（20f 起，句间 34/30/27/24/21f，pageTurnDur 10）；
-   PT-12 纸页 12 张做翻飞/堆叠（不建 89 节点）；FN-43 汇总页（局部 156–214f）落「89 篇」；
-   224–234f 骤停留白（2342–2352 全局）；尾帧纸山 + 山顶页光；GR-04。 */
+/* 镜 18 · Act 3 第一行 · 局部帧 [0,300) · 300f
+   TR-03 承接纸页流；FN-42 五句金句随页翻出（20f 起，句间 42f，每句约 1.4s，pageTurnDur 10）；
+   PT-12 纸页 12 张做翻飞/堆叠（不建 89 节点）；FN-43 汇总页（局部 230–288f）落「89 篇」；
+   288–300f 停住留白；尾帧纸山 + 山顶页光；GR-04。 */
 import type { FC } from 'react';
 import { AbsoluteFill, interpolate, random, useCurrentFrame } from 'remotion';
 import { colors, fontFamilies } from '../../../brand/tokens';
@@ -11,7 +11,7 @@ import { DustField } from '../components/DustField';
 import { PaperGrain } from '../components/PaperGrain';
 import { Grade } from '../components/Grade';
 
-const INTERVALS = [34, 30, 27, 24, 21] as const;
+const INTERVALS = [42, 42, 42, 42, 42] as const;
 const START = 20;
 const QUOTES = [
   '人生一世不过 3 万多天，实在是太短了。',
@@ -38,14 +38,14 @@ const SHEETS = Array.from({ length: 12 }).map((_, i) => {
 
 const ShotQuoteTurn: FC = () => {
   const frame = useCurrentFrame();
-  const tf = Math.min(frame, 224);
+  const tf = Math.min(frame, 290);
   const camX = Math.sin(tf / 47) * 10;
-  const camY = Math.sin(tf / 61 + 1.2) * 6 + interpolate(tf, [150, 200], [0, -26], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: CURVES.cineEaseInOut });
-  const sum = sumPage(frame, 156, 58);
-  const big = Math.round(numRoll(frame, 158, 36, 9, 89));
-  const summit = interpolate(frame, [156, 178], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: CURVES.cineEaseOut });
+  const camY = Math.sin(tf / 61 + 1.2) * 6 + interpolate(tf, [230, 280], [0, -26], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: CURVES.cineEaseInOut });
+  const sum = sumPage(frame, 230, 58);
+  const big = Math.round(numRoll(frame, 232, 36, 9, 89));
+  const summit = interpolate(frame, [230, 252], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: CURVES.cineEaseOut });
   const glow = 0.22 * summit * glowPulse(tf, 0.6).opacity;
-  const capIn = interpolate(frame, [186, 202], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: CURVES.cineEaseOut });
+  const capIn = interpolate(frame, [258, 274], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: CURVES.cineEaseOut });
 
   return (
     <AbsoluteFill style={{ backgroundColor: colors.bg, overflow: 'hidden' }}>
@@ -127,7 +127,7 @@ const ShotQuoteTurn: FC = () => {
       <Grade id="GR-04" />
       {/* 字幕底衬：纸山脚下压一层暗坡，保证字幕可读 */}
       <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: 250, backgroundImage: `linear-gradient(0deg, ${colors.bg}, transparent)`, opacity: 0.6 * capIn }} />
-      <Caption text="他还是继续写。2023 年 30 篇，2024 年 59 篇。" appearAt={186} />
+      <Caption text="他还是继续写。2023 年 30 篇，2024 年 59 篇。" appearAt={258} />
     </AbsoluteFill>
   );
 };
