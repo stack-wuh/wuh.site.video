@@ -4,7 +4,7 @@
   "name": "20261031-docs-intro-v2-s18-quotes",
   "type": "docs",
   "scope": "video-materials",
-  "status": "published",
+  "status": "archived",
   "baseBranch": "main",
   "branch": "docs/20261031-docs-intro-v2-s18-quotes",
   "files": [
@@ -26,13 +26,13 @@
   },
   "review": {
     "conclusion": "passed",
-    "verifiedCommit": "a0e1aa8c24e718a0d548e8b731a947a60449c151",
-    "verifiedAt": "2026-10-31T15:29:45.467Z"
+    "verifiedCommit": "35e281786c87017a32aaaf1bdca8961292617800",
+    "verifiedAt": "2026-11-01T00:41:25.806Z"
   },
   "workflow": {
     "operation": null,
-    "checkpoint": "pr:32",
-    "planHash": "e5e9749ec72af2bed5cea7fe89e40e02f3d6818e8249f8fbc59cdf6320b5db4a",
+    "checkpoint": "merged-pr:32",
+    "planHash": "781e08a63c96f0f35d5c236bbcde18bb3f9c486b5b62080a939a566d4102e04d",
     "updatedAt": null,
     "lastError": null,
     "release": {
