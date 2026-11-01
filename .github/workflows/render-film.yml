@@ -31,10 +31,10 @@ jobs:
     outputs:
       shots: ${{ steps.plan.outputs.shots }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
         with: { version: 10 }
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with: { node-version: 22, cache: pnpm }
       - run: pnpm install --frozen-lockfile
       - run: google-chrome-stable --version
@@ -49,7 +49,7 @@ jobs:
       - name: Read bundle path
         id: bundepath
         run: echo "dir=$(cat out/bundle-path.txt)" >> "$GITHUB_OUTPUT"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: remotion-bundle
           path: ${{ steps.bundepath.outputs.dir }}
@@ -68,10 +68,10 @@ jobs:
       CHROME_EXECUTABLE: /usr/bin/google-chrome-stable # 完整版 Chrome：headless-shell 的 blend/色彩管理有差异（CI 抽帧实证偏色）
       RENDER_CONCURRENCY: '1' # 每任务只渲一镜，单 Chrome 即可；总并发 = max-parallel
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
         with: { version: 10 }
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with: { node-version: 22, cache: pnpm }
       - run: pnpm install --frozen-lockfile
       - run: sudo apt-get update && sudo apt-get install -y ffmpeg fontconfig # runner 无预装 ffprobe——INV-S5 校验必需（CI 五跑实证）
@@ -83,13 +83,13 @@ jobs:
           fc-cache -f
           fc-match "PingFang SC" && fc-match "Songti SC" && fc-match "Menlo" # 别名生效自证
       - run: google-chrome-stable --version
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with: { name: remotion-bundle, path: ci-bundle }
       - name: Locate bundle
         id: loc
         run: echo "dir=$(dirname "$(find ci-bundle -name index.html | head -1)")" >> "$GITHUB_OUTPUT"
       - run: node scripts/render-film.mjs --only ${{ matrix.shot }} --bundle-dir "${{ steps.loc.outputs.dir }}" --unit "$FILM"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: shot-${{ matrix.shot }}
           path: out/shots/${{ env.FILM }}/${{ matrix.shot }}-*.mp4
@@ -104,20 +104,20 @@ jobs:
     env:
       CHROME_EXECUTABLE: /usr/bin/google-chrome-stable # 完整版 Chrome：headless-shell 的 blend/色彩管理有差异（CI 抽帧实证偏色）
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
         with: { version: 10 }
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with: { node-version: 22, cache: pnpm }
       - run: pnpm install --frozen-lockfile
       - run: sudo apt-get update && sudo apt-get install -y ffmpeg
       - run: google-chrome-stable --version
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           pattern: 'shot-*'
           path: out/shots/${{ env.FILM }}
           merge-multiple: true
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with: { name: remotion-bundle, path: ci-bundle }
       - name: Locate bundle
         id: loc
@@ -125,9 +125,9 @@ jobs:
       - name: Count collected shots
         run: echo "已收镜产物 $(ls out/shots/$FILM/*.mp4 2>/dev/null | wc -l) 个"
       - run: node scripts/render-film.mjs --assemble --bundle-dir "${{ steps.loc.outputs.dir }}" --unit "$FILM" # 缺镜在此明确列出
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: ${{ env.FILM }}-final
-          path: out/*-${{ env.FILM }}.mp4 # 规范名 {yyyyMMdd}-{序号}-{项目名}.mp4（artifact 名保持稳定便于 download）
+          path: out/*-${{ env.FILM }}.mp4 # 规范名 {yyyyMMdd}{index}-{项目名}.mp4（artifact 名保持稳定便于 download）
           retention-days: 90 # 仓库上限
           if-no-files-found: error
