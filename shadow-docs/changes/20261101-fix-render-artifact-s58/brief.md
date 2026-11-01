@@ -85,7 +85,7 @@
   - `render-film.yml` YAML 解析通过；assemble 后新增「Resolve final artifact name」step，用 `basename "$(ls out/*-${FILM}.mp4 | head -1)" .mp4` 解析 artifact 名；模拟产物 `2026110101-wuh-site-intro-v2.mp4` → artifact 名 `2026110101-wuh-site-intro-v2`。
   - `shots.mjs check --unit wuh-site-intro-v2` 全绿（58 镜 Σ8114）；`tsc --noEmit` 本次 s58 0 错误（全仓 7 处既有错误不变）。
   - S58 落款文字 `top 880→800`、`SIGN.y 894→814`，墨点/涟漪同步；帧数/时间轴不变。
-  - **证据缺口:** CI 出片后验 artifact 名与 8414 帧、S58 落款不再与字幕重叠。
+  - **CI 出片验证:** run 41270891070 成功；artifact 名 `2026110101-wuh-site-intro-v2`（与成片同名）；成片 8590f / 286.33s；S58 抽帧 8380 确认落款小字已上移、与底部字幕分离。
 
 ## 知识评估
 
