@@ -4,7 +4,7 @@
   "name": "20261101-fix-wuh-site-intro-v2-r2",
   "type": "fix",
   "scope": "video-studio",
-  "status": "reviewed",
+  "status": "published",
   "baseBranch": "main",
   "branch": "fix/20261101-fix-wuh-site-intro-v2-r2",
   "files": [
@@ -18,8 +18,8 @@
     "repository": "stack-wuh/wuh.site.video",
     "issue": null,
     "issueUrl": null,
-    "pullRequest": null,
-    "pullRequestUrl": null
+    "pullRequest": 40,
+    "pullRequestUrl": "https://github.com/stack-wuh/wuh.site.video/pull/40"
   },
   "review": {
     "conclusion": "passed",
@@ -28,7 +28,7 @@
   },
   "workflow": {
     "operation": null,
-    "checkpoint": null,
+    "checkpoint": "pr:40",
     "planHash": "e7acd70cba917f967513b25794de393a4dcb7ceffca886e399e116c1ed00d7b1",
     "updatedAt": null,
     "lastError": null,
