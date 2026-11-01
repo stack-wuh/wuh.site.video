@@ -4,7 +4,7 @@
   "name": "20261031-fix-ci-cjk-fonts",
   "type": "fix",
   "scope": "ci-render",
-  "status": "published",
+  "status": "archived",
   "baseBranch": "main",
   "branch": "fix/20261031-fix-ci-cjk-fonts",
   "files": [
@@ -21,13 +21,13 @@
   },
   "review": {
     "conclusion": "passed",
-    "verifiedCommit": "a0e1aa8c24e718a0d548e8b731a947a60449c151",
-    "verifiedAt": "2026-10-31T15:36:22.673Z"
+    "verifiedCommit": "c99e6a84492b3dd130987d0354c642fd067f7fe1",
+    "verifiedAt": "2026-11-01T00:41:37.114Z"
   },
   "workflow": {
     "operation": null,
-    "checkpoint": "pr:33",
-    "planHash": "c65542263f7f55e797f8552d068350b37715e8281ff996ffab35475fd86192e8",
+    "checkpoint": "merged-pr:33",
+    "planHash": "286c5859f8fbbd4b31635b969a833430c85ad3826de1cf70faff558a36e7c300",
     "updatedAt": null,
     "lastError": null,
     "release": {

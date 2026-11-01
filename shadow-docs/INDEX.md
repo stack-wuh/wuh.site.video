@@ -16,5 +16,5 @@
 | 20261031-feature-site-film-shot-pipeline | published | shadow-docs/changes/20261031-feature-site-film-shot-pipeline/brief.md |
 | 20261031-feature-wuh-site-intro-v2-preprod | ✅ 完成 | shadow-docs/changes/archive/20261031-feature-wuh-site-intro-v2-preprod/brief.md |
 | 20261031-feature-wuh-site-intro-v2-production | published | shadow-docs/changes/20261031-feature-wuh-site-intro-v2-production/brief.md |
-| 20261031-fix-ci-cjk-fonts | published | shadow-docs/changes/20261031-fix-ci-cjk-fonts/brief.md |
+| 20261031-fix-ci-cjk-fonts | ✅ 完成 | shadow-docs/changes/archive/20261031-fix-ci-cjk-fonts/brief.md |
 | 20261101-fix-wuh-site-intro-v2-r1 | published | shadow-docs/changes/20261101-fix-wuh-site-intro-v2-r1/brief.md |
