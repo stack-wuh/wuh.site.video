@@ -4,7 +4,7 @@
   "name": "20261031-docs-intro-v2-s29-ink-rain",
   "type": "docs",
   "scope": "video-materials",
-  "status": "published",
+  "status": "archived",
   "baseBranch": "main",
   "branch": "docs/20261031-docs-intro-v2-s29-ink-rain",
   "files": [
@@ -24,13 +24,13 @@
   },
   "review": {
     "conclusion": "passed",
-    "verifiedCommit": "825945857aae720f2d510e5747b94ab1bc74b02e",
-    "verifiedAt": "2026-10-31T14:47:41.630Z"
+    "verifiedCommit": "9dc8afe9438cf12bdb419bd96d2dd1fb7b46065e",
+    "verifiedAt": "2026-11-01T00:41:11.702Z"
   },
   "workflow": {
     "operation": null,
-    "checkpoint": "pr:30",
-    "planHash": "9198b873e509ee65061417e6925939c4f70fe7c7b393daab2edc2144e6408b48",
+    "checkpoint": "merged-pr:30",
+    "planHash": "24324d4130c9a56aa45d4866970b84e2df9701e20b286de479777c64fac198c2",
     "updatedAt": null,
     "lastError": null,
     "release": {
