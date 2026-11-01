@@ -20,5 +20,8 @@
 | 20261101-docs-zhi-guo-xiang-wrapup | ✅ 完成 | shadow-docs/changes/archive/20261101-docs-zhi-guo-xiang-wrapup/brief.md |
 | 20261101-feature-zhi-guo-xiang-preprod | ✅ 完成 | shadow-docs/changes/archive/20261101-feature-zhi-guo-xiang-preprod/brief.md |
 | 20261101-fix-output-naming | ✅ 完成 | shadow-docs/changes/archive/20261101-fix-output-naming/brief.md |
+| 20261101-fix-render-artifact-s58 | reviewed | shadow-docs/changes/20261101-fix-render-artifact-s58/brief.md |
 | 20261101-fix-runner-image-pin | ✅ 完成 | shadow-docs/changes/archive/20261101-fix-runner-image-pin/brief.md |
 | 20261101-fix-wuh-site-intro-v2-r1 | ✅ 完成 | shadow-docs/changes/archive/20261101-fix-wuh-site-intro-v2-r1/brief.md |
+| 20261101-fix-wuh-site-intro-v2-r2 | ✅ 完成 | shadow-docs/changes/archive/20261101-fix-wuh-site-intro-v2-r2/brief.md |
+| 20261101-fix-wuh-site-intro-v2-r3 | reviewed | shadow-docs/changes/20261101-fix-wuh-site-intro-v2-r3/brief.md |

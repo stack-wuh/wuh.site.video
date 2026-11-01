@@ -4,7 +4,7 @@
   "name": "20261101-fix-wuh-site-intro-v2-r2",
   "type": "fix",
   "scope": "video-studio",
-  "status": "published",
+  "status": "archived",
   "baseBranch": "main",
   "branch": "fix/20261101-fix-wuh-site-intro-v2-r2",
   "files": [
@@ -23,13 +23,13 @@
   },
   "review": {
     "conclusion": "passed",
-    "verifiedCommit": "d0931588579a67f389b52f2b6299da7418a6c63b",
-    "verifiedAt": "2026-11-01T02:52:38.109Z"
+    "verifiedCommit": "fe0e980890eee6be474a6235543fff69302bb885",
+    "verifiedAt": "2026-11-01T04:08:49.045Z"
   },
   "workflow": {
     "operation": null,
-    "checkpoint": "pr:40",
-    "planHash": "e7acd70cba917f967513b25794de393a4dcb7ceffca886e399e116c1ed00d7b1",
+    "checkpoint": "merged-pr:40",
+    "planHash": "b59755aca725687d221b26ce43a05b37161bd11f444f1734ca5e50a3a83fdcdc",
     "updatedAt": null,
     "lastError": null,
     "release": {
@@ -48,7 +48,7 @@
   "knowledge": {
     "action": "更新",
     "target": "shadow-docs/knowledge/render-stability-playbook.md",
-    "reason": "补充分段音量终验必须覆盖片尾：startFrom 越界导致的整段静音不影响时长，ffprobe 两路时长查不出；新增末窗 volumedetect 阈值与按曲长预校验要求"
+    "reason": "分段落幕音量终验补齐后复验通过"
   }
 }
 ---
