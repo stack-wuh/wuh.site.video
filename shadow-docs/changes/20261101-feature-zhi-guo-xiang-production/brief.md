@@ -140,7 +140,8 @@
   - INV-5 ✅ `git diff main...HEAD` 对五套原片目录为空
   - INV-6 ✅ `ZhiGuoXiangAudio` 为纯静默 `AbsoluteFill`；无音频文件入仓
   - INV-7 ✅ CI run 41270162934 全绿（52 镜矩阵）；ffprobe 7500f / 250.000s；本地 mux 250s，断点静默实测 137.8–148.8s
-  - 证据缺口：本机 `npx tsc --noEmit` exit 139（段错误），类型检查无本地证据；CI 未挂 typecheck 门（intro-v2 存量类型错误另立 change 修复）
+  - 证据缺口：本机 `tsc` 间歇段错误（exit 139、无输出），本地不作为判据；类型门由 CI 兜底
+  - 类型门 ✅ `pnpm typecheck:ci`（`tsconfig.ci.json`）已挂回 bundle 任务，run 41271456208 该步绿。范围收窄到 `videos/zhi-guo-xiang` + `brand`：intro-v2 的 8 处存量 TS2339 本 change 不修；`src` 因 `Root.tsx` 汇总所有单元 routes、经导入图会把 intro-v2 拉进程序而排除（已知覆盖缺口，intro-v2 修复后删该文件、换回全仓 `pnpm typecheck`）
 
 ## 知识评估
 
