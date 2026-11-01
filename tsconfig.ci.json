@@ -1,0 +1,9 @@
+{
+  // CI 类型门（render-film.yml 的 bundle 任务）——只检查当前在制单元，让出片不被别单元存量问题拖住。
+  // 收窄原因：全仓 `pnpm typecheck` 会被 videos/wuh-site-intro-v2 的 8 处存量 TS2339（引用了调色对象里
+  // 不存在的键）顶红，该单元问题与本链路无关。intro-v2 修好后删掉本文件，CI 换回 `pnpm typecheck`。
+  // 不含 src 的原因：src/Root.tsx 汇总了所有视频单元的 routes，一旦纳入就会把 intro-v2 经导入图拉进程序，
+  // 收窄失效——这是已知覆盖缺口，只能随全仓门一起恢复。
+  "extends": "./tsconfig.json",
+  "include": ["videos/zhi-guo-xiang", "brand", "scripts"]
+}

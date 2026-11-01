@@ -6,6 +6,7 @@
     "studio": "remotion studio src/index.ts --port 3210",
     "lint": "oxlint --react-plugin --deny-warnings src videos brand scripts",
     "typecheck": "tsc --noEmit",
+    "typecheck:ci": "tsc --noEmit -p tsconfig.ci.json",
     "check": "pnpm lint && pnpm typecheck",
     "new-video": "node scripts/new-video.mjs",
     "render:self-intro": "remotion render src/index.ts SelfIntro out/self-intro.mp4 --crf=16 --browser-executable=\"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome\" --port=3211"
@@ -14,6 +15,7 @@
     "@fontsource/noto-sans-sc": "^5.3.1",
     "@fontsource/noto-serif-sc": "^5.3.1",
     "@remotion/cli": "^4.0.0",
+    "lxgw-wenkai-webfont": "^1.7.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "remotion": "^4.0.0"

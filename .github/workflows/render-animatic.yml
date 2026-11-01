@@ -195,7 +195,7 @@ jobs:
         run: |
           cat > assemble.mjs <<'EOF'
           import { execFileSync } from 'node:child_process';
-          import { existsSync, readdirSync, readFileSync } from 'node:fs';
+          import { existsSync, readFileSync } from 'node:fs';
           const { segments } = JSON.parse(readFileSync('plan/segments.json', 'utf8'));
           const unit = process.env.UNIT;
           const files = segments.map((s) => `out/segs/seg-${s.id}.mp4`);
@@ -206,14 +206,8 @@ jobs:
           const chains = files.map((_, i) => `[${i}:v]trim=end_frame=${segments[i].end - segments[i].start + 1},setpts=PTS-STARTPTS[v${i}]`).join(';');
           const graph = `${chains};${files.map((_, i) => `[v${i}]`).join('')}concat=n=${files.length}:v=1:a=0[cat]`;
           const d = new Date();
-          const dateTag = `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}${String(d.getDate()).padStart(2, '0')}`;
-          const prev = readdirSync('out')
-            .filter((f) => f.startsWith('A') && f.endsWith(`-${unit}.mp4`))
-            .map((f) => f.match(/^A\d{8}(\d{2})-/))
-            .filter(Boolean)
-            .map((m) => Number(m[1]))
-            .reduce((a, b) => Math.max(a, b), 0);
-          const out = `out/A${dateTag}${String(prev + 1).padStart(2, '0')}-${unit}.mp4`;
+          const stamp = `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}${String(d.getDate()).padStart(2, '0')}${String(d.getHours()).padStart(2, '0')}${String(d.getMinutes()).padStart(2, '0')}${String(d.getSeconds()).padStart(2, '0')}`;
+          const out = `out/A${stamp}-${unit}.mp4`;
           args.push('-filter_complex', graph, '-map', '[cat]', '-r', '30', '-vsync', 'cfr', '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '16', '-pix_fmt', 'yuv420p', out);
           execFileSync('ffmpeg', ['-y', ...args], { stdio: 'inherit' });
           const frames = Number(execFileSync('ffprobe', ['-v', 'error', '-select_streams', 'v:0', '-show_entries', 'stream=nb_frames', '-of', 'default=noprint_wrappers=1:nokey=1', out], { encoding: 'utf8' }).trim());

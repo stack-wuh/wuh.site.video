@@ -10,7 +10,9 @@ on:
   workflow_dispatch:
     inputs:
       film:
-        description: '视频单元（默认 site-film；如 wuh-site-intro-v2）'
+        # 不用 type: choice 下拉：options 平台只支持静态枚举，而单元随片子增长——
+        # 合法单元以 videos/*/shots-manifest.json 为真源，bundle 首步动态校验拦截。
+        description: '视频单元 slug（合法值见 bundle 校验输出，如 site-film、zhi-guo-xiang）'
         required: false
         default: 'site-film'
       shots:
@@ -33,11 +35,24 @@ jobs:
       shots: ${{ steps.plan.outputs.shots }}
     steps:
       - uses: actions/checkout@v7
+      # FILM 动态校验：合法单元 = videos/*/shots-manifest.json（真源），填错在此红掉并列出可用值，
+      # 不等 node require 报 ENOENT。新单元只要 sync 过 manifest 即自动可渲，无需改本文件。
+      - name: 校验 FILM 输入
+        run: |
+          VALID=$(ls -d videos/*/shots-manifest.json | cut -d/ -f2 | paste -sd' ' -)
+          case " $VALID " in
+            *" $FILM "*) echo "视频单元 '$FILM' ✓（可用：$VALID）" ;;
+            *) echo "::error::未知视频单元 '$FILM'。可用单元：$VALID"; exit 1 ;;
+          esac
       - uses: pnpm/action-setup@v6
         with: { version: 10 }
       - uses: actions/setup-node@v7
         with: { node-version: 22, cache: pnpm }
       - run: pnpm install --frozen-lockfile
+      # 类型门：bundle 是最早的失败点，类型错在此拦下，不浪费数十个矩阵渲镜 job。
+      # 只查在制单元（tsconfig.ci.json）——全仓 pnpm typecheck 会被 videos/wuh-site-intro-v2 的
+      # 8 处存量 TS2339（调色键名不存在）顶红，属该单元既有问题；其修好后换回 pnpm typecheck。
+      - run: pnpm typecheck:ci
       - run: google-chrome-stable --version
       - id: plan
         env:
@@ -99,7 +114,7 @@ jobs:
 
   assemble:
     needs: shots
-    if: always() # 有红镜也要跑：统一清点、明确列缺，不静默
+    if: always() && github.event.inputs.shots == '' # 子集出片（shots 非空）不汇总：assemble 要求全 52 镜缓存
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     env:
@@ -132,6 +147,6 @@ jobs:
       - uses: actions/upload-artifact@v7
         with:
           name: ${{ steps.final.outputs.name }}
-          path: out/*-${{ env.FILM }}.mp4 # 规范名 {yyyyMMdd}{index}-{项目名}.mp4；artifact 名与成片同名（不含 .mp4）
+          path: out/*-${{ env.FILM }}.mp4 # 规范名 {yyyyMMdd}{HHmmss}-{项目名}.mp4；artifact 名与成片同名（不含 .mp4）
           retention-days: 90 # 仓库上限
           if-no-files-found: error

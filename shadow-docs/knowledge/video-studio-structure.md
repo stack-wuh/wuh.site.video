@@ -10,11 +10,12 @@ source:
   - changes/20261029-feature-film-identity/brief.md
   - changes/20261031-docs-scaffold-knowledge-fix/brief.md
   - changes/archive/20261101-feature-zhi-guo-xiang-preprod/brief.md
+  - changes/20261101-feature-zhi-guo-xiang-production/brief.md
   - changes/20261101-build-quality-gate/brief.md
   - changes/20261101-refactor-film-kit/brief.md
 verified: 2026-11-01
 verified-depth: runtime
-verified-scope: 2026-10-24/25 两日实测：v5《朝朝如念》2:30 成片 + v6 前期 animatic 4:00 分镜板（7200 帧）出片。实证：分段+轮转编排+渲染前清场+分块重试的收敛策略；Composition 越界拒绝（getRealFrameRanges）；staticFile 以 public/ 为根；Chrome 对部分透明度叠渲染的确定性崩溃及 3 帧跳变规避；前期三件套（素材库→storyboard→motion-spec→animatic）+ 分镜师/UE 大师 subagent 协作出品。2026-10-29 家族片头片尾套件实证：BrandIdent 420f 与 self-intro 630f 出片、时长公式对账、令牌再导出零视觉变化。2026-10-31 脚手架口径修正（生成器产出 routes.ts、以临时 slug + typecheck 验证）经代码走查对齐。2026-11-01 致郭襄前期：preprod-zhi-guo-xiang 单元 + render-animatic 的 unit/scope choice + 52 镜 animatic 7500f CI 出片（run 41260324683）+ A{yyyyMMdd}{index}-{film}.mp4 产物。2026-11-01 质量门：`pnpm check`（oxlint 1.90.0 + TypeScript 7.0.2 原生编译器）零告警零错误；TS7 类型检查约 1s，且不受本机 V8 段错误风暴影响；Remotion bundling 仍受风暴影响（`remotion still` 连续 4 次 SIGSEGV），intro-v2 像素走查留为 release 观察点。硬件内存嫌疑仍未做诊断，标注待验证。2026-11-01 组件层 film-kit 上收：pnpm check 绿 + 双单元 shots check 绿（代码级，unit）；CI 出片像素对账列为观察点，未在本机渲染验证。
+verified-scope: 2026-10-24/25 两日实测：v5《朝朝如念》2:30 成片 + v6 前期 animatic 4:00 分镜板（7200 帧）出片。实证：分段+轮转编排+渲染前清场+分块重试的收敛策略；Composition 越界拒绝（getRealFrameRanges）；staticFile 以 public/ 为根；Chrome 对部分透明度叠渲染的确定性崩溃及 3 帧跳变规避；前期三件套（素材库→storyboard→motion-spec→animatic）+ 分镜师/UE 大师 subagent 协作出品。2026-10-29 家族片头片尾套件实证：BrandIdent 420f 与 self-intro 630f 出片、时长公式对账、令牌再导出零视觉变化。2026-10-31 脚手架口径修正（生成器产出 routes.ts、以临时 slug + typecheck 验证）经代码走查对齐。2026-11-01 致郭襄前期：preprod-zhi-guo-xiang 单元 + render-animatic 的 unit/scope choice + 52 镜 animatic 7500f CI 出片（run 41260324683）+ A{yyyyMMdd}{index}-{film}.mp4 产物。2026-11-01 致郭襄正式制作：52 镜矩阵 job 全部 success（run 41270162934，bundle 41s → 52 镜并发 → assemble 4m17s），artifact `zhi-guo-xiang-final` 18.7MB，成片 7500f / 250s / 1920×1080。2026-11-01 质量门：`pnpm check`（oxlint 1.90.0 + TypeScript 7.0.2 原生编译器）零告警零错误；TS7 类型检查约 1s，且不受本机 V8 段错误风暴影响；Remotion bundling 仍受风暴影响（`remotion still` 连续 4 次 SIGSEGV），intro-v2 像素走查留为 release 观察点。硬件内存嫌疑仍未做诊断，标注待验证。2026-11-01 组件层 film-kit 上收：pnpm check 绿 + 双单元 shots check 绿（代码级，unit）；CI 出片像素对账列为观察点，未在本机渲染验证。2026-11-01 致郭襄水墨底图样片：`shots="s06 s21"` 子集出片（run 41285587793，两镜 success）；assemble 要求全镜缓存，子集跑改为跳过。
 ---
 
 # 视频工作室结构与渲染工具链
@@ -29,7 +30,9 @@ verified-scope: 2026-10-24/25 两日实测：v5《朝朝如念》2:30 成片 + v
 
 **前期五件套 + 人物视觉设定**（长片预流程）：素材库（materials.md，全条目标注真实数据源）→ 剧本（script.md，用户与编剧评审）→ 分镜（storyboard.md，逐镜表 + 帧数对账表）→ 动效规范（motion-spec.md，令牌化 + 全镜覆盖矩阵）→ animatic 分镜板（单色简板，构图+节拍+字幕）；人物视觉设定（character-design.md）与分镜并行。分镜师、UE 动效大师、人物设计师以专职 subagent 并行产出，协调方负责对账与整合。
 
-**Animatic CI 多片（2026-11-01）**：`render-animatic.yml`（workflow_dispatch）输入 `unit` choice（wuh-site-intro-v2 / zhi-guo-xiang / site-film）、`scope` choice（all / intro-outro / act1–act8）、`shots` 高级子集（空格分隔镜号，空 = 按 scope）。plan 读 `videos/<unit>/shots-manifest.json`；Composition `${Pascal}Animatic`；产物 `out/A{yyyyMMdd}{index}-<unit>.mp4`，artifact `<unit>-animatic`。`scope=all` 且 `shots` 空才汇总拼接；act / intro-outro / 自定义子集只渲对应段。
+**Animatic CI 多片（2026-11-01）**：`render-animatic.yml`（workflow_dispatch）输入 `unit` choice（wuh-site-intro-v2 / zhi-guo-xiang / site-film）、`scope` choice（all / intro-outro / act1–act8）、`shots` 高级子集（空格分隔镜号，空 = 按 scope）。plan 读 `videos/<unit>/shots-manifest.json`；Composition `${Pascal}Animatic`；产物 `out/A{yyyyMMdd}{HHmmss}-<unit>.mp4`，artifact `<unit>-animatic`。`scope=all` 且 `shots` 空才汇总拼接；act / intro-outro / 自定义子集只渲对应段。
+
+**正式制作 CI（2026-11-01 实证）**：`render-film.yml` 一镜一 job——bundle 预打包（约 41s）+ 52 镜矩阵（`max-parallel: 20`，每镜 40–100s）+ assemble 汇总（约 4m17s）。分支 workflow 的 artifact 名为 `<film>-final`；main 上已改为与成片同名的 `A{yyyyMMdd}{HHmmss}-<film>`（PR #41），两条分支合并后以新规为准。bundle 任务当前**没有** `pnpm typecheck` 门：intro-v2 存在存量类型错误，加门会阻断出片。
 
 **质量门（2026-11-01）**：`pnpm check` = `pnpm lint`（oxlint 1.90.0，react 插件 + `--deny-warnings`）+ `pnpm typecheck`（TypeScript 7.0.2 原生 Go 编译器，`tsc --noEmit`）。PR 与 `push main` 由 `.github/workflows/quality-gate.yml` 同源执行；本地与 CI 必须使用同一 lockfile 与 node 22。TS7 类型检查是原生二进制，不踩 V8 段错误；Remotion bundling 仍是 node/webpack，风暴期照旧会崩。
 

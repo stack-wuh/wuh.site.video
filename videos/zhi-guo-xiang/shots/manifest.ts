@@ -1,0 +1,352 @@
+/* 由 scripts/shots.mjs sync 生成——勿手改；真源 shots-manifest.json（类型化视图） */
+export type Manifest = { film: string; fps: number; totalFrames: number; acts: Array<{ act: number; title: string; startFrame: number; endFrame: number }>; shots: Array<{ id: string; act: number; title: string; startFrame: number; durationFrames: number; source: string }> };
+
+export const manifest: Manifest = {
+  "film": "zhi-guo-xiang",
+  "fps": 30,
+  "totalFrames": 8970,
+  "acts": [
+    {
+      "act": 1,
+      "title": "现在·海与云",
+      "startFrame": 0,
+      "endFrame": 660
+    },
+    {
+      "act": 2,
+      "title": "晚年·灯",
+      "startFrame": 660,
+      "endFrame": 1740
+    },
+    {
+      "act": 3,
+      "title": "出家·剑与针",
+      "startFrame": 1740,
+      "endFrame": 2610
+    },
+    {
+      "act": 4,
+      "title": "寻·判词",
+      "startFrame": 2610,
+      "endFrame": 4800
+    },
+    {
+      "act": 5,
+      "title": "十六岁·烟花",
+      "startFrame": 4800,
+      "endFrame": 8250
+    },
+    {
+      "act": 6,
+      "title": "回到现在",
+      "startFrame": 8250,
+      "endFrame": 8970
+    }
+  ],
+  "shots": [
+    {
+      "id": "s01",
+      "act": 1,
+      "title": "无",
+      "startFrame": 0,
+      "durationFrames": 150,
+      "source": "shots/s01.tsx"
+    },
+    {
+      "id": "s02",
+      "act": 1,
+      "title": "无",
+      "startFrame": 150,
+      "durationFrames": 180,
+      "source": "shots/s02.tsx"
+    },
+    {
+      "id": "s03",
+      "act": 1,
+      "title": "我走过山时，山不说话，",
+      "startFrame": 330,
+      "durationFrames": 210,
+      "source": "shots/s03.tsx"
+    },
+    {
+      "id": "s04",
+      "act": 1,
+      "title": "我路过海时，海不说话。",
+      "startFrame": 540,
+      "durationFrames": 120,
+      "source": "shots/s04.tsx"
+    },
+    {
+      "id": "s05",
+      "act": 2,
+      "title": "无",
+      "startFrame": 660,
+      "durationFrames": 150,
+      "source": "shots/s05.tsx"
+    },
+    {
+      "id": "s06",
+      "act": 2,
+      "title": "无",
+      "startFrame": 810,
+      "durationFrames": 180,
+      "source": "shots/s06.tsx"
+    },
+    {
+      "id": "s07",
+      "act": 2,
+      "title": "无",
+      "startFrame": 990,
+      "durationFrames": 240,
+      "source": "shots/s07.tsx"
+    },
+    {
+      "id": "s08",
+      "act": 2,
+      "title": "无",
+      "startFrame": 1230,
+      "durationFrames": 180,
+      "source": "shots/s08.tsx"
+    },
+    {
+      "id": "s09",
+      "act": 2,
+      "title": "无",
+      "startFrame": 1410,
+      "durationFrames": 180,
+      "source": "shots/s09.tsx"
+    },
+    {
+      "id": "s10",
+      "act": 2,
+      "title": "无",
+      "startFrame": 1590,
+      "durationFrames": 150,
+      "source": "shots/s10.tsx"
+    },
+    {
+      "id": "s11",
+      "act": 3,
+      "title": "无",
+      "startFrame": 1740,
+      "durationFrames": 210,
+      "source": "shots/s11.tsx"
+    },
+    {
+      "id": "s12",
+      "act": 3,
+      "title": "无",
+      "startFrame": 1950,
+      "durationFrames": 210,
+      "source": "shots/s12.tsx"
+    },
+    {
+      "id": "s13",
+      "act": 3,
+      "title": "无",
+      "startFrame": 2160,
+      "durationFrames": 210,
+      "source": "shots/s13.tsx"
+    },
+    {
+      "id": "s14",
+      "act": 3,
+      "title": "无",
+      "startFrame": 2370,
+      "durationFrames": 240,
+      "source": "shots/s14.tsx"
+    },
+    {
+      "id": "s15",
+      "act": 4,
+      "title": "小毛驴滴滴答答，倚天剑伴我走天涯。",
+      "startFrame": 2610,
+      "durationFrames": 210,
+      "source": "shots/s15.tsx"
+    },
+    {
+      "id": "s16",
+      "act": 4,
+      "title": "无",
+      "startFrame": 2820,
+      "durationFrames": 240,
+      "source": "shots/s16.tsx"
+    },
+    {
+      "id": "s17",
+      "act": 4,
+      "title": "大家都说我因为爱着杨过大侠，才在峨嵋山上出了家，",
+      "startFrame": 3060,
+      "durationFrames": 270,
+      "source": "shots/s17.tsx"
+    },
+    {
+      "id": "s18",
+      "act": 4,
+      "title": "无",
+      "startFrame": 3330,
+      "durationFrames": 240,
+      "source": "shots/s18.tsx"
+    },
+    {
+      "id": "s19",
+      "act": 4,
+      "title": "无",
+      "startFrame": 3570,
+      "durationFrames": 240,
+      "source": "shots/s19.tsx"
+    },
+    {
+      "id": "s20",
+      "act": 4,
+      "title": "三枚金针，三个愿望，她一个也没舍得用。",
+      "startFrame": 3810,
+      "durationFrames": 240,
+      "source": "shots/s20.tsx"
+    },
+    {
+      "id": "s21",
+      "act": 4,
+      "title": "无",
+      "startFrame": 4050,
+      "durationFrames": 270,
+      "source": "shots/s21.tsx"
+    },
+    {
+      "id": "s22",
+      "act": 4,
+      "title": "无",
+      "startFrame": 4320,
+      "durationFrames": 270,
+      "source": "shots/s22.tsx"
+    },
+    {
+      "id": "s23",
+      "act": 4,
+      "title": "无",
+      "startFrame": 4590,
+      "durationFrames": 210,
+      "source": "shots/s23.tsx"
+    },
+    {
+      "id": "s24",
+      "act": 5,
+      "title": "无",
+      "startFrame": 4800,
+      "durationFrames": 360,
+      "source": "shots/s24.tsx"
+    },
+    {
+      "id": "s25",
+      "act": 5,
+      "title": "无",
+      "startFrame": 5160,
+      "durationFrames": 300,
+      "source": "shots/s25.tsx"
+    },
+    {
+      "id": "s26",
+      "act": 5,
+      "title": "无",
+      "startFrame": 5460,
+      "durationFrames": 270,
+      "source": "shots/s26.tsx"
+    },
+    {
+      "id": "s27",
+      "act": 5,
+      "title": "无",
+      "startFrame": 5730,
+      "durationFrames": 300,
+      "source": "shots/s27.tsx"
+    },
+    {
+      "id": "s28",
+      "act": 5,
+      "title": "无",
+      "startFrame": 6030,
+      "durationFrames": 330,
+      "source": "shots/s28.tsx"
+    },
+    {
+      "id": "s29",
+      "act": 5,
+      "title": "无",
+      "startFrame": 6360,
+      "durationFrames": 300,
+      "source": "shots/s29.tsx"
+    },
+    {
+      "id": "s30",
+      "act": 5,
+      "title": "无",
+      "startFrame": 6660,
+      "durationFrames": 240,
+      "source": "shots/s30.tsx"
+    },
+    {
+      "id": "s31",
+      "act": 5,
+      "title": "无",
+      "startFrame": 6900,
+      "durationFrames": 420,
+      "source": "shots/s31.tsx"
+    },
+    {
+      "id": "s32",
+      "act": 5,
+      "title": "无",
+      "startFrame": 7320,
+      "durationFrames": 270,
+      "source": "shots/s32.tsx"
+    },
+    {
+      "id": "s33",
+      "act": 5,
+      "title": "满城烟火，本是军情。",
+      "startFrame": 7590,
+      "durationFrames": 300,
+      "source": "shots/s33.tsx"
+    },
+    {
+      "id": "s34",
+      "act": 5,
+      "title": "无",
+      "startFrame": 7890,
+      "durationFrames": 360,
+      "source": "shots/s34.tsx"
+    },
+    {
+      "id": "s35",
+      "act": 6,
+      "title": "无",
+      "startFrame": 8250,
+      "durationFrames": 150,
+      "source": "shots/s35.tsx"
+    },
+    {
+      "id": "s36",
+      "act": 6,
+      "title": "无",
+      "startFrame": 8400,
+      "durationFrames": 150,
+      "source": "shots/s36.tsx"
+    },
+    {
+      "id": "s37",
+      "act": 6,
+      "title": "像极了十六岁那年的烟花。",
+      "startFrame": 8550,
+      "durationFrames": 180,
+      "source": "shots/s37.tsx"
+    },
+    {
+      "id": "s38",
+      "act": 6,
+      "title": "无",
+      "startFrame": 8730,
+      "durationFrames": 240,
+      "source": "shots/s38.tsx"
+    }
+  ]
+};
