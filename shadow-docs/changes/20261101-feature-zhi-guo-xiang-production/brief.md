@@ -4,7 +4,7 @@
   "name": "20261101-feature-zhi-guo-xiang-production",
   "type": "feature",
   "scope": "video-production",
-  "status": "published",
+  "status": "committed",
   "baseBranch": "main",
   "branch": "feature/20261101-feature-zhi-guo-xiang-production",
   "files": [
@@ -28,7 +28,7 @@
   },
   "workflow": {
     "operation": null,
-    "checkpoint": "pr:42",
+    "checkpoint": "0853de3fbd52ad9f006f2ff164fb7951b5d131bd",
     "planHash": "af8d7b857eb696f2524ab1cfdb39c9ea393d5851fd716c44999e94e4c8752d5e",
     "updatedAt": null,
     "lastError": null,
