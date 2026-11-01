@@ -4,7 +4,7 @@
   "name": "20261101-refactor-film-kit",
   "type": "refactor",
   "scope": "video-studio",
-  "status": "reviewed",
+  "status": "published",
   "baseBranch": "main",
   "branch": "refactor/20261101-refactor-film-kit",
   "files": [
@@ -19,8 +19,8 @@
     "repository": null,
     "issue": null,
     "issueUrl": null,
-    "pullRequest": null,
-    "pullRequestUrl": null
+    "pullRequest": 47,
+    "pullRequestUrl": "https://github.com/stack-wuh/wuh.site.video/pull/47"
   },
   "review": {
     "conclusion": "passed",
@@ -29,7 +29,7 @@
   },
   "workflow": {
     "operation": null,
-    "checkpoint": null,
+    "checkpoint": "pr:47",
     "planHash": "799a3cd52e649b4aee18194f88da88cbec808e50ae85d3415be95348396793ca",
     "updatedAt": null,
     "lastError": null,
