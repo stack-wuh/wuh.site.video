@@ -103,7 +103,7 @@ jobs:
 
   assemble:
     needs: shots
-    if: always() # 有红镜也要跑：统一清点、明确列缺，不静默
+    if: always() && github.event.inputs.shots == '' # 子集出片（shots 非空）不汇总：assemble 要求全 52 镜缓存
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     env:

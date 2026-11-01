@@ -18,8 +18,8 @@ const S21: FC = () => {
   const f = useCurrentFrame();
   const cam = CM.hold();
   const rim = 1 - CV.hardStep3(Math.min(1, Math.max(0, (f - 110) / 30)));
-  const crowdX = interpolate(f, [0, 140], [140, -1500], CLAMP);
-  const crowdFade = interpolate(f, [80, 140], [1, 0], CLAMP);
+  const crowdX = interpolate(f, [0, 140], [760, -1780], CLAMP);
+  const crowdFade = interpolate(f, [85, 140], [1, 0], CLAMP);
   const grade = GRADES['GR-02'];
 
   return (
@@ -29,14 +29,14 @@ const S21: FC = () => {
         <Img src={BASE} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
 
         {/* 人群条：一边散一边还在说前线的事，自右向左流出画 */}
-        <div style={{ position: 'absolute', left: 0, bottom: 60, height: 420, opacity: crowdFade }}>
+        <div style={{ position: 'absolute', left: 0, bottom: -70, height: 640, opacity: crowdFade }}>
           {TILES.map((t) => (
             <Img
               key={t}
               src={CROWD}
               style={{
                 position: 'absolute',
-                left: t * 840 + crowdX,
+                left: t * 1280 + crowdX,
                 bottom: 0,
                 height: '100%',
                 width: 'auto',

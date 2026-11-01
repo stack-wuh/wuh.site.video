@@ -32,9 +32,9 @@ const S06: FC = () => {
         <div
           style={{
             position: 'absolute',
-            right: 40,
-            top: 0,
-            height: '100%',
+            right: 30,
+            bottom: 0,
+            height: '74%',
             transform: `translateY(${bob}px) translateX(${sway * 0.6}px)`,
           }}
         >
