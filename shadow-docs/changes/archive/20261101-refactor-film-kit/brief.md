@@ -4,7 +4,7 @@
   "name": "20261101-refactor-film-kit",
   "type": "refactor",
   "scope": "video-studio",
-  "status": "published",
+  "status": "archived",
   "baseBranch": "main",
   "branch": "refactor/20261101-refactor-film-kit",
   "files": [
@@ -24,16 +24,16 @@
   },
   "review": {
     "conclusion": "passed",
-    "verifiedCommit": "d9f152369edf61c00f102fde2455b4e33130c47d",
-    "verifiedAt": "2026-11-01T06:04:50.667Z"
+    "verifiedCommit": "3b8e1333b3e144d5d520a12e4697254bad8580f3",
+    "verifiedAt": "2026-11-01T06:16:36.992Z"
   },
   "workflow": {
     "operation": null,
-    "checkpoint": "pr:47",
-    "planHash": "799a3cd52e649b4aee18194f88da88cbec808e50ae85d3415be95348396793ca",
+    "checkpoint": "merged-pr:47",
+    "planHash": "bca86991b2efc83d420708efdcc3d91372e10a8ab9bd412f5d31e80ca32e1ca7",
     "updatedAt": null,
     "lastError": null,
-    "worktree": "/Users/wuhong/shadow-desktop/github/wuh.site.video/.worktrees/20261101-refactor-film-kit",
+    "worktree": null,
     "release": {
       "files": [
         "brand/film-kit",
