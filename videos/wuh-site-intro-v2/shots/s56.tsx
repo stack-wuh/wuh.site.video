@@ -1,7 +1,7 @@
 /* 镜 56 · Act 8 此刻 · 局部帧 [0,140) · 140f
    总结纸页铺满画幅（白边自 s55 收束溶解）：六母题——墨点、纸页、代码行、黑胶、灯、钤印——
    以 ≤12% 低透明度浮雕逐个叠印在同一张纸上（overlay + motif-still，每个约 15f）；
-   镜头自纸面一角缓移到整页（CM-06）；右下极小等宽脚注于末 30f 浮现（数字不占字幕）；
+   镜头自纸面一角缓移到整页（CM-06）；右下等宽脚注于 60f 起浮现（约 2.7s，字号 16，数字不占字幕）；
    尾帧纸页翻起、打字机光标在纸面亮起；GR-02。 */
 import type { FC } from 'react';
 import type { CSSProperties } from 'react';
@@ -29,7 +29,7 @@ const ShotSummaryPage: FC = () => {
     rot: 0,
   };
   const edge = interpolate(frame, [0, 24], [0.85, 0], { ...CLAMP, easing: CURVES.cineEaseOut });
-  const footnote = writeFade(frame, 110);
+  const footnote = writeFade(frame, 60);
   const flipP = interpolate(frame, [126, 140], [0, 1], { ...CLAMP, easing: CURVES.cineEaseInOut });
   const cursorIn = interpolate(frame, [128, 136], [0, 1], { ...CLAMP, easing: CURVES.cineEaseOut });
 
@@ -102,7 +102,7 @@ const ShotSummaryPage: FC = () => {
               right: 140,
               bottom: 96,
               fontFamily: MONO,
-              fontSize: 14,
+              fontSize: 16,
               letterSpacing: '0.08em',
               color: colors.muted,
               fontVariantNumeric: 'tabular-nums',

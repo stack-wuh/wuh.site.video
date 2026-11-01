@@ -1,7 +1,8 @@
 /* 镜 47 · Act 7 坐忘 · 局部帧 [0,108) · 108f
    落款位以笔锋写下「——司马承祯《坐忘歌》」（clip 生长 + 细线 stroke 生长），
    纸角一枚 16px 级「忘」字闲章（章落 4f，FN-09/FN-10 同工艺）；
-   微距俯拍落款起手，CM-04 100→102% 缓拉露出整页；画面文字即落款，不用 Caption；GR-02 + GR-03。 */
+   微距俯拍落款起手，CM-04 100→102% 缓拉露出整页；画面文字即落款，不用 Caption；
+   背景四句与 S45/S46 同版式：同一行四列、右起（常默最右→少思→不怒→不恼），全部已落定；GR-02 + GR-03。 */
 import type { CSSProperties, FC } from 'react';
 import { AbsoluteFill, interpolate, useCurrentFrame } from 'remotion';
 import { colors, fontFamilies } from '../../../brand/tokens';
@@ -10,11 +11,11 @@ import { PaperGrain } from '../components/PaperGrain';
 import { Grade } from '../components/Grade';
 
 const UPPER_TOP = 96;
-const LOWER_TOP = 486;
 const COLUMN_GAP = 130;
 
 const COLUMN_STYLE: CSSProperties = {
   writingMode: 'vertical-rl',
+  width: 48,
   fontFamily: fontFamilies.serif,
   fontSize: 34,
   lineHeight: 1,
@@ -46,12 +47,10 @@ const ShotSignatureSeal: FC = () => {
         {/* 四句：起手微距只锁落款，缓拉时整页入焦 */}
         <div style={{ position: 'absolute', inset: 0, filter: `blur(${(1 - release) * 1.4 + 0.2}px)` }}>
           <div style={{ position: 'absolute', left: 0, right: 0, top: UPPER_TOP, display: 'flex', justifyContent: 'center', gap: COLUMN_GAP }}>
-            <PageColumn frame={frame} text="少思慧烛内光。" />
-            <PageColumn frame={frame} text="常默元气不伤，" />
-          </div>
-          <div style={{ position: 'absolute', left: 0, right: 0, top: LOWER_TOP, display: 'flex', justifyContent: 'center', gap: COLUMN_GAP }}>
             <PageColumn frame={frame} text="不恼心地清凉。" />
             <PageColumn frame={frame} text="不怒百神和畅，" />
+            <PageColumn frame={frame} text="少思慧烛内光。" />
+            <PageColumn frame={frame} text="常默元气不伤，" />
           </div>
         </div>
 
