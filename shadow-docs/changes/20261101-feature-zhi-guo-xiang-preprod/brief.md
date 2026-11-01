@@ -29,7 +29,7 @@
   "workflow": {
     "operation": null,
     "checkpoint": "pr:37",
-    "planHash": "a0f9c32b39944a11d72eff755aa0cbf4c105cb611486acbca1b8586aca8e85da",
+    "planHash": "de7637dc4fdefd3d861af452a66d830b395a50725989a2ee8293617a4122ad2a",
     "updatedAt": null,
     "lastError": null,
     "worktree": "/Users/wuhong/shadow-desktop/github/wuh.site.video/.worktrees/20261101-feature-zhi-guo-xiang-preprod",
