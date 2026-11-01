@@ -50,9 +50,7 @@ type InkPaperProps = {
   color?: string;
   /** 墨团：0 无，1 最大 */
   blot?: number;
-  /** 墨团落在第几列（默认 0，即最右一列） */
-  blotOn?: number;
-  /** 墨团直接给画面坐标（px，1920×1080 基准），给了就不用 blotOn */
+  /** 墨团给画面坐标（px，1920×1080 基准） */
   blotAt?: { x: number; y: number; r?: number };
   /** 额外叠层 */
   children?: ReactNode;
@@ -69,7 +67,6 @@ export const InkPaper: FC<InkPaperProps> = ({
   gap = 1.5,
   color = colors.ink,
   blot = 0,
-  blotOn = 0,
   blotAt,
   children,
 }) => {
@@ -145,25 +142,5 @@ export const InkPaper: FC<InkPaperProps> = ({
       ) : null}
       {children}
     </AbsoluteFill>
-  );
-};
-
-/** 墨团：落在这一列写到的地方，radial 渐变 + multiply，把下一个字吃掉。 */
-const InkBlot: FC<{ size: number; at: number; blot: number }> = ({ size, at, blot }) => {
-  const r = size * (0.9 + blot * 2.2);
-  return (
-    <div
-      style={{
-        position: 'absolute',
-        top: at * size * LH - r * 0.38,
-        right: -size * 0.55,
-        width: r * 2,
-        height: r * 1.9,
-        borderRadius: '50%',
-        background: `radial-gradient(ellipse, ${colors.ink} 0%, rgba(24,21,18,0.82) 38%, rgba(24,21,18,0.2) 64%, transparent 76%)`,
-        filter: `blur(${1 + blot * 2.5}px)`,
-        opacity: 0.92,
-      }}
-    />
   );
 };

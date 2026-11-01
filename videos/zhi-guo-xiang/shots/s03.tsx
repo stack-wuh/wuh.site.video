@@ -13,7 +13,6 @@ const S03: FC = () => (
       right="14%"
       top="9%"
       blot={0.5}
-      blotOn={6}
     />
   </Slide>
 );
