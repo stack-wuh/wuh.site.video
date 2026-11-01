@@ -4,7 +4,7 @@
   "name": "20261031-build-animatic-ci-shot-matrix",
   "type": "build",
   "scope": "video-materials",
-  "status": "published",
+  "status": "archived",
   "baseBranch": "main",
   "branch": "build/20261031-build-animatic-ci-shot-matrix",
   "files": [
@@ -20,13 +20,13 @@
   },
   "review": {
     "conclusion": "passed",
-    "verifiedCommit": "f10f87e8fe35016c5cc85ae4c0965c88228aeaac",
-    "verifiedAt": "2026-10-31T14:32:29.609Z"
+    "verifiedCommit": "a4be70d9a462f284e7ebd76ba085da03460c2332",
+    "verifiedAt": "2026-11-01T00:41:04.384Z"
   },
   "workflow": {
     "operation": null,
-    "checkpoint": "pr:29",
-    "planHash": "359065548eea032efb011ec2a57f175b9e5b7d22a2a5d67fce5bab95dfa26a4f",
+    "checkpoint": "merged-pr:29",
+    "planHash": "3d6383ad4a614606f5dbea4618e0fd8e7ca97216feb00413839261e86bf22566",
     "updatedAt": null,
     "lastError": null,
     "release": {
