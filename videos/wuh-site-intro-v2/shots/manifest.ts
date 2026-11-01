@@ -4,7 +4,7 @@ export type Manifest = { film: string; fps: number; totalFrames: number; acts: A
 export const manifest: Manifest = {
   "film": "wuh-site-intro-v2",
   "fps": 30,
-  "totalFrames": 7934,
+  "totalFrames": 8114,
   "acts": [
     {
       "act": 1,
@@ -52,7 +52,7 @@ export const manifest: Manifest = {
       "act": 8,
       "title": "此刻",
       "startFrame": 6708,
-      "endFrame": 7934
+      "endFrame": 8114
     }
   ],
   "shots": [
@@ -483,34 +483,42 @@ export const manifest: Manifest = {
     {
       "id": "s54",
       "act": 8,
-      "title": "「博客是根——碎片的知识，先写在 Issue 里",
+      "title": "「257 次完整循环，39 张知识卡片。」",
       "startFrame": 7266,
-      "durationFrames": 300,
+      "durationFrames": 180,
       "source": "shots/s54.tsx"
     },
     {
       "id": "s55",
       "act": 8,
-      "title": "「写作是根，代码是干；方法、工具、桌面与影像，是",
-      "startFrame": 7566,
-      "durationFrames": 140,
+      "title": "「博客是根——碎片的知识，先写在 Issue 里",
+      "startFrame": 7446,
+      "durationFrames": 300,
       "source": "shots/s55.tsx"
     },
     {
       "id": "s56",
       "act": 8,
-      "title": "「写作是抵抗遗忘的方式，代码是构建世界的语言。」",
-      "startFrame": 7706,
-      "durationFrames": 132,
+      "title": "「写作是根，代码是干；方法、工具、桌面与影像，是",
+      "startFrame": 7746,
+      "durationFrames": 140,
       "source": "shots/s56.tsx"
     },
     {
       "id": "s57",
       "act": 8,
-      "title": "「吴尒红 · stack-wuh · a boy",
-      "startFrame": 7838,
-      "durationFrames": 96,
+      "title": "「写作是抵抗遗忘的方式，代码是构建世界的语言。」",
+      "startFrame": 7886,
+      "durationFrames": 132,
       "source": "shots/s57.tsx"
+    },
+    {
+      "id": "s58",
+      "act": 8,
+      "title": "「吴尒红 · stack-wuh · a boy",
+      "startFrame": 8018,
+      "durationFrames": 96,
+      "source": "shots/s58.tsx"
     }
   ]
 };

@@ -44,7 +44,7 @@ export const FILM_COLORS = {
   wireGrey: '#B9B4A8',
 } as const;
 
-/* ─── §5 节奏锚点（storyboard v3 · 7658 时间轴） ─── */
+/* ─── §5 节奏锚点（storyboard v5 · 8114 时间轴） ─── */
 export const ANCHORS = {
   firstInk: 80, // 第一滴墨触纸（第 5 拍）
   inscription: 240, // 题记落定（第 13 拍）
@@ -64,10 +64,11 @@ export const ANCHORS = {
   versionRain: 6896, // 116 点落满（第 345.8 拍）
   playerOn: 7036, // 播放器可用（第 352.8 拍）
   quoteSettle: 7236, // 方法论金句（第 362.8 拍）
-  treeStart: 7266, // 衍生树起（第 364.3 拍）
-  pageSettle: 7566, // 总结纸页（第 379.3 拍）
-  typewriter: 7706, // 打字机起（第 386.3 拍）
-  zero: 7934, // 归零（第 397.7 拍）
+  knowledgeBase: 7266, // 知识库起（第 364.3 拍）
+  treeStart: 7446, // 衍生树起（第 373.3 拍）
+  pageSettle: 7746, // 总结纸页（第 388.3 拍）
+  typewriter: 7886, // 打字机起（第 395.3 拍）
+  zero: 8114, // 归零（第 406.7 拍）
 } as const;
 
 /* ─── 幕界（帧号不动） ─── */
@@ -79,7 +80,7 @@ export const ACT_FRAMES = [
   { act: 5, start: 3642, end: 4440 },
   { act: 6, start: 4440, end: 5640 },
   { act: 7, start: 5640, end: 6708 },
-  { act: 8, start: 6708, end: 7934 },
+  { act: 8, start: 6708, end: 8114 },
 ] as const;
 
 /* ─── §3.7 八幕调色（GRADES：底色层 + 雾光层 + 全局滤镜） ─── */
