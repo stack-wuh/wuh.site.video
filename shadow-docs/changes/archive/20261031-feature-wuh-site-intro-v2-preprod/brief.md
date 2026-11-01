@@ -4,7 +4,7 @@
   "name": "20261031-feature-wuh-site-intro-v2-preprod",
   "type": "feature",
   "scope": "video-materials",
-  "status": "published",
+  "status": "archived",
   "baseBranch": "main",
   "branch": "feature/20261031-feature-wuh-site-intro-v2-preprod",
   "files": [
@@ -25,13 +25,13 @@
   },
   "review": {
     "conclusion": "passed",
-    "verifiedCommit": "a61554e737b648979aeba647cfb0d1ba105918ef",
-    "verifiedAt": "2026-10-31T14:13:32.443Z"
+    "verifiedCommit": "aa1b40383a4dfcc70bd7323077a112268dfdfba6",
+    "verifiedAt": "2026-11-01T00:40:57.179Z"
   },
   "workflow": {
     "operation": null,
-    "checkpoint": "pr:28",
-    "planHash": "7c2fbf796601b5dba1c3f4b897dd323cd35c525dccfcedda43442d2d66ba6723",
+    "checkpoint": "merged-pr:28",
+    "planHash": "324df89500e80296f13095fa472543cad65c1ed12cb7f01e43d775ac62a44c06",
     "updatedAt": null,
     "lastError": null,
     "issuePlan": {
