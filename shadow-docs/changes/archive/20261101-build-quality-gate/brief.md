@@ -4,7 +4,7 @@
   "name": "20261101-build-quality-gate",
   "type": "build",
   "scope": "video-materials",
-  "status": "published",
+  "status": "archived",
   "baseBranch": "main",
   "branch": "build/20261101-build-quality-gate",
   "files": [
@@ -38,16 +38,16 @@
   },
   "review": {
     "conclusion": "passed",
-    "verifiedCommit": "2c5684ec2304f35b00d54be4f1a1bff97d47fdbe",
-    "verifiedAt": "2026-11-01T04:11:30.635Z"
+    "verifiedCommit": "a3b88b6745318b6f9aedd75a7fd307832e9e82a4",
+    "verifiedAt": "2026-11-01T04:26:23.663Z"
   },
   "workflow": {
     "operation": null,
-    "checkpoint": "pr:45",
-    "planHash": "0ab316955f7301615288b92e190ec767839f18cc9af906b09adc6b7dbf536840",
+    "checkpoint": "merged-pr:45",
+    "planHash": "a2509d9af4881ab0605a3146702feb726d11cefb120a411b80b743c4df8b7082",
     "updatedAt": null,
     "lastError": null,
-    "worktree": "/Users/wuhong/shadow-desktop/github/wuh.site.video/.worktrees/20261101-build-quality-gate",
+    "worktree": null,
     "issuePlan": {
       "title": "[build] 建立 oxlint + TypeScript 7 质量门（本地 + CI）",
       "titleRaw": null,
@@ -90,7 +90,7 @@
   "knowledge": {
     "action": "更新",
     "target": "shadow-docs/knowledge/video-studio-structure.md",
-    "reason": "验证方式改为 pnpm check；补 TypeScript 7 / oxlint 口径；段错误边界：TS7 类型检查稳定，Remotion bundling 仍受 V8 风暴影响"
+    "reason": "squash 后 main HEAD 重验：pnpm check 全绿、CI run 41272914065 SUCCESS；知识卡已按 pnpm check + TS7/oxlint 口径更新"
   }
 }
 ---
@@ -162,7 +162,7 @@
 
 ### Release 观察点（不参与 apply/review 门槛）
 
-- CI `quality-gate` 在 PR 上跑绿 — release 建 PR 后回填 run 链接。
+- CI `quality-gate` 在 PR 上跑绿 — [run 41272914065](https://github.com/stack-wuh/wuh.site.video/actions/runs/41272914065) job `check` SUCCESS（2026-11-01）。
 - intro-v2 受影响镜头抽帧或短段渲染走查 — 本机 `remotion still` 连续 4 次 SIGSEGV（bundling 阶段，node 24 / mise node 22 均复现），属既有段错误风暴；替代观察点：tsc 确认令牌属性存在 + grep 确认引用源修正。待风暴退去或 CI 出片后补。
 
 ## 结果
@@ -173,10 +173,9 @@
   |---|---|
   | INV-1 | 观察点：`pnpm check` → oxlint 零输出、`tsc --noEmit` 零错误，exit 0 |
   | INV-2 | 观察点：`pnpm exec tsc --version` → 7.0.2；`tsc --noEmit` 零错误；7 处令牌引用已改到定义源（s12/s13 → `FILM_COLORS`，s17/s18/s19 → `colors`，s20 → `FILM_COLORS`） |
-  | INV-3 | 观察点：`pnpm install --frozen-lockfile --ignore-workspace` → exit 0；`quality-gate.yml` 与本地同为 node 22 / pnpm 10 / 同一 lockfile；CI run 待 release 回填 |
+  | INV-3 | 观察点：`pnpm install --frozen-lockfile --ignore-workspace` → exit 0；`quality-gate.yml` 与本地同为 node 22 / pnpm 10 / 同一 lockfile；CI [run 41272914065](https://github.com/stack-wuh/wuh.site.video/actions/runs/41272914065) job `check` SUCCESS |
 - 证据缺口:
-  - task-9：CI `quality-gate` 需 PR 触发，apply 阶段未推送；release 建 PR 后回填 run 链接。
-  - task-10：本机 `remotion still` 连续 3 次 SIGSEGV（bundling 阶段，node 24 与 mise node 22 均复现），属既有段错误风暴；像素证据缺口，替代观察点为 tsc 确认令牌属性存在 + grep 确认引用源修正。待风暴退去或 CI 出片后补。
+  - intro-v2 像素走查：本机 `remotion still` 连续 4 次 SIGSEGV（bundling 阶段，node 24 与 mise node 22 均复现），属既有段错误风暴；替代观察点为 tsc 确认令牌属性存在 + grep 确认引用源修正。待风暴退去或 CI 出片后补。
 
 ## 知识评估
 
