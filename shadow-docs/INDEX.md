@@ -24,4 +24,4 @@
 | 20261101-fix-runner-image-pin | ✅ 完成 | shadow-docs/changes/archive/20261101-fix-runner-image-pin/brief.md |
 | 20261101-fix-wuh-site-intro-v2-r1 | ✅ 完成 | shadow-docs/changes/archive/20261101-fix-wuh-site-intro-v2-r1/brief.md |
 | 20261101-fix-wuh-site-intro-v2-r2 | ✅ 完成 | shadow-docs/changes/archive/20261101-fix-wuh-site-intro-v2-r2/brief.md |
-| 20261101-fix-wuh-site-intro-v2-r3 | reviewed | shadow-docs/changes/20261101-fix-wuh-site-intro-v2-r3/brief.md |
+| 20261101-fix-wuh-site-intro-v2-r3 | ✅ 完成 | shadow-docs/changes/archive/20261101-fix-wuh-site-intro-v2-r3/brief.md |

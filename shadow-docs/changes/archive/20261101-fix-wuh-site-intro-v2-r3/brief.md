@@ -4,7 +4,7 @@
   "name": "20261101-fix-wuh-site-intro-v2-r3",
   "type": "fix",
   "scope": "video-studio",
-  "status": "published",
+  "status": "archived",
   "baseBranch": "main",
   "branch": "fix/20261101-fix-wuh-site-intro-v2-r3",
   "files": [
@@ -22,13 +22,13 @@
   },
   "review": {
     "conclusion": "passed",
-    "verifiedCommit": "f3f956e3396a0404b2e407f93ce341568d4a30d0",
-    "verifiedAt": "2026-11-01T03:49:07.411Z"
+    "verifiedCommit": "636054aa84818f750c4c89a78838683589b74765",
+    "verifiedAt": "2026-11-01T04:10:42.448Z"
   },
   "workflow": {
     "operation": null,
-    "checkpoint": "pr:43",
-    "planHash": "d2773b3f6af23cad4bf8eb2c5342e32cda663b42a1a8613344875a146f95a1f1",
+    "checkpoint": "merged-pr:43",
+    "planHash": "b81181335f0025694f55fd6097e233777be953e2c0d744730eb2131b17b45235",
     "updatedAt": null,
     "lastError": null,
     "release": {
@@ -46,7 +46,7 @@
   "knowledge": {
     "action": "无需变更",
     "target": null,
-    "reason": "节奏/版式修订，帧总账按前期文档同步；无长期工程事实"
+    "reason": null
   }
 }
 ---
