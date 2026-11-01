@@ -4,7 +4,7 @@
   "name": "20261101-build-quality-gate",
   "type": "build",
   "scope": "video-materials",
-  "status": "reviewed",
+  "status": "published",
   "baseBranch": "main",
   "branch": "build/20261101-build-quality-gate",
   "files": [
@@ -33,8 +33,8 @@
     "repository": "stack-wuh/wuh.site.video",
     "issue": 44,
     "issueUrl": "https://github.com/stack-wuh/wuh.site.video/issues/44",
-    "pullRequest": null,
-    "pullRequestUrl": null
+    "pullRequest": 45,
+    "pullRequestUrl": "https://github.com/stack-wuh/wuh.site.video/pull/45"
   },
   "review": {
     "conclusion": "passed",
@@ -43,7 +43,7 @@
   },
   "workflow": {
     "operation": null,
-    "checkpoint": "issue:44",
+    "checkpoint": "pr:45",
     "planHash": "0ab316955f7301615288b92e190ec767839f18cc9af906b09adc6b7dbf536840",
     "updatedAt": null,
     "lastError": null,
