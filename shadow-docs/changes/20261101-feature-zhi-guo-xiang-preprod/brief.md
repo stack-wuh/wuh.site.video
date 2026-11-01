@@ -4,7 +4,7 @@
   "name": "20261101-feature-zhi-guo-xiang-preprod",
   "type": "feature",
   "scope": "video-materials",
-  "status": "published",
+  "status": "committed",
   "baseBranch": "main",
   "branch": "feature/20261101-feature-zhi-guo-xiang-preprod",
   "files": [
@@ -28,16 +28,16 @@
   },
   "workflow": {
     "operation": null,
-    "checkpoint": "pr:37",
-    "planHash": "de7637dc4fdefd3d861af452a66d830b395a50725989a2ee8293617a4122ad2a",
+    "checkpoint": "667d7b90e23ad8ed998efdaeebd1b92255f83636",
+    "planHash": "1dfe59b8a2b3bce5a309558b436ef83b64d9aa51eda4bfddd8105c2451ac85d4",
     "updatedAt": null,
     "lastError": null,
     "worktree": "/Users/wuhong/shadow-desktop/github/wuh.site.video/.worktrees/20261101-feature-zhi-guo-xiang-preprod",
     "commit": {
       "files": [
-        ".github/workflows/render-animatic.yml"
+        "videos/preprod-zhi-guo-xiang/assets/music.md"
       ],
-      "message": "ci(render-animatic): scope/unit 改 choice 下拉，shots 保留高级子集"
+      "message": "docs(preprod): 配乐决策——陈致逸《爱意》4320 断点重启（本地 mux）"
     }
   }
 }
