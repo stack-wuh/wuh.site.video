@@ -19,7 +19,7 @@ const LINE1_Y = 380;
 const LINE2_Y = 523;
 const CHAR_W = 84;
 const X0 = 498;
-const SIGN = { x: 1352, y: 894 };
+const SIGN = { x: 1352, y: 814 };
 const LAND = 42;
 
 const serif = fontFamilies.serif;
@@ -54,7 +54,7 @@ const ShotSignature: FC = () => {
             <div style={{ position: 'absolute', left: 0, right: 0, top: LINE1_Y, textAlign: 'center', fontFamily: serif, fontSize: 84, lineHeight: '143px', color: colors.ink, whiteSpace: 'pre' }}>{TEXT1}</div>
             <div style={{ position: 'absolute', left: 0, right: 0, top: LINE2_Y, textAlign: 'center', fontFamily: serif, fontSize: 84, lineHeight: '143px', color: colors.ink, whiteSpace: 'pre' }}>{TEXT2}</div>
             {/* 落款：纸面右下一行小字 */}
-            <div style={{ ...sign, position: 'absolute', right: 170, top: 880, fontFamily: serif, fontSize: 27, letterSpacing: '0.1em', color: colors.ink, whiteSpace: 'nowrap' }}>
+            <div style={{ ...sign, position: 'absolute', right: 170, top: 800, fontFamily: serif, fontSize: 27, letterSpacing: '0.1em', color: colors.ink, whiteSpace: 'nowrap' }}>
               吴尒红 · stack-wuh · a boy just ~
             </div>
             {/* 名字处极小墨点：下落 → 洇开 */}
