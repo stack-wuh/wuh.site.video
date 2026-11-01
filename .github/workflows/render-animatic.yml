@@ -1,3 +1,4 @@
+# ⚠️ Runner 钉版：ubuntu-24.04（当前渲染链路已验证的镜像）；ubuntu-latest 自 2026-10-19 起迁移 Ubuntu 26（actions/runner-images#14748），升级前勿改回
 name: render-animatic
 # 云端渲染 animatic（workflow_dispatch）——bundle 一次 → 分段矩阵 → concat 帧级对齐 → 终验
 # 分段 = 片头 120f + N 镜（内容帧 +120 偏移）+ 片尾 180f，单段失败只重跑单段
@@ -40,7 +41,7 @@ concurrency:
 
 jobs:
   plan:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 5
     outputs:
       unit: ${{ steps.plan.outputs.unit }}
@@ -87,7 +88,7 @@ jobs:
 
   bundle:
     needs: plan
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v7
@@ -112,7 +113,7 @@ jobs:
 
   segments:
     needs: [plan, bundle]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
     strategy:
       matrix:
@@ -179,7 +180,7 @@ jobs:
   assemble:
     needs: [plan, segments]
     if: needs.plan.outputs.full == 'true'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
     env:
       UNIT: ${{ needs.plan.outputs.unit }}

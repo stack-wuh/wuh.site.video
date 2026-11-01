@@ -1,3 +1,4 @@
+# ⚠️ Runner 钉版：ubuntu-24.04（当前渲染链路已验证的镜像）；ubuntu-latest 自 2026-10-19 起迁移 Ubuntu 26（actions/runner-images#14748），升级前勿改回
 name: render-film
 # B 轨（shot-spec §5）：GitHub Actions 云端渲染——一镜一任务编排：
 #   bundle 任务（预打包 + 生成镜清单）→ shots 矩阵任务（一镜一个 job，fail-fast 关闭，互不牵连）
@@ -26,7 +27,7 @@ concurrency:
 
 jobs:
   bundle:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
     outputs:
       shots: ${{ steps.plan.outputs.shots }}
@@ -57,7 +58,7 @@ jobs:
 
   shots:
     needs: bundle
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
     strategy:
       matrix:
@@ -99,7 +100,7 @@ jobs:
   assemble:
     needs: shots
     if: always() # 有红镜也要跑：统一清点、明确列缺，不静默
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
     env:
       CHROME_EXECUTABLE: /usr/bin/google-chrome-stable # 完整版 Chrome：headless-shell 的 blend/色彩管理有差异（CI 抽帧实证偏色）
