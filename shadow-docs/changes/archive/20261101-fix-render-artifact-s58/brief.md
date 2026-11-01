@@ -4,7 +4,7 @@
   "name": "20261101-fix-render-artifact-s58",
   "type": "fix",
   "scope": "video-studio",
-  "status": "published",
+  "status": "archived",
   "baseBranch": "main",
   "branch": "fix/20261101-fix-render-artifact-s58",
   "files": [
@@ -21,13 +21,13 @@
   },
   "review": {
     "conclusion": "passed",
-    "verifiedCommit": "d184037e8107dc3854d5abc32c55ef16dc8d0e38",
-    "verifiedAt": "2026-11-01T03:21:16.797Z"
+    "verifiedCommit": "a708ac3317320bb2b462503b4d43381c3a73091a",
+    "verifiedAt": "2026-11-01T04:10:13.598Z"
   },
   "workflow": {
     "operation": null,
-    "checkpoint": "pr:41",
-    "planHash": "ed9632b72608b7d1753ecd11667aab452c006c11a10e086cbf6b86b376c2cc4d",
+    "checkpoint": "merged-pr:41",
+    "planHash": "dcf285d346b349e578a8c7f141f738169d6c52c09c0db935c51585432127d650",
     "updatedAt": null,
     "lastError": null,
     "release": {
@@ -44,7 +44,7 @@
   "knowledge": {
     "action": "无需变更",
     "target": null,
-    "reason": "命名与落款构图微调，无长期工程事实；artifact 命名规则由 workflow 注释即可读"
+    "reason": null
   }
 }
 ---
