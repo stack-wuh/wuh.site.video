@@ -212,7 +212,7 @@ export const typeCharsAt = (frame: number, total: number, start: number, fpc: nu
   Math.min(total, Math.max(0, Math.floor((frame - start) / fpc)));
 
 /** FN-11 block-drop 基石坠落：120px 下落 + 过冲 ≤6% */
-export const blockDrop = (frame: number, delay: number, fps: number): CSSProperties => {
+export const blockDrop = (frame: number, delay: number, _fps: number): CSSProperties => {
   const t = frame - delay;
   const p = interpolate(t, [0, 14], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: CURVES.cineEaseOut });
   const overshoot = t > 14 && t < 26 ? Math.sin(((t - 14) / 12) * Math.PI) * 0.06 : 0;
@@ -247,7 +247,7 @@ export const lineReplace = (frame: number, delay: number, dur = 12): { opacity: 
 };
 
 /** FN-16 pipeline-node 流水线节点：scale pop + 绿色进度覆盖 */
-export const pipelineNode = (frame: number, delay: number, fps: number): { transform: string; opacity: number; green: number } => {
+export const pipelineNode = (frame: number, delay: number, _fps: number): { transform: string; opacity: number; green: number } => {
   const s = interpolate(frame - delay, [0, 12], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: CURVES.cineAccent });
   return { transform: `scale(${0.88 + s * 0.12})`, opacity: Math.min(1, s), green: Math.min(1, s) };
 };
@@ -261,7 +261,7 @@ export const paperShake = (frame: number, delay: number, amp = 2, decay = 12): C
 };
 
 /** FN-18 bar-grow 纸柱/灯柱纵向生长（origin bottom） */
-export const barGrow = (frame: number, delay: number, fps: number): CSSProperties => {
+export const barGrow = (frame: number, delay: number, _fps: number): CSSProperties => {
   const p = interpolate(frame - delay, [0, 22], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: CURVES.cineEaseOut });
   return { transform: `scaleY(${p})`, transformOrigin: 'bottom', opacity: Math.min(1, p * 2) };
 };
@@ -306,7 +306,7 @@ export const pageFlip = (frame: number, delay: number, dur: number, dir: 'left' 
 };
 
 /** FN-24 light-on 灯亮：2px 上浮 + 小 pop */
-export const lightOn = (frame: number, delay: number, fps: number): CSSProperties => {
+export const lightOn = (frame: number, delay: number, _fps: number): CSSProperties => {
   const t = frame - delay;
   const s = interpolate(t, [0, 10], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: CURVES.cineAccent });
   return { opacity: Math.min(1, Math.max(0, t / 6)), transform: `translateY(${(1 - s) * 2}px) scale(${0.92 + s * 0.08})` };
@@ -338,7 +338,7 @@ export const orbitDrift = (frame: number, cx: number, cy: number, rx: number, ry
 };
 
 /** FN-29 letterpress 铅字压印（逐字调用） */
-export const letterpress = (frame: number, delay: number, step: number): CSSProperties => {
+export const letterpress = (frame: number, delay: number, _step: number): CSSProperties => {
   const t = frame - delay;
   const p = interpolate(t, [0, 10], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: CURVES.cineEaseOut });
   return { opacity: p, transform: `translateY(${(1 - p) * 2}px)`, textShadow: `0 ${p * 1.5}px 0 rgba(15,14,12,0.35)` };

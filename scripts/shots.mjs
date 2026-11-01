@@ -61,7 +61,7 @@ function parseStoryboard(path) {
 
 function validate(manifest, parsed) {
   const errs = [];
-  const { shots, acts, totalFrames } = manifest;
+  const { shots, totalFrames } = manifest;
   shots.forEach((s, i) => {
     const n = i + 1;
     if (s.id !== `s${String(n).padStart(2, '0')}`) errs.push(`镜号不连续: 第 ${n} 项是 ${s.id}`);

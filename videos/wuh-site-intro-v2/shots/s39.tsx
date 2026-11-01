@@ -21,7 +21,6 @@ const TILE = 4;
 const CLAMP = { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' } as const;
 
 const mono = fontFamilies.mono;
-const serif = fontFamilies.serif;
 const sans = fontFamilies.sans;
 
 const tileCenter = (i: number) => ({ x: TILE_RECTS[i].x + TILE_RECTS[i].w / 2, y: TILE_RECTS[i].y + TILE_RECTS[i].h / 2 });

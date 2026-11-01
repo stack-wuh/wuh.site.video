@@ -1,7 +1,7 @@
 ---
 title: 视频工作室结构与渲染工具链
 domain: video-materials
-keywords: [工作室结构, 分镜, 视频, 脚手架, new-video, 渲染, render, chrome, 端口, 段错误, 崩溃, 沙箱, node22, staticFile, 分块渲染, 清场, animatic, storyboard, motion-spec, 片头, 片尾, ident, FilmShell, 家族标识, 时长公式, render-animatic, unit, scope, choice, A 前缀, preprod, animatic CI, zhi-guo-xiang]
+keywords: [工作室结构, 分镜, 视频, 脚手架, new-video, 渲染, render, chrome, 端口, 段错误, 崩溃, 沙箱, node22, staticFile, 分块渲染, 清场, animatic, storyboard, motion-spec, 片头, 片尾, ident, FilmShell, 家族标识, 时长公式, render-animatic, unit, scope, choice, A 前缀, preprod, animatic CI, zhi-guo-xiang, oxlint, TypeScript 7, 质量门, pnpm check, tsc]
 scope: [brand/, brand/ident/, videos/, scripts/, src/Root.tsx, package.json, public/]
 status: active
 source:
@@ -10,9 +10,10 @@ source:
   - changes/20261029-feature-film-identity/brief.md
   - changes/20261031-docs-scaffold-knowledge-fix/brief.md
   - changes/archive/20261101-feature-zhi-guo-xiang-preprod/brief.md
+  - changes/20261101-build-quality-gate/brief.md
 verified: 2026-11-01
 verified-depth: runtime
-verified-scope: 2026-10-24/25 两日实测：v5《朝朝如念》2:30 成片 + v6 前期 animatic 4:00 分镜板（7200 帧）出片。实证：分段+轮转编排+渲染前清场+分块重试的收敛策略；Composition 越界拒绝（getRealFrameRanges）；staticFile 以 public/ 为根；Chrome 对部分透明度叠渲染的确定性崩溃及 3 帧跳变规避；前期三件套（素材库→storyboard→motion-spec→animatic）+ 分镜师/UE 大师 subagent 协作出品。2026-10-29 家族片头片尾套件实证：BrandIdent 420f 与 self-intro 630f 出片、时长公式对账、令牌再导出零视觉变化。2026-10-31 脚手架口径修正（生成器产出 routes.ts、以临时 slug + typecheck 验证）经代码走查对齐。2026-11-01 致郭襄前期：preprod-zhi-guo-xiang 单元 + render-animatic 的 unit/scope choice + 52 镜 animatic 7500f CI 出片（run 41260324683）+ A{yyyyMMdd}{index}-{film}.mp4 产物。硬件内存嫌疑仍未做诊断，标注待验证。
+verified-scope: 2026-10-24/25 两日实测：v5《朝朝如念》2:30 成片 + v6 前期 animatic 4:00 分镜板（7200 帧）出片。实证：分段+轮转编排+渲染前清场+分块重试的收敛策略；Composition 越界拒绝（getRealFrameRanges）；staticFile 以 public/ 为根；Chrome 对部分透明度叠渲染的确定性崩溃及 3 帧跳变规避；前期三件套（素材库→storyboard→motion-spec→animatic）+ 分镜师/UE 大师 subagent 协作出品。2026-10-29 家族片头片尾套件实证：BrandIdent 420f 与 self-intro 630f 出片、时长公式对账、令牌再导出零视觉变化。2026-10-31 脚手架口径修正（生成器产出 routes.ts、以临时 slug + typecheck 验证）经代码走查对齐。2026-11-01 致郭襄前期：preprod-zhi-guo-xiang 单元 + render-animatic 的 unit/scope choice + 52 镜 animatic 7500f CI 出片（run 41260324683）+ A{yyyyMMdd}{index}-{film}.mp4 产物。2026-11-01 质量门：`pnpm check`（oxlint 1.90.0 + TypeScript 7.0.2 原生编译器）零告警零错误；TS7 类型检查约 1s，且不受本机 V8 段错误风暴影响；Remotion bundling 仍受风暴影响（`remotion still` 连续 4 次 SIGSEGV），intro-v2 像素走查留为 release 观察点。硬件内存嫌疑仍未做诊断，标注待验证。
 ---
 
 # 视频工作室结构与渲染工具链
@@ -29,6 +30,8 @@ verified-scope: 2026-10-24/25 两日实测：v5《朝朝如念》2:30 成片 + v
 
 **Animatic CI 多片（2026-11-01）**：`render-animatic.yml`（workflow_dispatch）输入 `unit` choice（wuh-site-intro-v2 / zhi-guo-xiang / site-film）、`scope` choice（all / intro-outro / act1–act8）、`shots` 高级子集（空格分隔镜号，空 = 按 scope）。plan 读 `videos/<unit>/shots-manifest.json`；Composition `${Pascal}Animatic`；产物 `out/A{yyyyMMdd}{index}-<unit>.mp4`，artifact `<unit>-animatic`。`scope=all` 且 `shots` 空才汇总拼接；act / intro-outro / 自定义子集只渲对应段。
 
+**质量门（2026-11-01）**：`pnpm check` = `pnpm lint`（oxlint 1.90.0，react 插件 + `--deny-warnings`）+ `pnpm typecheck`（TypeScript 7.0.2 原生 Go 编译器，`tsc --noEmit`）。PR 与 `push main` 由 `.github/workflows/quality-gate.yml` 同源执行；本地与 CI 必须使用同一 lockfile 与 node 22。TS7 类型检查是原生二进制，不踩 V8 段错误；Remotion bundling 仍是 node/webpack，风暴期照旧会崩。
+
 ## 执行约束
 
 - 分镜组件禁止内联色值/字体字面量，一律引用 `brand/tokens`；白名单仅 SplitScreen 的 macOS 红绿灯 3 色（#e06c60/#e0b050/#7db27a）
@@ -39,7 +42,7 @@ verified-scope: 2026-10-24/25 两日实测：v5《朝朝如念》2:30 成片 + v
 - 不用 node 24 跑重 JS 任务（V8 堆随机段错误，崩溃报告实证）；若换机器，本卡工具链口径需重验后再沿用
 - **长片渲染编排（2026-10-25 实证）**：多段轮转制（各段独立重试，一段卡死不阻塞他段）优于顺序重试；**每次尝试前清场孤儿 Chrome**（`pkill -f "remotion-shared-memory-capture"` + `pkill -f "headless=old"`，两次实证清场后首试即过）；长流累积崩溃时**分块化**（360 帧→60 帧微块逐块重试）必然收敛，块齐按 concat 清单三级拼接
 - **半透明渐变崩溃规避**：本机 Chrome 对「部分透明度叠渲染」存在确定性崩溃（多板面同型实证）——样片/分镜板的元素 fade 一律用 2–3 帧硬切跳变，规避渐变中途帧
-- **tsc/CLI 亦会静默段错误或挂起**（空诊断退出码非零）：重试口径同上；关键长任务日志落文件防覆盖丢证据
+- **tsc/CLI 亦会静默段错误或挂起**（空诊断退出码非零）：重试口径同上；关键长任务日志落文件防覆盖丢证据。TypeScript 7 类型检查为原生二进制，实测不受 V8 段错误影响；Remotion bundling（node/webpack）仍在风暴期崩溃
 
 ## 适用边界
 
@@ -47,10 +50,10 @@ verified-scope: 2026-10-24/25 两日实测：v5《朝朝如念》2:30 成片 + v
 
 ## 验证方式
 
-- `pnpm typecheck`（node 22 下）零错误
+- `pnpm check`（node 22 下）零 oxlint 告警、零 tsc 错误
 - `grep -rn "#[0-9a-fA-F]{6}" videos src`（排除 tokens.ts 与 assets/*.md 规范文档）仅剩红绿灯白名单；`grep "Songti\|PingFang\|Menlo" videos src` 零命中
 - `pnpm render:<slug>` 出片且时长帧数正确；分段渲染逐段 ffprobe 对账 + 拼接后总帧数对账
-- `node scripts/new-video.mjs <slug>` 生成后用临时 slug 走一遍 `pnpm typecheck`（`node --check` 对 `.tsx` 无效），通过后移除临时目录并走查产物
+- `node scripts/new-video.mjs <slug>` 生成后用临时 slug 走一遍 `pnpm check`（`node --check` 对 `.tsx` 无效），通过后移除临时目录并走查产物
 - 前期三件套：storyboard 帧数对账表合计 = animatic `durationInFrames` = 成片 ffprobe 帧数
 
 ## 家族片头片尾（FilmShell）

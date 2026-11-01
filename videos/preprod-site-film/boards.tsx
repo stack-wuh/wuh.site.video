@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig } from 'remotion';
+import { interpolate, spring, useCurrentFrame } from 'remotion';
 import { colors, fontFamilies } from '../../brand/tokens';
 
 type BeatFrame = { frame: number };
@@ -123,7 +123,7 @@ const BoardZero: FC<BeatFrame> = ({ frame }) => (
   <div style={{ display: 'flex', gap: 34, alignItems: 'flex-end', height: 320 }}>
     {[
       ['2019', 3117], ['2020', 3563], ['2021', 3935], ['2022', 2139], ['2023', 2183], ['2024', 2319], ['2025', 0],
-    ].map(([y, v], i) => (
+    ].map(([y, v], _i) => (
       <div key={String(y)} style={{ textAlign: 'center' }}>
         <div style={{ width: 56, height: Math.max((Number(v) / 3935) * 260, 4), background: colors.muted, opacity: 0.4, borderRadius: 4 }} />
         <p style={{ fontFamily: mono, fontSize: 15, color: colors.muted, marginTop: 10 }}>{y}</p>
@@ -497,7 +497,7 @@ const BoardStudy: FC<BeatFrame> = ({ frame }) => (
         ))}
       </div>
       <div style={{ width: 110, height: 110, borderRadius: 55, border: `1px solid ${colors.hairline}`, opacity: fade(frame, 44) }} />
-      {[[0, 0], [30, 20], [60, 8]].map(([x, y], i) => (
+      {[[0, 0], [30, 20], [60, 8]].map(([_x, _y], i) => (
         <div key={i} style={{ width: 12, height: 12, borderRadius: 6, background: colors.accent, opacity: fade(frame, 60 + i * 14) }} />
       ))}
     </div>

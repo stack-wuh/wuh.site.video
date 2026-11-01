@@ -6,7 +6,7 @@
 import type { FC } from 'react';
 import { AbsoluteFill, interpolate, random, spring, useCurrentFrame, useVideoConfig } from 'remotion';
 import { colors, fontFamilies } from '../../../brand/tokens';
-import { CURVES, orbitDrift, writeFade } from '../motion-tokens';
+import { CURVES, writeFade } from '../motion-tokens';
 import { CameraRig } from '../components/CameraRig';
 import { DustField } from '../components/DustField';
 import { PaperGrain } from '../components/PaperGrain';
@@ -18,7 +18,6 @@ const mono = fontFamilies.mono;
 const serif = fontFamilies.serif;
 
 const COLS = 25;
-const ROWS = 11;
 const CARD = { w: 60, h: 38, gx: 6, gy: 4 };
 const WALL_W = COLS * (CARD.w + CARD.gx);
 const WALL_X = (1920 - WALL_W) / 2;

@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "studio": "remotion studio src/index.ts --port 3210",
+    "lint": "oxlint --react-plugin --deny-warnings src videos brand scripts",
     "typecheck": "tsc --noEmit",
+    "check": "pnpm lint && pnpm typecheck",
     "new-video": "node scripts/new-video.mjs",
     "render:self-intro": "remotion render src/index.ts SelfIntro out/self-intro.mp4 --crf=16 --browser-executable=\"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome\" --port=3211"
   },
@@ -21,6 +23,7 @@
     "@remotion/renderer": "^4.0.538",
     "@types/react": "^19.0.0",
     "esbuild": "^0.28.2",
-    "typescript": "^5.7.0"
+    "oxlint": "1.90.0",
+    "typescript": "7.0.2"
   }
 }

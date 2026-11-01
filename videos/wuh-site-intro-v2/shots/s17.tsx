@@ -55,7 +55,7 @@ const ShotWarmQuote: FC = () => {
           </div>
           {/* 尾帧掀角 */}
           <div style={{ position: 'absolute', right: 0, bottom: 0, width: 150, height: 150, transform: `rotate(${-26 * lift}deg)`, transformOrigin: '100% 100%', opacity: lift }}>
-            <div style={{ position: 'absolute', inset: 0, background: FILM_COLORS.paperDeep, clipPath: 'polygon(100% 0, 100% 100%, 0 100%)' }} />
+            <div style={{ position: 'absolute', inset: 0, background: colors.paperDeep, clipPath: 'polygon(100% 0, 100% 100%, 0 100%)' }} />
           </div>
         </div>
       </div>

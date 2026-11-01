@@ -3,7 +3,7 @@ import type { CSSProperties, FC } from 'react';
 import { AbsoluteFill, interpolate, useCurrentFrame } from 'remotion';
 import { colors, fontFamilies } from '../../../brand/tokens';
 import { CURVES, GRADES, glowPulse, writeFade } from '../motion-tokens';
-import { CameraRig, ParallaxLayer } from '../components/CameraRig';
+import { CameraRig } from '../components/CameraRig';
 import { DustField } from '../components/DustField';
 
 const serif = fontFamilies.serif;
