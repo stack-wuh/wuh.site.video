@@ -8,7 +8,6 @@ import { Scripture } from '../components/Objects';
 
 const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
 const FLAGS = [0, 1, 2, 3, 4];
-const NODS = [0, 1, 2, 3];
 
 /**
  * S40（5-5 中段，5320–5480，160f）——她手里的书卷合上，抬起头，开口（不出声）；前排弟子点头；

@@ -9,7 +9,6 @@ import { Caption } from '../components/Caption';
 import { DustField } from '../components/DustField';
 import { CM, CV, FILM, FN, GRADES, PT, STROKE } from '../motion-tokens';
 
-const CLAMP = { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' } as const;
 const BASE = staticFile('zhi-guo-xiang/base-s06.jpg');
 const FIG = staticFile('zhi-guo-xiang/fig-xiang16.png');
 const WATER = Array.from({ length: 9 }, (_, i) => i);

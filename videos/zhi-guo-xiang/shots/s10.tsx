@@ -5,7 +5,7 @@
 import type { FC } from 'react';
 import { AbsoluteFill, spring, useCurrentFrame, useVideoConfig } from 'remotion';
 import { colors } from '../../../brand/tokens';
-import { CM, CV, FILM, FN, GRADES, SP, STROKE, TR } from '../motion-tokens';
+import { CM, CV, FN, GRADES, SP, STROKE, TR } from '../motion-tokens';
 import { CameraRig } from '../components/CameraRig';
 import { DustField } from '../components/DustField';
 
