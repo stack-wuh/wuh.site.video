@@ -4,7 +4,7 @@
   "name": "20261101-fix-output-naming",
   "type": "fix",
   "scope": "ci-render",
-  "status": "reviewed",
+  "status": "published",
   "baseBranch": "main",
   "branch": "fix/20261101-fix-output-naming",
   "files": [
@@ -17,8 +17,8 @@
     "repository": null,
     "issue": null,
     "issueUrl": null,
-    "pullRequest": null,
-    "pullRequestUrl": null
+    "pullRequest": 36,
+    "pullRequestUrl": "https://github.com/stack-wuh/wuh.site.video/pull/36"
   },
   "review": {
     "conclusion": "passed",
@@ -27,7 +27,7 @@
   },
   "workflow": {
     "operation": null,
-    "checkpoint": null,
+    "checkpoint": "pr:36",
     "planHash": "7323b80235e710b0974cbdf4413a4dd16332be383af6bf8f6295c9dc088570f1",
     "updatedAt": null,
     "lastError": null,
