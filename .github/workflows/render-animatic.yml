@@ -1,13 +1,17 @@
 name: render-animatic
 # 云端渲染 animatic（workflow_dispatch）——bundle 一次 → 分段矩阵 → concat 帧级对齐 → 终验
-# 分段 = 片头 120f + 57 镜（内容帧 +120 偏移）+ 片尾 180f，单段失败只重跑单段
+# 分段 = 片头 120f + N 镜（内容帧 +120 偏移）+ 片尾 180f，单段失败只重跑单段
 on:
   workflow_dispatch:
     inputs:
       shots:
-        description: '镜号子集（空格分隔，如 "s03 s17"；空 = 全部 59 段 + 汇总）'
+        description: '镜号子集（空格分隔，如 "s03 s17"；空 = 全部镜 + 片头片尾 + 汇总）'
         required: false
         default: ''
+      unit:
+        description: '影片 slug（读 videos/<slug>/shots-manifest.json；默认 wuh-site-intro-v2）'
+        required: false
+        default: 'wuh-site-intro-v2'
 
 concurrency:
   group: render-animatic
@@ -18,6 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     outputs:
+      unit: ${{ steps.plan.outputs.unit }}
       segments: ${{ steps.plan.outputs.segments }}
       full: ${{ steps.plan.outputs.full }}
     steps:
@@ -25,10 +30,12 @@ jobs:
       - id: plan
         env:
           SHOTS_INPUT: ${{ github.event.inputs.shots }}
+          UNIT_INPUT: ${{ github.event.inputs.unit }}
         run: |
           node - <<'NODE'
           const fs = require('fs');
-          const m = JSON.parse(fs.readFileSync('videos/wuh-site-intro-v2/shots-manifest.json', 'utf8'));
+          const unit = (process.env.UNIT_INPUT || 'wuh-site-intro-v2').trim() || 'wuh-site-intro-v2';
+          const m = JSON.parse(fs.readFileSync(`videos/${unit}/shots-manifest.json`, 'utf8'));
           const INTRO = 120, OUTRO = 180;
           const input = (process.env.SHOTS_INPUT || '').split(/\s+/).filter(Boolean);
           const pick = (id) => input.length === 0 || input.includes(id);
@@ -39,9 +46,10 @@ jobs:
           }
           segments.push({ id: 'outro', start: m.totalFrames + INTRO, end: m.totalFrames + INTRO + OUTRO - 1 });
           const full = input.length === 0;
-          fs.writeFileSync('segments.json', JSON.stringify({ segments, full, total: m.totalFrames + INTRO + OUTRO }, null, 2));
-          console.log(`segments=${segments.length} full=${full} total=${m.totalFrames + INTRO + OUTRO}`);
+          fs.writeFileSync('segments.json', JSON.stringify({ unit, segments, full, total: m.totalFrames + INTRO + OUTRO }, null, 2));
+          console.log(`unit=${unit} segments=${segments.length} full=${full} total=${m.totalFrames + INTRO + OUTRO}`);
           NODE
+          echo "unit=$(jq -r .unit segments.json)" >> "$GITHUB_OUTPUT"
           echo "segments=$(jq -c .segments segments.json)" >> "$GITHUB_OUTPUT"
           echo "full=$(jq -r .full segments.json)" >> "$GITHUB_OUTPUT"
       - uses: actions/upload-artifact@v4
@@ -101,6 +109,7 @@ jobs:
         with: { name: remotion-bundle, path: ci-bundle }
       - name: Render segment
         env:
+          UNIT: ${{ needs.plan.outputs.unit }}
           SEG: ${{ matrix.seg.id }}
           START: ${{ matrix.seg.start }}
           END: ${{ matrix.seg.end }}
@@ -110,10 +119,12 @@ jobs:
           import { readFileSync } from 'node:fs';
           import { renderMedia } from '@remotion/renderer';
           const [seg, start, end] = process.argv.slice(2);
-          const m = JSON.parse(readFileSync('videos/wuh-site-intro-v2/shots-manifest.json', 'utf8'));
+          const unit = process.env.UNIT;
+          const pascal = unit.split('-').map((p) => p[0].toUpperCase() + p.slice(1)).join('');
+          const m = JSON.parse(readFileSync(`videos/${unit}/shots-manifest.json`, 'utf8'));
           const total = m.totalFrames + 120 + 180;
           await renderMedia({
-            composition: { id: 'WuhSiteIntroV2Animatic', width: 1920, height: 1080, fps: 30, durationInFrames: total },
+            composition: { id: `${pascal}Animatic`, width: 1920, height: 1080, fps: 30, durationInFrames: total },
             serveUrl: 'ci-bundle',
             codec: 'h264',
             crf: 16,
@@ -140,6 +151,8 @@ jobs:
     if: needs.plan.outputs.full == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    env:
+      UNIT: ${{ needs.plan.outputs.unit }}
     steps:
       - uses: actions/checkout@v4
       - run: sudo apt-get update && sudo apt-get install -y ffmpeg
@@ -153,6 +166,7 @@ jobs:
           import { execFileSync } from 'node:child_process';
           import { existsSync, readFileSync } from 'node:fs';
           const { segments } = JSON.parse(readFileSync('plan/segments.json', 'utf8'));
+          const unit = process.env.UNIT;
           const files = segments.map((s) => `out/segs/seg-${s.id}.mp4`);
           const missing = files.filter((f) => !existsSync(f));
           if (missing.length) { console.error('缺段:', missing.join(', ')); process.exit(1); }
@@ -160,18 +174,18 @@ jobs:
           for (const f of files) args.push('-i', f);
           const chains = files.map((_, i) => `[${i}:v]trim=end_frame=${segments[i].end - segments[i].start + 1},setpts=PTS-STARTPTS[v${i}]`).join(';');
           const graph = `${chains};${files.map((_, i) => `[v${i}]`).join('')}concat=n=${files.length}:v=1:a=0[cat]`;
-          args.push('-filter_complex', graph, '-map', '[cat]', '-r', '30', '-vsync', 'cfr', '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '16', '-pix_fmt', 'yuv420p', 'out/wuh-site-intro-v2-animatic.mp4');
+          args.push('-filter_complex', graph, '-map', '[cat]', '-r', '30', '-vsync', 'cfr', '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '16', '-pix_fmt', 'yuv420p', `out/${unit}-animatic.mp4`);
           execFileSync('ffmpeg', ['-y', ...args], { stdio: 'inherit' });
-          const out = 'out/wuh-site-intro-v2-animatic.mp4';
+          const out = `out/${unit}-animatic.mp4`;
           const frames = Number(execFileSync('ffprobe', ['-v', 'error', '-select_streams', 'v:0', '-show_entries', 'stream=nb_frames', '-of', 'default=noprint_wrappers=1:nokey=1', out], { encoding: 'utf8' }).trim());
-          const total = Number(JSON.parse(readFileSync('videos/wuh-site-intro-v2/shots-manifest.json', 'utf8')).totalFrames) + 120 + 180;
+          const total = Number(JSON.parse(readFileSync(`videos/${unit}/shots-manifest.json`, 'utf8')).totalFrames) + 120 + 180;
           console.log(`final frames=${frames} total=${total}`);
           if (frames !== total) process.exit(1);
           EOF
           node assemble.mjs
       - uses: actions/upload-artifact@v4
         with:
-          name: wuh-site-intro-v2-animatic
-          path: out/wuh-site-intro-v2-animatic.mp4
+          name: ${{ needs.plan.outputs.unit }}-animatic
+          path: out/${{ needs.plan.outputs.unit }}-animatic.mp4
           retention-days: 90
           if-no-files-found: error
