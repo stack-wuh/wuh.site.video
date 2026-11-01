@@ -4,7 +4,7 @@
   "name": "20261101-feature-zhi-guo-xiang-production",
   "type": "feature",
   "scope": "video-production",
-  "status": "published",
+  "status": "committed",
   "baseBranch": "main",
   "branch": "feature/20261101-feature-zhi-guo-xiang-production",
   "files": [
@@ -28,18 +28,16 @@
   },
   "workflow": {
     "operation": null,
-    "checkpoint": "pr:42",
-    "planHash": "d6ecde771f5676472d75833632dcb848b136b67217b559e4ce2acd16805667dc",
+    "checkpoint": "b5b582db0d52429557720e004de90402d813a282",
+    "planHash": "f8167ebdd7485a89ef0c4fdd7420722ad9d87735c70d8f7c1b06a72c5b72705f",
     "updatedAt": null,
     "lastError": null,
     "worktree": "/Users/wuhong/shadow-desktop/github/wuh.site.video/.worktrees/20261101-feature-zhi-guo-xiang-production",
     "commit": {
       "files": [
-        "shadow-docs/changes/20261101-feature-zhi-guo-xiang-production/brief.md",
-        "shadow-docs/knowledge/video-production-flow.md",
-        "shadow-docs/knowledge/video-studio-structure.md"
+        "videos/zhi-guo-xiang/assets/art-direction.md"
       ],
-      "message": "docs(shadow): 致郭襄正式制作——回写 CI 出片与 mux 实证 · 知识卡 verified-scope"
+      "message": "docs(zhi-guo-xiang): 美术设定 v2.1——水墨底图+代码动效，剪影暗部主义定案与 GLM 生成规范"
     }
   },
   "knowledge": {
