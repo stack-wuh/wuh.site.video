@@ -17,7 +17,7 @@
 | 20261031-feature-wuh-site-intro-v2-preprod | ✅ 完成 | shadow-docs/changes/archive/20261031-feature-wuh-site-intro-v2-preprod/brief.md |
 | 20261031-feature-wuh-site-intro-v2-production | ✅ 完成 | shadow-docs/changes/archive/20261031-feature-wuh-site-intro-v2-production/brief.md |
 | 20261031-fix-ci-cjk-fonts | ✅ 完成 | shadow-docs/changes/archive/20261031-fix-ci-cjk-fonts/brief.md |
-| 20261101-feature-zhi-guo-xiang-preprod | published | shadow-docs/changes/20261101-feature-zhi-guo-xiang-preprod/brief.md |
+| 20261101-feature-zhi-guo-xiang-preprod | ✅ 完成 | shadow-docs/changes/archive/20261101-feature-zhi-guo-xiang-preprod/brief.md |
 | 20261101-fix-output-naming | ✅ 完成 | shadow-docs/changes/archive/20261101-fix-output-naming/brief.md |
 | 20261101-fix-runner-image-pin | ✅ 完成 | shadow-docs/changes/archive/20261101-fix-runner-image-pin/brief.md |
 | 20261101-fix-wuh-site-intro-v2-r1 | ✅ 完成 | shadow-docs/changes/archive/20261101-fix-wuh-site-intro-v2-r1/brief.md |

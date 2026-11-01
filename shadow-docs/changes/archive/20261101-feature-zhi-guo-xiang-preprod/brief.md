@@ -4,7 +4,7 @@
   "name": "20261101-feature-zhi-guo-xiang-preprod",
   "type": "feature",
   "scope": "video-materials",
-  "status": "published",
+  "status": "archived",
   "baseBranch": "main",
   "branch": "feature/20261101-feature-zhi-guo-xiang-preprod",
   "files": [
@@ -22,23 +22,28 @@
     "pullRequestUrl": "https://github.com/stack-wuh/wuh.site.video/pull/37"
   },
   "review": {
-    "conclusion": "pending",
-    "verifiedCommit": null,
-    "verifiedAt": null
+    "conclusion": "passed",
+    "verifiedCommit": "e0e659f061db63997ba783765b6d7a2cac2f3e22",
+    "verifiedAt": "2026-11-01T02:23:07.583Z"
   },
   "workflow": {
     "operation": null,
-    "checkpoint": "pr:37",
-    "planHash": "de7637dc4fdefd3d861af452a66d830b395a50725989a2ee8293617a4122ad2a",
+    "checkpoint": "merged-pr:37",
+    "planHash": "5d2268aec1124c23a2a39178dc9030b7efc06cfd86d9f0bc445e069d1d375984",
     "updatedAt": null,
     "lastError": null,
-    "worktree": "/Users/wuhong/shadow-desktop/github/wuh.site.video/.worktrees/20261101-feature-zhi-guo-xiang-preprod",
+    "worktree": null,
     "commit": {
       "files": [
         ".github/workflows/render-animatic.yml"
       ],
       "message": "ci(render-animatic): scope/unit 改 choice 下拉，shots 保留高级子集"
     }
+  },
+  "knowledge": {
+    "action": "更新",
+    "target": "shadow-docs/knowledge/video-production-flow.md",
+    "reason": "本片新增 videos/preprod-zhi-guo-xiang 前期单元、52 镜/7200f 分镜、106 令牌动效规范与 animatic CI 多片参数化；诗电影/文学改编的两段式口径与本地 BGM mux 决策进入流程卡；PR #37 已合并。"
   }
 }
 ---
@@ -130,7 +135,7 @@
 
 - [x] `shots-data.ts`（由 storyboard 解析生成，产物入库）+ `boards.tsx` + `ZhiGuoXiangAnimatic.tsx`（FilmShell 包 7200f 正片，总 7500f；真实文案 / 卡点脉冲）+ `routes.ts` + Root 注册 — `videos/preprod-zhi-guo-xiang/`, `src/Root.tsx`
 - [x] `render-animatic.yml` 增 `unit` 输入（默认 `wuh-site-intro-v2`，manifest / Composition / 产物名随 unit 派生；既有用法零变化） — `.github/workflows/render-animatic.yml`
-- [ ] 渲染 animatic 7500f（CI 分块矩阵）→ ffprobe 对账 → 交用户评审定稿 — `out/`
+- [x] 渲染 animatic 7500f（CI 分块矩阵）→ ffprobe 对账 → 交用户评审定稿 — `out/`
 
 ### Phase 6 manifest 桥接
 
