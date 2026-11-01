@@ -28,8 +28,8 @@
   },
   "workflow": {
     "operation": null,
-    "checkpoint": "2b8ff6b53f7861d37efbdcb052b998f4aa2e925d",
-    "planHash": "c0c0dc621e050a9cfdaf67cae48308389daddb404719b54c34b0dba2d26ca007",
+    "checkpoint": "75f127f0a51502e1400864e8681422c5c45704d6",
+    "planHash": "d0c9f6f663df278f9675eba9d12a0ecd9c0117bf61a56ab9a10200872be4598a",
     "updatedAt": null,
     "lastError": null,
     "worktree": "/Users/wuhong/shadow-desktop/github/wuh.site.video/.worktrees/20261101-feature-zhi-guo-xiang-production",
