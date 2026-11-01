@@ -10,7 +10,7 @@ const S30: FC = () => {
   const p = interpolate(f, [20, durationInFrames - 30], [0, 0.82], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
   return (
     <Scene name="p-brush" zoom={[1.0, 1.05]} warm={0.08}>
-      <InkPaper lines={['其实我只是爱上了峨眉山上的云和']} progress={p} size={46} right="30%" top="26%" />
+      <InkPaper lines={['其实我只是爱上了峨眉山上的云和']} progress={p} size={46} right="46%" top="18%" />
     </Scene>
   );
 };

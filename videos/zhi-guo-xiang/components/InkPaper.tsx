@@ -80,9 +80,7 @@ export const InkPaper: FC<InkPaperProps> = ({
           src={staticFile(`zhi-guo-xiang/paper/${base}.jpg`)}
           style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
         />
-      ) : (
-        <AbsoluteFill style={{ background: colors.paper }} />
-      )}
+      ) : null}
       <AbsoluteFill style={{ mixBlendMode: 'multiply', filter: 'blur(0.3px)' }}>
       {lines.map((line, li) => {
         const from = offsets[li];
