@@ -1,17 +1,26 @@
+/* S31 · 背影空袖大雕掠过 300f——只给背影与雕影 */
 import type { FC } from 'react';
-import { AscendScene } from '../components/AscendScene';
+import { useCurrentFrame } from 'remotion';
+import { Scene } from '../components/SceneKit';
+import { colors } from '../../../brand/tokens';
 
-/**
- * S31（5-1 重放，4080–4320，240f）——4-4 的逐帧重放，TR-11 / FG-04。
- *
- * 同构契约：与 S30 共用同一份 `<AscendScene />`、同一 local 帧 0–239
- * （本镜由 Sequence 从 4080 起播，useCurrentFrame 即 local 0–239），
- * 不叠加任何额外图层、不落任何字幕——「撤掉诗第 4 行」，画面一帧未改。
- * 验收：S30 / S31 第 239 帧像素差分为 0；尾帧＝门缝 6px、光切石阶、将暗未暗。
- *
- * 装配层（ZhiGuoXiang / routes）已统一套 ShotShell；本镜不再自包，
- * 否则纸纹会叠两层，与 S30 的像素比对失准。
- */
-const S31: FC = () => <AscendScene />;
+const S31: FC = () => {
+  const f = useCurrentFrame();
+  const eagleX = 1500 - f * 4.5;
+  const eagleY = 240 + Math.sin(f / 30) * 14;
+  return (
+    <Scene name="u-guest-out" zoom={[1.08, 1.14]} driftY={[4, -8]} dim={0.22}>
+      <svg viewBox="0 0 1920 1080" style={{ position: 'absolute', inset: 0 }} preserveAspectRatio="none">
+        {f < 330 ? (
+          <path
+            d={`M${eagleX} ${eagleY} q 40 -14 84 0 q -20 -10 -44 -8 q -22 -6 -40 8 Z`}
+            fill={colors.ink}
+            opacity={0.75}
+          />
+        ) : null}
+      </svg>
+    </Scene>
+  );
+};
 
 export default S31;

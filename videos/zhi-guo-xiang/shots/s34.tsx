@@ -1,42 +1,22 @@
-/* 镜 34 · 幕五 雪与火 · local [0,140) · 140f
-   大雪落在断墙上，墙是焦黑的；远处有火光，风把火吹斜；雪与火在同一画面里。无血、无人、无屠杀。 */
+/* S34 · 眼里映着光 300f——长焦近景（用 u-fireworks 天空 + 代码反光点） */
 import type { FC } from 'react';
-import { AbsoluteFill, random, useCurrentFrame } from 'remotion';
-import { colors } from '../../../brand/tokens';
-import { ArtBase } from '../components/ArtBase';
+import { AbsoluteFill, interpolate, useCurrentFrame } from 'remotion';
+import { Scene } from '../components/SceneKit';
 import { FILM } from '../motion-tokens';
-
-const FLAKES = Array.from({ length: 60 }, (_, i) => i);
 
 const S34: FC = () => {
   const f = useCurrentFrame();
-
+  const glow = interpolate(f, [0, 40, 240, 300], [0.2, 1, 1, 0.3], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  const flick = 0.55 + 0.45 * Math.sin(f / 7);
   return (
-    <AbsoluteFill style={{ background: colors.ink }}>
-      <ArtBase name="g13" zoom={[1.02, 1.06]} shiftX={[10, -10]}>
-        {FLAKES.map((i) => {
-          const s = `s34-${i}`;
-          const x = ((random(`${s}-x`) * 2100 + f * (1.2 + random(`${s}-v`)) - 100) % 2100) - 90;
-          const y = ((random(`${s}-y`) * 1200 + f * (2.2 + random(`${s}-w`) * 2)) % 1200) - 60;
-          const r = 1 + random(`${s}-r`) * 2.2;
-          return <div key={s} style={{ position: 'absolute', left: x, top: y, width: r, height: r, borderRadius: '50%', background: colors.paper, opacity: 0.35 + random(`${s}-o`) * 0.4 }} />;
-        })}
-        <div
-          style={{
-            position: 'absolute',
-            right: '18%',
-            top: '46%',
-            width: 260,
-            height: 200,
-            background: `radial-gradient(circle, ${FILM.fireGold} 0%, transparent 64%)`,
-            opacity: 0.22 + 0.08 * Math.sin(f / 8),
-            filter: 'blur(12px)',
-            mixBlendMode: 'screen',
-          }}
-        />
-      </ArtBase>
-      <AbsoluteFill style={{ background: colors.ink, opacity: 0.16 }} />
-    </AbsoluteFill>
+    <Scene name="u-fireworks-v2" zoom={[1.3, 1.42]} driftY={[-20, -34]} dim={0.3}>
+      <AbsoluteFill
+        style={{
+          position: 'absolute', left: '50%', top: '52%', width: 6, height: 6, borderRadius: '50%',
+          background: FILM.fireGold, opacity: glow * flick, boxShadow: `0 0 16px ${FILM.fireGold}`,
+        }}
+      />
+    </Scene>
   );
 };
 

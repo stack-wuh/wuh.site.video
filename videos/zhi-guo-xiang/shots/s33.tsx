@@ -1,28 +1,26 @@
-/* 镜 33 · 幕五 定格 · local [0,60) · 60f
-   光里什么也看不见，只有门内的暖白；门框成剪影。完全静止 60f，只有极轻的呼吸。 */
+/* S33 · 生日夜满城烟花 360f——全片最亮 */
 import type { FC } from 'react';
 import { AbsoluteFill, useCurrentFrame } from 'remotion';
-import { colors } from '../../../brand/tokens';
+import { Scene } from '../components/SceneKit';
+import { Fireworks } from '../components/Fireworks';
 import { FILM } from '../motion-tokens';
 
 const S33: FC = () => {
   const f = useCurrentFrame();
-  const breathe = 0.97 + 0.03 * Math.sin((f / 60) * Math.PI);
-
+  const flash = f > 60 && f < 80 ? 0.07 * Math.sin(((f - 60) / 20) * Math.PI) : 0;
   return (
-    <AbsoluteFill style={{ background: colors.paper }}>
-      <AbsoluteFill
-        style={{
-          background: `linear-gradient(180deg, ${colors.paper} 0%, ${FILM.fireGold} 120%)`,
-          opacity: breathe,
-        }}
+    <Scene name="u-fireworks-v2" zoom={[1.0, 1.05]} dim={0.05}>
+      <Fireworks
+        seed="s33"
+        bursts={[
+          { x: 1420, y: 250, at: 10, scale: 1.2 },
+          { x: 480, y: 210, at: 90, scale: 1.0 },
+          { x: 980, y: 300, at: 170, scale: 0.85 },
+          { x: 1600, y: 340, at: 250, scale: 0.9 },
+        ]}
       />
-      <AbsoluteFill style={{ background: colors.ink, opacity: 0.08 }} />
-      {/* 门框剪影 */}
-      <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 180, background: colors.ink, opacity: 0.55 }} />
-      <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: 180, background: colors.ink, opacity: 0.55 }} />
-      <div style={{ position: 'absolute', left: 0, right: 0, top: 0, height: 120, background: colors.ink, opacity: 0.5 }} />
-    </AbsoluteFill>
+      <AbsoluteFill style={{ background: FILM.fireGold, opacity: flash, mixBlendMode: 'screen' }} />
+    </Scene>
   );
 };
 

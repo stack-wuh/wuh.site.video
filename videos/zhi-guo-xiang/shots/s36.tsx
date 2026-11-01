@@ -1,35 +1,22 @@
-/* 镜 36 · 幕五 缰绳与经卷 · local [0,120) · 120f
-   禅房案上：青驴的缰绳一圈圈放下，旁边摊着一卷经；案角一盏佛前灯；窗外是山。 */
+/* S36 · 烟灰落肩 240f */
 import type { FC } from 'react';
-import { AbsoluteFill, useCurrentFrame } from 'remotion';
+import { random, useCurrentFrame } from 'remotion';
+import { Scene } from '../components/SceneKit';
 import { colors } from '../../../brand/tokens';
-import { ArtBase } from '../components/ArtBase';
-import { FILM } from '../motion-tokens';
+
+const ASH = Array.from({ length: 30 }, (_, i) => i);
 
 const S36: FC = () => {
   const f = useCurrentFrame();
-  const lamp = 0.7 + 0.3 * Math.sin(f / 6) * Math.sin(f / 17);
-
   return (
-    <AbsoluteFill style={{ background: colors.bg }}>
-      <ArtBase name="g14" zoom={[1.0, 1.05]}>
-        <div
-          style={{
-            position: 'absolute',
-            right: '22%',
-            top: '46%',
-            width: 190,
-            height: 190,
-            borderRadius: '50%',
-            background: `radial-gradient(circle, ${FILM.fireGold} 0%, transparent 62%)`,
-            opacity: 0.22 * lamp,
-            filter: 'blur(8px)',
-            mixBlendMode: 'screen',
-          }}
-        />
-      </ArtBase>
-      <AbsoluteFill style={{ background: colors.ink, opacity: 0.1 }} />
-    </AbsoluteFill>
+    <Scene name="u-fireworks-v2" zoom={[1.16, 1.22]} dim={0.3}>
+      {ASH.map((i) => {
+        const s = `s36-${i}`;
+        const y = ((random(`${s}-y`) * 1000 + f * (0.6 + random(`${s}-v`))) % 1000);
+        const drift = Math.sin((f + random(`${s}-p`) * 80) / 40) * 14;
+        return <div key={s} style={{ position: 'absolute', left: random(`${s}-x`) * 1920 + drift, top: y, width: 2, height: 1, background: colors.paperMuted, opacity: 0.3 }} />;
+      })}
+    </Scene>
   );
 };
 

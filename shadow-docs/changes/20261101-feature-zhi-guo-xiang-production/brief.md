@@ -28,16 +28,16 @@
   },
   "workflow": {
     "operation": null,
-    "checkpoint": "852ab0637af93c7d5be12afc7ce752858f36cfd3",
-    "planHash": "d0c9f6f663df278f9675eba9d12a0ecd9c0117bf61a56ab9a10200872be4598a",
+    "checkpoint": "a679b7f3820a4a193a5f96878b87de2387e5755c",
+    "planHash": "19120a33b4b41447811f88e10f33773503abd08014ae8a5f3b6bfeac67203f67",
     "updatedAt": null,
     "lastError": null,
     "worktree": "/Users/wuhong/shadow-desktop/github/wuh.site.video/.worktrees/20261101-feature-zhi-guo-xiang-production",
     "commit": {
       "files": [
-        "shadow-docs/changes/20261101-feature-zhi-guo-xiang-production/brief.md"
+        "videos/zhi-guo-xiang/shots/s02.tsx"
       ],
-      "message": "docs(shadow): brief 最终态——committed"
+      "message": "feat(zhi-guo-xiang): 纸墨材料电影样张——S2 墨滴化山"
     }
   },
   "knowledge": {

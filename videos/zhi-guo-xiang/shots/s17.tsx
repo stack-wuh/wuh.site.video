@@ -1,28 +1,11 @@
-/* 镜 17 · 幕三 满城抬头 · local [0,120) · 120f
-   从城头拉到街巷与屋顶：满城的人都仰头，剪影一片；窗一扇扇推开，灯笼的光被烟花盖过。 */
+/* S17 · 驴与剑过渡口 270f——诗行3落点，驴蹄四拍 */
 import type { FC } from 'react';
-import { AbsoluteFill } from 'remotion';
-import { colors } from '../../../brand/tokens';
-import { ArtBase, Plate } from '../components/ArtBase';
-import { Fireworks } from '../components/Fireworks';
+import { Scene, Poem } from '../components/SceneKit';
 
-const S17: FC = () => {
-  return (
-    <AbsoluteFill style={{ background: colors.ink }}>
-      <ArtBase name="g07" zoom={[1.06, 1.10]} shiftX={[-26, 22]} shiftY={[10, 30]}>
-        <Fireworks
-          seed="s17"
-          bursts={[
-            { x: 420, y: 250, at: 6, scale: 0.9 },
-            { x: 1180, y: 200, at: 46, scale: 1.0 },
-            { x: 760, y: 320, at: 86, scale: 0.8 },
-          ]}
-        />
-        <Plate name="crowd" height="30%" left={-180} bottom={-60} opacity={0.95} blend="normal" />
-      </ArtBase>
-      <AbsoluteFill style={{ background: colors.ink, opacity: 0.16 }} />
-    </AbsoluteFill>
-  );
-};
+const S17: FC = () => (
+  <Scene name="u-g04-ferry" zoom={[1.02, 1.07]} driftX={[-8, 10]}>
+    <Poem text="小毛驴滴滴答答，倚天剑伴我走天涯。" start={30} end={250} />
+  </Scene>
+);
 
 export default S17;

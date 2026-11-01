@@ -44,14 +44,6 @@ import S41 from './s41';
 import S42 from './s42';
 import S43 from './s43';
 import S44 from './s44';
-import S45 from './s45';
-import S46 from './s46';
-import S47 from './s47';
-import S48 from './s48';
-import S49 from './s49';
-import S50 from './s50';
-import S51 from './s51';
-import S52 from './s52';
 
 export const shotRegistry: Record<string, FC> = {
   s01: S01,
@@ -98,12 +90,4 @@ export const shotRegistry: Record<string, FC> = {
   s42: S42,
   s43: S43,
   s44: S44,
-  s45: S45,
-  s46: S46,
-  s47: S47,
-  s48: S48,
-  s49: S49,
-  s50: S50,
-  s51: S51,
-  s52: S52,
 };
