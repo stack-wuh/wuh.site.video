@@ -7,7 +7,7 @@
 | 20261029-feature-film-identity | ✅ 完成 | shadow-docs/changes/archive/20261029-feature-film-identity/brief.md |
 | 20261031-build-animatic-ci-shot-matrix | ✅ 完成 | shadow-docs/changes/archive/20261031-build-animatic-ci-shot-matrix/brief.md |
 | 20261031-build-render-driver-ci | published | shadow-docs/changes/20261031-build-render-driver-ci/brief.md |
-| 20261031-docs-intro-v2-act6-console | published | shadow-docs/changes/20261031-docs-intro-v2-act6-console/brief.md |
+| 20261031-docs-intro-v2-act6-console | ✅ 完成 | shadow-docs/changes/archive/20261031-docs-intro-v2-act6-console/brief.md |
 | 20261031-docs-intro-v2-s18-quotes | published | shadow-docs/changes/20261031-docs-intro-v2-s18-quotes/brief.md |
 | 20261031-docs-intro-v2-s29-ink-rain | ✅ 完成 | shadow-docs/changes/archive/20261031-docs-intro-v2-s29-ink-rain/brief.md |
 | 20261031-docs-scaffold-knowledge-fix | ✅ 完成 | shadow-docs/changes/archive/20261031-docs-scaffold-knowledge-fix/brief.md |

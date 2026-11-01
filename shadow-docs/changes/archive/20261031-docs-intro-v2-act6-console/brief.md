@@ -4,7 +4,7 @@
   "name": "20261031-docs-intro-v2-act6-console",
   "type": "docs",
   "scope": "video-materials",
-  "status": "published",
+  "status": "archived",
   "baseBranch": "main",
   "branch": "docs/20261031-docs-intro-v2-act6-console",
   "files": [
@@ -25,13 +25,13 @@
   },
   "review": {
     "conclusion": "passed",
-    "verifiedCommit": "3ef1512e0afbab8794a1979b0b64e49477f5f72c",
-    "verifiedAt": "2026-10-31T15:03:19.585Z"
+    "verifiedCommit": "c669e81ecfb96046b04ea5f0a97b4d5200005fda",
+    "verifiedAt": "2026-11-01T00:41:18.785Z"
   },
   "workflow": {
     "operation": null,
-    "checkpoint": "pr:31",
-    "planHash": "a70869aea3bfbc5082cba9da987f680c838cac76bfd1804967fca1d1cae1fec5",
+    "checkpoint": "merged-pr:31",
+    "planHash": "b05c75f264dbb73933b7a696e345be0f79edd3397ca78cbc47b02839cd7bfae8",
     "updatedAt": null,
     "lastError": null,
     "release": {
