@@ -147,6 +147,6 @@ jobs:
       - uses: actions/upload-artifact@v7
         with:
           name: ${{ steps.final.outputs.name }}
-          path: out/*-${{ env.FILM }}.mp4 # 规范名 {yyyyMMdd}{index}-{项目名}.mp4；artifact 名与成片同名（不含 .mp4）
+          path: out/*-${{ env.FILM }}.mp4 # 规范名 {yyyyMMdd}{HHmmss}-{项目名}.mp4；artifact 名与成片同名（不含 .mp4）
           retention-days: 90 # 仓库上限
           if-no-files-found: error

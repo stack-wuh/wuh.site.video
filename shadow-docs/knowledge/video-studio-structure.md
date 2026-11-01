@@ -30,9 +30,9 @@ verified-scope: 2026-10-24/25 两日实测：v5《朝朝如念》2:30 成片 + v
 
 **前期五件套 + 人物视觉设定**（长片预流程）：素材库（materials.md，全条目标注真实数据源）→ 剧本（script.md，用户与编剧评审）→ 分镜（storyboard.md，逐镜表 + 帧数对账表）→ 动效规范（motion-spec.md，令牌化 + 全镜覆盖矩阵）→ animatic 分镜板（单色简板，构图+节拍+字幕）；人物视觉设定（character-design.md）与分镜并行。分镜师、UE 动效大师、人物设计师以专职 subagent 并行产出，协调方负责对账与整合。
 
-**Animatic CI 多片（2026-11-01）**：`render-animatic.yml`（workflow_dispatch）输入 `unit` choice（wuh-site-intro-v2 / zhi-guo-xiang / site-film）、`scope` choice（all / intro-outro / act1–act8）、`shots` 高级子集（空格分隔镜号，空 = 按 scope）。plan 读 `videos/<unit>/shots-manifest.json`；Composition `${Pascal}Animatic`；产物 `out/A{yyyyMMdd}{index}-<unit>.mp4`，artifact `<unit>-animatic`。`scope=all` 且 `shots` 空才汇总拼接；act / intro-outro / 自定义子集只渲对应段。
+**Animatic CI 多片（2026-11-01）**：`render-animatic.yml`（workflow_dispatch）输入 `unit` choice（wuh-site-intro-v2 / zhi-guo-xiang / site-film）、`scope` choice（all / intro-outro / act1–act8）、`shots` 高级子集（空格分隔镜号，空 = 按 scope）。plan 读 `videos/<unit>/shots-manifest.json`；Composition `${Pascal}Animatic`；产物 `out/A{yyyyMMdd}{HHmmss}-<unit>.mp4`，artifact `<unit>-animatic`。`scope=all` 且 `shots` 空才汇总拼接；act / intro-outro / 自定义子集只渲对应段。
 
-**正式制作 CI（2026-11-01 实证）**：`render-film.yml` 一镜一 job——bundle 预打包（约 41s）+ 52 镜矩阵（`max-parallel: 20`，每镜 40–100s）+ assemble 汇总（约 4m17s）。分支 workflow 的 artifact 名为 `<film>-final`；main 上已改为与成片同名的 `A{yyyyMMdd}{index}-<film>`（PR #41），两条分支合并后以新规为准。bundle 任务当前**没有** `pnpm typecheck` 门：intro-v2 存在存量类型错误，加门会阻断出片。
+**正式制作 CI（2026-11-01 实证）**：`render-film.yml` 一镜一 job——bundle 预打包（约 41s）+ 52 镜矩阵（`max-parallel: 20`，每镜 40–100s）+ assemble 汇总（约 4m17s）。分支 workflow 的 artifact 名为 `<film>-final`；main 上已改为与成片同名的 `A{yyyyMMdd}{HHmmss}-<film>`（PR #41），两条分支合并后以新规为准。bundle 任务当前**没有** `pnpm typecheck` 门：intro-v2 存在存量类型错误，加门会阻断出片。
 
 **质量门（2026-11-01）**：`pnpm check` = `pnpm lint`（oxlint 1.90.0，react 插件 + `--deny-warnings`）+ `pnpm typecheck`（TypeScript 7.0.2 原生 Go 编译器，`tsc --noEmit`）。PR 与 `push main` 由 `.github/workflows/quality-gate.yml` 同源执行；本地与 CI 必须使用同一 lockfile 与 node 22。TS7 类型检查是原生二进制，不踩 V8 段错误；Remotion bundling 仍是 node/webpack，风暴期照旧会崩。
 

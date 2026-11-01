@@ -37,7 +37,7 @@ verified-scope: site-film《朝朝如念》4:00 成片全流程实证（素材�
 - `preprod-<film>` 单元（如 `preprod-zhi-guo-xiang`）：素材库 → 剧本 → 人物视觉设定（与分镜并行）→ 分镜 → 动效规范 → animatic；`shots.mjs import --unit <film>` 为帧数真源。
 - 剧本以诗作文本为骨架；必须显式声明「情感蒙太奇非编年」与顺序取舍；文学改编另建「原著事实核对表」与「诗作托名考据」。
 - 人物视觉设定独立成 `character-design.md`：五段年龄、杨过不露脸、正片零红、4-4/5-1 标准姿态。
-- Animatic CI：`render-animatic.yml` 的 `unit` / `scope` 下拉；产物 `A{yyyyMMdd}{index}-{film}.mp4`。
+- Animatic CI：`render-animatic.yml` 的 `unit` / `scope` 下拉；产物 `A{yyyyMMdd}{HHmmss}-{film}.mp4`。
 - 版权 BGM：不进 `public/`；CI 出无声画面，发布前本地 `amix` / `adelay` 两遍 mux（禁用 `<Audio loop>`）。示例见 `videos/preprod-zhi-guo-xiang/assets/music.md`。
 - 正式制作（2026-11-01 实证）：52 镜一镜一文件、零共享状态，六幕交 subagent 并行实装；`ZhiGuoXiang.tsx` 只遍历 `shots-manifest.json` + `ShotShell`，装配层不写镜头内容。共享件在整合阶段统一收口（Caption/Figure/AscendScene/Objects），避免 52 镜各写一份。
 - 逐字对拍与末帧：字幕组件用 `charStarts` 给逐字落点（S25「滴滴答答」四字 20/32/44/56 与四蹄同帧）；末镜用 `fadeOut={false}` 保证最后一行在正片末帧完整，不靠延长 `end` 绕过淡出。
