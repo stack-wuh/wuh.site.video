@@ -4,7 +4,7 @@
   "name": "20261101-fix-render-artifact-s58",
   "type": "fix",
   "scope": "video-studio",
-  "status": "reviewed",
+  "status": "published",
   "baseBranch": "main",
   "branch": "fix/20261101-fix-render-artifact-s58",
   "files": [
@@ -16,8 +16,8 @@
     "repository": "stack-wuh/wuh.site.video",
     "issue": null,
     "issueUrl": null,
-    "pullRequest": null,
-    "pullRequestUrl": null
+    "pullRequest": 41,
+    "pullRequestUrl": "https://github.com/stack-wuh/wuh.site.video/pull/41"
   },
   "review": {
     "conclusion": "passed",
@@ -26,7 +26,7 @@
   },
   "workflow": {
     "operation": null,
-    "checkpoint": null,
+    "checkpoint": "pr:41",
     "planHash": "ed9632b72608b7d1753ecd11667aab452c006c11a10e086cbf6b86b376c2cc4d",
     "updatedAt": null,
     "lastError": null,
