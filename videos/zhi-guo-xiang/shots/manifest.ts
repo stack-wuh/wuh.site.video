@@ -1,0 +1,464 @@
+/* 由 scripts/shots.mjs sync 生成——勿手改；真源 shots-manifest.json（类型化视图） */
+export type Manifest = { film: string; fps: number; totalFrames: number; acts: Array<{ act: number; title: string; startFrame: number; endFrame: number }>; shots: Array<{ id: string; act: number; title: string; startFrame: number; durationFrames: number; source: string }> };
+
+export const manifest: Manifest = {
+  "film": "zhi-guo-xiang",
+  "fps": 30,
+  "totalFrames": 7200,
+  "acts": [
+    {
+      "act": 1,
+      "title": "山不说话",
+      "startFrame": 0,
+      "endFrame": 720
+    },
+    {
+      "act": 2,
+      "title": "风陵渡",
+      "startFrame": 720,
+      "endFrame": 1620
+    },
+    {
+      "act": 3,
+      "title": "生辰",
+      "startFrame": 1620,
+      "endFrame": 3120
+    },
+    {
+      "act": 4,
+      "title": "世人说",
+      "startFrame": 3120,
+      "endFrame": 4080
+    },
+    {
+      "act": 5,
+      "title": "其实",
+      "startFrame": 4080,
+      "endFrame": 6000
+    },
+    {
+      "act": 6,
+      "title": "像极了",
+      "startFrame": 6000,
+      "endFrame": 7200
+    }
+  ],
+  "shots": [
+    {
+      "id": "s01",
+      "act": 1,
+      "title": "无（留白：一页未写的纸）",
+      "startFrame": 0,
+      "durationFrames": 180,
+      "source": "shots/s01.tsx"
+    },
+    {
+      "id": "s02",
+      "act": 1,
+      "title": "我走过山时，山不说话，",
+      "startFrame": 180,
+      "durationFrames": 240,
+      "source": "shots/s02.tsx"
+    },
+    {
+      "id": "s03",
+      "act": 1,
+      "title": "我路过海时，海不说话，",
+      "startFrame": 420,
+      "durationFrames": 240,
+      "source": "shots/s03.tsx"
+    },
+    {
+      "id": "s04",
+      "act": 1,
+      "title": "无（留白：笔搁下）",
+      "startFrame": 660,
+      "durationFrames": 60,
+      "source": "shots/s04.tsx"
+    },
+    {
+      "id": "s05",
+      "act": 2,
+      "title": "无（留白：渡口）",
+      "startFrame": 720,
+      "durationFrames": 80,
+      "source": "shots/s05.tsx"
+    },
+    {
+      "id": "s06",
+      "act": 2,
+      "title": "那一年她十六岁，在风陵渡听人说神雕侠。",
+      "startFrame": 800,
+      "durationFrames": 180,
+      "source": "shots/s06.tsx"
+    },
+    {
+      "id": "s07",
+      "act": 2,
+      "title": "无（留白：灯亮）",
+      "startFrame": 980,
+      "durationFrames": 100,
+      "source": "shots/s07.tsx"
+    },
+    {
+      "id": "s08",
+      "act": 2,
+      "title": "说的人很多，见过的人很少。",
+      "startFrame": 1080,
+      "durationFrames": 180,
+      "source": "shots/s08.tsx"
+    },
+    {
+      "id": "s09",
+      "act": 2,
+      "title": "无（留白：火将熄）",
+      "startFrame": 1260,
+      "durationFrames": 60,
+      "source": "shots/s09.tsx"
+    },
+    {
+      "id": "s10",
+      "act": 2,
+      "title": "无（留白：三枚金针）",
+      "startFrame": 1320,
+      "durationFrames": 120,
+      "source": "shots/s10.tsx"
+    },
+    {
+      "id": "s11",
+      "act": 2,
+      "title": "无（留白：合掌）",
+      "startFrame": 1440,
+      "durationFrames": 120,
+      "source": "shots/s11.tsx"
+    },
+    {
+      "id": "s12",
+      "act": 2,
+      "title": "无（留白：离渡）",
+      "startFrame": 1560,
+      "durationFrames": 60,
+      "source": "shots/s12.tsx"
+    },
+    {
+      "id": "s13",
+      "act": 3,
+      "title": "无（留白：军报入城）",
+      "startFrame": 1620,
+      "durationFrames": 80,
+      "source": "shots/s13.tsx"
+    },
+    {
+      "id": "s14",
+      "act": 3,
+      "title": "九月廿四，她的生日。",
+      "startFrame": 1700,
+      "durationFrames": 160,
+      "source": "shots/s14.tsx"
+    },
+    {
+      "id": "s15",
+      "act": 3,
+      "title": "无（留白：无人回头）",
+      "startFrame": 1860,
+      "durationFrames": 120,
+      "source": "shots/s15.tsx"
+    },
+    {
+      "id": "s16",
+      "act": 3,
+      "title": "无（留白：第一朵）",
+      "startFrame": 1980,
+      "durationFrames": 120,
+      "source": "shots/s16.tsx"
+    },
+    {
+      "id": "s17",
+      "act": 3,
+      "title": "无（留白：满城抬头）",
+      "startFrame": 2100,
+      "durationFrames": 120,
+      "source": "shots/s17.tsx"
+    },
+    {
+      "id": "s18",
+      "act": 3,
+      "title": "无（留白：她也在抬头）",
+      "startFrame": 2220,
+      "durationFrames": 120,
+      "source": "shots/s18.tsx"
+    },
+    {
+      "id": "s19",
+      "act": 3,
+      "title": "无（留白：一朵接一朵）",
+      "startFrame": 2340,
+      "durationFrames": 90,
+      "source": "shots/s19.tsx"
+    },
+    {
+      "id": "s20",
+      "act": 3,
+      "title": "无（留白：烟落）",
+      "startFrame": 2430,
+      "durationFrames": 130,
+      "source": "shots/s20.tsx"
+    },
+    {
+      "id": "s21",
+      "act": 3,
+      "title": "满城烟火，本是军情。",
+      "startFrame": 2560,
+      "durationFrames": 140,
+      "source": "shots/s21.tsx"
+    },
+    {
+      "id": "s22",
+      "act": 3,
+      "title": "无（留白：他转身）",
+      "startFrame": 2700,
+      "durationFrames": 180,
+      "source": "shots/s22.tsx"
+    },
+    {
+      "id": "s23",
+      "act": 3,
+      "title": "无（留白：雾合上）",
+      "startFrame": 2880,
+      "durationFrames": 120,
+      "source": "shots/s23.tsx"
+    },
+    {
+      "id": "s24",
+      "act": 3,
+      "title": "他没有回头。",
+      "startFrame": 3000,
+      "durationFrames": 120,
+      "source": "shots/s24.tsx"
+    },
+    {
+      "id": "s25",
+      "act": 4,
+      "title": "小毛驴滴滴答答，倚天剑伴我走天涯。",
+      "startFrame": 3120,
+      "durationFrames": 240,
+      "source": "shots/s25.tsx"
+    },
+    {
+      "id": "s26",
+      "act": 4,
+      "title": "无（留白：山门）",
+      "startFrame": 3360,
+      "durationFrames": 80,
+      "source": "shots/s26.tsx"
+    },
+    {
+      "id": "s27",
+      "act": 4,
+      "title": "她一路问过去，没有人见过他。",
+      "startFrame": 3440,
+      "durationFrames": 160,
+      "source": "shots/s27.tsx"
+    },
+    {
+      "id": "s28",
+      "act": 4,
+      "title": "无（留白：说书桌）",
+      "startFrame": 3600,
+      "durationFrames": 80,
+      "source": "shots/s28.tsx"
+    },
+    {
+      "id": "s29",
+      "act": 4,
+      "title": "后来，江湖上开始讲她的故事。",
+      "startFrame": 3680,
+      "durationFrames": 160,
+      "source": "shots/s29.tsx"
+    },
+    {
+      "id": "s30",
+      "act": 4,
+      "title": "大家都说我因为爱着杨过大侠，才在峨嵋山上出了家，",
+      "startFrame": 3840,
+      "durationFrames": 240,
+      "source": "shots/s30.tsx"
+    },
+    {
+      "id": "s31",
+      "act": 5,
+      "title": "无（撤掉诗第 4 行）",
+      "startFrame": 4080,
+      "durationFrames": 240,
+      "source": "shots/s31.tsx"
+    },
+    {
+      "id": "s32",
+      "act": 5,
+      "title": "其实我只是爱上了峨嵋山上的云和霞，",
+      "startFrame": 4320,
+      "durationFrames": 180,
+      "source": "shots/s32.tsx"
+    },
+    {
+      "id": "s33",
+      "act": 5,
+      "title": "无（留白：定格）",
+      "startFrame": 4500,
+      "durationFrames": 60,
+      "source": "shots/s33.tsx"
+    },
+    {
+      "id": "s34",
+      "act": 5,
+      "title": "无（留白：雪与火）",
+      "startFrame": 4560,
+      "durationFrames": 140,
+      "source": "shots/s34.tsx"
+    },
+    {
+      "id": "s35",
+      "act": 5,
+      "title": "无（留白：剑）",
+      "startFrame": 4700,
+      "durationFrames": 160,
+      "source": "shots/s35.tsx"
+    },
+    {
+      "id": "s36",
+      "act": 5,
+      "title": "无（留白：缰绳放下）",
+      "startFrame": 4860,
+      "durationFrames": 120,
+      "source": "shots/s36.tsx"
+    },
+    {
+      "id": "s37",
+      "act": 5,
+      "title": "无（留白：手印）",
+      "startFrame": 4980,
+      "durationFrames": 120,
+      "source": "shots/s37.tsx"
+    },
+    {
+      "id": "s38",
+      "act": 5,
+      "title": "无（留白：她抬眼）",
+      "startFrame": 5100,
+      "durationFrames": 120,
+      "source": "shots/s38.tsx"
+    },
+    {
+      "id": "s39",
+      "act": 5,
+      "title": "无（留白：晨课）",
+      "startFrame": 5220,
+      "durationFrames": 100,
+      "source": "shots/s39.tsx"
+    },
+    {
+      "id": "s40",
+      "act": 5,
+      "title": "后来，我开始教人。",
+      "startFrame": 5320,
+      "durationFrames": 160,
+      "source": "shots/s40.tsx"
+    },
+    {
+      "id": "s41",
+      "act": 5,
+      "title": "无（留白：散课）",
+      "startFrame": 5480,
+      "durationFrames": 160,
+      "source": "shots/s41.tsx"
+    },
+    {
+      "id": "s42",
+      "act": 5,
+      "title": "无（留白：空钉）",
+      "startFrame": 5640,
+      "durationFrames": 60,
+      "source": "shots/s42.tsx"
+    },
+    {
+      "id": "s43",
+      "act": 5,
+      "title": "剑挂在墙上，再没取下来。",
+      "startFrame": 5700,
+      "durationFrames": 180,
+      "source": "shots/s43.tsx"
+    },
+    {
+      "id": "s44",
+      "act": 5,
+      "title": "无（留白：看它）",
+      "startFrame": 5880,
+      "durationFrames": 120,
+      "source": "shots/s44.tsx"
+    },
+    {
+      "id": "s45",
+      "act": 6,
+      "title": "无（留白：窗）",
+      "startFrame": 6000,
+      "durationFrames": 120,
+      "source": "shots/s45.tsx"
+    },
+    {
+      "id": "s46",
+      "act": 6,
+      "title": "无（留白：云）",
+      "startFrame": 6120,
+      "durationFrames": 150,
+      "source": "shots/s46.tsx"
+    },
+    {
+      "id": "s47",
+      "act": 6,
+      "title": "无（留白：光落到纸）",
+      "startFrame": 6270,
+      "durationFrames": 150,
+      "source": "shots/s47.tsx"
+    },
+    {
+      "id": "s48",
+      "act": 6,
+      "title": "无（留白：弟子）",
+      "startFrame": 6420,
+      "durationFrames": 120,
+      "source": "shots/s48.tsx"
+    },
+    {
+      "id": "s49",
+      "act": 6,
+      "title": "风陵师太，峨眉第二代掌门。",
+      "startFrame": 6540,
+      "durationFrames": 180,
+      "source": "shots/s49.tsx"
+    },
+    {
+      "id": "s50",
+      "act": 6,
+      "title": "无（留白：天）",
+      "startFrame": 6720,
+      "durationFrames": 160,
+      "source": "shots/s50.tsx"
+    },
+    {
+      "id": "s51",
+      "act": 6,
+      "title": "无（留白：两片金）",
+      "startFrame": 6880,
+      "durationFrames": 160,
+      "source": "shots/s51.tsx"
+    },
+    {
+      "id": "s52",
+      "act": 6,
+      "title": "像极了十六岁那年的烟花。",
+      "startFrame": 7040,
+      "durationFrames": 160,
+      "source": "shots/s52.tsx"
+    }
+  ]
+};
