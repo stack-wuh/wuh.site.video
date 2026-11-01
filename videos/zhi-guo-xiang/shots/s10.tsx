@@ -1,7 +1,17 @@
-/* S10 · 把纸对折，压进一本书里 150f */
+/* S10 · 她的掌心摊开，三枚金针 180f */
 import type { FC } from 'react';
+import { interpolate, useCurrentFrame } from 'remotion';
 import { Scene } from '../components/SceneKit';
+import { Needles } from '../components/Needles';
 
-const S10: FC = () => <Scene name="p-fold" zoom={[1.04, 1.1]} dim={0.04} />;
+const S10: FC = () => {
+  const f = useCurrentFrame();
+  const t = interpolate(f, [10, 70], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  return (
+    <Scene name="p-palm2" zoom={[1.04, 1.1]}>
+      <Needles count={3} origin={[640, 620]} len={620} spread={150} tilt={-5} opacity={t} />
+    </Scene>
+  );
+};
 
 export default S10;

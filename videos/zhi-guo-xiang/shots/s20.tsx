@@ -1,7 +1,12 @@
-/* S20 · 街边孩子跳着唱童谣 240f */
+/* S20 · 同一时刻：她按着一枚针，扎进落水者的穴道 240f */
 import type { FC } from 'react';
 import { Scene } from '../components/SceneKit';
+import { Needles } from '../components/Needles';
 
-const S20: FC = () => <Scene name="p-kids" zoom={[1.0, 1.06]} driftX={[-24, 24]} warm={0.1} />;
+const S20: FC = () => (
+  <Scene name="p-rescue" zoom={[1.02, 1.08]} dim={0.04}>
+    <Needles count={1} origin={[430, 700]} len={300} tilt={-58} shadow={false} />
+  </Scene>
+);
 
 export default S20;

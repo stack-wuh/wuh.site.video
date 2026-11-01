@@ -1,7 +1,7 @@
-/* S14 · 雪夜断墙，剑插在雪里，三道火燎痕 240f */
+/* S14 · 烟灰落在她肩上 120f */
 import type { FC } from 'react';
 import { Scene } from '../components/SceneKit';
 
-const S14: FC = () => <Scene name="p-snow-sword" zoom={[1.0, 1.07]} dim={0.06} />;
+const S14: FC = () => <Scene name="p-ash" zoom={[1.0, 1.045]} dim={0.04} />;
 
 export default S14;

@@ -1,58 +1,48 @@
 import type { FC } from 'react';
 import { interpolate, useCurrentFrame } from 'remotion';
 import { colors, fontFamilies } from '../../../brand/tokens';
-import { CLAMP } from '../motion-tokens';
 
-/** 字幕卡：本镜 local 帧；诗行用衬线大字，白话字幕略小；默认两端各 14f 淡入淡出。
- *  文字逐字照抄 preprod script.md；本组件不改写文案。
- *  charStarts 给逐字落点（S25 四字四拍）；fadeOut=false 让末镜收在完整一行。 */
-export const Caption: FC<{
-  text: string;
-  start: number;
-  end: number;
-  poem?: boolean;
-  bottom?: number;
-  tone?: 'paper' | 'ink';
-  fadeOut?: boolean;
-  charStarts?: readonly number[];
-}> = ({ text, start, end, poem = false, bottom = 150, tone = 'paper', fadeOut = true, charStarts }) => {
+/** 分幕小字幕（storyboard-v8 §三）：底部居中单行，14f 淡入 + 2px 上浮，停留后 14f 淡出。
+ *  文案逐字照抄 script-v8.md §分幕小字幕；本组件不改写。
+ *  tone：默认纸白字（暗底）；亮底场景用 ink。 */
+export const Caption: FC<{ text: string; start: number; end: number; bottom?: number; tone?: 'paper' | 'ink' }> = ({
+  text,
+  start,
+  end,
+  bottom = 110,
+  tone = 'paper',
+}) => {
   const frame = useCurrentFrame();
   if (frame < start || frame > end) return null;
   const ink = tone === 'ink';
-  const opacity = charStarts
-    ? fadeOut
-      ? interpolate(frame, [end - 14, end], [1, 0], CLAMP)
-      : 1
-    : fadeOut
-      ? interpolate(frame, [start, start + 14, end - 14, end], [0, 1, 1, 0], CLAMP)
-      : interpolate(frame, [start, start + 14], [0, 1], CLAMP);
+  const opacity = interpolate(frame, [start, start + 14, end - 14, end], [0, 1, 1, 0], {
+    extrapolateLeft: 'clamp',
+    extrapolateRight: 'clamp',
+  });
+  const lift = interpolate(frame, [start, start + 14], [2, 0], {
+    extrapolateLeft: 'clamp',
+    extrapolateRight: 'clamp',
+  });
   return (
     <div
       style={{
         position: 'absolute',
-        left: 140,
-        right: 140,
+        left: 160,
+        right: 160,
         bottom,
         textAlign: 'center',
         fontFamily: fontFamilies.serif,
-        fontSize: poem ? 48 : 42,
-        lineHeight: 1.5,
-        letterSpacing: '0.04em',
+        fontSize: 30,
+        lineHeight: 1.6,
+        letterSpacing: '0.08em',
         color: ink ? colors.ink : colors.paper,
-        opacity,
+        opacity: opacity * 0.9,
+        whiteSpace: 'nowrap',
         textShadow: ink ? 'none' : `0 2px 24px ${colors.bg}`,
+        transform: `translateY(${lift}px)`,
       }}
     >
-      {charStarts
-        ? [...text].map((ch, i) => {
-            const at = charStarts[i] ?? start;
-            return (
-              <span key={i} style={{ opacity: interpolate(frame, [at, at + 6], [0, 1], CLAMP) }}>
-                {ch}
-              </span>
-            );
-          })
-        : text}
+      {text}
     </div>
   );
 };

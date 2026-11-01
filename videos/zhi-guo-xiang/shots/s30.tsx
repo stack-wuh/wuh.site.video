@@ -1,15 +1,16 @@
-/* S30 · 掌心摊开，三枚金针。赠予者不在画里 240f */
+/* S30 · 笔尖落下，写第五行，停在「霞」前 180f */
 import type { FC } from 'react';
-import { interpolate, useCurrentFrame } from 'remotion';
+import { interpolate, useCurrentFrame, useVideoConfig } from 'remotion';
 import { Scene } from '../components/SceneKit';
-import { Needles } from '../components/Needles';
+import { InkPaper } from '../components/InkPaper';
 
 const S30: FC = () => {
   const f = useCurrentFrame();
-  const t = interpolate(f, [10, 70], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  const { durationInFrames } = useVideoConfig();
+  const p = interpolate(f, [20, durationInFrames - 30], [0, 0.82], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
   return (
-    <Scene name="p-palm2" zoom={[1.04, 1.1]}>
-      <Needles count={3} origin={[640, 620]} len={620} spread={150} tilt={-5} opacity={t} />
+    <Scene name="p-brush" zoom={[1.0, 1.05]} warm={0.08}>
+      <InkPaper lines={['其实我只是爱上了峨眉山上的云和']} progress={p} size={46} right="30%" top="26%" />
     </Scene>
   );
 };

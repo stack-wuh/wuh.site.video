@@ -1,12 +1,12 @@
-/* S25 · 她抬眼，眼里有一点火光 300f */
+/* S25 · 晨课，弟子两列背影，她走过，不出声 210f */
 import type { FC } from 'react';
-import { interpolate, useCurrentFrame } from 'remotion';
 import { Scene } from '../components/SceneKit';
+import { Caption } from '../components/Caption';
 
-const S25: FC = () => {
-  const f = useCurrentFrame();
-  const t = interpolate(f, [40, 120, 260], [0, 1, 0.85], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
-  return <Scene name="p-eyefire" zoom={[1.0, 1.05]} warm={0.06 * t} />;
-};
+const S25: FC = () => (
+  <Scene name="p-morning" zoom={[1.0, 1.05]}>
+    <Caption text="四十岁，她在峨眉山出了家。" start={18} end={192} tone="ink" />
+  </Scene>
+);
 
 export default S25;

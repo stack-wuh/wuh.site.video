@@ -1,7 +1,12 @@
-/* S4 · 他抬头，海面亮了一线 120f */
+/* S4 · 客栈火塘，一圈剪影，她坐最外圈 180f */
 import type { FC } from 'react';
 import { Scene } from '../components/SceneKit';
+import { Caption } from '../components/Caption';
 
-const S04: FC = () => <Scene name="p-him-back" zoom={[1.06, 1.0]} warm={0.14} />;
+const S04: FC = () => (
+  <Scene name="p-firecircle" zoom={[1.0, 1.05]} dim={0.04}>
+    <Caption text="十六岁那年，她在风陵渡遇见一个人。" start={16} end={164} />
+  </Scene>
+);
 
 export default S04;

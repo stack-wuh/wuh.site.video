@@ -1,17 +1,7 @@
-/* S17 · 说书人的醒木落下 270f */
+/* S17 · 她背着剑走过渡口，剑柄斜出右肩，剑穗随步 240f */
 import type { FC } from 'react';
-import { interpolate, useCurrentFrame } from 'remotion';
-import { AbsoluteFill } from 'remotion';
 import { Scene } from '../components/SceneKit';
 
-const S17: FC = () => {
-  const f = useCurrentFrame();
-  const hit = interpolate(f, [0, 8, 10], [0, 0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
-  return (
-    <Scene name="p-stall" zoom={[1.0, 1.04]} dim={0.06}>
-      <AbsoluteFill style={{ background: '#fff6e0', opacity: 0.22 * hit, mixBlendMode: 'screen' }} />
-    </Scene>
-  );
-};
+const S17: FC = () => <Scene name="p-xiang-sword-ferry" zoom={[1.02, 1.06]} driftX={[-30, 30]} warm={0.05} />;
 
 export default S17;
