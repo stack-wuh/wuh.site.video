@@ -28,16 +28,16 @@
   },
   "workflow": {
     "operation": null,
-    "checkpoint": "a679b7f3820a4a193a5f96878b87de2387e5755c",
-    "planHash": "19120a33b4b41447811f88e10f33773503abd08014ae8a5f3b6bfeac67203f67",
+    "checkpoint": "d50a373e6defa1105cc6dfa7a7184f9ce18c43b8",
+    "planHash": "84d2a639cf1a1c99cc813b7005b7ab09c0bb7df273cb0d154c8e6f84016988a1",
     "updatedAt": null,
     "lastError": null,
     "worktree": "/Users/wuhong/shadow-desktop/github/wuh.site.video/.worktrees/20261101-feature-zhi-guo-xiang-production",
     "commit": {
       "files": [
-        "videos/zhi-guo-xiang/shots/s02.tsx"
+        "shadow-docs/changes/20261101-feature-zhi-guo-xiang-production/brief.md"
       ],
-      "message": "feat(zhi-guo-xiang): 纸墨材料电影样张——S2 墨滴化山"
+      "message": "docs: brief 记录本次提交流水"
     }
   },
   "knowledge": {
