@@ -1,6 +1,7 @@
 /* 镜 45 · Act 7 坐忘 · 局部帧 [0,180) · 180f
-   承接 s44 翻起纸页（TR-03，入场 10f 内收拢）；纸页翻面，全屏只剩字：
-   前两句竖排衬线、字距极宽，每字半拍落下，带极轻压痕（FN-29）；
+   承接 s44 翻起纸页（TR-03，入场 10f 内收拢）；纸页翻面，四句同一行四列、右起：
+   常默（最右）→ 少思 → 不怒 → 不恼（最左）；本镜写右二列（常默/少思），左二列留空位；
+   竖排衬线、字距极宽，每字半拍落下，带极轻压痕（FN-29）；
    严格零运镜（CM-01，禁 CM-02/CM-14）——只有字的落下与光的变化；GR-02。 */
 import type { CSSProperties, FC } from 'react';
 import { AbsoluteFill, interpolate, useCurrentFrame } from 'remotion';
@@ -15,6 +16,7 @@ const COLUMN_GAP = 130;
 
 const COLUMN_STYLE: CSSProperties = {
   writingMode: 'vertical-rl',
+  width: 48,
   fontFamily: fontFamilies.serif,
   fontSize: 34,
   lineHeight: 1,
@@ -52,6 +54,8 @@ const ShotPoemFirstHalf: FC = () => {
           {/* 光的极缓变化（非运镜） */}
           <AbsoluteFill style={{ backgroundImage: `linear-gradient(180deg, ${colors.gold} 0%, transparent 58%)`, opacity: 0.1 + light * 0.1, mixBlendMode: 'screen' }} />
           <div style={{ position: 'absolute', left: 0, right: 0, top: UPPER_TOP, display: 'flex', justifyContent: 'center', gap: COLUMN_GAP }}>
+            <PageColumn frame={frame} text="" start={0} />
+            <PageColumn frame={frame} text="" start={0} />
             <PageColumn frame={frame} text="少思慧烛内光。" start={82} />
             <PageColumn frame={frame} text="常默元气不伤，" start={12} />
           </div>

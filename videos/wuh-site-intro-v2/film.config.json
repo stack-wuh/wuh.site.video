@@ -1,3 +1,6 @@
 {
-  "shell": { "intro": 120, "outro": 180 }
+  "shell": {
+    "intro": 150,
+    "outro": 180
+  }
 }
