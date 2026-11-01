@@ -9,5 +9,6 @@
 | 质量门 | 质量门 oxlint typecheck pnpm check lint 类型检查 TypeScript 7 | knowledge/video-studio-structure.md |
 | 渲染稳定性 | 卡顿 坑 误区 端口 偏移 拼接 分块 重试 收敛 音轨 静默 loop 淡出 重复帧 | knowledge/render-stability-playbook.md |
 | 片头片尾套件 | 片头 片尾 ident FilmShell 家族标识 时长公式 meta | knowledge/video-studio-structure.md |
+| 跨单元组件 | film-kit 组件 复用 垫片 re-export CameraRig DustField Caption ShotShell PaperGrain | knowledge/video-studio-structure.md |
 | 视频制作流程 | 制作流程 前期 分镜 storyboard motion-spec animatic 正式制作 素材库 | knowledge/video-production-flow.md |
 | 品牌令牌 | 配色 字体 token 颜色 tokens | brand/tokens.ts（源码即规范） |

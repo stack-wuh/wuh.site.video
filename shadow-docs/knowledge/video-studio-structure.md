@@ -1,7 +1,7 @@
 ---
 title: 视频工作室结构与渲染工具链
 domain: video-materials
-keywords: [工作室结构, 分镜, 视频, 脚手架, new-video, 渲染, render, chrome, 端口, 段错误, 崩溃, 沙箱, node22, staticFile, 分块渲染, 清场, animatic, storyboard, motion-spec, 片头, 片尾, ident, FilmShell, 家族标识, 时长公式, render-animatic, unit, scope, choice, A 前缀, preprod, animatic CI, zhi-guo-xiang, oxlint, TypeScript 7, 质量门, pnpm check, tsc]
+keywords: [工作室结构, 分镜, 视频, film-kit, 组件层, 垫片, re-export, CameraRig, DustField, 脚手架, new-video, 渲染, render, chrome, 端口, 段错误, 崩溃, 沙箱, node22, staticFile, 分块渲染, 清场, animatic, storyboard, motion-spec, 片头, 片尾, ident, FilmShell, 家族标识, 时长公式, render-animatic, unit, scope, choice, A 前缀, preprod, animatic CI, zhi-guo-xiang, oxlint, TypeScript 7, 质量门, pnpm check, tsc]
 scope: [brand/, brand/ident/, videos/, scripts/, src/Root.tsx, package.json, public/]
 status: active
 source:
@@ -11,9 +11,10 @@ source:
   - changes/20261031-docs-scaffold-knowledge-fix/brief.md
   - changes/archive/20261101-feature-zhi-guo-xiang-preprod/brief.md
   - changes/20261101-build-quality-gate/brief.md
+  - changes/20261101-refactor-film-kit/brief.md
 verified: 2026-11-01
 verified-depth: runtime
-verified-scope: 2026-10-24/25 两日实测：v5《朝朝如念》2:30 成片 + v6 前期 animatic 4:00 分镜板（7200 帧）出片。实证：分段+轮转编排+渲染前清场+分块重试的收敛策略；Composition 越界拒绝（getRealFrameRanges）；staticFile 以 public/ 为根；Chrome 对部分透明度叠渲染的确定性崩溃及 3 帧跳变规避；前期三件套（素材库→storyboard→motion-spec→animatic）+ 分镜师/UE 大师 subagent 协作出品。2026-10-29 家族片头片尾套件实证：BrandIdent 420f 与 self-intro 630f 出片、时长公式对账、令牌再导出零视觉变化。2026-10-31 脚手架口径修正（生成器产出 routes.ts、以临时 slug + typecheck 验证）经代码走查对齐。2026-11-01 致郭襄前期：preprod-zhi-guo-xiang 单元 + render-animatic 的 unit/scope choice + 52 镜 animatic 7500f CI 出片（run 41260324683）+ A{yyyyMMdd}{index}-{film}.mp4 产物。2026-11-01 质量门：`pnpm check`（oxlint 1.90.0 + TypeScript 7.0.2 原生编译器）零告警零错误；TS7 类型检查约 1s，且不受本机 V8 段错误风暴影响；Remotion bundling 仍受风暴影响（`remotion still` 连续 4 次 SIGSEGV），intro-v2 像素走查留为 release 观察点。硬件内存嫌疑仍未做诊断，标注待验证。
+verified-scope: 2026-10-24/25 两日实测：v5《朝朝如念》2:30 成片 + v6 前期 animatic 4:00 分镜板（7200 帧）出片。实证：分段+轮转编排+渲染前清场+分块重试的收敛策略；Composition 越界拒绝（getRealFrameRanges）；staticFile 以 public/ 为根；Chrome 对部分透明度叠渲染的确定性崩溃及 3 帧跳变规避；前期三件套（素材库→storyboard→motion-spec→animatic）+ 分镜师/UE 大师 subagent 协作出品。2026-10-29 家族片头片尾套件实证：BrandIdent 420f 与 self-intro 630f 出片、时长公式对账、令牌再导出零视觉变化。2026-10-31 脚手架口径修正（生成器产出 routes.ts、以临时 slug + typecheck 验证）经代码走查对齐。2026-11-01 致郭襄前期：preprod-zhi-guo-xiang 单元 + render-animatic 的 unit/scope choice + 52 镜 animatic 7500f CI 出片（run 41260324683）+ A{yyyyMMdd}{index}-{film}.mp4 产物。2026-11-01 质量门：`pnpm check`（oxlint 1.90.0 + TypeScript 7.0.2 原生编译器）零告警零错误；TS7 类型检查约 1s，且不受本机 V8 段错误风暴影响；Remotion bundling 仍受风暴影响（`remotion still` 连续 4 次 SIGSEGV），intro-v2 像素走查留为 release 观察点。硬件内存嫌疑仍未做诊断，标注待验证。2026-11-01 组件层 film-kit 上收：pnpm check 绿 + 双单元 shots check 绿（代码级，unit）；CI 出片像素对账列为观察点，未在本机渲染验证。
 ---
 
 # 视频工作室结构与渲染工具链
@@ -63,6 +64,14 @@ verified-scope: 2026-10-24/25 两日实测：v5《朝朝如念》2:30 成片 + v
 接入方式：`<FilmShell meta={{ title, subtitle, episode, credits }} contentFrames={N}>正片</FilmShell>`。Composition 的 `durationInFrames` 必须用 `totalFilmFrames(N)` 计算（120 + N + 180），routes.ts 与组件共用同一公式；`new-video.mjs` 生成的骨架已默认接入。
 
 音频口径：套件不带音效资产；BGM 在影片组件层声明——片头静音、正片首帧淡入、片尾接续并末 30f 淡出。不要用 `<Audio loop>` 收尾（音量回调按轮重置，见 [[render-stability-playbook]]），用显式两遍播放 + 独立尾段 Sequence。版权曲目改走本地 mux，不进此链路。
+
+## 跨单元组件层（film-kit）
+
+`brand/film-kit/` 是跨单元可复用分镜组件的唯一维护地（与 `brand/ident/` 平级）：`CameraRig`（含 ParallaxLayer/CamState）、`ShotShell`、`Caption`、`PaperGrain`、`DustField`（密度表由调用方 `acts` 注入，影片私有数据留在单元）。
+
+接入方式：单元 `components/` 同名文件保留为垫片——无影片私有依赖的单行 `export * from '../../../brand/film-kit/X'`；带私有配置的（如 wuh-site-intro-v2 的 DustField）留适配器注入本地密度表。既有 shots 的 import 一律不改。
+
+不抽口径：`Grade`（绑定各家私有 GRADES 数据形状）、`Console` 套件（TILE_LABELS 是影片内容）、音轨编排（数据全私有）、motion-tokens 通用令牌（已在 `brand/motion` 上收、单元 re-export）；site-film `components/DustField.tsx` 是旧分叉（算术 seed，随机源不同），保留不动。
 
 ## 关联知识
 
