@@ -47,7 +47,7 @@ jobs:
       segments: ${{ steps.plan.outputs.segments }}
       full: ${{ steps.plan.outputs.full }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - id: plan
         env:
           SHOTS_INPUT: ${{ github.event.inputs.shots }}
@@ -82,7 +82,7 @@ jobs:
           echo "unit=$(jq -r .unit segments.json)" >> "$GITHUB_OUTPUT"
           echo "segments=$(jq -c .segments segments.json)" >> "$GITHUB_OUTPUT"
           echo "full=$(jq -r .full segments.json)" >> "$GITHUB_OUTPUT"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with: { name: segments-plan, path: segments.json, retention-days: 7 }
 
   bundle:
@@ -90,10 +90,10 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
         with: { version: 10 }
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with: { node-version: 22, cache: pnpm }
       - run: pnpm install --frozen-lockfile
       - name: Bundle once
@@ -107,7 +107,7 @@ jobs:
           EOF
           node bundle.mjs
           ls ci-bundle/index.html
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with: { name: remotion-bundle, path: ci-bundle, retention-days: 7 }
 
   segments:
@@ -120,10 +120,10 @@ jobs:
       max-parallel: 20
       fail-fast: false
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
         with: { version: 10 }
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with: { node-version: 22, cache: pnpm }
       - run: pnpm install --frozen-lockfile
       - run: sudo apt-get update && sudo apt-get install -y ffmpeg
@@ -135,7 +135,7 @@ jobs:
           fc-cache -f
           fc-match "PingFang SC" && fc-match "Songti SC" && fc-match "Menlo" # 别名生效自证
           fc-list :lang=zh | grep -q . || { echo '缺少中文字体——mono 语境会渲成方框'; exit 1; } # 字体哨兵
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with: { name: remotion-bundle, path: ci-bundle }
       - name: Render segment
         env:
@@ -169,7 +169,7 @@ jobs:
           got=$(ffprobe -v error -select_streams v:0 -show_entries stream=nb_frames -of default=noprint_wrappers=1:nokey=1 "out/seg-$SEG.mp4")
           echo "seg=$SEG frames=$got want=$want"
           [ "$got" = "$want" ]
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: seg-${{ matrix.seg.id }}
           path: out/seg-${{ matrix.seg.id }}.mp4
@@ -184,17 +184,17 @@ jobs:
     env:
       UNIT: ${{ needs.plan.outputs.unit }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: sudo apt-get update && sudo apt-get install -y ffmpeg
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with: { pattern: 'seg-*', path: out/segs, merge-multiple: true }
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with: { name: segments-plan, path: plan }
       - name: Concat + verify
         run: |
           cat > assemble.mjs <<'EOF'
           import { execFileSync } from 'node:child_process';
-          import { existsSync, readFileSync } from 'node:fs';
+          import { existsSync, readdirSync, readFileSync } from 'node:fs';
           const { segments } = JSON.parse(readFileSync('plan/segments.json', 'utf8'));
           const unit = process.env.UNIT;
           const files = segments.map((s) => `out/segs/seg-${s.id}.mp4`);
@@ -204,18 +204,26 @@ jobs:
           for (const f of files) args.push('-i', f);
           const chains = files.map((_, i) => `[${i}:v]trim=end_frame=${segments[i].end - segments[i].start + 1},setpts=PTS-STARTPTS[v${i}]`).join(';');
           const graph = `${chains};${files.map((_, i) => `[v${i}]`).join('')}concat=n=${files.length}:v=1:a=0[cat]`;
-          args.push('-filter_complex', graph, '-map', '[cat]', '-r', '30', '-vsync', 'cfr', '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '16', '-pix_fmt', 'yuv420p', `out/${unit}-animatic.mp4`);
+          const d = new Date();
+          const dateTag = `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}${String(d.getDate()).padStart(2, '0')}`;
+          const prev = readdirSync('out')
+            .filter((f) => f.startsWith('A') && f.endsWith(`-${unit}.mp4`))
+            .map((f) => f.match(/^A\d{8}(\d{2})-/))
+            .filter(Boolean)
+            .map((m) => Number(m[1]))
+            .reduce((a, b) => Math.max(a, b), 0);
+          const out = `out/A${dateTag}${String(prev + 1).padStart(2, '0')}-${unit}.mp4`;
+          args.push('-filter_complex', graph, '-map', '[cat]', '-r', '30', '-vsync', 'cfr', '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '16', '-pix_fmt', 'yuv420p', out);
           execFileSync('ffmpeg', ['-y', ...args], { stdio: 'inherit' });
-          const out = `out/${unit}-animatic.mp4`;
           const frames = Number(execFileSync('ffprobe', ['-v', 'error', '-select_streams', 'v:0', '-show_entries', 'stream=nb_frames', '-of', 'default=noprint_wrappers=1:nokey=1', out], { encoding: 'utf8' }).trim());
           const total = Number(JSON.parse(readFileSync(`videos/${unit}/shots-manifest.json`, 'utf8')).totalFrames) + 120 + 180;
           console.log(`final frames=${frames} total=${total}`);
           if (frames !== total) process.exit(1);
           EOF
           node assemble.mjs
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: ${{ needs.plan.outputs.unit }}-animatic
-          path: out/${{ needs.plan.outputs.unit }}-animatic.mp4
+          path: out/A*-${{ needs.plan.outputs.unit }}.mp4
           retention-days: 90
           if-no-files-found: error

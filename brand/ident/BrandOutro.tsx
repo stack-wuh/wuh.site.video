@@ -9,7 +9,7 @@ const serif = fontFamilies.serif;
 const mono = fontFamilies.mono;
 const MOTTO = '写作是抵抗遗忘的方式，代码是构建世界的语言。';
 
-/** 片尾 180f：钤印浮现（4）→ 站训打字（40–106）→ 署名行（104–140）→ 光尘收束（128–168）→ 墨点收黑（158–180） */
+/** 片尾 180f：钤印浮现（4）→ 站训打字（40–106）→ 署名行（104–140）→ 光尘收束（128–168）→ 墨点坠落（158–170）；末帧停住不黑场 */
 export const BrandOutro: FC<{ meta: FilmMeta }> = ({ meta }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
@@ -18,7 +18,6 @@ export const BrandOutro: FC<{ meta: FilmMeta }> = ({ meta }) => {
   const ring = interpolate(frame, [128, 150, 168], [0, 0.8, 0], CLAMP);
   const dropY = interpolate(frame, [158, 168], [526, 660], { ...CLAMP, easing: CURVES.cineEaseIn });
   const dropO = interpolate(frame, [156, 160, 166, 170], [0, 1, 1, 0], CLAMP);
-  const black = interpolate(frame, [164, 176], [0, 1], { ...CLAMP, easing: CURVES.cineEaseIn });
   const credits = meta.credits ?? [];
   return (
     <AbsoluteFill>
@@ -115,7 +114,7 @@ export const BrandOutro: FC<{ meta: FilmMeta }> = ({ meta }) => {
           />
         );
       })}
-      {/* 墨点坠落 → 收黑 */}
+      {/* 墨点坠落（末帧停住，不做末尾收黑——播完保留最后一帧） */}
       <div
         style={{
           position: 'absolute',
@@ -130,7 +129,6 @@ export const BrandOutro: FC<{ meta: FilmMeta }> = ({ meta }) => {
           opacity: dropO,
         }}
       />
-      <AbsoluteFill style={{ background: colors.bg, opacity: black }} />
     </AbsoluteFill>
   );
 };

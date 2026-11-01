@@ -1,16 +1,17 @@
 ---
 title: 渲染稳定性作战手册（误区与耗时点）
 domain: video-materials
-keywords: [渲染, 崩溃, 卡顿, 误区, 坑, 端口, 偏移, 拼接, 分块, 段错误, 静默, 重试, 收敛, 音轨, startFrom, loop, 音量, 淡出, concat, 重复帧, 帧级对齐, radial, 渐变, pkill, 字体, CI, noto, 方框, fc-list]
+keywords: [渲染, 崩溃, 卡顿, 误区, 坑, 端口, 偏移, 拼接, 分块, 段错误, 静默, 重试, 收敛, 音轨, startFrom, loop, 音量, 淡出, concat, 重复帧, 帧级对齐, radial, 渐变, pkill, 字体, CI, noto, 方框, fc-list, FilmShell, shell, 三段装配, --unit]
 scope: [videos/, brand/ident/, scripts/, out/, package.json, .github/workflows/]
 status: active
 source:
   - changes/20261025-feature-site-film-production/brief.md
   - changes/20261029-feature-film-identity/brief.md
   - changes/20261031-fix-ci-cjk-fonts/brief.md
-verified: 2026-10-31
+  - changes/20261031-feature-wuh-site-intro-v2-production/brief.md
+verified: 2026-11-01
 verified-depth: runtime
-verified-scope: site-film 正式制作全天实战（十数小时渲染攻坚）全部坑位实证；2026-10-29 家族片头片尾出片新增两坑实证——loop 音量按轮重置（440Hz 测试音整片 volumedetect）与分块终装重复帧（630f→633f 复现并帧级对齐修复）；2026-10-31 render-animatic 云端首跑实证 CJK 字体缺失——mono 中文全成 .notdef 方框，render-film 早有字体块而 animatic 漏抄
+verified-scope: site-film 正式制作全天实战（十数小时渲染攻坚）全部坑位实证；2026-10-29 家族片头片尾出片新增两坑实证——loop 音量按轮重置（440Hz 测试音整片 volumedetect）与分块终装重复帧（630f→633f 复现并帧级对齐修复）；2026-10-31 render-animatic 云端首跑实证 CJK 字体缺失——mono 中文全成 .notdef 方框，render-film 早有字体块而 animatic 漏抄；2026-11-01 FilmShell 三段装配与 --unit 多片化落地（出片待 CI 实证）
 ---
 
 # 渲染稳定性作战手册（误区与耗时点）
@@ -42,6 +43,7 @@ verified-scope: site-film 正式制作全天实战（十数小时渲染攻坚）
 - **typecheck 没绿就渲染** = 白烧数十分钟。先绿后渲是硬门槛
 
 ### 装配工艺
+- **FilmShell 三段装配（2026-11-01 落地，wuh-site-intro-v2；出片待 CI 实证）**：片头/片尾不单独建 composition——直接对 film comp 取 `frameRange`（0–intro-1 / total-outro–total-1）渲染成两段，与逐镜段一起走 concat 滤镜；片头 120f + 正片 7658f + 片尾 180f = 7958f，终验帧数对 7958。多片渲染用 `--unit` 派生 composition 前缀/缓存目录/音轨 id，`film.config.json` 声明 shell；默认 site-film 零变化
 - **`-c copy` 拼接时间戳漂移**（11ms 级）→ 播放卡顿。终装必须重编码；但 2026-10-29 实证：**分块 mp4 每段容器带 ~16ms 音频余量**，`concat demuxer + -r 30 CFR` 会按时间戳补帧（630f 拼出 633f，多出 3 个重复帧 ≈100ms 卡顿）。正确姿势：`concat` **滤镜**拼接，每段视频 `trim=end_frame=N`、音频 `atrim=end=N/30` 帧级对齐后再合流，出片 ffprobe 必须等于总帧数
 - **音轨后修复**：视频已好、音频缺尾段时不要重渲——`ffmpeg atrim + concat` 补音频、`-c:v copy` 秒级完成
 - **静帧通过 ≠ 渲染通过**（渲染多音频 muxing/编码环节），二分定位杀手帧时两者都要试

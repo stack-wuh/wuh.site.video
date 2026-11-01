@@ -82,6 +82,11 @@
 
 来源：[API `/api/repos`]（项目简介、星标）；[git]（本地仓库首末提交与规模，2026-10-31 采集）。
 
+### 2.8 书架与年度最爱 [API]
+
+- **微信读书书架 146 本**（wuh.site `/api/weread/books`，2026-11-01 快照；真封面已入 `public/wuh-site-intro-v2/books/`，S37 书墙使用）。示例：《中国古代文化常识（插图修订第4版）》王力 /《龙文鞭影》乔天一译注 /《古文观止》王身钢译注 /《你当像鸟飞往你的山》塔拉·韦斯特弗 /《美国反对美国》王沪宁。
+- **年度最爱**（v1 2026-10-25 抓取，八年歌单播放之最；S38 黑胶年轮逐年展示）：2018《诱惑的街 (Live)》林志炫 · 2019《腻味》金玟岐 · 2020《少年不凡》刘美麟 · 2021《风月缠绵（金风玉露变奏）》陈致逸 · 2022《归期》钱润玉 · 2023《爱意（金风玉露变奏）》陈致逸 · 2024《爱意（金风玉露变奏）》陈致逸 · 2025《爱意（金风玉露变奏）》陈致逸。
+
 ## 三、站点架构与技术栈 [源码 README / package.json]
 
 - **monorepo**：`apps/site`（Next.js **16.3.2** · React **19.2.5** · TypeScript 5 · styled-components 6）· `apps/server`（NestJS 10 · MongoDB/Mongoose 8 · REST `/v2` + Swagger）· `apps/console`（Vite 管理端）· `packages/components`（共享组件库 + CSS 变量主题令牌）

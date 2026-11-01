@@ -1,15 +1,16 @@
 ---
 title: 视频制作流程（前期三件套 → 正式制作 → 渲染出片）
 domain: video-materials
-keywords: [制作流程, 前期, 分镜, storyboard, motion-spec, animatic, 正式制作, 素材库, 分镜师, UE, 多代理]
-scope: [videos/, shadow-docs/knowledge/]
+keywords: [制作流程, 前期, 分镜, storyboard, motion-spec, animatic, 正式制作, 素材库, 分镜师, UE, 多代理, 多片, FilmShell, shell, 三段装配]
+scope: [videos/, shadow-docs/knowledge/, scripts/, src/Root.tsx, .github/workflows/]
 status: active
 source:
   - changes/20261025-feature-site-film-preprod/brief.md
   - changes/20261025-feature-site-film-production/brief.md
-verified: 2026-10-25
+  - changes/20261031-feature-wuh-site-intro-v2-production/brief.md
+verified: 2026-11-01
 verified-depth: runtime
-verified-scope: site-film《朝朝如念》4:00 成片全流程实证（素材库→分镜 45 镜→动效规范 108 令牌→animatic→正式制作→分段渲染出片）
+verified-scope: site-film《朝朝如念》4:00 成片全流程实证（素材库→分镜 45 镜→动效规范 108 令牌→animatic→正式制作→分段渲染出片）；2026-11-01 第二片 wuh-site-intro-v2 正式制作落地（57 镜 / 124 令牌 / FilmShell 三段装配 / render-film --unit + CI film 输入），本片出片待 CI 实证
 ---
 
 # 视频制作流程（前期三件套 → 正式制作 → 渲染出片）
@@ -24,6 +25,7 @@ verified-scope: site-film《朝朝如念》4:00 成片全流程实证（素材�
    - 动效规范 `motion-spec.md`：令牌化（曲线/弹性/镜头/粒子/转场/调色）+ **全镜覆盖矩阵**（每镜入场/持续/出场/转场必有令牌）
    - Animatic 分镜板：真实内容**单色简板**（非空框）预演节奏，用户定稿后进正式制作
 2. **正式制作**：令牌库先行（motion-tokens.ts 落地规范）→ 七幕场景实装 → 配乐多轨接线（90 BPM 对拍）→ 分段渲染出片
+3. **多片化（2026-11-01 落地）**：单元自包含——`videos/<unit>/film.config.json` 声明 shell（intro/outro 帧）时，`shots.mjs sync` 给 film/audio 路由算「片头+正片+片尾」时长；`render-film.mjs --unit` 派生 composition 前缀（site-film→SiteFilm、wuh-site-intro-v2→WuhSiteIntroV2）、缓存目录、音轨 id 与中间产物，并做三段装配（片头/片尾直接对 film comp 取 frameRange，与逐镜段一起 concat）；CI `render-film.yml` 用 `film` 输入跑任意单元。默认 `--unit site-film` 行为零变化
 3. **专家多代理**：分镜师、UE 动效大师以专职 subagent 并行产出文档，协调方只做对账与整合；场景实装可多幕并行（独立文件、零共享状态）
 
 ## 执行约束
@@ -43,3 +45,4 @@ verified-scope: site-film《朝朝如念》4:00 成片全流程实证（素材�
 - motion-spec 覆盖矩阵 45/45（或全镜数）走查
 - 素材库每条有来源标注
 - 成片 ffprobe：帧数/时长/音轨三项
+- 多片：`shots.mjs check`（默认 site-film）与 `shots.mjs check --unit <film>` 双绿；带 shell 的单元成片帧数 = 片头 + 正片 + 片尾
