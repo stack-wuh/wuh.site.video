@@ -4,7 +4,7 @@
   "name": "20261101-feature-zhi-guo-xiang-production",
   "type": "feature",
   "scope": "video-production",
-  "status": "committed",
+  "status": "published",
   "baseBranch": "main",
   "branch": "feature/20261101-feature-zhi-guo-xiang-production",
   "files": [
@@ -22,14 +22,14 @@
     "pullRequestUrl": "https://github.com/stack-wuh/wuh.site.video/pull/42"
   },
   "review": {
-    "conclusion": "pending",
-    "verifiedCommit": null,
-    "verifiedAt": null
+    "conclusion": "passed",
+    "verifiedCommit": "b4b8b406712f765c5248bdb07526e803b952ca56",
+    "verifiedAt": "2026-11-01T03:56:11.291Z"
   },
   "workflow": {
     "operation": null,
-    "checkpoint": "0853de3fbd52ad9f006f2ff164fb7951b5d131bd",
-    "planHash": "af8d7b857eb696f2524ab1cfdb39c9ea393d5851fd716c44999e94e4c8752d5e",
+    "checkpoint": "pr:42",
+    "planHash": "d6ecde771f5676472d75833632dcb848b136b67217b559e4ce2acd16805667dc",
     "updatedAt": null,
     "lastError": null,
     "worktree": "/Users/wuhong/shadow-desktop/github/wuh.site.video/.worktrees/20261101-feature-zhi-guo-xiang-production",
@@ -41,6 +41,11 @@
       ],
       "message": "docs(shadow): 致郭襄正式制作——回写 CI 出片与 mux 实证 · 知识卡 verified-scope"
     }
+  },
+  "knowledge": {
+    "action": "更新",
+    "target": "shadow-docs/knowledge/video-production-flow.md",
+    "reason": "52 镜实装与共享件整合经 check/扫描/CI 出片/本地 mux 对账；视频制作流程卡补正式制作口径与逐字对拍、出片口径；工作室结构卡补 52 镜矩阵 CI 与 typecheck 门现状"
   }
 }
 ---
