@@ -28,16 +28,16 @@
   },
   "workflow": {
     "operation": null,
-    "checkpoint": "b5b582db0d52429557720e004de90402d813a282",
-    "planHash": "f8167ebdd7485a89ef0c4fdd7420722ad9d87735c70d8f7c1b06a72c5b72705f",
+    "checkpoint": "2b8ff6b53f7861d37efbdcb052b998f4aa2e925d",
+    "planHash": "c0c0dc621e050a9cfdaf67cae48308389daddb404719b54c34b0dba2d26ca007",
     "updatedAt": null,
     "lastError": null,
     "worktree": "/Users/wuhong/shadow-desktop/github/wuh.site.video/.worktrees/20261101-feature-zhi-guo-xiang-production",
     "commit": {
       "files": [
-        "videos/zhi-guo-xiang/assets/art-direction.md"
+        "shadow-docs/changes/20261101-feature-zhi-guo-xiang-production/brief.md"
       ],
-      "message": "docs(zhi-guo-xiang): 美术设定 v2.1——水墨底图+代码动效，剪影暗部主义定案与 GLM 生成规范"
+      "message": "docs(shadow): brief 最终态——committed"
     }
   },
   "knowledge": {
