@@ -5,3 +5,5 @@ import '@fontsource/noto-serif-sc/400.css';
 import '@fontsource/noto-serif-sc/700.css';
 import '@fontsource/noto-sans-sc/400.css';
 import '@fontsource/noto-sans-sc/700.css';
+/* 毛笔楷：纸上的诗（马善政毛笔楷书，OFL）。只给纸上真字，不进字幕。 */
+import '@fontsource/ma-shan-zheng/400.css';

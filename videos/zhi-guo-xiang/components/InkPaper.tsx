@@ -93,7 +93,7 @@ export const InkPaper: FC<InkPaperProps> = ({
               right: `calc(${right} + ${li * size * gap}px)`,
               top,
               writingMode: 'vertical-rl',
-              fontFamily: fontFamilies.serif,
+              fontFamily: fontFamilies.brush,
               fontSize: size,
               lineHeight: LH,
               letterSpacing: size * 0.06,
