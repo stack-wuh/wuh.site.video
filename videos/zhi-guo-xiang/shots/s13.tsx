@@ -14,13 +14,13 @@ const S13: FC = () => {
         <Fireworks
           seed="s13"
           bursts={[
-            { x: 620, y: 260, at: 16, scale: 1.4 },
-            { x: 1240, y: 210, at: 70, scale: 1.6 },
-            { x: 900, y: 340, at: 130, scale: 1.1 },
+            { x: 620, y: 260, at: 16, scale: 2.2 },
+            { x: 1240, y: 210, at: 70, scale: 2.6 },
+            { x: 900, y: 340, at: 130, scale: 1.8 },
           ]}
         />
       </AbsoluteFill>
-      <AbsoluteFill style={{ background: '#ffd27a', mixBlendMode: 'soft-light', opacity: 0.18 * lit }} />
+      <AbsoluteFill style={{ background: '#ffd27a', mixBlendMode: 'soft-light', opacity: 0.24 * lit }} />
     </Scene>
   );
 };

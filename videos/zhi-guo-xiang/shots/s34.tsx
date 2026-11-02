@@ -7,11 +7,11 @@ import { Fireworks } from '../components/Fireworks';
 
 const S34: FC = () => {
   const f = useCurrentFrame();
-  const t = interpolate(f, [0, 120], [0, 0.5], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  const t = interpolate(f, [0, 120], [0, 0.6], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
   return (
     <Scene name="p-sea" zoom={[1.0, 1.04]} warm={0.08}>
       <AbsoluteFill style={{ mixBlendMode: 'screen', opacity: t }}>
-        <Fireworks seed="s34" bursts={[{ x: 980, y: 300, at: 0, scale: 1.2 }, { x: 1500, y: 360, at: 60, scale: 0.9 }]} />
+        <Fireworks seed="s34" bursts={[{ x: 980, y: 300, at: 0, scale: 1.6 }, { x: 1500, y: 360, at: 60, scale: 1.2 }]} />
       </AbsoluteFill>
     </Scene>
   );
