@@ -2,6 +2,7 @@
 import type { FC } from 'react';
 import { interpolate, useCurrentFrame } from 'remotion';
 import { Scene } from '../components/SceneKit';
+import { Caption } from '../components/Caption';
 import { Needles } from '../components/Needles';
 
 const S24: FC = () => {
@@ -10,6 +11,7 @@ const S24: FC = () => {
   return (
     <Scene name="p-palm" zoom={[1.0, 1.06]}>
       <Needles count={2} origin={[700, 640]} len={560} spread={160} tilt={-6} opacity={t} />
+      <Caption text="三个愿望，她只用了一个——救一个陌生人。" start={16} end={164} />
     </Scene>
   );
 };

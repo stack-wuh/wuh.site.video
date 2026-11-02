@@ -2,11 +2,16 @@
 import type { FC } from 'react';
 import { interpolate, useCurrentFrame } from 'remotion';
 import { Scene } from '../components/SceneKit';
+import { Caption } from '../components/Caption';
 
 const S05: FC = () => {
   const f = useCurrentFrame();
   const t = interpolate(f, [30, 90, 150], [0, 1, 0.85], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
-  return <Scene name="p-eyefire" zoom={[1.0, 1.05]} warm={0.06 * t} />;
+  return (
+    <Scene name="p-eyefire" zoom={[1.0, 1.05]} warm={0.06 * t}>
+      <Caption text="他叫杨过，江湖人称神雕侠。" start={16} end={134} />
+    </Scene>
+  );
 };
 
 export default S05;
