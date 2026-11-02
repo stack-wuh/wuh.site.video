@@ -3,6 +3,7 @@ import type { FC } from 'react';
 import { interpolate, useCurrentFrame } from 'remotion';
 import { AbsoluteFill } from 'remotion';
 import { Scene } from '../components/SceneKit';
+import { Caption } from '../components/Caption';
 import { Fireworks } from '../components/Fireworks';
 
 const S34: FC = () => {
@@ -13,6 +14,7 @@ const S34: FC = () => {
       <AbsoluteFill style={{ mixBlendMode: 'screen', opacity: t }}>
         <Fireworks seed="s34" bursts={[{ x: 980, y: 300, at: 0, scale: 1.6 }, { x: 1500, y: 360, at: 60, scale: 1.2 }]} />
       </AbsoluteFill>
+      <Caption text="很多年后，有人在海边读到这张纸。" start={16} end={194} tone="ink" />
     </Scene>
   );
 };
