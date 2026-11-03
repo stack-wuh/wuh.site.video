@@ -1,19 +1,7 @@
-/* S24 · 掌心摊开，剩两枚 180f */
+/* S24 · 茶棚，她张了一下口；锣响；她把那碗茶喝完 210f */
 import type { FC } from 'react';
-import { interpolate, useCurrentFrame } from 'remotion';
 import { Scene } from '../components/SceneKit';
-import { Caption } from '../components/Caption';
-import { Needles } from '../components/Needles';
 
-const S24: FC = () => {
-  const f = useCurrentFrame();
-  const t = interpolate(f, [0, 30], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
-  return (
-    <Scene name="p-palm" zoom={[1.0, 1.06]}>
-      <Needles count={2} origin={[700, 640]} len={560} spread={160} tilt={-6} opacity={t} />
-      <Caption text="三个愿望，她只用了一个——救一个陌生人。" start={16} end={164} />
-    </Scene>
-  );
-};
+const S24: FC = () => <Scene name="p-teastall" zoom={[1.0, 1.04]} dim={0.03} />;
 
 export default S24;

@@ -1,11 +1,11 @@
-/* S33 · 她搁笔，看向窗外；窗外云霞 200f */
+/* S33 · 笔悬着 210f */
 import type { FC } from 'react';
 import { Scene } from '../components/SceneKit';
-import { Caption } from '../components/Caption';
+import { InkPaper } from '../components/InkPaper';
 
 const S33: FC = () => (
-  <Scene name="p-window" zoom={[1.0, 1.04]} warm={0.04}>
-    <Caption text="写不下去的那一句，她留在了纸的背面。" start={16} end={184} />
+  <Scene name="p-brush" zoom={[1.12, 1.15]} warm={0.08} dim={0.02}>
+    <InkPaper lines={['其实我只是爱上了峨眉山上的云和']} progress={0.82} size={46} right="46%" top="18%" />
   </Scene>
 );
 

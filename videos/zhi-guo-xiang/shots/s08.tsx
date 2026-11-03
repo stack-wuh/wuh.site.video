@@ -1,4 +1,4 @@
-/* S8 · 一个独臂人影从火光里过来，一抬手，两人退了 210f */
+/* S08 · 一个独臂人影从火光里过来，一抬手，两人退了 210f */
 import type { FC } from 'react';
 import { Scene } from '../components/SceneKit';
 

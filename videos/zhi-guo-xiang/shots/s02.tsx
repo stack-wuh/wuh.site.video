@@ -1,4 +1,4 @@
-/* S2 · 纸正面：前四行旧墨，第五行只剩「其」 210f */
+/* S02 · 纸正面：前四行旧墨，第五行只剩「其」 210f */
 import type { FC } from 'react';
 import { Slide } from '../components/SceneKit';
 import { InkPaper, POEM_COLS } from '../components/InkPaper';

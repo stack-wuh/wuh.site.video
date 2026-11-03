@@ -1,4 +1,4 @@
-/* S7 · 两个醉汉扯她的斗篷 150f */
+/* S07 · 两个醉汉扯她的斗篷 150f */
 import type { FC } from 'react';
 import { Scene } from '../components/SceneKit';
 

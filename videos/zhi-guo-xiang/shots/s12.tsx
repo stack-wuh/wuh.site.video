@@ -1,4 +1,4 @@
-/* S12 · 满城烟花炸开，火金铺满夜空 240f */
+/* S12 · 满城烟花炸开，火金铺满夜空 210f */
 import type { FC } from 'react';
 import { interpolate, useCurrentFrame } from 'remotion';
 import { AbsoluteFill } from 'remotion';

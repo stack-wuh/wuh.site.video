@@ -1,11 +1,11 @@
-/* S21 · 她听见了，没有回头 150f */
+/* S21 · 同一时刻：她按着一枚针，扎进落水者的穴道 210f */
 import type { FC } from 'react';
 import { Scene } from '../components/SceneKit';
-import { Caption } from '../components/Caption';
+import { Needles } from '../components/Needles';
 
 const S21: FC = () => (
-  <Scene name="p-noturn" zoom={[1.0, 1.05]} dim={0.05}>
-    <Caption text="她没有解释。" start={14} end={136} />
+  <Scene name="p-rescue" zoom={[1.02, 1.08]} dim={0.04}>
+    <Needles count={1} origin={[430, 700]} len={300} tilt={-58} shadow={false} />
   </Scene>
 );
 

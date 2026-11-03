@@ -38,7 +38,8 @@ export const Caption: FC<{ text: string; start: number; end: number; bottom?: nu
         color: ink ? colors.ink : colors.paper,
         opacity: opacity * 0.9,
         whiteSpace: 'nowrap',
-        textShadow: ink ? 'none' : `0 2px 24px ${colors.bg}`,
+        /* 浅底用深字：底图多是淡墨，给一层纸色的柔光晕，压在中间调上也不糊 */
+        textShadow: ink ? '0 1px 10px rgba(245, 240, 232, 0.85)' : `0 2px 24px ${colors.bg}`,
         transform: `translateY(${lift}px)`,
       }}
     >

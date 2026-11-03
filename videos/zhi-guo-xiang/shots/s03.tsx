@@ -1,4 +1,4 @@
-/* S3 · 渡口黄昏，云与河都静着 150f */
+/* S03 · 渡口黄昏，云与河都静着 150f */
 import type { FC } from 'react';
 import { Scene } from '../components/SceneKit';
 

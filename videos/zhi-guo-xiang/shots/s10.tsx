@@ -3,6 +3,7 @@ import type { FC } from 'react';
 import { interpolate, useCurrentFrame } from 'remotion';
 import { Scene } from '../components/SceneKit';
 import { Needles } from '../components/Needles';
+import { Caption } from '../components/Caption';
 
 const S10: FC = () => {
   const f = useCurrentFrame();
@@ -10,6 +11,7 @@ const S10: FC = () => {
   return (
     <Scene name="p-palm2" zoom={[1.04, 1.1]}>
       <Needles count={3} origin={[640, 620]} len={620} spread={150} tilt={-5} opacity={t} />
+      <Caption text="他留下三枚金针，说可以许三个愿望。" start={20} end={164} tone="ink" />
     </Scene>
   );
 };

@@ -1,11 +1,11 @@
-/* S23 · 茶棚，她张了一下口；锣响；她把那碗茶喝完 210f */
+/* S23 · 街边孩子跳着唱童谣，天真 180f */
 import type { FC } from 'react';
 import { Scene } from '../components/SceneKit';
 import { Caption } from '../components/Caption';
 
 const S23: FC = () => (
-  <Scene name="p-teastall" zoom={[1.0, 1.04]} dim={0.03}>
-    <Caption text="二十四年，她一直走在路上。" start={16} end={194} tone="ink" />
+  <Scene name="p-kids" zoom={[1.0, 1.05]} driftX={[10, -10]}>
+    <Caption text="峨眉有个郭女侠，等郎等到白了发。" start={16} end={164} tone="ink" />
   </Scene>
 );
 

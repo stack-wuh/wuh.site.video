@@ -1,16 +1,17 @@
-/* S32 · 一滴墨从笔尖落下，洇开，把要写的那个字吃掉 180f */
+/* S32 · 笔尖落下，写第五行，停在「霞」前 180f */
 import type { FC } from 'react';
-import { interpolate, useCurrentFrame } from 'remotion';
-import { Slide } from '../components/SceneKit';
-import { InkPaper, POEM_COLS } from '../components/InkPaper';
+import { interpolate, useCurrentFrame, useVideoConfig } from 'remotion';
+import { Scene } from '../components/SceneKit';
+import { InkPaper } from '../components/InkPaper';
 
 const S32: FC = () => {
   const f = useCurrentFrame();
-  const blot = interpolate(f, [40, 120], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  const { durationInFrames } = useVideoConfig();
+  const p = interpolate(f, [20, durationInFrames - 30], [0, 0.82], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
   return (
-    <Slide zoom={[1.0, 1.02]}>
-      <InkPaper base="p-paper-close-lamp" lines={[POEM_COLS[6], POEM_COLS[7]]} progress={0.88} size={60} right="24%" top="6%" blot={blot} blotAt={{ x: 1392, y: 528, r: 74 }} />
-    </Slide>
+    <Scene name="p-brush" zoom={[1.0, 1.05]} warm={0.08}>
+      <InkPaper lines={['其实我只是爱上了峨眉山上的云和']} progress={p} size={46} right="46%" top="18%" />
+    </Scene>
   );
 };
 

@@ -1,19 +1,12 @@
-/* S35 · 纸背：第五、六行写得完整，墨色如新 240f */
+/* S35 · 她搁笔，看向窗外；窗外云霞 180f */
 import type { FC } from 'react';
-import { interpolate, useCurrentFrame } from 'remotion';
-import { Slide } from '../components/SceneKit';
-import { InkPaper, POEM_COLS } from '../components/InkPaper';
+import { Scene } from '../components/SceneKit';
 import { Caption } from '../components/Caption';
 
-const S35: FC = () => {
-  const f = useCurrentFrame();
-  const t = interpolate(f, [10, 140], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
-  return (
-    <Slide zoom={[1.02, 1.08]} driftY={[0, -30]}>
-      <InkPaper base="p-paper-back" lines={[POEM_COLS[6], POEM_COLS[7], POEM_COLS[8]]} progress={t} size={52} right="24%" top="9%" />
-      <Caption text="她把一生，写成了一首诗。" start={18} end={222} tone="ink" />
-    </Slide>
-  );
-};
+const S35: FC = () => (
+  <Scene name="p-window" zoom={[1.0, 1.04]} warm={0.04}>
+    <Caption text="舍不得写完的那一句，她留在了纸的背面。" start={16} end={164} />
+  </Scene>
+);
 
 export default S35;

@@ -1,4 +1,4 @@
-/* S17 · 她背着剑走过渡口，剑柄斜出右肩，剑穗随步 240f */
+/* S17 · 她背着剑走过渡口，剑柄斜出右肩，剑穗随步 210f */
 import type { FC } from 'react';
 import { Scene } from '../components/SceneKit';
 

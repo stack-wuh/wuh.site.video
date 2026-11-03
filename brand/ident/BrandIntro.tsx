@@ -9,17 +9,17 @@ import type { FilmMeta } from './identity';
 const serif = fontFamilies.serif;
 const mono = fontFamilies.mono;
 
-/** 片头默认 120f；duration 可按 entry 覆盖（v2 150f）——节点按 duration/INTRO 等比后移。
- *  墨滴坠落（20–32）→ 墨晕触纸（34–60）→ 标题落笔与片名打字（56–100）→ 钤印落定（100）。 */
+/** 片头默认 120f；duration 可按 entry 覆盖——节点按 duration/INTRO 等比后移。
+ *  墨滴坠落（8–20）→ 墨晕触纸（22–44）→ 标题落笔与片名打字（38–71）→ episode（72）→ 钤印落定（82）→ 停留 38f。 */
 export const BrandIntro: FC<{ meta: FilmMeta; duration?: number }> = ({ meta, duration = INTRO }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const k = duration / INTRO;
-  const fallY = interpolate(frame, [20 * k, 32 * k], [430, 556], { ...CLAMP, easing: CURVES.cineEaseIn });
-  const dropO = interpolate(frame, [20 * k, 24 * k, 32 * k, 36 * k], [0, 1, 1, 0], CLAMP);
-  const bloom = interpolate(frame, [34 * k, 60 * k], [0, 1], { ...CLAMP, easing: CURVES.cineEaseOut });
-  const chars = Math.min(meta.title.length, Math.max(0, Math.floor((frame - 74 * k) / (TYPE.fast * k))));
-  const seal = sealStamp(frame, 100 * k, fps, sealTilt('wuh.site-ident'));
+  const fallY = interpolate(frame, [8 * k, 20 * k], [430, 556], { ...CLAMP, easing: CURVES.cineEaseIn });
+  const dropO = interpolate(frame, [8 * k, 12 * k, 20 * k, 24 * k], [0, 1, 1, 0], CLAMP);
+  const bloom = interpolate(frame, [22 * k, 44 * k], [0, 1], { ...CLAMP, easing: CURVES.cineEaseOut });
+  const chars = Math.min(meta.title.length, Math.max(0, Math.floor((frame - 50 * k) / (TYPE.fast * k))));
+  const seal = sealStamp(frame, 82 * k, fps, sealTilt('wuh.site-ident'));
   return (
     <AbsoluteFill>
       <BrandDust count={40} />
@@ -64,7 +64,7 @@ export const BrandIntro: FC<{ meta: FilmMeta; duration?: number }> = ({ meta, du
           color: colors.paper,
           margin: 0,
           letterSpacing: '0.04em',
-          ...writeFade(frame, 56 * k),
+          ...writeFade(frame, 38 * k),
         }}
       >
         wuh.site · 朝朝如念
@@ -81,7 +81,7 @@ export const BrandIntro: FC<{ meta: FilmMeta; duration?: number }> = ({ meta, du
           color: colors.paperMuted,
           margin: 0,
           letterSpacing: '0.05em',
-          ...writeFade(frame, 70 * k),
+          ...writeFade(frame, 50 * k),
         }}
       >
         {meta.title.slice(0, chars)}
@@ -92,7 +92,7 @@ export const BrandIntro: FC<{ meta: FilmMeta; duration?: number }> = ({ meta, du
       {meta.episode ? (
         <p
           style={{
-            ...writeFade(frame, 92 * k),
+            ...writeFade(frame, 72 * k),
             position: 'absolute',
             left: 0,
             width: '100%',

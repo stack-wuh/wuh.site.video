@@ -1,4 +1,4 @@
-/* S6 · 她走出客栈，夜里的渡口 150f */
+/* S06 · 她走出客栈，夜里的渡口 150f */
 import type { FC } from 'react';
 import { Scene } from '../components/SceneKit';
 

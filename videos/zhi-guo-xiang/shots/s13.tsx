@@ -14,9 +14,9 @@ const S13: FC = () => {
         <Fireworks
           seed="s13"
           bursts={[
-            { x: 620, y: 260, at: 16, scale: 2.2 },
-            { x: 1240, y: 210, at: 70, scale: 2.6 },
-            { x: 900, y: 340, at: 130, scale: 1.8 },
+            { x: 640, y: 250, at: 16, scale: 2.2 },
+            { x: 1010, y: 170, at: 70, scale: 2.6 },
+            { x: 520, y: 380, at: 130, scale: 1.6 },
           ]}
         />
       </AbsoluteFill>

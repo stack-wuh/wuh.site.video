@@ -1,17 +1,12 @@
-/* S27 · 两枚金针放进经卷夹层，经卷合上 180f */
+/* S27 · 晨课，弟子两列背影，她走过，不出声 210f */
 import type { FC } from 'react';
-import { interpolate, useCurrentFrame } from 'remotion';
 import { Scene } from '../components/SceneKit';
-import { Needles } from '../components/Needles';
+import { Caption } from '../components/Caption';
 
-const S27: FC = () => {
-  const f = useCurrentFrame();
-  const t = interpolate(f, [0, 50], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
-  return (
-    <Scene name="p-sutra" zoom={[1.0, 1.05]} warm={0.06}>
-      <Needles count={2} origin={[560, 620]} len={620} spread={120} tilt={-16} opacity={t} />
-    </Scene>
-  );
-};
+const S27: FC = () => (
+  <Scene name="p-morning" zoom={[1.0, 1.05]}>
+    <Caption text="十六岁出门，四十岁出家。" start={18} end={192} tone="ink" />
+  </Scene>
+);
 
 export default S27;
