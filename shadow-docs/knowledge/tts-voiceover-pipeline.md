@@ -2,11 +2,11 @@
 title: 配音管线（TTS 双声部 · 落点对位 · Token Plan 白名单）
 domain: video-materials
 keywords: [配音, TTS, 旁白, 诗行, 双声部, 男声, 女声, 音色, longanhuan, longanlingxin, longanlufeng, Token Plan, 白名单, 401, 落点表, 对位, 回落谷, 念念, 声音复刻, qwen-tts, final.wav, WAV 头]
-scope: [public/zhi-guo-xiang/tts/, videos/zhi-guo-xiang/, D:/works/qwen-tts]
+scope: [public/zhi-guo-xiang/tts/, videos/zhi-guo-xiang/, shadow-dev-cli 仓 tools/qwen-tts/]
 status: active
 source:
   - changes/20261101-feature-zhi-guo-xiang-production/brief.md
-  - qwen-tts 仓（D:/works/qwen-tts）tts.py 与 README.md（仓外工具，无 brief——20261104 会话驱动的配音产出）
+  - shadow-dev-cli 仓 tools/qwen-tts/（tts.py 与 assemble_track.py，20261104 会话驱动产出后入仓；见其 qwen-tts-voiceover 知识卡）
 verified: 2026-11-04
 verified-depth: runtime
 verified-scope: Token Plan（sk-sp- Key）实调 15 次全成功：5s 试听、整诗连读（18.9s）、诗六行逐行×2 版（安欢/灵心）、男声框架句两句（含「念念」改版）、灵心 L5 试听；音色白名单 401 实证——CosyVoice v3 全系（*_v3）、3.0-flash 池（longanfengyue）、3.1 整模型均 401；WAV 头 nframes 坏值复现并由 sanitize_wav 修复；2026-11-04 灵心定稿重出 + 245s 整轨拼装完成，RMS 验证 8 落点有声/对照区静音
@@ -16,11 +16,11 @@ verified-scope: Token Plan（sk-sp- Key）实调 15 次全成功：5s 试听、�
 
 ## 当前结论
 
-《风陵 · 致郭襄》配音走**双声部**设计（工具载体 `D:\works\qwen-tts\tts.py`，工具仓 `stack-wuh/qwen-tts`——换机 clone 到同路径即恢复；流程细节见 shadow-dev-workflow 的 `shadow-dev-tts` 技能；shadow-dev-cli 仓另有 `media-tts` 域知识卡）：
+《风陵 · 致郭襄》配音走**双声部**设计（工具载体 shadow-dev-cli 仓 `tools/qwen-tts/tts.py`；流程细节见 shadow-dev-workflow 的 `shadow-dev-tts` 技能；shadow-dev-cli 仓另有 `media-tts` 域知识卡）：
 
 - **男声 = 讲述者**（用户本人视角，海边读纸人）：只说两句——S01「念念，我想给你讲一个故事。」（4–11s，近讲干声）与 S38「这个故事，我讲完了，念念~」（~239–244s，全片最后一个人声，音乐已自然静默）。当前为 TTS 占位（`longanlufeng` 龙安鲁风），**待用户以本人声音替换**——录制成品 wav 或走声音复刻均可，模型支持。
 - **女声 = 诗六行**（纸的声音，她自己的声音）：**已定稿 `longanlingxin` 龙安灵心（知心温暖音）**，`line-01..06.wav` 均为灵心版（2026-11-04 重出）；`poem-full.wav` 为龙安欢整诗连读版（试听参考，未定稿用）。
-- **旁白整轨已拼装**：`voice-track-full.wav`（245.0s 人声轨，44.1k/16bit/mono，20.6MB，人声共 24.7s）——落点起点（秒）：男 S01=4.0、L1=189.0、L2=191.6、L3=196.0、L4=215.0、L5=228.5、L6=235.0、男 S38=239.5。拼装工具 `D:\works\qwen-tts\assemble_track.py`（纯 wave 模块，防重叠断言 + RMS 验证：8 落点全有声、静音对照区 RMS=0）。BGM 不混入，装配层 mux 时人声/BGM 各占一路。
+- **旁白整轨已拼装**：`voice-track-full.wav`（245.0s 人声轨，44.1k/16bit/mono，20.6MB，人声共 24.7s）——落点起点（秒）：男 S01=4.0、L1=189.0、L2=191.6、L3=196.0、L4=215.0、L5=228.5、L6=235.0、男 S38=239.5。拼装工具 shadow-dev-cli 仓 `tools/qwen-tts/assemble_track.py`（纯 wave 模块，防重叠断言 + RMS 验证：8 落点全有声、静音对照区 RMS=0）。BGM 不混入，装配层 mux 时人声/BGM 各占一路。
 - 诗行**逐字不改**（INV-5），TTS 输入即 v9 定稿文本（含「峨嵋」原字）。
 
 ## 落点表（245s 时间轴 · 踩音乐回落谷）
