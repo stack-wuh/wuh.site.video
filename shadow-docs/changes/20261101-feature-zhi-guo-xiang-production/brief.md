@@ -29,7 +29,7 @@
   "workflow": {
     "operation": null,
     "checkpoint": "be8a6c2fb54ee12254ca2f41a68341e429143b58",
-    "planHash": "f863f497581cc9a2ca1967355ca97bd0dfd3040cceba69a16351d1c0c8ff371b",
+    "planHash": "828c507eab333b816d1b0ea84505e0547548adadaa982b90492da33a5581c17c",
     "updatedAt": null,
     "lastError": null,
     "worktree": "/Users/wuhong/shadow-desktop/github/wuh.site.video/.worktrees/20261101-feature-zhi-guo-xiang-production",
@@ -37,7 +37,7 @@
       "files": [
         "shadow-docs/changes/20261101-feature-zhi-guo-xiang-production/brief.md"
       ],
-      "message": "docs(shadow): brief INV-6 对账 —— 音频口径改 v9 245s + 人声入库例外"
+      "message": "docs(shadow): brief INV-6/INV-7 对账 —— v9 245s/7350f + 人声入库例外 + mux 落点验收项"
     }
   },
   "knowledge": {
@@ -74,8 +74,8 @@
   - `INV-3 装配`：FilmShell 120 + 7200 + 180 = 7500f；meta = 《风陵 · 致郭襄》/「四分钟武侠诗电影」/「网络流传 · 托名程灵素」；正片末帧 7199。
   - `INV-4 重讲`：S30/S31 共用 `<AscendScene />`（无 props，各自 local 帧 0–239）；第 239 帧像素差分 0。
   - `INV-5 原片`：`videos/site-film/`、`videos/self-intro/`、`videos/wuh-site-intro-v2/`、`videos/preprod-wuh-site-intro-v2/`、`videos/preprod-zhi-guo-xiang/` 零改动。
-  - `INV-6 音频`：成片与 CI 产物无声；`ZhiGuoXiangAudio` 不含 `<Audio>`；BGM 仅本地 mux，250s；音频不入仓。
-  - `INV-7 验证`：typecheck 绿；`shots.mjs check --unit zhi-guo-xiang` 绿；CI `render-film.yml` `film=zhi-guo-xiang` 出 7500f；ffprobe 帧数/时长/静默音轨；本地 mux ffprobe 250s。
+  - `INV-6 音频`：CI 产物无声；`ZhiGuoXiangAudio` 不含 `<Audio>`；BGM 仅本地 mux；版权 BGM 不入仓，自制旁白 wav 入 `public/zhi-guo-xiang/tts/`；v9 终片 = BGM 两遍 + 人声一路 = 245.0s / 7350f。
+  - `INV-7 验证`：typecheck 绿；`shots.mjs check --unit zhi-guo-xiang` 绿；CI `render-film.yml` `film=zhi-guo-xiang` 出 7350f；ffprobe 帧数/时长/静默音轨；本地 mux ffprobe 245.0s 且落点区响度高于纯 BGM、茶棚 143.46–151.0s 维持静默。
 - **领域事件:** CI 7500f 出片 → 本地 BGM mux → 用户验收 → 另立 change 发布/归档。
 
 ## 引用规范
