@@ -1,7 +1,12 @@
-/* S16 · 渡口的船靠岸，她上船 240f */
+/* S16 · 驴蹄踩过水洼，一行蹄印 150f */
 import type { FC } from 'react';
 import { Scene } from '../components/SceneKit';
+import { Caption } from '../components/Caption';
 
-const S16: FC = () => <Scene name="p-ferry" zoom={[1.0, 1.06]} driftX={[20, -20]} warm={0.08} />;
+const S16: FC = () => (
+  <Scene name="p-hoof" zoom={[1.06, 1.0]} driftX={[-20, 20]}>
+    <Caption text="后来，她背着剑，走了很多年。" start={14} end={136} tone="ink" />
+  </Scene>
+);
 
 export default S16;

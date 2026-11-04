@@ -4,7 +4,7 @@ import { FILM } from '../motion-tokens';
 
 type Burst = { x: number; y: number; at: number; scale?: number };
 
-const SPARKS = 16;
+const SPARKS = 24;
 const LIFE = 72;
 
 /** 宋代烟花（art-direction §五）：起花上冲 + 不规则散射 + 落灰；禁止球形对称菊球。
@@ -35,7 +35,7 @@ export const Fireworks: FC<{ bursts: Burst[]; seed: string }> = ({ bursts, seed 
                   x2={b.x}
                   y2={riseY}
                   stroke={FILM.fireGold}
-                  strokeWidth={2}
+                  strokeWidth={2.5}
                   opacity={riseOpacity}
                 />
               ) : null}
@@ -55,8 +55,8 @@ export const Fireworks: FC<{ bursts: Burst[]; seed: string }> = ({ bursts, seed 
                     const sparkFade = Math.max(0, 1 - k / life) * (0.55 + 0.45 * Math.sin(random(`${s}-p`) * 20 + k / 3));
                     return (
                       <g key={i} opacity={sparkFade}>
-                        <line x1={px} y1={py} x2={x} y2={y} stroke={FILM.fireGold} strokeWidth={1.4} strokeLinecap="round" />
-                        <circle cx={x} cy={y} r={1.3} fill={FILM.fireGold} />
+                        <line x1={px} y1={py} x2={x} y2={y} stroke={FILM.fireGold} strokeWidth={2} strokeLinecap="round" />
+                        <circle cx={x} cy={y} r={1.7} fill={FILM.fireGold} />
                       </g>
                     );
                   })

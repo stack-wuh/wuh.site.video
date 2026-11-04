@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@fontsource/ma-shan-zheng':
+        specifier: ^5.3.1
+        version: 5.3.1
       '@fontsource/noto-sans-sc':
         specifier: ^5.3.1
         version: 5.3.1
@@ -447,6 +450,9 @@ packages:
     engines: {node: '>=18'}
     cpu: [x64]
     os: [win32]
+
+  '@fontsource/ma-shan-zheng@5.3.1':
+    resolution: {integrity: sha512-cGGn7Yje2RSduXVxEk+rCfNZyD/T/7FMGj03LNPiK8TRL9Sing0tq1zJF3n+W29szPqgb2RNs5oIvmm+ikeI+Q==}
 
   '@fontsource/noto-sans-sc@5.3.1':
     resolution: {integrity: sha512-YxZ/VWAWo9FWzH08Q6fGTzIW6vYNP2TMhUFCnfhlimbhdXnWrxJLrzX3KWt2FKnV0s8XiM5vjpGHQiyFRlTj0w==}
@@ -2069,6 +2075,8 @@ snapshots:
 
   '@esbuild/win32-x64@0.28.2':
     optional: true
+
+  '@fontsource/ma-shan-zheng@5.3.1': {}
 
   '@fontsource/noto-sans-sc@5.3.1': {}
 

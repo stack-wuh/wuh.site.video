@@ -1,7 +1,7 @@
-/* S7 · 写到最后一行，笔停住，悬着不落 240f */
+/* S07 · 两个醉汉扯她的斗篷 150f */
 import type { FC } from 'react';
 import { Scene } from '../components/SceneKit';
 
-const S07: FC = () => <Scene name="p-daogu" zoom={[1.0, 1.03]} warm={0.08} />;
+const S07: FC = () => <Scene name="p-drunk" zoom={[1.02, 1.07]} driftX={[10, -10]} dim={0.04} />;
 
 export default S07;

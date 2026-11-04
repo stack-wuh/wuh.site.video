@@ -1,7 +1,7 @@
-/* S9 · 她搁笔，看向窗外。窗外也是云霞 180f */
+/* S09 · 她抬头：只看见背影与空袖；天上一只大雕的影子掠过 210f */
 import type { FC } from 'react';
 import { Scene } from '../components/SceneKit';
 
-const S09: FC = () => <Scene name="p-window" zoom={[1.03, 1.08]} warm={0.1} />;
+const S09: FC = () => <Scene name="p-sleeve" zoom={[1.0, 1.06]} dim={0.03} />;
 
 export default S09;

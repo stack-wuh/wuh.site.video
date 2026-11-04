@@ -1,7 +1,12 @@
-/* S22 · 茶棚，她张了一下口；锣响；那碗茶喝完 270f */
+/* S22 · 她听见了，没有回头 150f */
 import type { FC } from 'react';
 import { Scene } from '../components/SceneKit';
+import { Caption } from '../components/Caption';
 
-const S22: FC = () => <Scene name="p-teastall" zoom={[1.0, 1.05]} dim={0.05} />;
+const S22: FC = () => (
+  <Scene name="p-noturn" zoom={[1.0, 1.05]} dim={0.05}>
+    <Caption text="她没有解释。" start={14} end={136} tone="ink" />
+  </Scene>
+);
 
 export default S22;

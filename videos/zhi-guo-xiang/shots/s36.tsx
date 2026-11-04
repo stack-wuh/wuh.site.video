@@ -1,16 +1,21 @@
-/* S36 · 他把纸翻过来。背面有字，墨色如新 150f */
+/* S36 · 海面云霞，与十六岁那夜的烟花叠在同一帧 210f */
 import type { FC } from 'react';
 import { interpolate, useCurrentFrame } from 'remotion';
-import { Slide } from '../components/SceneKit';
-import { InkPaper, POEM_COLS } from '../components/InkPaper';
+import { AbsoluteFill } from 'remotion';
+import { Scene } from '../components/SceneKit';
+import { Caption } from '../components/Caption';
+import { Fireworks } from '../components/Fireworks';
 
 const S36: FC = () => {
   const f = useCurrentFrame();
-  const t = interpolate(f, [10, 80], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  const t = interpolate(f, [0, 120], [0, 0.6], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
   return (
-    <Slide zoom={[1.06, 1.0]}>
-      <InkPaper base="p-paper-back" lines={[POEM_COLS[6], POEM_COLS[7], POEM_COLS[8]]} progress={t} size={44} right="22%" top="12%" />
-    </Slide>
+    <Scene name="p-sea" zoom={[1.0, 1.04]} warm={0.08}>
+      <AbsoluteFill style={{ mixBlendMode: 'screen', opacity: t }}>
+        <Fireworks seed="s34" bursts={[{ x: 980, y: 300, at: 0, scale: 1.6 }, { x: 1500, y: 360, at: 60, scale: 1.2 }]} />
+      </AbsoluteFill>
+      <Caption text="很多年后，有人在海边读到这张纸。" start={16} end={194} tone="ink" />
+    </Scene>
   );
 };
 

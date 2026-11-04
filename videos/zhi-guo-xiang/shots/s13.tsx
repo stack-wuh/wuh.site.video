@@ -1,15 +1,26 @@
-/* S13 · 两枚金针插进经卷夹层，经卷合上 210f */
+/* S13 · 她仰头，脸被照亮 180f */
 import type { FC } from 'react';
 import { interpolate, useCurrentFrame } from 'remotion';
+import { AbsoluteFill } from 'remotion';
 import { Scene } from '../components/SceneKit';
-import { Needles } from '../components/Needles';
+import { Fireworks } from '../components/Fireworks';
 
 const S13: FC = () => {
   const f = useCurrentFrame();
-  const t = interpolate(f, [0, 50], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  const lit = interpolate(f, [0, 50, 180], [0, 1, 0.85], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
   return (
-    <Scene name="p-sutra" zoom={[1.0, 1.05]} warm={0.06}>
-      <Needles count={2} origin={[560, 620]} len={620} spread={120} tilt={-16} opacity={t} />
+    <Scene name="p-her-up" zoom={[1.0, 1.05]}>
+      <AbsoluteFill style={{ mixBlendMode: 'screen', opacity: 0.95 }}>
+        <Fireworks
+          seed="s13"
+          bursts={[
+            { x: 640, y: 250, at: 16, scale: 2.2 },
+            { x: 1010, y: 170, at: 70, scale: 2.6 },
+            { x: 520, y: 380, at: 130, scale: 1.6 },
+          ]}
+        />
+      </AbsoluteFill>
+      <AbsoluteFill style={{ background: '#ffd27a', mixBlendMode: 'soft-light', opacity: 0.24 * lit }} />
     </Scene>
   );
 };

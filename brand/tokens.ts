@@ -18,6 +18,8 @@ export const colors = {
 export const fontFamilies = {
   serif: '"Noto Serif SC", "Songti SC", serif',
   sans: '"Noto Sans SC", "PingFang SC", sans-serif',
-  mono: 'Menlo, monospace',
-  kai: '"LXGW WenKai", "Noto Serif SC", serif',
+  /* 拉丁走 Menlo，中文回退到已入仓的 Noto Sans SC——mono 不再承载无字形中文（片头 episode 行曾因此变豆腐块） */
+  mono: 'Menlo, "Noto Sans SC", monospace',
+  /* 纸上真字：毛笔楷优先，缺字回退思源宋体 */
+  brush: '"Ma Shan Zheng", "Noto Serif SC", serif',
 } as const;

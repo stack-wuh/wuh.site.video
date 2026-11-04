@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 /**
- * 本地 BGM mux（music.md）——静默成片 + 用户本地音频 → 4320 断点两遍混音。
+ * 本地 BGM mux（music.md）——静默成片 + 用户本地音频 → 断点两遍混音。
  * 用法：node scripts/mux-bgm.mjs --film out/<silent>.mp4 --audio <aiyi.mp3> --out out/<final>.mp4
- * 约束：音频不入仓；禁用 <Audio loop>；片头 4s 静音、第一遍 0–139.46s、门开静默、
- *       第二遍 148s 起取 0–102s、末 3s 淡出；volume=0.7 留 AAC/B 站二压余量。
+ * 约束：音频不入仓；禁用 <Audio loop>；片头 4s 静音、第一遍 0–139.46s、
+ *       v9 断点静默 143.46–151.0s（童谣尾 → 茶棚）、第二遍 151.0s 起取 45.46–139.46s（94.0s，自然收，不淡出）；
+ *       v9 成片 7350f / 245.0s（片头 120f + 正片 7050f + 片尾 180f）。
  */
 import { execFileSync } from 'node:child_process';
 import { existsSync } from 'node:fs';
@@ -27,9 +28,9 @@ if (!existsSync(film) || !existsSync(audio)) {
 
 const filter = [
   '[1:a]atrim=0:139.46,asetpts=PTS-STARTPTS,afade=t=in:st=0:d=1[a1]',
-  '[1:a]atrim=0:102,asetpts=PTS-STARTPTS,afade=t=in:st=0:d=1,afade=t=out:st=99:d=3[a2]',
+  '[1:a]atrim=45.46:139.46,asetpts=PTS-STARTPTS,afade=t=in:st=0:d=1[a2]',
   '[a1]adelay=4000|4000[d1]',
-  '[a2]adelay=148000|148000[d2]',
+  '[a2]adelay=151000|151000[d2]',
   '[d1][d2]amix=inputs=2:duration=longest:dropout_transition=0:normalize=0,volume=0.7[a]',
 ].join(';');
 

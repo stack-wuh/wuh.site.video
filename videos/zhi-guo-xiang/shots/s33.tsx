@@ -1,7 +1,12 @@
-/* S33 · 高处，一个深墨背影看着这座城 300f */
+/* S33 · 笔悬着 210f */
 import type { FC } from 'react';
 import { Scene } from '../components/SceneKit';
+import { InkPaper } from '../components/InkPaper';
 
-const S33: FC = () => <Scene name="p-high" zoom={[1.0, 1.05]} dim={0.08} />;
+const S33: FC = () => (
+  <Scene name="p-brush" zoom={[1.12, 1.15]} warm={0.08} dim={0.02}>
+    <InkPaper lines={['其实我只是爱上了峨眉山上的云和']} progress={0.82} size={46} right="46%" top="18%" />
+  </Scene>
+);
 
 export default S33;

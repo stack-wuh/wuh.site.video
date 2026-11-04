@@ -4,83 +4,89 @@ export type Manifest = { film: string; fps: number; totalFrames: number; acts: A
 export const manifest: Manifest = {
   "film": "zhi-guo-xiang",
   "fps": 30,
-  "totalFrames": 8970,
+  "totalFrames": 7050,
   "acts": [
     {
       "act": 1,
-      "title": "现在·海与云",
+      "title": "序·海边",
       "startFrame": 0,
-      "endFrame": 660
+      "endFrame": 420
     },
     {
       "act": 2,
-      "title": "晚年·灯",
-      "startFrame": 660,
-      "endFrame": 1740
+      "title": "风陵渡",
+      "startFrame": 420,
+      "endFrame": 1800
     },
     {
       "act": 3,
-      "title": "出家·剑与针",
-      "startFrame": 1740,
-      "endFrame": 2610
+      "title": "烟花",
+      "startFrame": 1800,
+      "endFrame": 2700
     },
     {
       "act": 4,
-      "title": "寻·判词",
-      "startFrame": 2610,
-      "endFrame": 4800
+      "title": "寻",
+      "startFrame": 2700,
+      "endFrame": 4770
     },
     {
       "act": 5,
-      "title": "十六岁·烟花",
-      "startFrame": 4800,
-      "endFrame": 8250
+      "title": "出家",
+      "startFrame": 4770,
+      "endFrame": 5550
     },
     {
       "act": 6,
-      "title": "回到现在",
-      "startFrame": 8250,
-      "endFrame": 8970
+      "title": "写诗",
+      "startFrame": 5550,
+      "endFrame": 6480
+    },
+    {
+      "act": 7,
+      "title": "尾",
+      "startFrame": 6480,
+      "endFrame": 7050
     }
   ],
   "shots": [
     {
       "id": "s01",
       "act": 1,
-      "title": "无",
+      "title": "念念，我想给你讲一个故事。",
       "startFrame": 0,
-      "durationFrames": 150,
+      "durationFrames": 210,
       "source": "shots/s01.tsx"
     },
     {
       "id": "s02",
       "act": 1,
       "title": "无",
-      "startFrame": 150,
-      "durationFrames": 180,
+      "startFrame": 210,
+      "durationFrames": 210,
       "source": "shots/s02.tsx"
     },
     {
       "id": "s03",
-      "act": 1,
-      "title": "我走过山时，山不说话，",
-      "startFrame": 330,
-      "durationFrames": 210,
+      "act": 2,
+      "title": "无",
+      "startFrame": 420,
+      "durationFrames": 150,
       "source": "shots/s03.tsx"
     },
     {
       "id": "s04",
-      "act": 1,
-      "title": "我路过海时，海不说话。",
-      "startFrame": 540,
-      "durationFrames": 120,
+      "act": 2,
+      "title": "十六岁那年，她在风陵渡遇见一个人。",
+      "startFrame": 570,
+      "durationFrames": 180,
       "source": "shots/s04.tsx"
     },
     {
       "id": "s05",
       "act": 2,
-      "title": "无",
-      "startFrame": 660,
+      "title": "他叫杨过。江湖上叫他神雕侠。",
+      "startFrame": 750,
       "durationFrames": 150,
       "source": "shots/s05.tsx"
     },
@@ -88,24 +94,24 @@ export const manifest: Manifest = {
       "id": "s06",
       "act": 2,
       "title": "无",
-      "startFrame": 810,
-      "durationFrames": 180,
+      "startFrame": 900,
+      "durationFrames": 150,
       "source": "shots/s06.tsx"
     },
     {
       "id": "s07",
       "act": 2,
       "title": "无",
-      "startFrame": 990,
-      "durationFrames": 240,
+      "startFrame": 1050,
+      "durationFrames": 150,
       "source": "shots/s07.tsx"
     },
     {
       "id": "s08",
       "act": 2,
       "title": "无",
-      "startFrame": 1230,
-      "durationFrames": 180,
+      "startFrame": 1200,
+      "durationFrames": 210,
       "source": "shots/s08.tsx"
     },
     {
@@ -113,30 +119,30 @@ export const manifest: Manifest = {
       "act": 2,
       "title": "无",
       "startFrame": 1410,
-      "durationFrames": 180,
+      "durationFrames": 210,
       "source": "shots/s09.tsx"
     },
     {
       "id": "s10",
       "act": 2,
-      "title": "无",
-      "startFrame": 1590,
-      "durationFrames": 150,
+      "title": "他留下三枚金针，说可以许三个愿望。",
+      "startFrame": 1620,
+      "durationFrames": 180,
       "source": "shots/s10.tsx"
     },
     {
       "id": "s11",
       "act": 3,
-      "title": "无",
-      "startFrame": 1740,
-      "durationFrames": 210,
+      "title": "那一夜，满城烟花是为她放的。",
+      "startFrame": 1800,
+      "durationFrames": 180,
       "source": "shots/s11.tsx"
     },
     {
       "id": "s12",
       "act": 3,
       "title": "无",
-      "startFrame": 1950,
+      "startFrame": 1980,
       "durationFrames": 210,
       "source": "shots/s12.tsx"
     },
@@ -144,208 +150,208 @@ export const manifest: Manifest = {
       "id": "s13",
       "act": 3,
       "title": "无",
-      "startFrame": 2160,
-      "durationFrames": 210,
+      "startFrame": 2190,
+      "durationFrames": 180,
       "source": "shots/s13.tsx"
     },
     {
       "id": "s14",
       "act": 3,
-      "title": "无",
+      "title": "她不知道。",
       "startFrame": 2370,
-      "durationFrames": 240,
+      "durationFrames": 150,
       "source": "shots/s14.tsx"
     },
     {
       "id": "s15",
-      "act": 4,
-      "title": "小毛驴滴滴答答，倚天剑伴我走天涯。",
-      "startFrame": 2610,
-      "durationFrames": 210,
+      "act": 3,
+      "title": "无",
+      "startFrame": 2520,
+      "durationFrames": 180,
       "source": "shots/s15.tsx"
     },
     {
       "id": "s16",
       "act": 4,
-      "title": "无",
-      "startFrame": 2820,
-      "durationFrames": 240,
+      "title": "后来，她背着剑，走了很多年。",
+      "startFrame": 2700,
+      "durationFrames": 150,
       "source": "shots/s16.tsx"
     },
     {
       "id": "s17",
       "act": 4,
-      "title": "大家都说我因为爱着杨过大侠，才在峨嵋山上出了家，",
-      "startFrame": 3060,
-      "durationFrames": 270,
+      "title": "无",
+      "startFrame": 2850,
+      "durationFrames": 210,
       "source": "shots/s17.tsx"
     },
     {
       "id": "s18",
       "act": 4,
-      "title": "无",
-      "startFrame": 3330,
-      "durationFrames": 240,
+      "title": "一个渡口接一个渡口，她在找他。",
+      "startFrame": 3060,
+      "durationFrames": 210,
       "source": "shots/s18.tsx"
     },
     {
       "id": "s19",
       "act": 4,
-      "title": "无",
-      "startFrame": 3570,
-      "durationFrames": 240,
+      "title": "有人说，他三天前来过。",
+      "startFrame": 3270,
+      "durationFrames": 210,
       "source": "shots/s19.tsx"
     },
     {
       "id": "s20",
       "act": 4,
-      "title": "三枚金针，三个愿望，她一个也没舍得用。",
-      "startFrame": 3810,
-      "durationFrames": 240,
+      "title": "江湖都说，她这一生，误在杨过身上。",
+      "startFrame": 3480,
+      "durationFrames": 180,
       "source": "shots/s20.tsx"
     },
     {
       "id": "s21",
       "act": 4,
       "title": "无",
-      "startFrame": 4050,
-      "durationFrames": 270,
+      "startFrame": 3660,
+      "durationFrames": 210,
       "source": "shots/s21.tsx"
     },
     {
       "id": "s22",
       "act": 4,
-      "title": "无",
-      "startFrame": 4320,
-      "durationFrames": 270,
+      "title": "她没有解释。",
+      "startFrame": 3870,
+      "durationFrames": 150,
       "source": "shots/s22.tsx"
     },
     {
       "id": "s23",
       "act": 4,
-      "title": "无",
-      "startFrame": 4590,
-      "durationFrames": 210,
+      "title": "峨眉有个郭女侠，等郎等到白了发。",
+      "startFrame": 4020,
+      "durationFrames": 180,
       "source": "shots/s23.tsx"
     },
     {
       "id": "s24",
-      "act": 5,
+      "act": 4,
       "title": "无",
-      "startFrame": 4800,
-      "durationFrames": 360,
+      "startFrame": 4200,
+      "durationFrames": 210,
       "source": "shots/s24.tsx"
     },
     {
       "id": "s25",
-      "act": 5,
-      "title": "无",
-      "startFrame": 5160,
-      "durationFrames": 300,
+      "act": 4,
+      "title": "三个愿望，她用掉了一个。",
+      "startFrame": 4410,
+      "durationFrames": 180,
       "source": "shots/s25.tsx"
     },
     {
       "id": "s26",
-      "act": 5,
+      "act": 4,
       "title": "无",
-      "startFrame": 5460,
-      "durationFrames": 270,
+      "startFrame": 4590,
+      "durationFrames": 180,
       "source": "shots/s26.tsx"
     },
     {
       "id": "s27",
       "act": 5,
-      "title": "无",
-      "startFrame": 5730,
-      "durationFrames": 300,
+      "title": "十六岁出门，四十岁出家。",
+      "startFrame": 4770,
+      "durationFrames": 210,
       "source": "shots/s27.tsx"
     },
     {
       "id": "s28",
       "act": 5,
-      "title": "无",
-      "startFrame": 6030,
-      "durationFrames": 330,
+      "title": "剑收进木匣，再也没有取出来。",
+      "startFrame": 4980,
+      "durationFrames": 210,
       "source": "shots/s28.tsx"
     },
     {
       "id": "s29",
       "act": 5,
       "title": "无",
-      "startFrame": 6360,
-      "durationFrames": 300,
+      "startFrame": 5190,
+      "durationFrames": 180,
       "source": "shots/s29.tsx"
     },
     {
       "id": "s30",
       "act": 5,
-      "title": "无",
-      "startFrame": 6660,
-      "durationFrames": 240,
+      "title": "她记得的，是那夜的火光。",
+      "startFrame": 5370,
+      "durationFrames": 180,
       "source": "shots/s30.tsx"
     },
     {
       "id": "s31",
-      "act": 5,
-      "title": "无",
-      "startFrame": 6900,
-      "durationFrames": 420,
+      "act": 6,
+      "title": "她留下一首诗，写的是十六岁那年的烟花。",
+      "startFrame": 5550,
+      "durationFrames": 180,
       "source": "shots/s31.tsx"
     },
     {
       "id": "s32",
-      "act": 5,
+      "act": 6,
       "title": "无",
-      "startFrame": 7320,
-      "durationFrames": 270,
+      "startFrame": 5730,
+      "durationFrames": 180,
       "source": "shots/s32.tsx"
     },
     {
       "id": "s33",
-      "act": 5,
-      "title": "满城烟火，本是军情。",
-      "startFrame": 7590,
-      "durationFrames": 300,
+      "act": 6,
+      "title": "无",
+      "startFrame": 5910,
+      "durationFrames": 210,
       "source": "shots/s33.tsx"
     },
     {
       "id": "s34",
-      "act": 5,
+      "act": 6,
       "title": "无",
-      "startFrame": 7890,
-      "durationFrames": 360,
+      "startFrame": 6120,
+      "durationFrames": 180,
       "source": "shots/s34.tsx"
     },
     {
       "id": "s35",
       "act": 6,
-      "title": "无",
-      "startFrame": 8250,
-      "durationFrames": 150,
+      "title": "舍不得写完的那一句，她留在了纸的背面。",
+      "startFrame": 6300,
+      "durationFrames": 180,
       "source": "shots/s35.tsx"
     },
     {
       "id": "s36",
-      "act": 6,
-      "title": "无",
-      "startFrame": 8400,
-      "durationFrames": 150,
+      "act": 7,
+      "title": "很多年后，有人在海边读到这张纸。",
+      "startFrame": 6480,
+      "durationFrames": 210,
       "source": "shots/s36.tsx"
     },
     {
       "id": "s37",
-      "act": 6,
-      "title": "像极了十六岁那年的烟花。",
-      "startFrame": 8550,
-      "durationFrames": 180,
+      "act": 7,
+      "title": "她写完了。",
+      "startFrame": 6690,
+      "durationFrames": 210,
       "source": "shots/s37.tsx"
     },
     {
       "id": "s38",
-      "act": 6,
-      "title": "无",
-      "startFrame": 8730,
-      "durationFrames": 240,
+      "act": 7,
+      "title": "这个故事，我讲完了，念念~",
+      "startFrame": 6900,
+      "durationFrames": 150,
       "source": "shots/s38.tsx"
     }
   ]

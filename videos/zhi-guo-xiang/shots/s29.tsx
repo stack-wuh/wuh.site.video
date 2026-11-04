@@ -1,7 +1,17 @@
-/* S29 · 她怔在原地，风把斗篷吹起 300f */
+/* S29 · 两枚金针放进经卷夹层，经卷合上 180f */
 import type { FC } from 'react';
+import { interpolate, useCurrentFrame } from 'remotion';
 import { Scene } from '../components/SceneKit';
+import { Needles } from '../components/Needles';
 
-const S29: FC = () => <Scene name="p-still" zoom={[1.02, 1.08]} dim={0.05} />;
+const S29: FC = () => {
+  const f = useCurrentFrame();
+  const t = interpolate(f, [0, 50], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  return (
+    <Scene name="p-sutra" zoom={[1.0, 1.05]} warm={0.06}>
+      <Needles count={2} origin={[560, 620]} len={620} spread={120} tilt={-16} opacity={t} />
+    </Scene>
+  );
+};
 
 export default S29;

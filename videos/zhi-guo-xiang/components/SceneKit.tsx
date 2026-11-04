@@ -1,7 +1,6 @@
 import type { FC, ReactNode } from 'react';
 import { AbsoluteFill, Img, interpolate, staticFile, useCurrentFrame, useVideoConfig } from 'remotion';
 import { colors } from '../../../brand/tokens';
-import { Caption } from './Caption';
 
 /** 统一绢本调色（v3 画风锁）：暖纸底 + 低饱和 + 轻颗粒压色，全片同一道。 */
 export const InkGrade: FC = () => (
@@ -83,8 +82,3 @@ export const Fade: FC<{ inF?: number; outF?: number; children: ReactNode }> = ({
   });
   return <AbsoluteFill style={{ opacity: o }}>{children}</AbsoluteFill>;
 };
-
-/** 诗行字幕（居中、衬线、绢底墨字；tone ink 用于亮底）。 */
-export const Poem: FC<{ text: string; start: number; end: number }> = ({ text, start, end }) => (
-  <Caption text={text} start={start} end={end} poem />
-);

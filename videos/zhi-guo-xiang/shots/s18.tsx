@@ -1,11 +1,11 @@
-/* S18 · 同一时刻：一枚针按进一个落水者的穴道 240f */
+/* S18 · 山路背影，剑在背上，斗篷与剑穗被风吹向一侧 210f */
 import type { FC } from 'react';
 import { Scene } from '../components/SceneKit';
-import { Needles } from '../components/Needles';
+import { Caption } from '../components/Caption';
 
 const S18: FC = () => (
-  <Scene name="p-rescue" zoom={[1.02, 1.08]} dim={0.04}>
-    <Needles count={1} origin={[430, 700]} len={300} tilt={-58} shadow={false} />
+  <Scene name="p-xiang-sword-road" zoom={[1.0, 1.05]} driftX={[10, -10]} dim={0.03}>
+    <Caption text="一个渡口接一个渡口，她在找他。" start={16} end={186} tone="ink" />
   </Scene>
 );
 
