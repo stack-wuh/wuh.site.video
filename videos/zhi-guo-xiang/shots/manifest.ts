@@ -53,7 +53,7 @@ export const manifest: Manifest = {
     {
       "id": "s01",
       "act": 1,
-      "title": "我想给你讲一个故事。",
+      "title": "念念，我想给你讲一个故事。",
       "startFrame": 0,
       "durationFrames": 210,
       "source": "shots/s01.tsx"
@@ -349,7 +349,7 @@ export const manifest: Manifest = {
     {
       "id": "s38",
       "act": 7,
-      "title": "这个故事，我讲完了。",
+      "title": "这个故事，我讲完了，念念~",
       "startFrame": 6900,
       "durationFrames": 150,
       "source": "shots/s38.tsx"
