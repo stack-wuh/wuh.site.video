@@ -4,7 +4,7 @@
   "name": "20261101-feature-zhi-guo-xiang-production",
   "type": "feature",
   "scope": "video-production",
-  "status": "published",
+  "status": "committed",
   "baseBranch": "main",
   "branch": "feature/20261101-feature-zhi-guo-xiang-production",
   "files": [
@@ -28,8 +28,8 @@
   },
   "workflow": {
     "operation": null,
-    "checkpoint": "pr:50",
-    "planHash": "ed424b6850665f63f38863ac037605fbb9b6bf560a54eea68aa5563ee6a55221",
+    "checkpoint": "f71cedc856b7a768b6b7a8ea352cc352b73b896f",
+    "planHash": "c679b309fc6e82e3bf34a7cb8db92bc00943215b344d11146a413c41d7282cad",
     "updatedAt": null,
     "lastError": null,
     "worktree": "/Users/wuhong/shadow-desktop/github/wuh.site.video/.worktrees/20261101-feature-zhi-guo-xiang-production",
@@ -37,7 +37,7 @@
       "files": [
         "scripts/mux-bgm.mjs"
       ],
-      "message": "feat(zhi-guo-xiang): mux 叠第三路人声轨 —— voice-track-full.wav 对位混音"
+      "message": "fix(zhi-guo-xiang): mux 人声改单遍三入 amix —— 修两级混合截到 143s\n\n- 两级 amix（先合 BGM 再叠人声）实测把音轨截到 143.45s，第二遍 BGM 未参与\n- 改为 [d1][d2][vc] 单遍 amix=inputs=3，BGM 两遍各自 volume=0.7，总响度与原两遍一致（mean -16.1dB 不变）\n- 出片实测 7350f / 245.000s；片尾「念念」处比纯 BGM 高 41.7dB，茶棚静默区 -91dB"
     }
   },
   "knowledge": {
