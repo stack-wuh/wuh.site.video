@@ -16,7 +16,7 @@ verified-scope: Token Plan（sk-sp- Key）实调 15 次全成功：5s 试听、�
 
 ## 当前结论
 
-《风陵 · 致郭襄》配音走**双声部**设计（工具载体 `D:\works\qwen-tts\tts.py`，流程细节见 shadow-dev-workflow 的 `shadow-dev-tts` 技能；shadow-dev-cli 仓另有 `media-tts` 域知识卡）：
+《风陵 · 致郭襄》配音走**双声部**设计（工具载体 `D:\works\qwen-tts\tts.py`，工具仓 `stack-wuh/qwen-tts`——换机 clone 到同路径即恢复；流程细节见 shadow-dev-workflow 的 `shadow-dev-tts` 技能；shadow-dev-cli 仓另有 `media-tts` 域知识卡）：
 
 - **男声 = 讲述者**（用户本人视角，海边读纸人）：只说两句——S01「念念，我想给你讲一个故事。」（4–11s，近讲干声）与 S38「这个故事，我讲完了，念念~」（~239–244s，全片最后一个人声，音乐已自然静默）。当前为 TTS 占位（`longanlufeng` 龙安鲁风），**待用户以本人声音替换**——录制成品 wav 或走声音复刻均可，模型支持。
 - **女声 = 诗六行**（纸的声音，她自己的声音）：**已定稿 `longanlingxin` 龙安灵心（知心温暖音）**，`line-01..06.wav` 均为灵心版（2026-11-04 重出）；`poem-full.wav` 为龙安欢整诗连读版（试听参考，未定稿用）。
