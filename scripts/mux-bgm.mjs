@@ -30,23 +30,19 @@ for (const f of [film, audio, ...(voice ? [voice] : [])]) {
   }
 }
 
-const bgmHead = [
-  '[1:a]atrim=0:139.46,asetpts=PTS-STARTPTS,afade=t=in:st=0:d=1[a1]',
-  '[1:a]atrim=45.46:139.46,asetpts=PTS-STARTPTS,afade=t=in:st=0:d=1[a2]',
+// BGM 两遍各自衰减 0.7 后直加（amix normalize=0），与先合后音量一致
+const filter = [
+  '[1:a]atrim=0:139.46,asetpts=PTS-STARTPTS,afade=t=in:st=0:d=1,volume=0.7[a1]',
+  '[1:a]atrim=45.46:139.46,asetpts=PTS-STARTPTS,afade=t=in:st=0:d=1,volume=0.7[a2]',
   '[a1]adelay=4000|4000[d1]',
   '[a2]adelay=151000|151000[d2]',
-];
-const bgmMix = '[d1][d2]amix=inputs=2:duration=longest:dropout_transition=0:normalize=0,volume=0.7';
-// 人声轨自带 245s 静音底、时长即片长，不再 adelay；叠成 stereo/44.1k 与 BGM 对齐后再混
-const filter = [
-  ...bgmHead,
-  voice ? `${bgmMix}[bgm]` : `${bgmMix}[a]`,
   ...(voice
     ? [
+        // 人声轨自带 245s 静音底、时长即片长，不再 adelay；叠成 stereo/44.1k 与 BGM 对齐
         '[2:a]aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo[vc]',
-        '[bgm][vc]amix=inputs=2:duration=longest:dropout_transition=0:normalize=0[a]',
+        '[d1][d2][vc]amix=inputs=3:duration=longest:dropout_transition=0:normalize=0[a]',
       ]
-    : []),
+    : ['[d1][d2]amix=inputs=2:duration=longest:dropout_transition=0:normalize=0[a]']),
 ].join(';');
 
 execFileSync(
