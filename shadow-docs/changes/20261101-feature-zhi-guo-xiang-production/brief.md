@@ -29,15 +29,15 @@
   "workflow": {
     "operation": null,
     "checkpoint": "pr:50",
-    "planHash": "121e0e6d6de5d24ce496c6573563d34d75c922b78664430fefadac70c9912fe2",
+    "planHash": "f863f497581cc9a2ca1967355ca97bd0dfd3040cceba69a16351d1c0c8ff371b",
     "updatedAt": null,
     "lastError": null,
     "worktree": "/Users/wuhong/shadow-desktop/github/wuh.site.video/.worktrees/20261101-feature-zhi-guo-xiang-production",
     "commit": {
       "files": [
-        "scripts/mux-bgm.mjs"
+        "shadow-docs/changes/20261101-feature-zhi-guo-xiang-production/brief.md"
       ],
-      "message": "fix(zhi-guo-xiang): mux 人声改单遍三入 amix —— 修两级混合截到 143s\n\n- 两级 amix（先合 BGM 再叠人声）实测把音轨截到 143.45s，第二遍 BGM 未参与\n- 改为 [d1][d2][vc] 单遍 amix=inputs=3，BGM 两遍各自 volume=0.7，总响度与原两遍一致（mean -16.1dB 不变）\n- 出片实测 7350f / 245.000s；片尾「念念」处比纯 BGM 高 41.7dB，茶棚静默区 -91dB"
+      "message": "docs(shadow): brief INV-6 对账 —— 音频口径改 v9 245s + 人声入库例外"
     }
   },
   "knowledge": {
@@ -67,7 +67,7 @@
 - **统一语言增量:**
   - **生产单元 `zhi-guo-xiang`**：`videos/zhi-guo-xiang/`，52 镜 + 令牌 + 装配 + 静默音轨；`shots-manifest.json` 为帧数真源。
   - **标准背影 `AscendScene`**：4-4（S30）与 5-1（S31）共用的同一组件，各自 local 帧 0–239；第 239 帧像素差分 0。
-  - **本地 BGM mux**：成片保持无声；CI 出画面后按 `music.md` 在 4320 断点做两遍混音；音频不入仓。
+  - **本地 mux**：CI 成片保持无声；CI 出画面后按 `music.md` 断点做两遍混音，可叠第三路人声整轨（`--voice`）。版权 BGM 不入仓；自制旁白 wav 走 `public/zhi-guo-xiang/tts/` 入库。
 - **聚合与不变量:**
   - `INV-1 生产单元`：`shots.mjs sync --unit zhi-guo-xiang` 生成 52 镜 manifest/registry/routes；正片 7200f；Composition `ZhiGuoXiang` 与 `ZhiGuoXiangAudio` 均为 7500f（`totalFilmFrames(7200)`）。
   - `INV-2 镜头实装`：52 个 `shots/sNN.tsx` 全部存在，local 帧 0 起；每个镜按分镜画面/镜头语言与动效矩阵令牌实装；零内联 hex/字体字面量（`brand/tokens` + `motion-tokens`）。
