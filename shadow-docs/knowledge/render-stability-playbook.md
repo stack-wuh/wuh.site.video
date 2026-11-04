@@ -18,6 +18,14 @@ verified-scope: site-film 正式制作全天实战（十数小时渲染攻坚）
 
 ## 当前结论
 
+**渲染一律走 GitHub Actions，本机不跑渲染**（2026-11-04 用户定策）。成片、单镜、静帧/抽帧核对全部从 CI 拿像素；本机只保留版权 BGM 的 mux 与静态门（`shots.mjs check` / `typecheck` / `oxlint`）。
+
+- **出全片**：`gh workflow run render-film.yml --ref <分支> -f film=<unit>`
+- **改一镜看一帧**：`gh workflow run render-film.yml --ref <分支> -f film=<unit> -f shots="s10 s25 s29"`——`assemble` 条件是 `shots == ''`，子集跑只出镜级产物、不拼全片，一两分钟回结果
+- **抽帧**：`gh run download <runId> -n shot-s25 -D /tmp/ci` → `ffmpeg -y -i /tmp/ci/s25-*.mp4 -vf "select=eq(n\,120)" -vframes 1 /tmp/ci/s25-f120.png`
+
+理由：本机（Intel MBP 2019）段错误风暴 + Chrome 确定性崩溃，「本机调一镜看一帧」经常几十分钟拿不到一张图且无结果；CI 一镜一 job、互不牵连，一条命令就出图。下文「环境态」各条（端口僵尸、收敛梯、清场）只在**本机兜底路径**下才需要。
+
 本机渲染的坑分四类：**环境态**（端口/僵尸/风暴）、**代码逻辑**（帧号/引用/参数）、**流程纪律**（检查/验证/清理）、**装配工艺**（拼接/音轨/终装）。每条都是真实耗时点，按此卡逐个预防。
 
 ## 执行约束（坑位清单）

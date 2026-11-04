@@ -45,6 +45,7 @@ verified-scope: site-film《朝朝如念》4:00 成片全流程实证（素材�
 
 ## 执行约束
 
+- **渲染只走 CI，本机不渲**（2026-11-04 用户定策）：成片用 `gh workflow run render-film.yml -f film=<unit>`；改一镜看一帧用 `-f shots="s10 s25 s29"`（子集不触发 assemble，一两分钟回镜级产物），再 `gh run download` + `ffmpeg` 抽帧看图。本机仅保留版权 BGM mux 与静态门。细则见 [[render-stability-playbook]] 首节
 - 分镜师 brief 必含：总帧数硬约束、素材编号引用要求、对账表自查；UE 大师 brief 必含：覆盖矩阵行数要求、Remotion 可实现约束（不引 UE 专属概念）
 - 片长变更在前期阶段做（改分镜数字重排即可）；正式制作开始后改片长=重渲全片
 - 真实数据优先：能抓 API 就抓（如 /api/music/playlist?playlistId=、/api/about/activity），素材库全条目标注抓取日期

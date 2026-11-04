@@ -10,7 +10,7 @@ const S25: FC = () => {
   const t = interpolate(f, [0, 30], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
   return (
     <Scene name="p-palm" zoom={[1.0, 1.06]}>
-      <Needles count={2} origin={[700, 640]} len={560} spread={160} tilt={-6} opacity={t} />
+      <Needles count={2} origin={[790, 680]} len={433} spread={52} tilt={-26} opacity={t} />
       <Caption text="三个愿望，她用掉了一个。" start={16} end={164} />
     </Scene>
   );

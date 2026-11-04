@@ -9,7 +9,7 @@ const S29: FC = () => {
   const t = interpolate(f, [0, 50], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
   return (
     <Scene name="p-sutra" zoom={[1.0, 1.05]} warm={0.06}>
-      <Needles count={2} origin={[560, 620]} len={620} spread={120} tilt={-16} opacity={t} />
+      <Needles count={2} origin={[600, 500]} len={300} spread={60} tilt={30} opacity={t} />
     </Scene>
   );
 };
