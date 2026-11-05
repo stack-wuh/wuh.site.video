@@ -7,3 +7,4 @@ videos/*/assets/bgm*-candidate-*
 videos/preprod-site-film/assets/bgm-candidate-*.mp3
 videos/site-film/assets/bgm-candidate-*
 videos/site-film/assets/bgm2-candidate-*
+.tmp/
