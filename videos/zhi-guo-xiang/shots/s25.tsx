@@ -2,7 +2,6 @@
 import type { FC } from 'react';
 import { interpolate, useCurrentFrame } from 'remotion';
 import { Scene } from '../components/SceneKit';
-import { Caption } from '../components/Caption';
 import { Needles } from '../components/Needles';
 
 const S25: FC = () => {
@@ -13,7 +12,6 @@ const S25: FC = () => {
     <Scene name="p-palm" zoom={[1.0, 1.06]}>
       {/* 针窝在掌心凹处（底图实测 x≈880 / y≈650），针长与 S10 同值——同一批针，只少一枚 */}
       <Needles count={2} origin={[800, 640]} len={300} spread={62} tilt={-26} opacity={t} />
-      <Caption text="三个愿望，她用掉了一个。" start={16} end={164} tone="ink" />
     </Scene>
   );
 };

@@ -3,7 +3,6 @@ import type { FC } from 'react';
 import { interpolate, useCurrentFrame } from 'remotion';
 import { Scene } from '../components/SceneKit';
 import { DustField } from '../components/DustField';
-import { Caption } from '../components/Caption';
 
 /** 远处的人影：脚印的尽头已在山垭口上（底图实测 x≈1185 / 脊线 y≈455），
  *  身高只给 16px——观众要和他一样「看不清是谁」，杨过永远不给脸。 */
@@ -52,7 +51,6 @@ const S19: FC = () => (
     <DustField act={4} count={70} seedBase="s19-snow" />
     <DistantFigure />
     <Feather />
-    <Caption text="有人说，他三天前来过。" start={16} end={194} tone="ink" />
   </Scene>
 );
 
