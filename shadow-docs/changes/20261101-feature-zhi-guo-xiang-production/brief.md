@@ -4,7 +4,7 @@
   "name": "20261101-feature-zhi-guo-xiang-production",
   "type": "feature",
   "scope": "video-production",
-  "status": "committed",
+  "status": "published",
   "baseBranch": "main",
   "branch": "feature/20261101-feature-zhi-guo-xiang-production",
   "files": [
@@ -29,8 +29,8 @@
   },
   "workflow": {
     "operation": null,
-    "checkpoint": "fb5fe2126ecedd72004b268c914a7578289580c8",
-    "planHash": "278b217f509ff922070f8dc375e2b8880748974a232139a9120482585f2bc18d",
+    "checkpoint": "pr:50",
+    "planHash": "3d7dea863e8a8a78b2478fbca8501d3baf4fe0b1299fd7221427af6e511b9d8c",
     "updatedAt": null,
     "lastError": null,
     "worktree": "/Users/wuhong/shadow-desktop/github/wuh.site.video/.worktrees/20261101-feature-zhi-guo-xiang-production",
