@@ -8,7 +8,8 @@ import numpy as np, wave, json, os, sys, io
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
 
 PROJ = r'D:\works\wuh.site.video'
-BGM = os.path.join(PROJ, '.tmp', 'bgm', 'ai-yi.wav')
+BGM_FLAC = os.path.join(PROJ, 'public', 'zhi-guo-xiang', 'bgm', 'ai-yi.flac')
+BGM = os.path.join(PROJ, '.tmp', 'bgm', 'ai-yi.wav')      # 由 FLAC 现转，不入仓
 VOICE = os.path.join(PROJ, 'public', 'zhi-guo-xiang', 'tts', 'voice-track-v5.wav')
 MIX = os.path.join(PROJ, '.tmp', 'bgm', 'mix-v5.wav')
 LINES = os.path.join(PROJ, '.tmp', 'audition', 'v2e', 'lines.json')
@@ -48,6 +49,15 @@ def p90(x):
     r = float(np.percentile(np.abs(x), 90))
     return 20 * np.log10(r) if r > 1e-12 else -99.0
 
+
+# 工作用 WAV 直接从 FLAC 转（FLAC 是入仓母版，WAV 26MB 不入仓）
+if not os.path.exists(BGM):
+    import subprocess
+    os.makedirs(os.path.dirname(BGM), exist_ok=True)
+    print('转码 FLAC → WAV ...')
+    subprocess.run(['npx.cmd', '--no-install', 'remotion', 'ffmpeg', '-y', '-loglevel', 'error',
+                    '-i', BGM_FLAC, '-ar', str(SR), '-ac', '2', '-c:a', 'pcm_s16le', BGM],
+                   check=True, shell=False)
 
 src, voice = read(BGM), read(VOICE)
 vm = voice.mean(axis=1)
@@ -177,3 +187,4 @@ for s, e in runs:
     worst = min(worst, m)
     print('%6.2f–%6.2f   %8.1f %8.1f %8.1f%s' % (ss, ee, dv, dbb, m, tag))
 print('\n最小余量 %.1f dB ｜ 低于 4dB 的段: %s' % (worst, bad if bad else '无'))
+
