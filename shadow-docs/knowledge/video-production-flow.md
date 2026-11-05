@@ -38,10 +38,10 @@ verified-scope: site-film《朝朝如念》4:00 成片全流程实证（素材�
 - 剧本以诗作文本为骨架；必须显式声明「情感蒙太奇非编年」与顺序取舍；文学改编另建「原著事实核对表」与「诗作托名考据」。
 - 人物视觉设定独立成 `character-design.md`：五段年龄、杨过不露脸、正片零红、4-4/5-1 标准姿态。
 - Animatic CI：`render-animatic.yml` 的 `unit` / `scope` 下拉；产物 `A{yyyyMMdd}{HHmmss}-{film}.mp4`。
-- 版权 BGM：不进 `public/`；CI 出无声画面，发布前本地 `amix` / `adelay` 两遍 mux（禁用 `<Audio loop>`）。示例见 `videos/preprod-zhi-guo-xiang/assets/music.md`。
+- 版权 BGM：不进 `public/`；CI 出无声画面，发布前本地 `amix` / `adelay` 两遍 mux（禁用 `<Audio loop>`）。示例见 `videos/preprod-zhi-guo-xiang/assets/music.md`。**自制旁白 wav 例外**——无版权问题的 TTS/录音走 `public/<film>/tts/` 入库（见 [[tts-voiceover-pipeline]]），mux 时叠成第三路。
 - 正式制作（2026-11-01 实证）：52 镜一镜一文件、零共享状态，六幕交 subagent 并行实装；`ZhiGuoXiang.tsx` 只遍历 `shots-manifest.json` + `ShotShell`，装配层不写镜头内容。共享件在整合阶段统一收口（Caption/Figure/AscendScene/Objects），避免 52 镜各写一份。
 - 逐字对拍与末帧：字幕组件用 `charStarts` 给逐字落点（S25「滴滴答答」四字 20/32/44/56 与四蹄同帧）；末镜用 `fadeOut={false}` 保证最后一行在正片末帧完整，不靠延长 `end` 绕过淡出。
-- 出片口径：CI 只出画面 + 静默轨，ffprobe 帧数必须等于 `片头 + 正片 + 片尾`；本地 mux 后再验 250s 与断点静默窗口（本次 137.8–148.8s），最后交用户验收。
+- 出片口径：CI 只出画面 + 静默轨，ffprobe 帧数必须等于 `片头 + 正片 + 片尾`；本地 mux 后再验**该片当前版本的片长**与断点静默窗口，最后交用户验收。致郭襄 v9 = 7350f / 245s，断点静默 143.46–151.0s（旧口径 7500f / 250s、静默 137.8–148.8s 属 v8 前，已过期）。mux 支持 BGM 之外叠第三路人声整轨（`--voice`）：人声轨自带片长静音底，不再 `adelay`，走单遍 `amix=inputs=3`——先合 BGM 再叠人声的两级 amix 会把音轨截到第一遍结尾（实测 143.45s），别用。
 
 ## 执行约束
 
