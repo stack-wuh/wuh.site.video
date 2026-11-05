@@ -4,7 +4,7 @@
   "name": "20261101-feature-zhi-guo-xiang-production",
   "type": "feature",
   "scope": "video-production",
-  "status": "published",
+  "status": "committed",
   "baseBranch": "main",
   "branch": "feature/20261101-feature-zhi-guo-xiang-production",
   "files": [
@@ -12,6 +12,7 @@
     "public/zhi-guo-xiang",
     "scripts/mux-bgm.mjs",
     "shadow-docs/changes/20261101-feature-zhi-guo-xiang-production",
+    "shadow-docs/knowledge",
     "src/Root.tsx",
     "videos/zhi-guo-xiang"
   ],
@@ -29,21 +30,17 @@
   },
   "workflow": {
     "operation": null,
-    "checkpoint": "pr:50",
-    "planHash": "3d7dea863e8a8a78b2478fbca8501d3baf4fe0b1299fd7221427af6e511b9d8c",
+    "checkpoint": "c655dc12b853f576c39a8e6931471f142a1c926e",
+    "planHash": "def066a109a17cc7f6cc6cb72c582a3c5d39d072b62d5d4f6aab0fd2b26216e9",
     "updatedAt": null,
     "lastError": null,
     "worktree": "/Users/wuhong/shadow-desktop/github/wuh.site.video/.worktrees/20261101-feature-zhi-guo-xiang-production",
     "commit": {
       "files": [
-        "public/zhi-guo-xiang/paper/p-paper-back.jpg",
-        "public/zhi-guo-xiang/scene/p-palm.jpg",
-        "videos/zhi-guo-xiang/components/Needles.tsx",
-        "videos/zhi-guo-xiang/shots/s19.tsx",
-        "videos/zhi-guo-xiang/shots/s21.tsx",
-        "videos/zhi-guo-xiang/shots/s25.tsx"
+        "shadow-docs/knowledge/tts-voiceover-pipeline.md",
+        "shadow-docs/knowledge/video-production-flow.md"
       ],
-      "message": "fix(zhi-guo-xiang): 五处画面缺陷——悬空针 · 针身退化 · 亮底掌 · 纸色统一 · 远处人影\n\n- S21 底图 p-rescue 她手里已画着针，删掉代码叠的第二枚（画面中间那根悬空针的真因）\n- Needles 针身渐变 40%–100% 原用近白 #f0dcae，一根针读成金柄+白银针+灰影子三样；改为全程金色，影子 rx=len*0.42 → len*0.16\n- p-palm 重出为亮底水墨掌（均值 113/110/102 → 232/225/207，wan2.7-image-pro）；S25 字幕改 tone=ink、针窝到掌心凹处、针长 433 → 300 与 S10 对齐\n- p-paper-back 重着色到暖纸家族（191/190/191 → 215/184/151，对齐 p-paper-dusk 217/185/150）\n- S19 加 16px 远处人影踩山脊线（x1185/y455），雕羽 92px → 30px 并落在最后一个脚印上"
+      "message": "docs(knowledge): 配音卡与流程卡对账 v9 —— 真声定策 · 落点定稿 · mux 三入坑 · 出片口径 245s\n\n- 男声：2026-11-05 定策用本人真声、走直接录音不走复刻；两句仍为 lufeng 占位待替换，音频本轮暂停\n- 落点表八行全部改为定稿态（灵心 line-01..06 / lufeng frame-open-close），旧「待定稿女声后逐行重出」过期\n- mux 装配口径落定 --voice 单遍 amix=inputs=3；两级 amix 实测把音轨截到 143.45s（第二遍 BGM 未参与）\n- 补记：旁白若按字幕表全铺（21 条≈57s），12 条落在 BGM > -20dB 段，\"不需要 ducking\" 不再成立；压低方案尚未验通\n- 流程卡出片口径改 v9 7350f/245s、断点静默 143.46–151s（旧 7500f/250s、137.8–148.8s 属 v8 前）\n- 版权 BGM 不入仓与自制旁白 wav 入库的边界写清"
     }
   },
   "knowledge": {
