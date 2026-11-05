@@ -8,10 +8,12 @@ import { Needles } from '../components/Needles';
 const S25: FC = () => {
   const f = useCurrentFrame();
   const t = interpolate(f, [0, 30], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  // 新底图是亮底水墨掌（均值 232/225/207），字幕改用 ink 墨色字，纸白字会看不见
   return (
     <Scene name="p-palm" zoom={[1.0, 1.06]}>
-      <Needles count={2} origin={[790, 680]} len={433} spread={52} tilt={-26} opacity={t} />
-      <Caption text="三个愿望，她用掉了一个。" start={16} end={164} />
+      {/* 针窝在掌心凹处（底图实测 x≈880 / y≈650），针长与 S10 同值——同一批针，只少一枚 */}
+      <Needles count={2} origin={[800, 640]} len={300} spread={62} tilt={-26} opacity={t} />
+      <Caption text="三个愿望，她用掉了一个。" start={16} end={164} tone="ink" />
     </Scene>
   );
 };

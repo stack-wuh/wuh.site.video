@@ -6,6 +6,7 @@ import { AbsoluteFill } from 'remotion';
 const GOLD = '#c8a24d';
 const GOLD_HI = '#f0dcae';
 const GOLD_LO = '#8a6b28';
+const GOLD_MID = '#a8813a';
 
 /** 一枚针：柄在原点，针身朝 +x 方向，总长 len。 */
 const Needle: FC<{ len: number; width?: number }> = ({ len, width = 1 }) => {
@@ -31,10 +32,13 @@ const Needle: FC<{ len: number; width?: number }> = ({ len, width = 1 }) => {
 
 const Defs: FC = () => (
   <defs>
+    {/* 针身全程保持金色：旧版 40%–100% 用近白的 GOLD_HI，六成长度读成一根银针，
+        和针柄+影子叠在一起就成了「三根」。现在只在靠近针柄处给高光，针尖转暗。 */}
     <linearGradient id="nz-shaft" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0%" stopColor={GOLD_LO} />
-      <stop offset="40%" stopColor={GOLD_HI} />
-      <stop offset="100%" stopColor={GOLD_HI} />
+      <stop offset="22%" stopColor={GOLD} />
+      <stop offset="55%" stopColor={GOLD_HI} />
+      <stop offset="100%" stopColor={GOLD_MID} />
     </linearGradient>
     <linearGradient id="nz-wrap" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0%" stopColor={GOLD_HI} />
@@ -61,7 +65,9 @@ export const Needles: FC<{
         const a = tilt + (i - (count - 1) / 2) * 3.2;
         return (
           <g key={i} transform={`translate(${origin[0] + off * 0.35}, ${origin[1] + off}) rotate(${a})`}>
-            {shadow ? <ellipse cx={len * 0.45} cy={9} rx={len * 0.42} ry={5} fill="rgba(0,0,0,0.16)" /> : null}
+            {/* 影子只贴针柄一侧、比针短得多：旧版 rx=len*0.42 几乎与针等长，
+                在浅底上读成第二根针。 */}
+            {shadow ? <ellipse cx={len * 0.2} cy={7} rx={len * 0.16} ry={3.5} fill="rgba(0,0,0,0.13)" /> : null}
             <Needle len={len} />
           </g>
         );
