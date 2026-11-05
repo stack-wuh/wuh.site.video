@@ -9,6 +9,7 @@
   "branch": "feature/20261101-feature-zhi-guo-xiang-production",
   "files": [
     ".github/workflows/render-film.yml",
+    "public/zhi-guo-xiang",
     "scripts/mux-bgm.mjs",
     "shadow-docs/changes/20261101-feature-zhi-guo-xiang-production",
     "src/Root.tsx",
@@ -22,22 +23,27 @@
     "pullRequestUrl": "https://github.com/stack-wuh/wuh.site.video/pull/50"
   },
   "review": {
-    "conclusion": "passed",
-    "verifiedCommit": "b4b8b406712f765c5248bdb07526e803b952ca56",
-    "verifiedAt": "2026-11-01T03:56:11.291Z"
+    "conclusion": "pending",
+    "verifiedCommit": null,
+    "verifiedAt": null
   },
   "workflow": {
     "operation": null,
-    "checkpoint": "f3f35ff6f0d1fa746ee01600dc3fed9981c3f216",
-    "planHash": "828c507eab333b816d1b0ea84505e0547548adadaa982b90492da33a5581c17c",
+    "checkpoint": "fb5fe2126ecedd72004b268c914a7578289580c8",
+    "planHash": "278b217f509ff922070f8dc375e2b8880748974a232139a9120482585f2bc18d",
     "updatedAt": null,
     "lastError": null,
     "worktree": "/Users/wuhong/shadow-desktop/github/wuh.site.video/.worktrees/20261101-feature-zhi-guo-xiang-production",
     "commit": {
       "files": [
-        "shadow-docs/changes/20261101-feature-zhi-guo-xiang-production/brief.md"
+        "public/zhi-guo-xiang/paper/p-paper-back.jpg",
+        "public/zhi-guo-xiang/scene/p-palm.jpg",
+        "videos/zhi-guo-xiang/components/Needles.tsx",
+        "videos/zhi-guo-xiang/shots/s19.tsx",
+        "videos/zhi-guo-xiang/shots/s21.tsx",
+        "videos/zhi-guo-xiang/shots/s25.tsx"
       ],
-      "message": "docs(shadow): brief INV-6/INV-7 对账 —— v9 245s/7350f + 人声入库例外 + mux 落点验收项"
+      "message": "fix(zhi-guo-xiang): 五处画面缺陷——悬空针 · 针身退化 · 亮底掌 · 纸色统一 · 远处人影\n\n- S21 底图 p-rescue 她手里已画着针，删掉代码叠的第二枚（画面中间那根悬空针的真因）\n- Needles 针身渐变 40%–100% 原用近白 #f0dcae，一根针读成金柄+白银针+灰影子三样；改为全程金色，影子 rx=len*0.42 → len*0.16\n- p-palm 重出为亮底水墨掌（均值 113/110/102 → 232/225/207，wan2.7-image-pro）；S25 字幕改 tone=ink、针窝到掌心凹处、针长 433 → 300 与 S10 对齐\n- p-paper-back 重着色到暖纸家族（191/190/191 → 215/184/151，对齐 p-paper-dusk 217/185/150）\n- S19 加 16px 远处人影踩山脊线（x1185/y455），雕羽 92px → 30px 并落在最后一个脚印上"
     }
   },
   "knowledge": {
