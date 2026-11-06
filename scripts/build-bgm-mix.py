@@ -10,8 +10,8 @@ sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='repla
 PROJ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BGM_FLAC = os.path.join(PROJ, 'public', 'zhi-guo-xiang', 'bgm', 'ai-yi.flac')
 BGM = os.path.join(PROJ, '.tmp', 'bgm', 'ai-yi.wav')      # 由 FLAC 现转，不入仓
-VOICE = os.path.join(PROJ, 'public', 'zhi-guo-xiang', 'tts', 'voice-track-v5.wav')
-MIX = os.path.join(PROJ, '.tmp', 'bgm', 'mix-v5.wav')
+VOICE = os.path.join(PROJ, 'public', 'zhi-guo-xiang', 'tts', 'voice-track-v6.wav')
+MIX = os.path.join(PROJ, '.tmp', 'bgm', 'mix-v6.wav')
 LINES = os.path.join(PROJ, 'scripts', 'voice', 'lines.json')
 
 if shutil.which('ffmpeg'):
@@ -171,6 +171,10 @@ if pk > 0.891:
     k2 = 0.891 / pk
     mix *= k2
     print('\n峰值 %.2f dBFS → 整体衰减 %.2f dB' % (20 * np.log10(pk), 20 * np.log10(k2)))
+
+clip = int(np.count_nonzero(np.abs(mix) >= 0.999))
+print('峰值 %.6f（%.2f dBFS）｜ 削波样本 %d ｜ 采样率 %d / 声道 2 / 时长 %.3fs'
+      % (float(np.max(np.abs(mix))), 20 * np.log10(float(np.max(np.abs(mix))) + 1e-12), clip, SR, len(mix) / SR))
 
 w = wave.open(MIX, 'wb')
 w.setnchannels(2); w.setsampwidth(2); w.setframerate(SR)

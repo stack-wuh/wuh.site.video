@@ -1,6 +1,16 @@
 #!/usr/bin/env node
 /**
- * duck-voice.mjs —— 21 条旁白方案的「BGM ducking」可行性与执行工具（不改 mux-bgm.mjs）
+ * duck-voice.mjs —— 「BGM ducking」可行性与执行工具（不改 mux-bgm.mjs）
+ *
+ * ⚠️ 过期声明（2026-11-06 · v6）：
+ *   本文件里的 `LANDINGS` 是 v9 时期的 21 条**字幕**表，`CONTROL_WINDOWS` 是当时的留白窗。
+ *   v5 已删 7 条、移 2 条字幕，v6 又把旁白从 20 段扩到 22 段（a01–a05 / b08 拆 b08a·b08b），
+ *   现片只有 **14 条字幕**、**22 段人声**，且 11–23s 早已有 a02–a04 在说话。
+ *   → `--mode plan` 的时间预算 / 男声×诗行重叠 / 对照窗三条结论**一条都不能用**；
+ *   → 仍有效的是：filter_complex 拓扑、ffmpeg 封装（含本次修复的 stderr 解析）、measure/verify 的取窗口方式。
+ *   成片混音请走 `scripts/build-bgm-mix.py`（v6 实测压深表由它逐段检测输出）。
+ *   修正记录：`ffQuiet` 原先只回 stdout、而 volumedetect 写 stderr（BUG1，实测 stdout 命中 0 次）→
+ *   现改用 spawnSync 同时收 stdout+stderr；`PASS2_OFFSET` 45.46 → 45.45754（零交叉起播，修 click）。
  *
  * 为什么单独一个脚本：mux-bgm.mjs 的口径是「单遍 amix=inputs=3」，不能再叠第二级 amix
  * （已实证：先合 BGM 再叠人声会把音轨截到 143.45s，第二遍 BGM 根本没参与）。
@@ -27,7 +37,7 @@
  *   4) 窗口末点后 300ms 内恢复：末 100ms 段与 C 的差 ≤ 1.5 dB
  */
 
-import { execFileSync } from 'node:child_process';
+import { execFileSync, spawnSync } from 'node:child_process';
 import { existsSync, mkdirSync } from 'node:fs';
 import { dirname, resolve, join } from 'node:path';
 
@@ -36,9 +46,9 @@ import { dirname, resolve, join } from 'node:path';
 const PASS1_START = 4.0;      // 绝对 4.0  ↔ 曲 0
 const PASS1_LEN = 139.46;     // 绝对 4.0–143.46 ↔ 曲 0–139.46
 const BREAK_START = 143.46;   // 断点静默起
-const PASS2_START = 151.0;    // 绝对 151.0 ↔ 曲 45.46
-const PASS2_OFFSET = 45.46;   // 第二遍曲内偏移
-const PASS2_LEN = 94.0;       // 曲 45.46–139.46
+const PASS2_START = 151.0;    // 绝对 151.0 ↔ 曲 45.45754
+const PASS2_OFFSET = 45.45754; // 第二遍曲内偏移（零交叉点，修 mux 起播 click）
+const PASS2_LEN = 94.0;       // 曲 45.45754–139.46
 const FILM_LEN = 245.0;
 
 /** 21 条字幕窗口（script-v9.md §七）；字数只数汉字，标点另计停顿 */
@@ -100,6 +110,7 @@ const DEFAULTS = {
   release: 280,         // ms —— 必须 ≤300ms，对应「人声静默 300ms 内恢复」
   knee: 2.5,
   makeup: 1,
+  level_sc: 1,          // ★ BUG2 兜底：render 模式不传 --level-sc 时也曾拼出 level_sc=undefined
   targetDepth: 14,      // dB，默认压低量（实测不足时由 recommend() 抬高）
 };
 
@@ -168,7 +179,7 @@ function buildFilter({ variant = 'mix', p = DEFAULTS } = {}) {
   const f = [
     // 第一遍：曲 0–139.46 放在绝对 4.0
     `[1:a]atrim=0:${PASS1_LEN},asetpts=PTS-STARTPTS,afade=t=in:st=0:d=1,volume=0.7[b1]`,
-    // 第二遍：曲 45.46–139.46 放在绝对 151.0（不淡出，落在曲子自己的静默里）
+    // 第二遍：曲 45.45754–139.46 放在绝对 151.0（不淡出，落在曲子自己的静默里）
     `[1:a]atrim=${PASS2_OFFSET}:${PASS2_OFFSET + PASS2_LEN},asetpts=PTS-STARTPTS,afade=t=in:st=0:d=1,volume=0.7[b2]`,
   ];
 
@@ -224,8 +235,11 @@ function ff(args) {
   return execFileSync('ffmpeg', ['-hide_banner', '-nostats', ...args], { encoding: 'utf8', maxBuffer: 1 << 26 });
 }
 function ffQuiet(args) {
-  try { return execFileSync('ffmpeg', ['-hide_banner', '-nostats', ...args], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], maxBuffer: 1 << 26 }); }
-  catch (e) { return String(e.stderr || e.stdout || ''); }
+  // ★ BUG1 修复：volumedetect 把结果写在 **stderr**，execFileSync 成功路径只返回 stdout
+  //   （实测 stdout 命中 0 次、stderr 1 次 → 旧版「语音−BGM = −70dB」那批废数字的真根因）。
+  //   改 spawnSync 一次性拿两路，stdout+stderr 拼接后再正则解析。
+  const r = spawnSync('ffmpeg', ['-hide_banner', '-nostats', ...args], { encoding: 'utf8', maxBuffer: 1 << 26 });
+  return `${r.stdout || ''}${r.stderr || ''}`;
 }
 /** 量某文件 [a,b) 的 mean_volume（dBFS）；输入侧 -ss/-t，避免解码抖动 */
 function meanVolume(file, a, b) {

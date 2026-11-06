@@ -6,7 +6,7 @@ PROJ = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 HERE = os.path.dirname(os.path.abspath(__file__))
 WAVDIR = os.path.join(PROJ, '.tmp', 'audition', 'v2e', 'wav')
 TTS = os.path.join(PROJ, 'public', 'zhi-guo-xiang', 'tts')
-OUT = os.path.join(TTS, 'voice-track-v5.wav')
+OUT = os.path.join(TTS, 'voice-track-v6.wav')
 
 # mac/Linux 用系统 ffmpeg；Windows 借 remotion 自带的那份
 if shutil.which('ffmpeg'):
