@@ -15,8 +15,9 @@ import { CLAMP, CURVES } from '../motion-tokens';
 
 const EASE = { ...CLAMP, easing: CURVES.cineEaseInOut };
 
-/** 她：左前景，16 岁背影（双鬟、雪青斗篷），右手举针。脚点 (560+146, 1050)，身高 780。 */
-const HER = { left: 560, top: 270, width: 292.5, height: 780 };
+/** 她：左前景，16 岁背影（双鬟、雪青斗篷），右手举针。v10 抽帧修正：缩小到 590 高、下移靠左，
+ *  不再挡住雪径主体；暖青斗篷压成墨色剪影（brightness 0.34），与 S27 的黑剪影同族。 */
+const HER = { left: 372, top: 458, width: 221, height: 590 };
 /** 他：雪径尽头远影。身高 360（viewBox 120×360，1:1），脚点 (1115, 585)。 */
 const HIM = { left: 1055, top: 225, width: 120, height: 360 };
 
@@ -26,16 +27,18 @@ const S21: FC = () => {
   const raiseToMask = interpolate(f, [45, 115], [0, 1], EASE);
   const lower = interpolate(f, [120, 150], [0, 1], EASE);
   const raise = raiseToMask * (1 - lower);
-  /* 转身：背影片横向压窄 + 略微侧转（不给脸）；随后持续走出画右 */
+  /* 转身：背影片横向压窄 + 略微侧转（不给脸）；随后沿山脊往上走、走进垭口雾里（不横移出画，
+   *  底图右侧没有雪坡，旧版横移会读成悬空）。 */
   const turn = interpolate(f, [115, 132], [0, 1], EASE);
-  const walk = interpolate(f, [120, 162], [0, 1], CLAMP);
+  const walk = interpolate(f, [120, 165], [0, 1], CLAMP);
+  const vanish = interpolate(f, [130, 166], [1, 0], CLAMP);
   /* 针在她手里：他抬手回应后，那枚针就「用掉」了——145f 后手心空着 */
   const needle = interpolate(f, [112, 145], [1, 0], CLAMP);
   const herHem = Math.sin(f / 52) * 2.2;
   const herLift = Math.sin(f / 46) * 1.6;
-  const himLeft = HIM.left + walk * 950;
-  /* 沿右侧雪坡走下去（出画）：脚点 y 585→760，始终踩在底图可见的雪坡上，不从山脊走进雾里 */
-  const himTop = HIM.top + walk * 175;
+  /* 沿雪径往上（左上）走：脚点 (1115,585) → (965,530)，身高 360→280，走进垭口雾里渐隐 */
+  const himLeft = HIM.left - walk * 150;
+  const himTop = HIM.top - walk * 55;
   const step = walk > 0 && walk < 1 ? Math.abs(Math.sin(f / 6)) * 2.6 : 0;
 
   return (
@@ -50,6 +53,7 @@ const S21: FC = () => {
           top: HER.top + herLift,
           width: HER.width,
           height: HER.height,
+          filter: 'brightness(0.34) saturate(0.65)',
         }}
       >
         <XiangFigure
@@ -70,7 +74,8 @@ const S21: FC = () => {
           top: himTop - step,
           width: HIM.width,
           height: HIM.height,
-          transform: `scale(${1 - 0.06 * walk}) scaleX(${1 - 0.24 * turn}) rotate(${-7 * turn}deg)`,
+          opacity: vanish,
+          transform: `scale(${1 - 0.22 * walk}) scaleX(${1 - 0.24 * turn}) rotate(${-7 * turn}deg)`,
           transformOrigin: '50% 100%',
         }}
       >
