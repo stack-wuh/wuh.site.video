@@ -1,8 +1,10 @@
-"""把 BGM《爱意》铺进 v5：两遍对位 + 逐段 ducking + 混音。
+"""把 BGM《爱意》铺进 v7：两遍对位 + 逐段 ducking + BGM「站出」+ 茶棚空间底。
 
 对位依据 assets/bgm-ai-yi-map.md §5；ducking 判据依据 §6.1/§6.3。
-压深不照抄 spec 的表（那表按旧稿人声密度算），改为在 v5 实际线上实测反算；
-有声区间从人声轨直接检测，所以诗六行 / D01 一并覆盖。
+v7 新增两件事（vo-script-v7.md §3.3/§3.4）：
+  1) 站出：任何 ≥3s 无旁白窗口，BGM 从床（−11dB）抬到 −5dB（+6dB），0.8s 起 / 1.0s 落；
+  2) 空间底：133.4–151.2 茶棚静默段垫一层 −40dBFS 的低频空气底（不是音效），
+     把「静」和「断」分开。
 """
 import numpy as np, wave, json, os, sys, io, shutil
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
@@ -10,8 +12,8 @@ sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='repla
 PROJ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BGM_FLAC = os.path.join(PROJ, 'public', 'zhi-guo-xiang', 'bgm', 'ai-yi.flac')
 BGM = os.path.join(PROJ, '.tmp', 'bgm', 'ai-yi.wav')      # 由 FLAC 现转，不入仓
-VOICE = os.path.join(PROJ, 'public', 'zhi-guo-xiang', 'tts', 'voice-track-v6.wav')
-MIX = os.path.join(PROJ, '.tmp', 'bgm', 'mix-v6.wav')
+VOICE = os.path.join(PROJ, 'public', 'zhi-guo-xiang', 'tts', 'voice-track-v7.wav')
+MIX = os.path.join(PROJ, '.tmp', 'bgm', 'mix-v7.wav')
 LINES = os.path.join(PROJ, 'scripts', 'voice', 'lines.json')
 
 if shutil.which('ffmpeg'):
@@ -31,6 +33,13 @@ FEMALE_DB = 2.0
 VOICE_DB = 1.0                             # 全人声 +1dB（留出被床掩蔽的句尾）
 DUCK_CAP = 9.0                            # 女独白抬回与男声同一线
 SNR_TARGET = 6.5
+
+# v7：BGM 两态（床 / 站出）与茶棚空间底
+FG_DB = 6.0           # 站出相对床的抬升
+FG_MIN_GAP = 3.0      # 无旁白 ≥ 该秒数才站出
+FG_MIN_BED_P90 = -45.0  # 床 p90 低于此值不站出（空床交给空间底）
+ROOM_WIN = (133.4, 151.2)
+ROOM_RMS_DB = -40.0   # 空间底 RMS（远低于人声与 BGM，只补「空间还在」）
 
 
 def read(p):
@@ -145,9 +154,61 @@ for s, e, dep, _, _ in merged:
     if c2 > b2: g[b2:c2] = np.minimum(g[b2:c2], np.linspace(-dep, 0, c2 - b2))
 for s, e, dep in LIFTS:
     g[int(s * GRID):int(e * GRID)] += dep
+# ---- 4b. BGM「站出」：≥3s 无旁白窗口抬 +6dB（0.8s 起 / 1.0s 落） ----
+fg = np.zeros(M)
+bounds = []
+prev = 0.0
+for s_i, e_i in runs:
+    ss, ee = s_i / SR, e_i / SR
+    if ss - prev >= FG_MIN_GAP and prev >= 4.0:
+        bounds.append((prev, ss))
+    prev = max(prev, ee)
+if TOTAL - prev >= FG_MIN_GAP:
+    bounds.append((prev, TOTAL))
+print('\n站出窗口 %d 个：' % len(bounds))
+for a0, b0 in bounds:
+    a0 = max(a0, 4.0)
+    # 空床不站出：第一遍曲到 133.5 已破到 −50 以下，抬一个已经死了的床没有意义，
+    # 那一段按 §3.4 方案 A 交给 −40dBFS 空间底（设计稿 §3.3 的「靠空间底」即此意）。
+    if p90(bed[int(a0 * SR):int(b0 * SR)]) < FG_MIN_BED_P90:
+        print('  %6.2f–%6.2f  床已静默（p90 < %.0f dBFS）→ 不站出' % (a0, b0, FG_MIN_BED_P90))
+        continue
+    i0, i1 = int(a0 * GRID), int(b0 * GRID)
+    up, dn = int(0.8 * GRID), int(1.0 * GRID)
+    if i1 - i0 < up + dn + 1:
+        continue
+    seg = np.full(i1 - i0, FG_DB)
+    seg[:up] = np.linspace(0, FG_DB, up)
+    seg[-dn:] = np.linspace(FG_DB, 0, dn)
+    fg[i0:i1] = np.maximum(fg[i0:i1], seg)
+    print('  %6.2f–%6.2f  %5.1fs  → +%.1fdB' % (a0, b0, b0 - a0, FG_DB))
+
 g = np.convolve(g, np.ones(60) / 60.0, mode='same')
+fg = np.convolve(fg, np.ones(80) / 80.0, mode='same')
 g_db = np.interp(np.arange(N) / SR * GRID, np.arange(M), g)
-beds = bed * (10 ** ((BASE_DB + g_db) / 20.0).astype(np.float32))[:, None]
+fg_db = np.interp(np.arange(N) / SR * GRID, np.arange(M), fg)
+beds = bed * (10 ** ((BASE_DB + g_db + fg_db) / 20.0).astype(np.float32))[:, None]
+
+# ---- 4c. 茶棚空间底（−40dBFS 低频空气，只在静默段） ----
+room = np.zeros((N, 2), dtype=np.float32)
+rs, re = ROOM_WIN
+ri0, ri1 = int(rs * SR), int(re * SR)
+nr = ri1 - ri0
+if nr > 0:
+    rng = np.random.default_rng(7)
+    noise = rng.standard_normal(nr).astype(np.float32)
+    k2 = np.ones(140, dtype=np.float32) / 140.0
+    air = np.convolve(noise, k2, mode='same')
+    t = np.arange(nr) / SR
+    air *= (0.62 + 0.38 * np.sin(2 * np.pi * 0.07 * t)).astype(np.float32)
+    target = 10 ** (ROOM_RMS_DB / 20.0)
+    air *= target / max(float(np.sqrt(np.mean(air ** 2))), 1e-9)
+    fi, fo = int(1.2 * SR), int(1.2 * SR)
+    air[:fi] *= np.linspace(0, 1, fi)
+    air[-fo:] *= np.linspace(1, 0, fo)
+    room[ri0:ri1, 0] = air
+    room[ri0:ri1, 1] = air
+    print('空间底 %.1f–%.1fs @ %.0f dBFS RMS' % (rs, re, ROOM_RMS_DB))
 
 # ---- 5. 角色电平 ----
 with open(LINES, 'r', encoding='utf-8') as f:
@@ -165,7 +226,7 @@ for ln in lines:
     if a0 + r < b0: vg[a0:a0 + r] = np.linspace(1.0, fg, r)
     if b0 - r > a0: vg[b0 - r:b0] = np.linspace(fg, 1.0, r)
 
-mix = beds + voice * (vg * (10 ** (VOICE_DB / 20.0)))[:, None]
+mix = beds + room + voice * (vg * (10 ** (VOICE_DB / 20.0)))[:, None]
 pk = float(np.max(np.abs(mix)))
 if pk > 0.891:
     k2 = 0.891 / pk
@@ -196,4 +257,93 @@ for s, e in runs:
     worst = min(worst, m)
     print('%6.2f–%6.2f   %8.1f %8.1f %8.1f%s' % (ss, ee, dv, dbb, m, tag))
 print('\n最小余量 %.1f dB ｜ 低于 4dB 的段: %s' % (worst, bad if bad else '无'))
+
+# ---- 7. 五态落表（静 / 托底 / 让位 / 站出 / 收） ----
+# 判据直接读本脚本算出的同一条包络（g_db = 逐段 duck 增益，fg_db = 站出增益），
+# 所以这张表和实际混出来的东西必然一致，不是另写一套期望值。
+print('\n-- 五态时间表 --')
+STATE_BIN = 0.25
+states = []
+for i in range(int(TOTAL / STATE_BIN)):
+    t = (i + 0.5) * STATE_BIN
+    j = int(t * SR)
+    lvl = db(beds[j:j + int(STATE_BIN * SR)])
+    if t >= 232.5:
+        st = '收'
+    elif t < PASS1_AT or lvl < -55.0:
+        st = '静'
+    elif float(fg_db[j]) > 2.0:
+        st = '站出'
+    elif float(g_db[j]) <= -7.0:
+        st = '让位'
+    else:
+        st = '托底'
+    states.append((t, st, lvl))
+
+merged_st = []
+for t, st, lvl in states:
+    if merged_st and merged_st[-1][0] == st and abs(merged_st[-1][2] - t) < STATE_BIN * 1.5:
+        merged_st[-1][2] = t + STATE_BIN / 2
+        merged_st[-1][3].append(lvl)
+    else:
+        merged_st.append([st, t, t + STATE_BIN / 2, [lvl]])
+for st, a, b, lv in merged_st:
+    if b - a < 0.5:
+        continue
+    print('  %-4s %6.2f–%6.2f  %5.1fs  床均 %6.1f dBFS' % (st, a, b, b - a, float(np.mean(lv))))
+tot = {}
+for _, st, _ in states:
+    tot[st] = tot.get(st, 0.0) + STATE_BIN
+print('  合计：' + ' ｜ '.join('%s %.1fs' % (k, v) for k, v in sorted(tot.items(), key=lambda x: -x[1])))
+
+# 设计稿 §3.3 手画的站出窗口 → 实测是否兑现（取区间重叠）
+DESIGN_FG = [(34.5, 44.5), (64.0, 88.4), (94.0, 106.4), (120.2, 126.3), (133.1, 138.5),
+             (148.2, 151.5), (161.4, 163.5), (189.0, 220.0), (224.0, 239.0)]
+act = []
+prev_end = 0.0
+for s_i, e_i in runs:
+    ss, ee = s_i / SR, e_i / SR
+    if ss - prev_end >= FG_MIN_GAP and prev_end >= 4.0:
+        act.append((prev_end, ss))
+    prev_end = max(prev_end, ee)
+if TOTAL - prev_end >= FG_MIN_GAP:
+    act.append((prev_end, TOTAL))
+act = [(a, b) for a, b in act if b - a - (0.8 + 1.0) >= 0.0]
+print('\n-- 站出窗口：实测 vs 设计稿 §3.3（≥3s 无旁白，+%.0fdB，ramp 0.8s 起 / 1.0s 落）--' % FG_DB)
+fg_rows = []
+for a0, b0 in act:
+    if p90(bed[int(a0 * SR):int(b0 * SR)]) < FG_MIN_BED_P90:
+        continue
+    ov = max([min(b0, de) - max(a0, ds) for ds, de in DESIGN_FG] + [0.0])
+    fg_rows.append({'a': round(a0, 2), 'b': round(b0, 2), 'dur': round(b0 - a0, 2),
+                    'design_overlap': round(max(0.0, ov), 2)})
+    print('  %6.2f–%6.2f  %5.2fs  设计稿重叠 %4.2fs' % (a0, b0, b0 - a0, max(0.0, ov)))
+missing = [(ds, de) for ds, de in DESIGN_FG
+           if not any(min(de, r['b']) - max(ds, r['a']) > 1.0 for r in fg_rows)]
+print('  设计稿列了但实测不成立（该窗已被旁白占/不足 3s）：%s'
+      % (['%.1f–%.1f' % m for m in missing] if missing else '无'))
+
+# ---- 8. 验收 + 机读报告 ----
+peak_db = 20 * np.log10(float(np.max(np.abs(mix))) + 1e-12)
+ok = (abs(len(mix) / SR - TOTAL) < 1e-6 and peak_db <= -1.0 + 1e-6 and clip == 0 and worst >= 4.0)
+print('\n-- 验收 --')
+print('  时长 %.3fs / %.3fs  %s' % (len(mix) / SR, TOTAL, '✓' if abs(len(mix) / SR - TOTAL) < 1e-6 else '✗'))
+print('  峰值 %.2f dBFS（≤ −1.0）  %s' % (peak_db, '✓' if peak_db <= -1.0 + 1e-6 else '✗'))
+print('  削波样本 %d  %s' % (clip, '✓' if clip == 0 else '✗'))
+print('  人声对床最小余量 %.1f dB（≥4）  %s' % (worst, '✓' if worst >= 4.0 else '✗'))
+print('  总判定 %s' % ('PASS' if ok else 'FAIL'))
+with open(os.path.join(os.path.dirname(MIX), 'mix-v7-report.json'), 'w', encoding='utf-8') as f:
+    json.dump({'peak_db': peak_db, 'clip': clip, 'duration': len(mix) / SR,
+               'min_margin': worst, 'bad_segments': bad, 'snr_target': SNR_TARGET,
+               'standout': fg_rows, 'design_standout': DESIGN_FG, 'design_missing': missing,
+               'states': [{'state': st, 'a': round(a, 2), 'b': round(b, 2)}
+                          for st, a, b, _ in merged_st if b - a >= 0.5],
+               'state_totals': {k: round(v, 2) for k, v in tot.items()},
+               'duck': [{'a': round(s, 2), 'b': round(e, 2), 'depth': dep,
+                         'bed': round(bdb, 1), 'p90': round(p, 1)}
+                        for s, e, dep, bdb, p in merged],
+               'base_db': BASE_DB, 'fg_db': FG_DB, 'room_win': list(ROOM_WIN),
+               'room_db': ROOM_RMS_DB, 'pass2_src': PASS2_SRC, 'ok': bool(ok)},
+              f, ensure_ascii=False, indent=1)
+print('\n机读报告 → %s' % os.path.join(os.path.dirname(MIX), 'mix-v7-report.json'))
 

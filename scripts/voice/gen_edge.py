@@ -7,8 +7,12 @@ MP3DIR = os.path.join(HERE, 'mp3')
 os.makedirs(MP3DIR, exist_ok=True)
 
 # 男声 云健（108Hz，沉稳）；女声 晓晓（214Hz，温润）
+# v7 语速：设计稿 §四.5 写男 −26%，但 §五「样音实测」已实测 −26% 下每条比预算多 0.9–1.6s
+#   （S08 44–51 / S10 58–64 / S27 163–170 三个窗口装不下），设计稿自己给了「快」这条路：
+#   男 −22% = A/B 样音第二遍，实测快 8–10%。lines.json 每条都带显式 r 覆盖，此处只是兜底。
+#   女声分两档年龄：16 岁（f01–f04）−18%，40 岁（f05–f08）−30%（§四.5「同一把嗓子两个年龄」）。
 CAST = {
-    'male':   ('zh-CN-YunjianNeural',  '-26%', '-6Hz'),
+    'male':   ('zh-CN-YunjianNeural',  '-22%', '-6Hz'),
     'female': ('zh-CN-XiaoxiaoNeural', '-28%', '-4Hz'),
 }
 # 备选（只用于 A/B，不参与主轨）
@@ -42,6 +46,8 @@ async def main():
     jobs = []
     for ln in lines:
         voice, rate, pit = CAST[ln['v']]
+        rate = ln.get('r', rate)  # v7：允许逐条覆盖语速（女声 16 岁 −18% / 40 岁 −30%）
+        pit = ln.get('p', pit)
         jobs.append((one(ln['t'], voice, rate, pit, os.path.join(MP3DIR, ln['id'] + '.mp3'), sem), ln['id']))
     # 备选男声：只做开篇 5 条，供 A/B
     for ln in lines:
