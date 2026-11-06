@@ -29,10 +29,37 @@ const configPath = join(filmDir, 'film.config.json');
 const readShell = () => (existsSync(configPath) ? (JSON.parse(readFileSync(configPath, 'utf8')).shell ?? null) : null);
 const FPS = 30;
 
+/* ─── 转场（v10 §三）：第 7 列 = 进入本镜的 inbound；outbound = 下一镜 inbound ───
+ * 单侧帧数即镜内首/尾遮罩占用：纸翻 18（总 36）、飞白 10（总 20）、墨洇 12（总 24）、硬切 0。
+ * durationFrames / startFrame 不因转场改动——转场只在镜内占用（design-v10 §3.1）。 */
+const TRANSITIONS = {
+  page: { side: 18, zh: '纸翻' },
+  dry: { side: 10, zh: '飞白' },
+  ink: { side: 12, zh: '墨洇' },
+  cut: { side: 0, zh: '切' },
+};
+const TRANSITION_SIDE = Object.fromEntries(Object.entries(TRANSITIONS).map(([k, v]) => [k, v.side]));
+const isTransition = (v) => Object.hasOwn(TRANSITIONS, v);
+/** 中文/英文别名 → page/dry/ink/cut。空值（无该列的老分镜）= cut；无法识别的非空值返回 null（由 validate 决定是否报错） */
+const TRANSITION_ALIASES = {
+  纸翻: 'page', 翻页: 'page', 翻: 'page', page: 'page', paper: 'page', flip: 'page',
+  飞白: 'dry', 干笔: 'dry', dry: 'dry',
+  墨洇: 'ink', 洇墨: 'ink', 墨: 'ink', ink: 'ink', bleed: 'ink',
+  切: 'cut', 硬切: 'cut', cut: 'cut',
+};
+function normalizeTransition(raw) {
+  const key = String(raw ?? '').trim().toLowerCase();
+  if (!key) return 'cut';
+  return Object.hasOwn(TRANSITION_ALIASES, key) ? TRANSITION_ALIASES[key] : null;
+}
+
 /* ─── storyboard 解析（import 一次性入口 + check 交叉核对共用） ─── */
 function parseStoryboard(path) {
   if (!existsSync(path)) die(`分镜脚本不存在: ${path}`);
-  const lines = readFileSync(path, 'utf8').split('\n');
+  const text = readFileSync(path, 'utf8');
+  const lines = text.split('\n');
+  /** 表头注释声明了「进入本镜的转场」才严格校验第 7 列；老单元第 7 列是尾帧/音效散文，按无转场处理 */
+  const strictTransitions = text.includes('进入本镜的转场');
   const acts = [];
   const shots = [];
   for (const line of lines) {
@@ -45,6 +72,7 @@ function parseStoryboard(path) {
     if (row && acts.length > 0) {
       const cells = line.split('|').map((c) => c.trim());
       const copy = (cells[5] ?? '').replace(/\[材质?\S*\]|\[材料\S*\]/g, '').replace(/\s+/g, ' ').trim();
+      const transitionRaw = cells[6] ?? '';
       shots.push({
         id: `s${String(Number(row[1])).padStart(2, '0')}`,
         act: acts[acts.length - 1].act,
@@ -52,11 +80,13 @@ function parseStoryboard(path) {
         durationFrames: Number(row[2]),
         cellStart: Number(row[3]),
         cellEnd: Number(row[4]),
+        transition: normalizeTransition(transitionRaw),
+        transitionRaw,
         source: `shots/s${String(Number(row[1])).padStart(2, '0')}.tsx`,
       });
     }
   }
-  return { acts, shots };
+  return { acts, shots, strictTransitions };
 }
 
 function validate(manifest, parsed) {
@@ -67,13 +97,31 @@ function validate(manifest, parsed) {
     if (s.id !== `s${String(n).padStart(2, '0')}`) errs.push(`镜号不连续: 第 ${n} 项是 ${s.id}`);
     const prefix = shots.slice(0, i).reduce((sum, x) => sum + x.durationFrames, 0);
     if (s.startFrame !== prefix) errs.push(`${s.id} startFrame ${s.startFrame} ≠ 前缀和 ${prefix}`);
+    // 转场值域：manifest 只允许 page/dry/ink/cut
+    if (s.transition !== undefined && !isTransition(s.transition)) {
+      errs.push(`${s.id} transition「${s.transition}」不在 page/dry/ink/cut 值域`);
+    }
     if (parsed) {
       const p = parsed.shots[i];
       if (!p || p.id !== s.id) errs.push(`${s.id} 与分镜表第 ${i + 1} 行不对应`);
-      else if (p.durationFrames !== s.durationFrames) errs.push(`${s.id} 时长 ${s.durationFrames} ≠ 分镜表 ${p.durationFrames}`);
-      else if (p.cellStart !== s.startFrame) errs.push(`${s.id} 起帧 ${s.startFrame} ≠ 分镜表 ${p.cellStart}`);
+      else {
+        if (p.durationFrames !== s.durationFrames) errs.push(`${s.id} 时长 ${s.durationFrames} ≠ 分镜表 ${p.durationFrames}`);
+        if (p.cellStart !== s.startFrame) errs.push(`${s.id} 起帧 ${s.startFrame} ≠ 分镜表 ${p.cellStart}`);
+        // 转场真源在分镜表：manifest 必须与第 7 列一致
+        if (p.transition === null) {
+          if (parsed.strictTransitions) {
+            errs.push(`${s.id} 转场值「${String(p.transitionRaw).trim()}」无法识别（可用：${Object.keys(TRANSITION_ALIASES).join(' / ')}）`);
+          }
+        } else if (s.transition !== undefined && s.transition !== p.transition) {
+          errs.push(`${s.id} transition「${s.transition}」≠ 分镜表「${p.transition}」`);
+        }
+        if (parsed.strictTransitions && s.transition === undefined) errs.push(`${s.id} manifest 缺 transition（先跑 import）`);
+      }
     }
   });
+  // 转场连续性：s01 无前镜 → inbound 必须硬切；outbound 由下一镜 inbound 推导、末镜恒为切，不落表
+  const first = shots[0];
+  if (first?.transition !== undefined && first.transition !== 'cut') errs.push(`${first.id} 是首镜，无前镜，inbound 必须为 cut`);
   const sum = shots.reduce((sum, x) => sum + x.durationFrames, 0);
   if (sum !== totalFrames) errs.push(`Σ durationFrames ${sum} ≠ totalFrames ${totalFrames}`);
   if (parsed) {
@@ -97,7 +145,15 @@ function doImport() {
   const shots = parsed.shots.map((s) => {
     if (s.cellStart !== cursor) die(`${s.id} 分镜表起帧 ${s.cellStart} 与前镜止帧 ${cursor} 不连续`);
     cursor = s.cellEnd;
-    return { id: s.id, act: s.act, title: s.title, startFrame: s.cellStart, durationFrames: s.durationFrames, source: s.source };
+    return {
+      id: s.id,
+      act: s.act,
+      title: s.title,
+      startFrame: s.cellStart,
+      durationFrames: s.durationFrames,
+      transition: s.transition ?? 'cut',
+      source: s.source,
+    };
   });
   const manifest = { film: unit, fps: FPS, totalFrames: cursor, acts: parsed.acts, shots };
   const errs = validate(manifest, parsed);
@@ -115,10 +171,15 @@ function doSync() {
   const filmDurationExpr = shell ? String(manifest.totalFrames + shell.intro + shell.outro) : 'manifest.totalFrames';
   mkdirSync(join(filmDir, 'shots'), { recursive: true });
   const header = (what) => `/* 由 scripts/shots.mjs sync 生成——勿手改；真源 shots-manifest.json（${what}） */\n`;
-  const tsType = `{ film: string; fps: number; totalFrames: number; acts: Array<{ act: number; title: string; startFrame: number; endFrame: number }>; shots: Array<{ id: string; act: number; title: string; startFrame: number; durationFrames: number; source: string }> }`;
+  const transitionUnion = Object.keys(TRANSITIONS).map((k) => `'${k}'`).join(' | ');
+  const tsType = `{ film: string; fps: number; totalFrames: number; acts: Array<{ act: number; title: string; startFrame: number; endFrame: number }>; shots: Array<{ id: string; act: number; title: string; startFrame: number; durationFrames: number; transition: Transition; source: string }> }`;
   writeFileSync(
     join(filmDir, 'shots', 'manifest.ts'),
-    header('类型化视图') + `export type Manifest = ${tsType};\n\nexport const manifest: Manifest = ${JSON.stringify(manifest, null, 2)};\n`,
+    header('类型化视图')
+      + `export type Transition = ${transitionUnion};\n\n`
+      + `/** 转场单侧帧数（总帧 = 2×；cut = 0）：纸翻 18 / 飞白 10 / 墨洇 12。in = 镜首 inbound，out = 下一镜 inbound */\n`
+      + `export const TRANSITION_SIDE: Record<Transition, number> = ${JSON.stringify(TRANSITION_SIDE, null, 2)};\n\n`
+      + `export type Manifest = ${tsType};\n\nexport const manifest: Manifest = ${JSON.stringify(manifest, null, 2)};\n`,
   );
   const imports = manifest.shots.map((s) => `import ${s.id.toUpperCase()} from './${s.id}';`).join('\n');
   const entries = manifest.shots.map((s) => `  ${s.id}: ${s.id.toUpperCase()},`).join('\n');
@@ -130,7 +191,7 @@ function doSync() {
     join(filmDir, 'routes.tsx'),
     header('视频单元路由')
       + `import type { FC } from 'react';\nimport type { VideoRoute } from '../../src/route';\nimport { ${pascal} } from './${pascal}';\nimport { ${pascal}Audio } from './${pascal}Audio';\nimport { ShotShell } from './components/ShotShell';\nimport { shotRegistry } from './shots/registry';\nimport { manifest } from './shots/manifest';\n\n`
-      + `const shotRoute = (id: string): VideoRoute => {\n  const entry = manifest.shots.find((s) => s.id === id);\n  if (!entry) throw new Error(\`manifest 缺镜 \${id}\`);\n  const Shot = shotRegistry[id];\n  const ShotComposition: FC = () => (\n    <ShotShell>\n      <Shot />\n    </ShotShell>\n  );\n  return { id: \`${pascal}-\${id}\`, component: ShotComposition, durationInFrames: entry.durationFrames };\n};\n\n`
+      + `const shotRoute = (id: string): VideoRoute => {\n  const entry = manifest.shots.find((s) => s.id === id);\n  if (!entry) throw new Error(\`manifest 缺镜 \${id}\`);\n  const next = manifest.shots[manifest.shots.indexOf(entry) + 1];\n  const Shot = shotRegistry[id];\n  const ShotComposition: FC = () => (\n    <ShotShell in={entry.transition} out={next?.transition} duration={entry.durationFrames}>\n      <Shot />\n    </ShotShell>\n  );\n  return { id: \`${pascal}-\${id}\`, component: ShotComposition, durationInFrames: entry.durationFrames };\n};\n\n`
       + `export const ${camel}Routes: VideoRoute[] = [\n  { id: '${pascal}', component: ${pascal}, durationInFrames: ${filmDurationExpr} },\n  { id: '${pascal}Audio', component: ${pascal}Audio, durationInFrames: ${filmDurationExpr} },\n  ...manifest.shots.map((s) => shotRoute(s.id)),\n];\n`,
   );
   rmSync(join(filmDir, 'routes.ts'), { force: true });
@@ -164,6 +225,19 @@ function doCheck() {
     if (!routes.includes(`component: ${pascal}Audio,`)) errs.push(`routes.tsx 缺 audio comp ${pascal}Audio（跑 sync 重生成）`);
     if (!routes.includes('...manifest.shots.map((s) => shotRoute(s.id))')) errs.push('routes.tsx 缺 manifest 逐镜遍历（跑 sync 重生成）');
     if (!routes.includes(`durationInFrames: ${filmDurationExpr}`)) errs.push('routes.tsx 缺时长对账（跑 sync 重生成）');
+    // 转场透传：分镜表声明了 inbound 列的单元，镜级 comp 必须把 in（本镜 inbound）/out（下一镜 inbound）喂给 ShotShell；
+    // 老单元（第 7 列是尾帧/音效散文）维持旧契约，不因共享工具升级而红
+    if (parsed.strictTransitions) {
+      if (!routes.includes('in={entry.transition}')) errs.push('routes.tsx 缺 ShotShell in 透传（跑 sync 重生成）');
+      if (!routes.includes('out={next?.transition}')) errs.push('routes.tsx 缺 ShotShell out 透传（跑 sync 重生成）');
+      if (!routes.includes('duration={entry.durationFrames}')) errs.push('routes.tsx 缺 ShotShell duration 透传（跑 sync 重生成）');
+    }
+  }
+  const manifestTsPath = join(filmDir, 'shots', 'manifest.ts');
+  if (parsed.strictTransitions && existsSync(manifestTsPath)) {
+    const mts = readFileSync(manifestTsPath, 'utf8');
+    if (!mts.includes('transition: Transition')) errs.push('manifest.ts 缺 transition 字段（跑 sync 重生成）');
+    if (!mts.includes('export const TRANSITION_SIDE')) errs.push('manifest.ts 缺 TRANSITION_SIDE（跑 sync 重生成）');
   }
   if (errs.length > 0) die(`INV 对账失败 ${errs.length} 处:\n  ${errs.join('\n  ')}`);
   console.log(`✅ check: INV-S1/S2/S6 全绿 —— ${manifest.shots.length} 镜 Σ=${manifest.totalFrames} 帧，与分镜表/幕表/生成物一致`);
