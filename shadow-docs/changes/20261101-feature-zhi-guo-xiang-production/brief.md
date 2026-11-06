@@ -31,20 +31,19 @@
   "workflow": {
     "operation": null,
     "checkpoint": "7b81452afb1b89c9ca6a17523177f7ed5b744cc2",
-    "planHash": "5ccdf4c06377d9365e8e00652e54bb8a1697c7ec1d724aa057f09b6b8113218c",
+    "planHash": "4b991229aaf9d2ba7b82ce84bdcaf08ff286d8d8bd3413467f114dc9c747ba31",
     "updatedAt": null,
     "lastError": null,
     "worktree": "/Users/wuhong/shadow-desktop/github/wuh.site.video/.worktrees/20261101-feature-zhi-guo-xiang-production",
     "commit": {
       "files": [
-        ".gitignore",
-        "scripts/build-bgm-mix.py",
-        "scripts/voice/build_track.py",
-        "scripts/voice/decode-ncm.py",
-        "scripts/voice/edit_captions.py",
-        "scripts/voice/verify.py"
+        "shadow-docs/changes/20261101-feature-zhi-guo-xiang-production/design-v10.md",
+        "videos/zhi-guo-xiang/assets/art-direction.md",
+        "videos/zhi-guo-xiang/assets/bgm-ai-yi-map.md",
+        "videos/zhi-guo-xiang/assets/script-v9.md",
+        "videos/zhi-guo-xiang/assets/storyboard-v9.md"
       ],
-      "message": "fix(voice): 配音与混音流水线可移植化 —— 去掉 Windows 硬路径\n\n- 5 个脚本的 PROJ/SHOTS/dst 由 r\"D:\\works\\wuh.site.video\" 改为按 __file__ 反推仓库根\n- build_track.py 原读 .tmp/audition/v2e/lines.json、gen_edge.py 写 scripts/voice/，两半对接不上；统一到 scripts/voice/\n- npx.cmd 改为「有系统 ffmpeg 直接用，否则回落 remotion 自带那份」，mac/Linux 可跑\n- .gitignore 补 __pycache__/"
+      "message": "docs(script): v10 路 B 定调 —— 金针求揭面 · 面具回归 · 四席评审重写方案\n\n- S21 由「扎进落水者的穴道」（救人）改为「把唯一那枚递到他面前，求他取下面具」；补「剩下两枚此后再没动过」\n- 时间线自洽：那一夜一枚没用，寻访多年、每次都晚三天，直到唯一一次赶上才用掉 → S21 留在 act4 原位，S20 醒木↔S21 用针的「同一时刻」成立\n- §4.4 铁律理由改写：从「郭襄自己就没看见」→「她拿唯一一次机会换了一张脸，观众仍然不给；她看见了，我们没有」\n- 金针定义按原著更正（如见你面／托人持针传命），并修 script-v9 §3.2 的「凭此来找我」\n- S25「剩两枚」读法变为舍不得用，与 S26 戏眼「舍不得用掉那枚针」第一次呼应；S25/S29/b11 账目不动\n- art-direction 新增 §十二：面具回归形制、弃用 p-giving 改代码剪影、针位子集约束、手的统一规格、露脸双参考图、生图只认 wan2.7-image-pro、金针无针眼、南宋形制\n- 新增 design-v10.md（四席评审后重写版，含初稿 10 条事实错误留痕）"
     }
   },
   "knowledge": {
