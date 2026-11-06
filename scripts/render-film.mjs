@@ -144,8 +144,15 @@ async function shotHash(s) {
     entryPoints: [join(filmDir, s.source)], bundle: true, write: false, metafile: true, logLevel: 'silent', jsx: 'automatic',
   });
   const files = Object.keys(result.metafile.inputs).filter((k) => !k.includes('node_modules')).sort();
+  /* 装配层文件不在镜文件的依赖闭包里（ShotShell 由 ZhiGuoXiang.tsx 引入），但会改变每一帧的像素：
+   * 必须显式并入缓存键，否则改了转场遮罩后逐镜仍命中旧缓存（v11 墨洇 12f→20f 就踩过这个坑）。 */
+  const ASSEMBLY = [`videos/${unit}/ZhiGuoXiang.tsx`, `videos/${unit}/components/ShotShell.tsx`, `videos/${unit}/motion-tokens.ts`, 'brand/tokens.ts'];
   const h = createHash('sha256');
-  h.update(JSON.stringify({ schema: 2, composition: `${pascal}-${s.id}`, durationFrames: s.durationFrames, fps: manifest.fps }));
+  h.update(JSON.stringify({ schema: 3, composition: `${pascal}-${s.id}`, durationFrames: s.durationFrames, fps: manifest.fps }));
+  for (const rel of ASSEMBLY) {
+    const abs = join(root, rel);
+    if (existsSync(abs)) h.update(rel).update(readFileSync(abs));
+  }
   for (const f of files) {
     const abs = join(root, f);
     if (existsSync(abs) && statSync(abs).isFile()) h.update(readFileSync(abs));
@@ -189,6 +196,9 @@ async function renderRange(comp, serveUrl, start, end, out, stallMs = STALL_MS) 
     await renderMedia({
       composition: comp, // 全镜时长 Composition；frameRange 用镜内全局索引取块——禁止再用块长覆盖 duration
       serveUrl, codec: 'h264', crf: CRF, concurrency: CONCURRENCY, browserExecutable: CHROME,
+      /* 鬼帧处方（design-v11 §六）：Chrome 156 + 并发截图时 shared-memory capture 偶发返回错 surface，
+       * 整帧变成「画面缩到 1/3 平铺 3×3」。关掉它回落 CDP 截图，实测 4/8 鬼帧 → 0。 */
+      chromiumOptions: { disableSharedMemoryCapture: true },
       outputLocation: out, inputProps: {}, frameRange: [start, end - 1], cancelSignal,
       onProgress: ({ renderedFrames }) => {
         lastTick = Date.now();

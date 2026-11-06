@@ -29,13 +29,13 @@ const configPath = join(filmDir, 'film.config.json');
 const readShell = () => (existsSync(configPath) ? (JSON.parse(readFileSync(configPath, 'utf8')).shell ?? null) : null);
 const FPS = 30;
 
-/* ─── 转场（v10 §三）：第 7 列 = 进入本镜的 inbound；outbound = 下一镜 inbound ───
- * 单侧帧数即镜内首/尾遮罩占用：纸翻 18（总 36）、飞白 10（总 20）、墨洇 12（总 24）、硬切 0。
- * durationFrames / startFrame 不因转场改动——转场只在镜内占用（design-v10 §3.1）。 */
+/* ─── 转场（v11 §二）：第 7 列 = 进入本镜的 inbound；outbound = 下一镜 inbound ───
+ * 单侧帧数即镜内首/尾遮罩占用：墨洇 20（总 40，v11 起全片唯一软转场）、纸翻 18、飞白 10、硬切 0。
+ * durationFrames / startFrame 不因转场改动——转场只在镜内占用（design-v11 §二）。 */
 const TRANSITIONS = {
   page: { side: 18, zh: '纸翻' },
   dry: { side: 10, zh: '飞白' },
-  ink: { side: 12, zh: '墨洇' },
+  ink: { side: 20, zh: '墨洇' },
   cut: { side: 0, zh: '切' },
 };
 const TRANSITION_SIDE = Object.fromEntries(Object.entries(TRANSITIONS).map(([k, v]) => [k, v.side]));
@@ -177,7 +177,7 @@ function doSync() {
     join(filmDir, 'shots', 'manifest.ts'),
     header('类型化视图')
       + `export type Transition = ${transitionUnion};\n\n`
-      + `/** 转场单侧帧数（总帧 = 2×；cut = 0）：纸翻 18 / 飞白 10 / 墨洇 12。in = 镜首 inbound，out = 下一镜 inbound */\n`
+      + `/** 转场单侧帧数（总帧 = 2×；cut = 0）：墨洇 20 / 纸翻 18 / 飞白 10。in = 镜首 inbound，out = 下一镜 inbound */\n`
       + `export const TRANSITION_SIDE: Record<Transition, number> = ${JSON.stringify(TRANSITION_SIDE, null, 2)};\n\n`
       + `export type Manifest = ${tsType};\n\nexport const manifest: Manifest = ${JSON.stringify(manifest, null, 2)};\n`,
   );

@@ -1,25 +1,38 @@
 import type { FC } from 'react';
 import { interpolate, useCurrentFrame } from 'remotion';
 import { colors, fontFamilies } from '../../../brand/tokens';
+import { CAPTION_CUES } from '../shots/caption-cues';
 
-/** 分幕小字幕（storyboard-v8 §三）：底部居中单行，14f 淡入 + 2px 上浮，停留后 14f 淡出。
- *  文案逐字照抄 script-v8.md §分幕小字幕；本组件不改写。
- *  tone：默认纸白字（暗底）；亮底场景用 ink。 */
-export const Caption: FC<{ text: string; start: number; end: number; bottom?: number; tone?: 'paper' | 'ink' }> = ({
-  text,
-  start,
-  end,
-  bottom = 110,
-  tone = 'paper',
-}) => {
+/** 分幕小字幕（design-v11 §一）：底部居中单行，10f 淡入 + 2px 上浮，12f 淡出。
+ *
+ *  v11 起**落点由旁白反推**，不再手写：
+ *    <Caption cue="s10" />  →  查 `shots/caption-cues.ts`（由 `node scripts/captions.mjs` 生成，
+ *    真源是 storyboard.md 字幕列 × out/voice/cues-v7.json 的旁白实测落点）。
+ *  老写法 `<Caption text start end>` 保留兼容（其它 video unit 在用）。
+ *
+ *  tone：默认纸白字（暗底）；亮底场景用 ink。
+ *  字幕与画面同层、会被转场墨层一起吞掉——所以生成表已把 start 卡在 inSide+12 之后，
+ *  字幕永远不会与墨洇抢同一帧。 */
+export const Caption: FC<{
+  cue?: string;
+  text?: string;
+  start?: number;
+  end?: number;
+  bottom?: number;
+  tone?: 'paper' | 'ink';
+}> = ({ cue, text, start, end, bottom = 110, tone = 'paper' }) => {
   const frame = useCurrentFrame();
-  if (frame < start || frame > end) return null;
+  const row = cue ? CAPTION_CUES[cue] : undefined;
+  const body = row?.text ?? text;
+  const from = row?.start ?? start ?? 0;
+  const to = row?.end ?? end ?? 0;
+  if (!body || frame < from || frame > to) return null;
   const ink = tone === 'ink';
-  const opacity = interpolate(frame, [start, start + 14, end - 14, end], [0, 1, 1, 0], {
+  const opacity = interpolate(frame, [from, from + 10, to - 12, to], [0, 1, 1, 0], {
     extrapolateLeft: 'clamp',
     extrapolateRight: 'clamp',
   });
-  const lift = interpolate(frame, [start, start + 14], [2, 0], {
+  const lift = interpolate(frame, [from, from + 10], [2, 0], {
     extrapolateLeft: 'clamp',
     extrapolateRight: 'clamp',
   });
@@ -43,7 +56,7 @@ export const Caption: FC<{ text: string; start: number; end: number; bottom?: nu
         transform: `translateY(${lift}px)`,
       }}
     >
-      {text}
+      {body}
     </div>
   );
 };
