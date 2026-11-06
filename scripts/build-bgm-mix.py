@@ -4,15 +4,20 @@
 压深不照抄 spec 的表（那表按旧稿人声密度算），改为在 v5 实际线上实测反算；
 有声区间从人声轨直接检测，所以诗六行 / D01 一并覆盖。
 """
-import numpy as np, wave, json, os, sys, io
+import numpy as np, wave, json, os, sys, io, shutil
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
 
-PROJ = r'D:\works\wuh.site.video'
+PROJ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BGM_FLAC = os.path.join(PROJ, 'public', 'zhi-guo-xiang', 'bgm', 'ai-yi.flac')
 BGM = os.path.join(PROJ, '.tmp', 'bgm', 'ai-yi.wav')      # 由 FLAC 现转，不入仓
 VOICE = os.path.join(PROJ, 'public', 'zhi-guo-xiang', 'tts', 'voice-track-v5.wav')
 MIX = os.path.join(PROJ, '.tmp', 'bgm', 'mix-v5.wav')
-LINES = os.path.join(PROJ, '.tmp', 'audition', 'v2e', 'lines.json')
+LINES = os.path.join(PROJ, 'scripts', 'voice', 'lines.json')
+
+if shutil.which('ffmpeg'):
+    FF = ['ffmpeg']
+else:
+    FF = ['npx' if shutil.which('npx') else 'npx.cmd', '--no-install', 'remotion', 'ffmpeg']
 
 SR = 48000
 TOTAL = 245.0
@@ -55,7 +60,7 @@ if not os.path.exists(BGM):
     import subprocess
     os.makedirs(os.path.dirname(BGM), exist_ok=True)
     print('转码 FLAC → WAV ...')
-    subprocess.run(['npx.cmd', '--no-install', 'remotion', 'ffmpeg', '-y', '-loglevel', 'error',
+    subprocess.run(FF + ['-y', '-loglevel', 'error',
                     '-i', BGM_FLAC, '-ar', str(SR), '-ac', '2', '-c:a', 'pcm_s16le', BGM],
                    check=True, shell=False)
 

@@ -1,7 +1,8 @@
 import os, re, io, sys
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
 
-SHOTS = r'D:\works\wuh.site.video\videos\zhi-guo-xiang\shots'
+SHOTS = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
+                     'videos', 'zhi-guo-xiang', 'shots')
 DROP = ['s04', 's16', 's18', 's19', 's25', 's27', 's30']
 SHIFT = {'s22': ('14', '34'), 's28': ('16', '56')}
 

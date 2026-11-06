@@ -1,11 +1,18 @@
-import json, os, sys, io, math, array, wave, subprocess, glob
+import json, os, sys, io, math, array, wave, subprocess, glob, shutil
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
 
-PROJ = r'D:\works\wuh.site.video'
-HERE = os.path.join(PROJ, '.tmp', 'audition', 'v2e')
-WAVDIR = os.path.join(HERE, 'wav')
+PROJ = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# 素材与 lines.json 跟 gen_edge.py 同目录（它写 HERE/mp3），中间 wav 落 .tmp（已 gitignore）
+HERE = os.path.dirname(os.path.abspath(__file__))
+WAVDIR = os.path.join(PROJ, '.tmp', 'audition', 'v2e', 'wav')
 TTS = os.path.join(PROJ, 'public', 'zhi-guo-xiang', 'tts')
 OUT = os.path.join(TTS, 'voice-track-v5.wav')
+
+# mac/Linux 用系统 ffmpeg；Windows 借 remotion 自带的那份
+if shutil.which('ffmpeg'):
+    FF = ['ffmpeg']
+else:
+    FF = ['npx' if shutil.which('npx') else 'npx.cmd', '--no-install', 'remotion', 'ffmpeg']
 SR = 48000
 TOTAL = 245.0
 os.makedirs(WAVDIR, exist_ok=True)
@@ -28,7 +35,7 @@ for pid, _, fn in POEM:
 todo = [(n, p) for n, p in srcs if not (os.path.exists(os.path.join(WAVDIR, n + '.wav'))
                                         and os.path.getsize(os.path.join(WAVDIR, n + '.wav')) > 2000)]
 if todo:
-    cmd = ['npx.cmd', '--no-install', 'remotion', 'ffmpeg', '-y', '-loglevel', 'error']
+    cmd = FF + ['-y', '-loglevel', 'error']
     for _, p in todo:
         cmd += ['-i', p]
     for i, (n, _) in enumerate(todo):

@@ -230,5 +230,6 @@ def decode(path, outdir):
 
 if __name__ == '__main__':
     src = sys.argv[1] if len(sys.argv) > 1 else r'D:\CloudMusic\VipSongsDownload\陈致逸 - 爱意 (金风玉露变奏).ncm'
-    dst = sys.argv[2] if len(sys.argv) > 2 else r'D:\works\wuh.site.video\.tmp\bgm'
+    dst = sys.argv[2] if len(sys.argv) > 2 else os.path.join(
+        os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), '.tmp', 'bgm')
     decode(src, dst)

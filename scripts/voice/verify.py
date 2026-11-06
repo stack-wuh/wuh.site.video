@@ -1,9 +1,9 @@
 import wave, array, math, sys, io, json, os
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
 
-PROJ = r'D:\works\wuh.site.video'
+PROJ = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+HERE = os.path.dirname(os.path.abspath(__file__))
 TRACK = os.path.join(PROJ, 'public', 'zhi-guo-xiang', 'tts', 'voice-track-v5.wav')
-HERE = os.path.join(PROJ, '.tmp', 'audition', 'v2e')
 
 w = wave.open(TRACK, 'rb')
 fr, ch = w.getframerate(), w.getnchannels()
