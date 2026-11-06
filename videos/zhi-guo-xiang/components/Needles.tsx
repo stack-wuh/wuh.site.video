@@ -47,20 +47,32 @@ const Defs: FC = () => (
     </linearGradient>
   </defs>
 );
-/** 一组针：摆在掌心/纸上。positions 用画面像素（1920×1080 基准）。 */
+/** S10 / S25 共用的针槽真值（v10 §2.3/§2.4）：同一张底图 p-palm2（cand-3）同一组 origin/spread/tilt，
+ *  S25 只 drop 一枚。改针位只改这里——两镜不会再各自漂。 */
+export const PALM2_NEEDLES = {
+  origin: [880, 572] as [number, number],
+  len: 300,
+  spread: 70,
+  tilt: -12,
+} as const;
+
+/** 一组针：摆在掌心/纸上。positions 用画面像素（1920×1080 基准）。
+ *  drop：按 count 的槽位布局只丢掉第 i 枚（S25 要严格取 S10 三槽中的两个——origin/spread/tilt 与 S10 一致、只少一枚）。 */
 export const Needles: FC<{
   count?: number;
+  drop?: number;
   origin?: [number, number];
   len?: number;
   spread?: number;
   tilt?: number;
   opacity?: number;
   shadow?: boolean;
-}> = ({ count = 3, origin = [900, 560], len = 900, spread = 150, tilt = -7, opacity = 1, shadow = true }) => (
+}> = ({ count = 3, drop, origin = [900, 560], len = 900, spread = 150, tilt = -7, opacity = 1, shadow = true }) => (
   <AbsoluteFill style={{ opacity, mixBlendMode: 'normal' }}>
     <svg width={1920} height={1080} viewBox="0 0 1920 1080" style={{ position: 'absolute', inset: 0 }}>
       <Defs />
       {Array.from({ length: count }).map((_, i) => {
+        if (drop !== undefined && i === drop) return null;
         const off = (i - (count - 1) / 2) * spread;
         const a = tilt + (i - (count - 1) / 2) * 3.2;
         return (

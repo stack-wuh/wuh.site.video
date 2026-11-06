@@ -11,7 +11,7 @@ const S37: FC = () => {
   return (
     <Slide zoom={[1.02, 1.08]} driftY={[0, -30]}>
       <InkPaper base="p-paper-back" lines={[POEM_COLS[6], POEM_COLS[7], POEM_COLS[8]]} progress={t} size={52} right="24%" top="9%" />
-      <Caption text="她写完了。" start={18} end={192} tone="ink" />
+      <Caption text="她写完了。" start={18} end={186} tone="ink" />
     </Slide>
   );
 };
