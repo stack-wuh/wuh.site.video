@@ -4,13 +4,13 @@
   "name": "20261101-feature-zhi-guo-xiang-production",
   "type": "feature",
   "scope": "video-production",
-  "status": "published",
+  "status": "committed",
   "baseBranch": "main",
   "branch": "feature/20261101-feature-zhi-guo-xiang-production",
   "files": [
     ".github/workflows/render-film.yml",
     "public/zhi-guo-xiang",
-    "scripts/mux-bgm.mjs",
+    "scripts",
     "shadow-docs/changes/20261101-feature-zhi-guo-xiang-production",
     "shadow-docs/knowledge",
     "src/Root.tsx",
@@ -30,17 +30,21 @@
   },
   "workflow": {
     "operation": null,
-    "checkpoint": "pr:50",
-    "planHash": "d26ae4b65a7055b1e1b11de11ae1660177738fe263fefe7adec33cee7c1a049a",
+    "checkpoint": "7b81452afb1b89c9ca6a17523177f7ed5b744cc2",
+    "planHash": "5ccdf4c06377d9365e8e00652e54bb8a1697c7ec1d724aa057f09b6b8113218c",
     "updatedAt": null,
     "lastError": null,
     "worktree": "/Users/wuhong/shadow-desktop/github/wuh.site.video/.worktrees/20261101-feature-zhi-guo-xiang-production",
     "commit": {
       "files": [
-        "shadow-docs/knowledge/tts-voiceover-pipeline.md",
-        "shadow-docs/knowledge/video-production-flow.md"
+        ".gitignore",
+        "scripts/build-bgm-mix.py",
+        "scripts/voice/build_track.py",
+        "scripts/voice/decode-ncm.py",
+        "scripts/voice/edit_captions.py",
+        "scripts/voice/verify.py"
       ],
-      "message": "docs(knowledge): 配音卡与流程卡对账 v9 —— 真声定策 · 落点定稿 · mux 三入坑 · 出片口径 245s\n\n- 男声：2026-11-05 定策用本人真声、走直接录音不走复刻；两句仍为 lufeng 占位待替换，音频本轮暂停\n- 落点表八行全部改为定稿态（灵心 line-01..06 / lufeng frame-open-close），旧「待定稿女声后逐行重出」过期\n- mux 装配口径落定 --voice 单遍 amix=inputs=3；两级 amix 实测把音轨截到 143.45s（第二遍 BGM 未参与）\n- 补记：旁白若按字幕表全铺（21 条≈57s），12 条落在 BGM > -20dB 段，\"不需要 ducking\" 不再成立；压低方案尚未验通\n- 流程卡出片口径改 v9 7350f/245s、断点静默 143.46–151s（旧 7500f/250s、137.8–148.8s 属 v8 前）\n- 版权 BGM 不入仓与自制旁白 wav 入库的边界写清"
+      "message": "fix(voice): 配音与混音流水线可移植化 —— 去掉 Windows 硬路径\n\n- 5 个脚本的 PROJ/SHOTS/dst 由 r\"D:\\works\\wuh.site.video\" 改为按 __file__ 反推仓库根\n- build_track.py 原读 .tmp/audition/v2e/lines.json、gen_edge.py 写 scripts/voice/，两半对接不上；统一到 scripts/voice/\n- npx.cmd 改为「有系统 ffmpeg 直接用，否则回落 remotion 自带那份」，mac/Linux 可跑\n- .gitignore 补 __pycache__/"
     }
   },
   "knowledge": {
