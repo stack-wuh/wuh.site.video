@@ -9,7 +9,7 @@ import { DustField } from '../components/DustField';
 const S35: FC = () => (
   <Scene name="p-window" zoom={[1.0, 1.04]} warm={0.04}>
     <DustField act={6} count={18} seedBase="s35-time" />
-    <Caption text="舍不得写完的那一句，她留在了纸的背面。" start={16} end={150} />
+    <Caption cue="s35" />
   </Scene>
 );
 

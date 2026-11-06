@@ -10,7 +10,7 @@ import { DustField } from '../components/DustField';
 const S14: FC = () => (
   <Scene name="p-ash" zoom={[1.0, 1.045]} dim={0.04}>
     <DustField act={3} count={40} seedBase="s14-ash" wind={7} />
-    <Caption text="她不知道。" start={12} end={126} tone="ink" />
+    <Caption cue="s14" tone="ink" />
   </Scene>
 );
 

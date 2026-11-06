@@ -1,70 +1,83 @@
-/* S28 · 她把剑从背上取下，放进木匣，合上 210f
- * v10 §二.5 / §五（P0）。底图 p-sword-case 已画到「剑已横在匣口、匣盖开着、灯在左」的那一下，
- * 所以本镜不再重演「从背上取下」的前半段，只接两件已写好的东西：
- *   ① Objects.Sword 的位移/旋转：干笔剑影（multiply、半透）从匣口上方沿剑轴「横置落匣」，
- *      落位后化回底图（不新画第二柄实物剑）；
- *   ② 匣口收光：剑落定后匣口暗下去（合匣），顶边一线纸白反光收住。
- * 底图名、时长、字幕文案都不动；转场入墨洇（12f）/ 出硬切。 */
+/* S28 · 解剑 → 平放入匣 210f
+ *
+ * v11 §3.10（用户意见 15「什么动效，难看死了」）：v10 用 `dry` 干笔擦（横向几何条带）演「剑滑入匣」，
+ * 那是一排与画面无关的横条。本节整段换成「光与遮挡」，**不出现任何干笔条带/几何蒙版**：
+ *   20–70f  解剑：剑影（d-sword-case.tsx SwordShadow）沿一条弧线落向匣口 —— 影层按开着的匣盖四边
+ *           裁住、投在盖的内面上（灯在左、剑在灯与盖之间，影子落在那儿是物理上对的），
+ *           所以它是「会动的影子」，不是第二把剑；
+ *   70–120f 平放入匣：剑影继续朝匣口沉下去，被匣沿一点一点吃掉 —— 先六成，最后 8f 剩下的也没入；
+ *           落定那一下灯焰被压一档（LampFlame jolt）、匣口前沿起一点尘（CaseDust）；
+ *   150–196f 静，灯火在匣面亮一下（LampFlame boost）。
+ * 「合盖」这一段 v11 试过「压平开着的盖 + 平移底图补墙 + 再画一块盖板」，渲出来是直边假墙 + 窄木带，
+ * 比不闭盖更出戏，**已按 lead 决定撤掉**（见 components/d-sword-case.tsx 头注释）：
+ * 本镜把底图那只开着的盖原样留着，「剑收进木匣」由剑已入匣 + 旁白承担。
+ * 已知取舍：底图里她的双手已经把剑按在匣口、剑是烤死的像素动不了，所以「解剑/入匣」由剑影承担。
+ * 底图、时长、字幕文案都不动；镜内转场归 ShotShell（首尾墨洇）。 */
 import type { FC } from 'react';
-import { AbsoluteFill, interpolate, useCurrentFrame } from 'remotion';
+import { AbsoluteFill, interpolate, useCurrentFrame, useVideoConfig } from 'remotion';
 import { Scene } from '../components/SceneKit';
 import { Caption } from '../components/Caption';
-import { Sword } from '../components/Objects';
-import { colors } from '../../../brand/tokens';
+import { LampFlame } from '../components/d-lamp';
+import { CaseDust, LID_OPEN_CSS, SwordShadow } from '../components/d-sword-case';
 import { CLAMP, CURVES } from '../motion-tokens';
 
-/** 底图实测（1920×1080）：剑尖 (650,770) → 剑柄 (990,645)，剑轴约 −20°，静置中心 (820,708)，
- *  剑长约 365px；剑匣口暗部是 (625,755)-(1105,700)-(1122,772)-(640,827) 那块。 */
-const SWORD = { cx: 820, cy: 708, w: 83, h: 365 };
-const CASE_MOUTH = '625,755 1105,700 1122,772 640,827';
-/** 竖直剑形的「剑尖朝下」转到与剑轴 −20° 对齐时，逆时针转 70°；起始再立一点（38°）。 */
-const ROT_OPEN = 38;
-const ROT_FLAT = 70;
+/** 剑影（投在盖面上）：底图实测剑轴 −24.6°，影形按 62° 落，长 292 / 宽 97。 */
+const SHADOW = { w: 97, h: 292, rotFlat: 62, rotStart: 48 };
+/** 解剑弧线：持剑位 → 匣口（二次贝塞尔），缓出 */
+const P0 = { x: 826, y: 548 };
+const PC = { x: 726, y: 570 };
+const P2 = { x: 690, y: 636 };
 
 const S28: FC = () => {
   const f = useCurrentFrame();
-  const ease = { ...CLAMP, easing: CURVES.cineEaseInOut };
-  /* 横置落匣：20–128f。剑影从 38° 放平到 70°（70° 时与底图剑轴完全对齐：
-   * 竖直剑形旋转 70° 后剑尖指向左下 (650,770)、剑柄指向右上 (990,645)），
-   * 同时沿剑轴沉下十几像素；150–200f 化回底图。剑穗在旋转后不随重力下坠，用 inset 裁掉。 */
-  const lay = interpolate(f, [20, 128], [0, 1], ease);
-  const echo = interpolate(f, [20, 70, 128, 200], [0, 0.42, 0.42, 0], CLAMP);
-  const rot = ROT_OPEN + (ROT_FLAT - ROT_OPEN) * lay;
-  const echoX = (1 - lay) * 16;
-  const echoY = (1 - lay) * -10;
-  /* 合匣：140–200f 匣口收光，末帧整镜再压一点（剑收进木匣，灯被盖住） */
-  const close = interpolate(f, [140, 200], [0, 1], ease);
+  const { durationInFrames } = useVideoConfig();
+  const tt = durationInFrames > 1 ? f / (durationInFrames - 1) : 0;
+  /* 与 Scene 的 Img 同一套 zoom 换算，叠层才咬得住底图 */
+  const s = interpolate(tt, [0, 1], [1.0, 1.04], CLAMP);
+
+  /* ── 解剑：20–70f，影沿弧线落到匣口，缓出 ── */
+  const lay = interpolate(f, [20, 70], [0, 1], { ...CLAMP, easing: CURVES.cineEaseOut });
+  const bx = (1 - lay) * (1 - lay) * P0.x + 2 * (1 - lay) * lay * PC.x + lay * lay * P2.x;
+  const by = (1 - lay) * (1 - lay) * P0.y + 2 * (1 - lay) * lay * PC.y + lay * lay * P2.y;
+  const rot = SHADOW.rotStart + (SHADOW.rotFlat - SHADOW.rotStart) * lay;
+
+  /* ── 平放入匣：70–120f，影朝匣口沉下去，被匣沿吃掉；112f 后没入 ── */
+  const push = interpolate(f, [70, 120], [0, 1], { ...CLAMP, easing: CURVES.cineEaseInOut });
+  const dx = -74 * push;
+  const dy = 78 * push;
+  const appear = interpolate(f, [20, 46], [0, 1], CLAMP);
+  const gone = interpolate(f, [112, 120], [0, 1], CLAMP);
+  const shadowOpacity = appear * (1 - gone) * 0.58;
+  /* 入匣落定那一拍：灯焰被压一档再晃回来（4f 冲击、10f 回稳） */
+  const jolt = interpolate(f, [114, 117, 130], [0, 1, 0], CLAMP);
+  /* 150–196f 灯火在匣面亮一下 */
+  const boost = interpolate(f, [150, 168, 196], [0, 0.5, 0.05], CLAMP);
+
   return (
-    <Scene name="p-sword-case" zoom={[1.0, 1.04]} dim={0.06 + close * 0.05} warm={0.04}>
-      <div
-        style={{
-          position: 'absolute',
-          left: SWORD.cx - SWORD.w / 2 + echoX,
-          top: SWORD.cy - SWORD.h / 2 + echoY,
-          width: SWORD.w,
-          height: SWORD.h,
-          transform: `rotate(${rot}deg)`,
-          opacity: echo,
-          mixBlendMode: 'multiply',
-          filter: 'blur(0.6px)',
-          clipPath: 'inset(0 0 11% 0)',
-        }}
-      >
-        <Sword state="back" style={{ width: '100%', height: '100%' }} />
-      </div>
+    <Scene name="p-sword-case" zoom={[1.0, 1.04]} warm={0.03}>
       <AbsoluteFill style={{ pointerEvents: 'none' }}>
-        <svg width={1920} height={1080} viewBox="0 0 1920 1080" style={{ position: 'absolute', inset: 0 }}>
-          {/* 合匣：匣口的暗收上去（盖合，灯照不进去） */}
-          <polygon points={CASE_MOUTH} fill={colors.ink} opacity={0.44 * close} style={{ mixBlendMode: 'multiply' }} />
-          {/* 盖沿一线纸白反光，收在顶边上 */}
-          <path
-            d="M625 755 L1105 700"
-            stroke={colors.paperMuted}
-            strokeWidth={1.4}
-            opacity={0.3 * close}
-            style={{ mixBlendMode: 'screen' }}
-          />
-        </svg>
+        <div style={{ position: 'absolute', inset: 0, transform: `scale(${s})`, transformOrigin: '50% 50%' }}>
+          {/* 剑影投在开着的盖面上：按盖的四边裁住，沉下去就是被匣沿吃掉 */}
+          <div style={{ position: 'absolute', inset: 0, clipPath: `polygon(${LID_OPEN_CSS})` }}>
+            <div
+              style={{
+                position: 'absolute',
+                left: bx - SHADOW.w / 2 + dx,
+                top: by - SHADOW.h / 2 + dy,
+                width: SHADOW.w,
+                height: SHADOW.h,
+                transform: `rotate(${rot}deg)`,
+                opacity: shadowOpacity,
+                mixBlendMode: 'multiply',
+                filter: 'blur(2.2px)',
+              }}
+            >
+              <SwordShadow style={{ width: '100%', height: '100%' }} />
+            </div>
+          </div>
+          <LampFlame frame={f} at={{ x: 492, y: 722 }} size={20} jolt={jolt} boost={boost} />
+          <CaseDust frame={f} from={112} />
+        </div>
       </AbsoluteFill>
       <Caption text="剑收进木匣，再也没有取出来。" start={56} end={194} />
     </Scene>

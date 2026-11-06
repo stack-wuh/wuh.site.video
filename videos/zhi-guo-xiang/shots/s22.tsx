@@ -9,7 +9,7 @@ import { DustField } from '../components/DustField';
 const S22: FC = () => (
   <Scene name="p-noturn" zoom={[1.0, 1.05]} dim={0.05}>
     <DustField act={4} count={64} seedBase="s22-snow" wind={-12} />
-    <Caption text="她没有解释。" start={34} end={128} tone="ink" />
+    <Caption cue="s22" tone="ink" />
   </Scene>
 );
 

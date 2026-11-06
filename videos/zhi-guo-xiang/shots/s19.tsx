@@ -1,57 +1,82 @@
-/* S19 · 差一点：山垭雪径，脚印正在被新雪抹平；远处一个米粒大的人影，一片雕羽落在他走过的最后一个脚印上 */
+/* S19 · 一个人的雪山：她极小的背影独自朝画面深处走 210f
+ *
+ * design-v11 §3.6（用户意见 9「叶子意义是什么？她一人雪山慢慢走远，孤独感更好」）：
+ *   v10 的雕羽与落羽动效**全部删掉**（不得出现任何羽毛状物体）；
+ *   孤独感改由「留不住痕迹」给：
+ *     · 底图 p-snow-walk：雪山脊大远景，她极小的背影（画面高 ~8%）走在雪脊上，朝景深走；
+ *     · 镜头极缓后拉 zoom 1.06 → 1.0（她越走越小，观众留在原地看她走远）；
+ *     · 雪片斜落（风向右 12px/s）——SnowFall 的 wind 与 DustField 同口径（px/秒）；
+ *     · 她走过处一串脚印（FootprintTrail，近大远小），末 30f 新雪把最近两枚盖住（软斑淡入）。
+ * 底图由美术组生成；人物在底图里，本镜不再叠第二个身影。
+ */
 import type { FC } from 'react';
-import { interpolate, useCurrentFrame } from 'remotion';
-import { Scene } from '../components/SceneKit';
-import { DustField } from '../components/DustField';
+import { AbsoluteFill, Img, interpolate, staticFile, useCurrentFrame } from 'remotion';
+import { colors } from '../../../brand/tokens';
+import { InkGrade } from '../components/SceneKit';
+import { Caption } from '../components/Caption';
+import { FootprintTrail, footprintTrail } from '../components/b-footprints';
+import { MistFlow } from '../components/b-mistflow';
+import { SnowFall } from '../components/b-snowfall';
+import { CLAMP, CURVES } from '../motion-tokens';
 
-/** 远处的人影：脚印的尽头已在山垭口上（底图实测 x≈1185 / 脊线 y≈455），
- *  身高只给 16px——观众要和他一样「看不清是谁」，杨过永远不给脸。 */
-const DistantFigure: FC = () => {
-  const f = useCurrentFrame();
-  const o = interpolate(f, [8, 52], [0, 0.72], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
-  return (
-    <svg width={1920} height={1080} viewBox="0 0 1920 1080" style={{ position: 'absolute', inset: 0 }}>
-      <g transform="translate(1185 455)" opacity={o}>
-        <path d="M0 0 L0 -11" stroke="#221c16" strokeWidth={1.6} strokeLinecap="round" />
-        <circle cx={0} cy={-13.4} r={1.7} fill="#221c16" />
-        <path d="M0 -9 L-2.6 -1" stroke="#221c16" strokeWidth={1} strokeLinecap="round" opacity={0.8} />
-        <path d="M0 -9 L2.4 -2" stroke="#221c16" strokeWidth={1} strokeLinecap="round" opacity={0.8} />
-      </g>
-    </svg>
-  );
+/** 底图：雪山脊大远景（她极小背影在雪脊上，朝景深走） */
+const BASE = 'p-snow-walk';
+const EASE = { ...CLAMP, easing: CURVES.cineEaseInOut };
+/** 本镜时长（manifest 固定 210f；不用 useVideoConfig——整片里拿到的是根 comp 时长） */
+const TOTAL = 210;
+
+/** 脚印这条路（底图到位后按雪脊走线校准）：前景下缘 → 她的脚下。
+ *  from 最近（大），to 最远（小）；ctrl 让整串跟着雪脊的弯走。 */
+const TRAIL = {
+  from: { x: 250, y: 1062, s: 34 },
+  ctrl: { x: 430, y: 952, s: 14 },
+  to: { x: 606, y: 852, s: 6 },
+  count: 16,
 };
 
-/** 雕羽：从右上斜着飘落，一边转一边落，落在他走过的最后一个脚印上（底图实测 x≈1169 / y≈543）。
- *  旧版羽身 92px、opacity 0.94，在雪径上读成一个洞；缩到三分之一并让落点踩脚印。 */
-const Feather: FC = () => {
+const S19: FC = () => {
   const f = useCurrentFrame();
-  const t = interpolate(f, [12, 168], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
-  const x = interpolate(t, [0, 1], [1430, 1163]);
-  const y = interpolate(t, [0, 1], [-60, 543]);
-  const rot = interpolate(t, [0, 1], [-22, 148]);
-  const sway = Math.sin(t * Math.PI * 2.6) * 22;
-  const o = interpolate(t, [0, 0.9, 1], [0.7, 0.7, 0.5]);
+  const total = TOTAL;
+
+  /* 极缓后拉：1.06 → 1.0（前 34f 先定住，让墨洇退完之后再动） */
+  const pull = interpolate(f, [34, total - 1], [0, 1], EASE);
+  const scale = 1.06 - 0.06 * pull;
+
+  /* 末 30f：新雪把最近两枚脚印盖住 */
+  const cover = interpolate(f, [total - 30, total - 3], [0, 1], EASE);
+
+  const points = footprintTrail(TRAIL.from, TRAIL.ctrl, TRAIL.to, TRAIL.count, 's19-prints');
+
   return (
-    <svg width={1920} height={1080} viewBox="0 0 1920 1080" style={{ position: 'absolute', inset: 0 }}>
-      <g transform={`translate(${x + sway} ${y}) rotate(${rot})`} opacity={o}>
-        <path d="M0 -15 L0 15" stroke="#17130f" strokeWidth={1} strokeLinecap="round" />
-        <path d="M0 -14 C 6 -8, 7 4, 0 14 C -7 4, -6 -8, 0 -14 Z" fill="#221c16" />
-        {Array.from({ length: 5 }).map((_, i) => {
-          const yy = -11 + i * 5.2;
-          const w = 4 - Math.abs(i - 2) * 0.9;
-          return <path key={i} d={`M0 ${yy} L ${w} ${yy - 2}`} stroke="#0d0a07" strokeWidth={0.5} opacity={0.5} />;
-        })}
-      </g>
-    </svg>
+    <AbsoluteFill style={{ background: colors.paper, overflow: 'hidden' }}>
+      <Img
+        src={staticFile(`zhi-guo-xiang/scene/${BASE}.jpg`)}
+        style={{
+          position: 'absolute',
+          inset: 0,
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          transform: `scale(${scale})`,
+        }}
+      />
+      <InkGrade />
+
+      {/* 贴雪脊走的薄雾：只在雪面上浮，不遮人脸（她没有脸） */}
+      <MistFlow seed="s19-mist" intensity={0.5} period={260} count={3} />
+
+      {/* 一串脚印：近大远小、左右脚交错；末 30f 最近两枚被新雪盖掉 */}
+      <FootprintTrail points={points} cover={cover} coverCount={2} opacity={0.95} />
+
+      {/* 雪片斜落：风向右 12px/s */}
+      <SnowFall seed="s19-snow" count={130} wind={12} opacity={0.85} />
+
+      {/* 新雪起时，画面末段再飘一层极淡的白（只压雪脊，不压字幕） */}
+      {cover > 0.01 ? <AbsoluteFill style={{ background: colors.paper, opacity: 0.08 * cover, pointerEvents: 'none' }} /> : null}
+
+      <Caption cue="s19" tone="ink" />
+    </AbsoluteFill>
   );
 };
-
-const S19: FC = () => (
-  <Scene name="p-footprints" zoom={[1.0, 1.05]} driftY={[0, 8]} dim={0.03}>
-    <DustField act={4} count={70} seedBase="s19-snow" />
-    <DistantFigure />
-    <Feather />
-  </Scene>
-);
 
 export default S19;

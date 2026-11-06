@@ -10,7 +10,7 @@ import { WaveField } from '../components/WaveField';
 const S38: FC = () => (
   <Scene name="p-sea" zoom={[1.0, 1.03]} warm={0.06}>
     <WaveField seed="s38-sea" amp={7} speed={0.12} opacity={0.3} band={[0.64, 1.0]} />
-    <Caption text="这个故事，我讲完了，念念~" start={24} end={136} tone="ink" />
+    <Caption cue="s38" tone="ink" />
   </Scene>
 );
 

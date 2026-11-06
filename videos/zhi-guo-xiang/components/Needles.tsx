@@ -67,7 +67,9 @@ export const Needles: FC<{
   tilt?: number;
   opacity?: number;
   shadow?: boolean;
-}> = ({ count = 3, drop, origin = [900, 560], len = 900, spread = 150, tilt = -7, opacity = 1, shadow = true }) => (
+  /** 针身/针柄的整体粗细倍数：特写镜（S10）用 2 左右才读得出"金针"，远景保持 1 */
+  width?: number;
+}> = ({ count = 3, drop, origin = [900, 560], len = 900, spread = 150, tilt = -7, opacity = 1, shadow = true, width = 1 }) => (
   <AbsoluteFill style={{ opacity, mixBlendMode: 'normal' }}>
     <svg width={1920} height={1080} viewBox="0 0 1920 1080" style={{ position: 'absolute', inset: 0 }}>
       <Defs />
@@ -80,7 +82,7 @@ export const Needles: FC<{
             {/* 影子只贴针柄一侧、比针短得多：旧版 rx=len*0.42 几乎与针等长，
                 在浅底上读成第二根针。 */}
             {shadow ? <ellipse cx={len * 0.2} cy={7} rx={len * 0.16} ry={3.5} fill="rgba(0,0,0,0.13)" /> : null}
-            <Needle len={len} />
+            <Needle len={len} width={width} />
           </g>
         );
       })}

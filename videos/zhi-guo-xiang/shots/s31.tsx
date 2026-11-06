@@ -9,7 +9,7 @@ const S31: FC = () => {
   const grow = interpolate(f, [0, 60, 180], [0, 1, 0.92], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
   return (
     <Scene name="p-lamp" zoom={[1.0, 1.04]} warm={0.06 + grow * 0.1} dim={0.12 - grow * 0.1}>
-      <Caption text="她留下一首诗，写的是十六岁那年的烟花。" start={16} end={164} tone="ink" />
+      <Caption cue="s31" tone="ink" />
     </Scene>
   );
 };

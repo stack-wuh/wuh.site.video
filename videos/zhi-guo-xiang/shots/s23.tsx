@@ -10,7 +10,7 @@ import { DustField } from '../components/DustField';
 const S23: FC = () => (
   <Scene name="p-kids" zoom={[1.0, 1.05]} driftX={[10, -10]}>
     <DustField act={3} count={28} seedBase="s23-kids" />
-    <Caption text="峨眉有个郭女侠，等郎等到白了发。" start={22} end={164} tone="ink" />
+    <Caption cue="s23" tone="ink" />
   </Scene>
 );
 
