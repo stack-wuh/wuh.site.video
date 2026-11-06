@@ -43,6 +43,14 @@ verified-scope: site-film《朝朝如念》4:00 成片全流程实证（素材�
 - 逐字对拍与末帧：字幕组件用 `charStarts` 给逐字落点（S25「滴滴答答」四字 20/32/44/56 与四蹄同帧）；末镜用 `fadeOut={false}` 保证最后一行在正片末帧完整，不靠延长 `end` 绕过淡出。
 - 出片口径：CI 只出画面 + 静默轨，ffprobe 帧数必须等于 `片头 + 正片 + 片尾`；本地 mux 后再验**该片当前版本的片长**与断点静默窗口，最后交用户验收。致郭襄 v9 = 7350f / 245s，断点静默 143.46–151.0s（旧口径 7500f / 250s、静默 137.8–148.8s 属 v8 前，已过期）。mux 支持 BGM 之外叠第三路人声整轨（`--voice`）：人声轨自带片长静音底，不再 `adelay`，走单遍 `amix=inputs=3`——先合 BGM 再叠人声的两级 amix 会把音轨截到第一遍结尾（实测 143.45s），别用。
 
+## v10 转场与出片兜底（2026-11-06 实证）
+
+- **镜内转场**：转场类型进机器分镜表第 7 列（= 进入本镜的 inbound），`shots.mjs import` 解析成 manifest 的 `transition`；`page` 纸翻 18f/侧、`dry` 飞白 10f、`ink` 墨洇 12f、`cut` 0。遮罩只在 `ShotShell` 镜首/镜尾占用，`durationFrames`/`startFrame` 一个字节不动；字幕安全窗 = `start ≥ in+12`、`end ≤ dur−out−12`。跨镜图层在「逐镜渲 + concat」链路里产 0 像素，别做。
+- **CI 矩阵抖动与兜底**：`render-film.yml` 首波 20 个 job 并发跑 `apt-get install` 会锁争用，慢 job 撞 15 分钟 job 超时被 cancelled（表现为「几镜缺产物、assemble 报缺镜」）。处理：① `gh run rerun --failed`；② 仍红就 `-f shots="sNN"` 子集 run 单镜；③ 终极兜底 = 逐镜 artifact（`shot-*`，保留 90 天）+ 本地 concat：cache 命名 `out/shots/<unit>/sNN-<shotHash>.mp4`，把 artifact 放回该目录，`node scripts/render-film.mjs --assemble` 在本机偶发 Node 段错误，可直接用 ffmpeg 复刻 concat 滤镜（`trim=end_frame` + `concat=n`，libx264 veryfast crf16 yuv420p 30fps）。
+- **片头/片尾**：CI assemble 未跑成时，用 CI 的 `remotion-bundle` artifact + 本机 `@remotion/renderer` 的 `renderMedia({frameRange:[0,119] / [7170,7349]})` 补渲（本机 `npx remotion render` 会 exit 139，别用 CLI）。
+- **抽帧偏移**：成片帧号 = manifest 帧号 + FilmShell 片头 120f；按 manifest 直接抽帧会抽到前一镜。
+- **v10 出品**：38 镜 / 正片 7050f / 全片 7350f / 245.0s；转场 12 处非硬切；配音 v6（22 段 140.16s）+ mix v6（峰值 −1.0 dBFS、0 削波）。细节见 change brief 与 `design-v10.md`。
+
 ## 执行约束
 
 - **渲染只走 CI，本机不渲**（2026-11-04 用户定策）：成片用 `gh workflow run render-film.yml -f film=<unit>`；改一镜看一帧用 `-f shots="s10 s25 s29"`（子集不触发 assemble，一两分钟回镜级产物），再 `gh run download` + `ffmpeg` 抽帧看图。本机仅保留版权 BGM mux 与静态门。细则见 [[render-stability-playbook]] 首节
