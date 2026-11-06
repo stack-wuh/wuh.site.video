@@ -10,7 +10,7 @@ import { InkBloom } from '../components/InkBloom';
 import { CLAMP } from '../motion-tokens';
 
 /** 底图实测笔尖墨滴 (1030,605)，zoom 1.12→1.15 之后约 (1040,612)；
- *  InkBloom 的纵向中心比 at.y 略低（0.35·r·progress），所以 at.y 取 598 让墨积在滴上。 */
+ *  InkBloom 的纵向中心比 at.y 略低（0.35·r·progress），所以 at.y 取 607（墨心落点 ≈ 613）让墨积在滴上。 */
 const TIP = { x: 1039, y: 607 };
 
 const S33: FC = () => {
