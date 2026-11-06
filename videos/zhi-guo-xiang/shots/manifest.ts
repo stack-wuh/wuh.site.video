@@ -1,11 +1,11 @@
 /* 由 scripts/shots.mjs sync 生成——勿手改；真源 shots-manifest.json（类型化视图） */
 export type Transition = 'page' | 'dry' | 'ink' | 'cut';
 
-/** 转场单侧帧数（总帧 = 2×；cut = 0）：纸翻 18 / 飞白 10 / 墨洇 12。in = 镜首 inbound，out = 下一镜 inbound */
+/** 转场单侧帧数（总帧 = 2×；cut = 0）：墨洇 20 / 纸翻 18 / 飞白 10。in = 镜首 inbound，out = 下一镜 inbound */
 export const TRANSITION_SIDE: Record<Transition, number> = {
   "page": 18,
   "dry": 10,
-  "ink": 12,
+  "ink": 20,
   "cut": 0
 };
 
@@ -75,7 +75,7 @@ export const manifest: Manifest = {
       "title": "无",
       "startFrame": 210,
       "durationFrames": 210,
-      "transition": "cut",
+      "transition": "ink",
       "source": "shots/s02.tsx"
     },
     {
@@ -84,7 +84,7 @@ export const manifest: Manifest = {
       "title": "无",
       "startFrame": 420,
       "durationFrames": 150,
-      "transition": "page",
+      "transition": "ink",
       "source": "shots/s03.tsx"
     },
     {
@@ -102,7 +102,7 @@ export const manifest: Manifest = {
       "title": "他叫杨过。江湖上叫他神雕侠。",
       "startFrame": 750,
       "durationFrames": 150,
-      "transition": "cut",
+      "transition": "ink",
       "source": "shots/s05.tsx"
     },
     {
@@ -120,7 +120,7 @@ export const manifest: Manifest = {
       "title": "无",
       "startFrame": 1050,
       "durationFrames": 150,
-      "transition": "cut",
+      "transition": "ink",
       "source": "shots/s07.tsx"
     },
     {
@@ -129,7 +129,7 @@ export const manifest: Manifest = {
       "title": "无",
       "startFrame": 1200,
       "durationFrames": 210,
-      "transition": "cut",
+      "transition": "ink",
       "source": "shots/s08.tsx"
     },
     {
@@ -138,16 +138,16 @@ export const manifest: Manifest = {
       "title": "无",
       "startFrame": 1410,
       "durationFrames": 210,
-      "transition": "cut",
+      "transition": "ink",
       "source": "shots/s09.tsx"
     },
     {
       "id": "s10",
       "act": 2,
-      "title": "他留下三枚金针，说可以许三个愿望。",
+      "title": "他留下三枚金针，说凭针可以差他办三件事。",
       "startFrame": 1620,
       "durationFrames": 180,
-      "transition": "cut",
+      "transition": "ink",
       "source": "shots/s10.tsx"
     },
     {
@@ -165,7 +165,7 @@ export const manifest: Manifest = {
       "title": "无",
       "startFrame": 1980,
       "durationFrames": 210,
-      "transition": "cut",
+      "transition": "ink",
       "source": "shots/s12.tsx"
     },
     {
@@ -174,7 +174,7 @@ export const manifest: Manifest = {
       "title": "无",
       "startFrame": 2190,
       "durationFrames": 180,
-      "transition": "cut",
+      "transition": "ink",
       "source": "shots/s13.tsx"
     },
     {
@@ -183,7 +183,7 @@ export const manifest: Manifest = {
       "title": "她不知道。",
       "startFrame": 2370,
       "durationFrames": 150,
-      "transition": "cut",
+      "transition": "ink",
       "source": "shots/s14.tsx"
     },
     {
@@ -201,7 +201,7 @@ export const manifest: Manifest = {
       "title": "后来，她背着剑，走了很多年。",
       "startFrame": 2700,
       "durationFrames": 150,
-      "transition": "cut",
+      "transition": "ink",
       "source": "shots/s16.tsx"
     },
     {
@@ -210,7 +210,7 @@ export const manifest: Manifest = {
       "title": "无",
       "startFrame": 2850,
       "durationFrames": 210,
-      "transition": "dry",
+      "transition": "ink",
       "source": "shots/s17.tsx"
     },
     {
@@ -246,7 +246,7 @@ export const manifest: Manifest = {
       "title": "无",
       "startFrame": 3660,
       "durationFrames": 210,
-      "transition": "cut",
+      "transition": "ink",
       "source": "shots/s21.tsx"
     },
     {
@@ -255,7 +255,7 @@ export const manifest: Manifest = {
       "title": "她没有解释。",
       "startFrame": 3870,
       "durationFrames": 150,
-      "transition": "cut",
+      "transition": "ink",
       "source": "shots/s22.tsx"
     },
     {
@@ -264,7 +264,7 @@ export const manifest: Manifest = {
       "title": "峨眉有个郭女侠，等郎等到白了发。",
       "startFrame": 4020,
       "durationFrames": 180,
-      "transition": "dry",
+      "transition": "ink",
       "source": "shots/s23.tsx"
     },
     {
@@ -279,7 +279,7 @@ export const manifest: Manifest = {
     {
       "id": "s25",
       "act": 4,
-      "title": "三个愿望，她用掉了一个。",
+      "title": "三枚金针，她只用了一枚。",
       "startFrame": 4410,
       "durationFrames": 180,
       "transition": "cut",
@@ -300,7 +300,7 @@ export const manifest: Manifest = {
       "title": "十六岁出门，四十岁出家。",
       "startFrame": 4770,
       "durationFrames": 210,
-      "transition": "page",
+      "transition": "ink",
       "source": "shots/s27.tsx"
     },
     {
@@ -318,7 +318,7 @@ export const manifest: Manifest = {
       "title": "无",
       "startFrame": 5190,
       "durationFrames": 180,
-      "transition": "cut",
+      "transition": "ink",
       "source": "shots/s29.tsx"
     },
     {
@@ -327,7 +327,7 @@ export const manifest: Manifest = {
       "title": "她记得的，是那夜的火光。",
       "startFrame": 5370,
       "durationFrames": 180,
-      "transition": "cut",
+      "transition": "ink",
       "source": "shots/s30.tsx"
     },
     {
@@ -336,7 +336,7 @@ export const manifest: Manifest = {
       "title": "她留下一首诗，写的是十六岁那年的烟花。",
       "startFrame": 5550,
       "durationFrames": 180,
-      "transition": "cut",
+      "transition": "ink",
       "source": "shots/s31.tsx"
     },
     {
@@ -345,7 +345,7 @@ export const manifest: Manifest = {
       "title": "无",
       "startFrame": 5730,
       "durationFrames": 180,
-      "transition": "cut",
+      "transition": "ink",
       "source": "shots/s32.tsx"
     },
     {
@@ -354,7 +354,7 @@ export const manifest: Manifest = {
       "title": "无",
       "startFrame": 5910,
       "durationFrames": 210,
-      "transition": "cut",
+      "transition": "ink",
       "source": "shots/s33.tsx"
     },
     {
@@ -363,7 +363,7 @@ export const manifest: Manifest = {
       "title": "无",
       "startFrame": 6120,
       "durationFrames": 180,
-      "transition": "cut",
+      "transition": "ink",
       "source": "shots/s34.tsx"
     },
     {
@@ -372,7 +372,7 @@ export const manifest: Manifest = {
       "title": "舍不得写完的那一句，她留在了纸的背面。",
       "startFrame": 6300,
       "durationFrames": 180,
-      "transition": "cut",
+      "transition": "ink",
       "source": "shots/s35.tsx"
     },
     {
@@ -381,7 +381,7 @@ export const manifest: Manifest = {
       "title": "很多年后，有人在海边读到这张纸。",
       "startFrame": 6480,
       "durationFrames": 210,
-      "transition": "page",
+      "transition": "ink",
       "source": "shots/s36.tsx"
     },
     {
@@ -390,7 +390,7 @@ export const manifest: Manifest = {
       "title": "她写完了。",
       "startFrame": 6690,
       "durationFrames": 210,
-      "transition": "cut",
+      "transition": "ink",
       "source": "shots/s37.tsx"
     },
     {

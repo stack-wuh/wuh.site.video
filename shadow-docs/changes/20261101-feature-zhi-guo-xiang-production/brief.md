@@ -156,3 +156,23 @@ v9（38 镜 / 7050f）在四席评审（导演分镜 / 编剧 / 美术 / 声效�
 - **预期影响:** 更新
 - **候选卡片:** `shadow-docs/knowledge/video-production-flow.md`、`render-stability-playbook.md`、`tts-voiceover-pipeline.md`
 - **理由:** 镜内转场口径（真源第 7 列 + 帧数不动）、CI 矩阵 apt 争用与「逐镜 artifact + 本地 concat」兜底、配音 v6 与 ducking 实测，均应写入知识卡；`tts-voiceover-pipeline.md` 已由本轮重写为 v6。
+
+---
+
+## v11 结果（2026-11-07，对 v10 成片 16 条逐帧意见的回应）
+
+- 成片：`out/202611070425-zhi-guo-xiang-v11-final.mp4` · 7350f / 245.000s / 1920×1080 / 30fps / h264+AAC · 232MB
+- 验证：
+  - INV-1 ✅ `shots.mjs check --unit zhi-guo-xiang`：38 镜 Σ=7050
+  - INV-2 ✅ typecheck 绿、`pnpm lint` 0/0、禁用项 clean
+  - INV-3 ✅ ffprobe 7350f / 245.000s；42 段逐镜产物 trim 对齐拼接（intro 120 + 38 镜 7050 + outro 180）
+  - INV-4 ✅ 转场只剩两种：墨洇 32 处（单侧 20f）+ 硬切 6 处（含 s01/s38 端点）；字幕 21 条全部在安全窗内（脚本核对：12 条跟人声、8 条 BGM 段点睛、诗六行不锚定）
+  - INV-5 ✅ 四套原片目录零改动
+  - INV-6 ✅ 成片音频 = mix-v7（人声 25 条 + BGM 五态），peak −1.003 dBFS、0 削波
+  - INV-7 ✅ **鬼帧逐帧全扫 7350 帧干净**（`scripts/check-ghost-frames.py`）
+- 出片链路：本机 `RENDER_CONCURRENCY=1` + `chromiumOptions.disableSharedMemoryCapture` + `--force` 逐镜渲染（38 镜，~28 分钟）→ `out/concat-v11.mjs` concat + mux。**CI 未参与本轮**（v10 的 apt 争用问题未复现机会）。
+- 事故与处方：
+  1. **鬼帧**（随机帧变 3×3 平铺）——Chrome 156 + 并发截图 shared-memory capture 竞态；关掉后消失，判据与检测器入库。
+  2. **缓存键不含装配层**——改了 `ShotShell` 但逐镜仍命中旧缓存，墨洇 12f→20f 白渲一轮；已把 `ZhiGuoXiang.tsx`/`ShotShell.tsx`/`motion-tokens.ts`/`tokens.ts` 并入缓存键（schema 3）。
+  3. **bundle-only 静默失败**——高 load 下 SIGSEGV，脚本吞掉退出码后用旧 bundle 渲，导致 s10/s27 白渲一次；处方是渲染前校验 bundle 目录 mtime。
+- 未做/遗留：`p-needle-look`（S26 针形制仍是旧图）、S34 墨盖字约七成、S28「合盖」放弃（底图剑是死像素）、男声仍是 edge-tts 占位。
