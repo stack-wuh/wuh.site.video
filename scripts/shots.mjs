@@ -60,6 +60,8 @@ function parseStoryboard(path) {
   const lines = text.split('\n');
   /** 表头注释声明了「进入本镜的转场」才严格校验第 7 列；老单元第 7 列是尾帧/音效散文，按无转场处理 */
   const strictTransitions = text.includes('进入本镜的转场');
+  /** 表头注释声明了「资产外键」才解析第 8/9 列（资产 / 尾帧）；未声明的老分镜零感知（strictTransitions 同构模式） */
+  const strictAssets = text.includes('资产外键');
   const acts = [];
   const shots = [];
   for (const line of lines) {
@@ -73,6 +75,8 @@ function parseStoryboard(path) {
       const cells = line.split('|').map((c) => c.trim());
       const copy = (cells[5] ?? '').replace(/\[材质?\S*\]|\[材料\S*\]/g, '').replace(/\s+/g, ' ').trim();
       const transitionRaw = cells[6] ?? '';
+      const assetRaw = strictAssets ? (cells[7] ?? '') : '';
+      const endFrameRaw = strictAssets ? (cells[8] ?? '') : '';
       shots.push({
         id: `s${String(Number(row[1])).padStart(2, '0')}`,
         act: acts[acts.length - 1].act,
@@ -82,14 +86,39 @@ function parseStoryboard(path) {
         cellEnd: Number(row[4]),
         transition: normalizeTransition(transitionRaw),
         transitionRaw,
+        copyRaw: cells[5] ?? '',
+        assets: assetRaw.split(/[\s、，,/／]+/).filter(Boolean),
+        endFrame: endFrameRaw.trim() || undefined,
         source: `shots/s${String(Number(row[1])).padStart(2, '0')}.tsx`,
       });
     }
   }
-  return { acts, shots, strictTransitions };
+  return { acts, shots, strictTransitions, strictAssets };
 }
 
-function validate(manifest, parsed) {
+/* ─── 资产登记表（asset-registry.md）：编号三型 C(角色)/S(场景)/P(底图·道具) → 文件（∅ = 未入库） ───
+ * 引用即承诺已入库：分镜引用 P 编号而登记表文件为 ∅ 是红；C/S 编号只锚身份与场景，无文件要求。 */
+const ASSET_TYPE_NOTE = '登记表行格式：| 编号 | 类型(C/S/P) | 名称 | 文件路径或∅ | 说明 |';
+function parseRegistry() {
+  const regPath = join(root, 'videos', `preprod-${unit}`, 'assets', 'asset-registry.md');
+  if (!existsSync(regPath)) return null;
+  const rows = new Map();
+  for (const line of readFileSync(regPath, 'utf8').split('\n')) {
+    const m = line.match(/^\|\s*([^|\s]+)\s*\|\s*([CSP])\s*\|\s*([^|]*)\|\s*([^|]*)\|/);
+    if (!m) continue;
+    const [, code, type, name, file] = m;
+    if (rows.has(code)) return { error: `编号重复: ${code}（${ASSET_TYPE_NOTE}）` };
+    const f = file.trim();
+    rows.set(code, { type, name: name.trim(), file: f === '∅' || f === '' ? null : f });
+  }
+  return { rows, path: regPath };
+}
+/** 字数硬表：三锚点 (2.5s,20)/(5s,40)/(10s,82) 分段线性内插、向下取整（防音画漂移，ai-director §2.2） */
+const narrationCap = (sec) => (sec <= 2.5 ? Math.floor(sec * 8) : sec <= 5 ? Math.floor(20 + (sec - 2.5) * 8) : Math.floor(40 + (sec - 5) * 8.4));
+
+/** mode='import'：只挡结构错误（未登记/多场景/字段不一致/字数硬表）——∅ 引用与文件存在性留给 check，
+ *  因为分镜（前期）先于资产生成（正式制作）是常态，animatic CI 依赖 manifest 先存在；mode='check'：全量红。 */
+function validate(manifest, parsed, mode = 'check') {
   const errs = [];
   const { shots, totalFrames } = manifest;
   shots.forEach((s, i) => {
@@ -124,6 +153,50 @@ function validate(manifest, parsed) {
   if (first?.transition !== undefined && first.transition !== 'cut') errs.push(`${first.id} 是首镜，无前镜，inbound 必须为 cut`);
   const sum = shots.reduce((sum, x) => sum + x.durationFrames, 0);
   if (sum !== totalFrames) errs.push(`Σ durationFrames ${sum} ≠ totalFrames ${totalFrames}`);
+  /* ── 资产外键 / 尾帧 / 字数硬表（表头声明「资产外键」才激活；INV-3/4/5，strictTransitions 同构） ── */
+  if (parsed?.strictAssets) {
+    const isCheck = mode === 'check';
+    const reg = parseRegistry();
+    if (!reg) errs.push('表头声明了资产外键，但缺 videos/preprod-<unit>/assets/asset-registry.md');
+    else if (reg.error) errs.push(reg.error);
+    else {
+      if (isCheck) {
+        for (const [code, row] of reg.rows) {
+          if (row.file !== null && !existsSync(join(root, row.file))) errs.push(`登记表文件不存在: ${row.file}（${code}）`);
+        }
+      }
+      shots.forEach((s, i) => {
+        const p = parsed.shots[i];
+        if (!p || p.id !== s.id) return; // 行对应错位由上方既有对账报
+        const codes = p.assets ?? [];
+        const typeOf = (c) => reg.rows.get(c)?.type;
+        const pCodes = codes.filter((c) => typeOf(c) === 'P');
+        const sCodes = codes.filter((c) => typeOf(c) === 'S');
+        for (const code of codes) {
+          if (!reg.rows.has(code)) errs.push(`${s.id} 资产编号「${code}」未登记（asset-registry.md）`);
+          else if (isCheck && typeOf(code) === 'P' && reg.rows.get(code).file === null) {
+            errs.push(`${s.id} 引用未入库资产「${code}」（登记表文件为 ∅——先入库再引用）`);
+          }
+        }
+        if (sCodes.length > 1) errs.push(`${s.id} 声明了 ${sCodes.length} 个场景编号（每镜一场景，多场景强制拆镜）`);
+        const mC = JSON.stringify(s.characterIds ?? []);
+        const pC = JSON.stringify(codes.filter((c) => typeOf(c) === 'C'));
+        if (mC !== pC) errs.push(`${s.id} characterIds 与登记表解析不一致（重跑 import）`);
+        if ((s.environmentId ?? null) !== (sCodes[0] ?? null)) errs.push(`${s.id} environmentId 与分镜表不一致（重跑 import）`);
+        const firstPFile = pCodes.length > 0 ? reg.rows.get(pCodes[0]).file : null;
+        if ((s.firstFrameAsset ?? null) !== (firstPFile ?? null)) errs.push(`${s.id} firstFrameAsset 与登记表不一致（重跑 import）`);
+        if ((s.endFrameDesc ?? undefined) !== p.endFrame) errs.push(`${s.id} endFrameDesc 与分镜表尾帧列不一致（重跑 import）`);
+        if (isCheck && s.firstFrameAsset) {
+          if (!/-v\d+\.[A-Za-z]+$/.test(s.firstFrameAsset)) errs.push(`${s.id} firstFrameAsset「${s.firstFrameAsset}」缺版本后缀 -vN（换图必改引用，缓存键语义）`);
+          if (!existsSync(join(root, s.firstFrameAsset))) errs.push(`${s.id} firstFrameAsset 文件不存在: ${s.firstFrameAsset}`);
+        }
+        const sec = s.durationFrames / FPS;
+        const cap = narrationCap(sec);
+        const text = (p.copyRaw ?? '').replace(/（[^）]*）/g, '').replace(/[\s／/]/g, '');
+        if (text.length > cap) errs.push(`${s.id} 旁白 ${text.length} 字 > 上限 ${cap}（${sec}s，字数硬表防音画漂移）`);
+      });
+    }
+  }
   if (parsed) {
     const lastEnd = parsed.shots[parsed.shots.length - 1]?.cellEnd;
     if (lastEnd !== totalFrames) errs.push(`分镜表末镜止帧 ${lastEnd} ≠ totalFrames ${totalFrames}`);
@@ -141,11 +214,17 @@ function validate(manifest, parsed) {
 function doImport() {
   const parsed = parseStoryboard(storyboardPath);
   if (parsed.shots.length === 0) die('分镜表解析出 0 镜——表格格式可能已变');
+  let registry = null;
+  if (parsed.strictAssets) {
+    registry = parseRegistry();
+    if (!registry) die('表头声明了资产外键，但缺 videos/preprod-<unit>/assets/asset-registry.md');
+    if (registry.error) die(registry.error);
+  }
   let cursor = 0;
   const shots = parsed.shots.map((s) => {
     if (s.cellStart !== cursor) die(`${s.id} 分镜表起帧 ${s.cellStart} 与前镜止帧 ${cursor} 不连续`);
     cursor = s.cellEnd;
-    return {
+    const shot = {
       id: s.id,
       act: s.act,
       title: s.title,
@@ -154,13 +233,29 @@ function doImport() {
       transition: s.transition ?? 'cut',
       source: s.source,
     };
+    if (parsed.strictAssets) {
+      const codes = s.assets ?? [];
+      const rows = codes.map((c) => [c, registry.rows.get(c)]);
+      const unknown = rows.find(([, r]) => !r);
+      if (unknown) die(`${s.id} 资产编号「${unknown[0]}」未登记（asset-registry.md）`);
+      const byType = (t) => rows.filter(([, r]) => r.type === t);
+      if (byType('S').length > 1) die(`${s.id} 声明了 ${byType('S').length} 个场景编号（每镜一场景，多场景强制拆镜）`);
+      shot.characterIds = byType('C').map(([c]) => c);
+      shot.environmentId = byType('S')[0]?.[0] ?? null;
+      shot.firstFrameAsset = byType('P')[0]?.[1].file ?? null;
+      if (s.endFrame) shot.endFrameDesc = s.endFrame;
+    }
+    return shot;
   });
   const manifest = { film: unit, fps: FPS, totalFrames: cursor, acts: parsed.acts, shots };
-  const errs = validate(manifest, parsed);
+  const errs = validate(manifest, parsed, 'import');
   if (errs.length > 0) die(`对账失败 ${errs.length} 处:\n  ${errs.join('\n  ')}`);
   mkdirSync(filmDir, { recursive: true });
   writeFileSync(manifestPath, JSON.stringify(manifest, null, 2) + '\n');
-  console.log(`✅ import: ${shots.length} 镜 / ${parsed.acts.length} 幕 / ${manifest.totalFrames} 帧 → shots-manifest.json`);
+  const assetNote = parsed.strictAssets
+    ? `（资产列：characterIds×${shots.filter((s) => (s.characterIds ?? []).length > 0).length} / environmentId×${shots.filter((s) => s.environmentId).length} / firstFrameAsset×${shots.filter((s) => s.firstFrameAsset).length} / 尾帧×${shots.filter((s) => s.endFrameDesc).length}）`
+    : '';
+  console.log(`✅ import: ${shots.length} 镜 / ${parsed.acts.length} 幕 / ${manifest.totalFrames} 帧 → shots-manifest.json${assetNote}`);
 }
 
 /* ─── sync：manifest → manifest.ts + registry.ts + routes.tsx ─── */
@@ -172,7 +267,7 @@ function doSync() {
   mkdirSync(join(filmDir, 'shots'), { recursive: true });
   const header = (what) => `/* 由 scripts/shots.mjs sync 生成——勿手改；真源 shots-manifest.json（${what}） */\n`;
   const transitionUnion = Object.keys(TRANSITIONS).map((k) => `'${k}'`).join(' | ');
-  const tsType = `{ film: string; fps: number; totalFrames: number; acts: Array<{ act: number; title: string; startFrame: number; endFrame: number }>; shots: Array<{ id: string; act: number; title: string; startFrame: number; durationFrames: number; transition: Transition; source: string }> }`;
+  const tsType = `{ film: string; fps: number; totalFrames: number; acts: Array<{ act: number; title: string; startFrame: number; endFrame: number }>; shots: Array<{ id: string; act: number; title: string; startFrame: number; durationFrames: number; transition: Transition; source: string; characterIds?: string[]; environmentId?: string | null; firstFrameAsset?: string | null; endFrameDesc?: string }> }`;
   writeFileSync(
     join(filmDir, 'shots', 'manifest.ts'),
     header('类型化视图')
@@ -240,7 +335,7 @@ function doCheck() {
     if (!mts.includes('export const TRANSITION_SIDE')) errs.push('manifest.ts 缺 TRANSITION_SIDE（跑 sync 重生成）');
   }
   if (errs.length > 0) die(`INV 对账失败 ${errs.length} 处:\n  ${errs.join('\n  ')}`);
-  console.log(`✅ check: INV-S1/S2/S6 全绿 —— ${manifest.shots.length} 镜 Σ=${manifest.totalFrames} 帧，与分镜表/幕表/生成物一致`);
+  console.log(`✅ check: INV-S1/S2/S6${parsed.strictAssets ? '/S7' : ''} 全绿 —— ${manifest.shots.length} 镜 Σ=${manifest.totalFrames} 帧，与分镜表/幕表/生成物一致${parsed.strictAssets ? '（资产外键/字数硬表/首帧资产已校验）' : ''}`);
 }
 
 switch (cmd) {

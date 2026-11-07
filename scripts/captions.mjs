@@ -132,7 +132,7 @@ const pushLine = (row) => {
   lines.push({ ...row, text: text ?? '' });
 };
 for (const row of paragraph('opening', ['m01', 'm02', 'm03', 'm04', 'm05', 'm06', 'm07'])) pushLine(row);
-for (const id of [...texts.keys()]) {
+for (const id of texts.keys()) {
   if (/^(m0[1-7]|m5[4-9]|m6[0-2])$/.test(id)) continue; // opening / ending 段落已处理
   const v = raw[id];
   if (!v) { fail(`cues-v8.json 缺 ${id} 的落点`); continue; }
