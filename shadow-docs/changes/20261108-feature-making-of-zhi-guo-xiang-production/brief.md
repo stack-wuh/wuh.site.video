@@ -4,7 +4,7 @@
   "name": "20261108-feature-making-of-zhi-guo-xiang-production",
   "type": "feature",
   "scope": "video-materials",
-  "status": "published",
+  "status": "committed",
   "baseBranch": "main",
   "branch": "feature/20261108-feature-making-of-zhi-guo-xiang-production",
   "files": [
@@ -29,8 +29,8 @@
   },
   "workflow": {
     "operation": null,
-    "checkpoint": "pr:57",
-    "planHash": "7351d77958aeb945cdfde90808c13b2a81eb9856d938372cd04b98b6c850dc72",
+    "checkpoint": "848057b0185cc9c0ac4d3de6abdb8da5b2b072ff",
+    "planHash": "1a8e67fa3f6deb11effbaa4dbd832cbc72a958c871651031a99a5dba0793a6f3",
     "updatedAt": null,
     "lastError": null,
     "issuePlan": {
@@ -45,11 +45,10 @@
     "worktree": "/Users/wuhong/shadow-desktop/github/wuh.site.video/.worktrees/20261108-feature-making-of-zhi-guo-xiang-production",
     "commit": {
       "files": [
-        "public/making-of-zhi-guo-xiang",
         "videos/making-of-zhi-guo-xiang",
         "videos/preprod-making-of-zhi-guo-xiang"
       ],
-      "message": "fix(making-of): s02 七版快闪改取各版正片开场 5.0–5.933s（v2 段）——2s 处是各版自己的片头标题卡，七闪同质看不出演化"
+      "message": "feat(making-of): 数据动效 retrofit 九镜——MO-NUM-ROLL/ODOMETER/SLAM + MO-CHART-GROW 令牌入库（motion-tokens/spec 矩阵 v3 重排），s02/s07 角标滚轮、s11 0→52 滚动、s23 双数冲线、s27/s28/s29/s30 生长入场、s29/s30 数字滚定、s36 1→11 逐版快滚；共享 Odometer 组件"
     }
   }
 }
@@ -120,7 +119,7 @@
 
 ### Phase 4 · CI 出片与验收
 - [x] push → `gh workflow run render-film.yml --ref <branch> -f film=making-of-zhi-guo-xiang` → 矩阵 41 job → assemble → 下载 → ffprobe 7980f 对账
-- [ ] 抽帧走查（镜中点帧 = 内容帧 +120f）+ 内联预览页交用户定稿意见
+- [x] 抽帧走查（镜中点帧 = 内容帧 +120f）+ 内联预览页交用户定稿意见
 - [ ] 意见单镜返工（workflow_dispatch shots 子集）→ 终验 → review/publish/release
 
 ## 结果
