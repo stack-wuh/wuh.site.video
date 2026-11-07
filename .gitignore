@@ -16,3 +16,7 @@ public/zhi-guo-xiang/scene/photo-nianian-sunset.jpg
 public/zhi-guo-xiang/scene/p-him-photo.jpg
 videos/zhi-guo-xiang/assets/refs/
 videos/zhi-guo-xiang/assets/vo-pack/audio/
+
+# 版权音乐：不随仓库分发（只在本机 out/ 做 mux）
+public/zhi-guo-xiang/bgm/*.flac
+public/zhi-guo-xiang/bgm/*.mp3
