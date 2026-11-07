@@ -4,7 +4,7 @@
   "name": "20261107-feature-making-of-zhi-guo-xiang-preprod",
   "type": "feature",
   "scope": "video-materials",
-  "status": "committed",
+  "status": "published",
   "baseBranch": "main",
   "branch": "feature/20261107-feature-making-of-zhi-guo-xiang-preprod",
   "files": [
@@ -20,8 +20,8 @@
     "repository": "stack-wuh/wuh.site.video",
     "issue": 54,
     "issueUrl": "https://github.com/stack-wuh/wuh.site.video/issues/54",
-    "pullRequest": null,
-    "pullRequestUrl": null
+    "pullRequest": 55,
+    "pullRequestUrl": "https://github.com/stack-wuh/wuh.site.video/pull/55"
   },
   "review": {
     "conclusion": "pending",
@@ -30,8 +30,8 @@
   },
   "workflow": {
     "operation": null,
-    "checkpoint": "31318172a7cf9a7e5f978c516a47c72f24890519",
-    "planHash": "14bff177f76ae99601e6e58e8b615121127de1e5d177d7f0dda1b24cf238b3b0",
+    "checkpoint": "pr:55",
+    "planHash": "6982cea44b256d0ced9ef0f39e67db33bf43c7d2c5c4cac90c3302805c1bbbad",
     "updatedAt": null,
     "lastError": null,
     "issuePlan": {
