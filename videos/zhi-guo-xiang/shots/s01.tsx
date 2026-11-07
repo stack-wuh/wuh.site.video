@@ -21,7 +21,7 @@ import { MistFlow } from '../components/b-mistflow';
 import { WarmBloom } from '../components/e-firelight';
 import { CLAMP } from '../motion-tokens';
 
-const TOTAL = 180;
+const TOTAL = 210;
 /** 海面那道金光（落日在海上拉出的光带，1920×1080 基准） */
 const SUN_PATH = { x: 960, y: 250 };
 

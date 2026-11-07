@@ -25,7 +25,7 @@ import { WaveField } from '../components/WaveField';
 import { MistFlow } from '../components/b-mistflow';
 import { CLAMP, CURVES } from '../motion-tokens';
 
-const TOTAL = 180;
+const TOTAL = 210;
 /** 落日推近：1.58（接 s03 终点）→ 1.74，一路不停 */
 const ZOOM: [number, number] = [1.58, 1.74];
 

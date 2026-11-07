@@ -1,16 +1,15 @@
-/* S11 · 她的肩后视角：他抬手到面具，面具离脸的一瞬，光从面具边缘漫出来吞掉他的脸 210f
+/* S11 · 她的肩后视角：他抬手到面具，面具离脸的一瞬，光从面具边缘漫出来吞掉他的脸 360f（12s）
  *
  * v12 分镜：中·过肩，双人同框，光驱动。观众**看不见他的脸**——这是全片的铁律（杨过永远不给脸），
  * 所以这一镜的戏是「光把脸吃掉」，不是「摘下了一张面具」。
  *
- * 底图 `p-unmask-her`（新，art-v12；她的侧后剪影在前景、他抬手到面具、两人间留雾）。
- * 代码只做光：
- *   ① 面具边缘亮起：64f 起，先一下短闪，再从面具位置漫开一大团暖白（screen）——
- *      光越大、越软，他的五官就越读不出来；末段用一层纸色洗过去，把「脸」彻底抹平；
- *   ② 两人之间的雾：LocalMist 从中间长起来（湿接，不是贴片）；
- *   ③ 光里的尘：光一起来，空气里的尘才看得见。
- * 光的位置按 art 口径（他抬手、面具在画面中偏右上方）给一个宽容的大圆，不追具体五官。
- * 转场：入「切」，出「墨洇」。
+ * 本轮时长 240f → 360f（12s）。郭襄第一次真正看见他的脸，12 秒要撑得住，所以整条光的时间轴往后压：
+ *   0–132f   静：他抬手到面具（在底图里），两人之间只有薄雾；光只有底图自己那一点点；
+ *   132–178f 「面具离脸」的一瞬：先一下短闪（16f 峰值），稿子的心脏就在这一下；
+ *   178–300f 光漫开、把五官洗平（光越大越软，他的脸就越读不出来）；
+ *   300–330f 光与雾都收住，不再变；
+ *   330–360f **静止一秒**：镜头停、光停、雾停，只剩空气里的尘慢慢落下来。
+ * 镜内不做全屏黑/白，转场归 ShotShell（入「切」，出「墨洇」）。
  */
 import type { FC } from 'react';
 import { AbsoluteFill, interpolate, useCurrentFrame } from 'remotion';
@@ -26,19 +25,26 @@ const TOTAL = 360;
 const MASK = { x: 1245, y: 252 };
 /** 两人之间的雾 */
 const BETWEEN = { x: 900, y: 640 };
+/** 结尾静止的起点：之后一帧都不再变（镜头也停） */
+const HOLD = 330;
 
-const S12: FC = () => {
+const S11: FC = () => {
   const f = useCurrentFrame();
-  /* ① 光的生长：64f 短闪，110f 撑满，之后缓慢再涨一点（不收回——脸不能再露出来） */
-  const flash = interpolate(f, [110, 120, 151], [0, 1, 0], CLAMP);
-  const grow = interpolate(f, [110, 223, TOTAL - 1], [0, 0.86, 1], { ...CLAMP, easing: CURVES.cineEaseOut });
+  /* 推近：330f 走到位就停住，最后 1 秒镜头不动 */
+  const cam = Math.min(1, f / HOLD);
+
+  /* ① 光：132f 起短闪，178f 后漫开，300f 基本长成，330f 收住 */
+  const flash = interpolate(f, [132, 148, 178], [0, 1, 0], CLAMP);
+  const grow = interpolate(f, [132, 300, HOLD], [0, 0.88, 1], { ...CLAMP, easing: CURVES.cineEaseOut });
   const halo = 240 + 660 * grow;
   const core = 90 + 300 * grow;
-  /* ② 雾：80f 后从两人之间长起来 */
-  const mist = interpolate(f, [137, 291], [0, 0.85], { ...CLAMP, easing: CURVES.cineEaseInOut });
+  /* ② 雾：等光起来之后才从两人之间长起来（150–310f 走完） */
+  const mist = interpolate(f, [150, 310], [0, 0.85], { ...CLAMP, easing: CURVES.cineEaseInOut });
+  /* ③ 尘：结尾 1 秒收一点，让画面真的静下来 */
+  const dust = interpolate(f, [310, 344], [1, 0.55], CLAMP);
 
   return (
-    <ShotScene name="p-unmask-her" total={TOTAL} frame={f} zoom={[1.0, 1.05]} dim={0.03}>
+    <ShotScene name="p-unmask-her" total={TOTAL} frame={f} progress={cam} zoom={[1.0, 1.045]} dim={0.03}>
       {/* ①a 大光晕：面具边缘漫出来的那一片（screen，宽而软） */}
       <div
         style={{
@@ -82,10 +88,12 @@ const S12: FC = () => {
       />
 
       {/* ② 两人之间的雾（湿接） */}
-      <LocalMist at={BETWEEN} progress={mist} seedBase="s12-between" spread={300} rise={260} count={4} strength={0.8} />
+      <LocalMist at={BETWEEN} progress={mist} seedBase="s11-between" spread={300} rise={260} count={4} strength={0.8} />
 
-      {/* ③ 光里的尘：光一起来，尘才显影 */}
-      <DustField act={3} count={26} seedBase="s12-motes" wind={3} />
+      {/* ③ 光里的尘：光一起来，尘才显影；结尾收一点 */}
+      <AbsoluteFill style={{ opacity: dust, pointerEvents: 'none' }}>
+        <DustField act={3} count={26} seedBase="s11-motes" wind={3} />
+      </AbsoluteFill>
 
       {/* 她的肩背那一侧压一档（前景剪影），光从他那一侧来 */}
       <AbsoluteFill
@@ -101,4 +109,4 @@ const S12: FC = () => {
   );
 };
 
-export default S12;
+export default S11;

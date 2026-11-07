@@ -19,7 +19,7 @@ import { FireLine, WarmBloom } from '../components/e-firelight';
 import { GroundMist } from '../components/c-fog';
 import { DustField } from '../components/DustField';
 
-const TOTAL = 210;
+const TOTAL = 240;
 
 const S08: FC = () => {
   const f = useCurrentFrame();

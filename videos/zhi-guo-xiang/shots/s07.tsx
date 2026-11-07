@@ -20,7 +20,7 @@ import { WarmBloom } from '../components/e-firelight';
 import { EmberField } from '../components/e-emberfield';
 import { CLAMP, FILM } from '../motion-tokens';
 
-const TOTAL = 210;
+const TOTAL = 240;
 /** 两瞳位（p-eyefire 实测） */
 const PUPILS = [
   { x: 731, y: 440 },

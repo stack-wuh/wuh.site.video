@@ -16,7 +16,7 @@ import { WaveField } from '../components/WaveField';
 import { MistFlow } from '../components/b-mistflow';
 import { DustField } from '../components/DustField';
 
-const TOTAL = 210;
+const TOTAL = 270;
 
 const S05: FC = () => {
   const f = useCurrentFrame();

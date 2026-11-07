@@ -16,7 +16,7 @@ import { WarmBloom } from '../components/e-firelight';
 import { EmberField } from '../components/e-emberfield';
 import { DustField } from '../components/DustField';
 
-const TOTAL = 210;
+const TOTAL = 270;
 /** 火塘心（p-firecircle 实测） */
 const FIRE = { x: 955, y: 745 };
 

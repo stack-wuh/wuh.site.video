@@ -18,7 +18,7 @@ import { WarmBloom } from '../components/e-firelight';
 import { DustField } from '../components/DustField';
 import { CLAMP } from '../motion-tokens';
 
-const TOTAL = 180;
+const TOTAL = 210;
 /** 起点 = s02 的终点（1.24）；终点 = s04 的起点（1.58） */
 const ZOOM: [number, number] = [1.24, 1.58];
 const SUN = { x: INK_SUN.x * 1920, y: INK_SUN.y * 1080 };

@@ -18,7 +18,7 @@ import { WarmBloom, RimLight } from '../components/e-firelight';
 import { EmberField } from '../components/e-emberfield';
 import { DustField } from '../components/DustField';
 
-const TOTAL = 210;
+const TOTAL = 240;
 /** 光从画面右侧的火塘来（逆光）：光源在他身后偏右 */
 const BACKLIGHT = { x: 1380, y: 520 };
 /** 轮廓金边贴的那条线（近后脑—肩—右袖一侧） */

@@ -28,9 +28,12 @@ export const ShotScene: FC<{
   driftY?: [number, number];
   dim?: number;
   warm?: number;
+  /** 覆盖进度（0–1）：镜头自己给的缓动曲线（默认按 frame/total 线性） */
+  progress?: number;
   children?: ReactNode;
-}> = ({ name, total, frame, zoom = [1.0, 1.045], driftX = [0, 0], driftY = [0, 0], dim = 0, warm = 0, children }) => {
-  const t = useShotT(frame, total);
+}> = ({ name, total, frame, zoom = [1.0, 1.045], driftX = [0, 0], driftY = [0, 0], dim = 0, warm = 0, progress, children }) => {
+  const base = useShotT(frame, total);
+  const t = progress ?? base;
   const scale = interpolate(t, [0, 1], zoom, clampOpts);
   const x = interpolate(t, [0, 1], driftX, clampOpts);
   const y = interpolate(t, [0, 1], driftY, clampOpts);

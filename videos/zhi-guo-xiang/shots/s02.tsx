@@ -17,7 +17,7 @@ import { Caption } from '../components/Caption';
 import { WarmBloom } from '../components/e-firelight';
 import { DustField } from '../components/DustField';
 
-const TOTAL = 180;
+const TOTAL = 210;
 /** 推近的终点 = s03 的起点（1.24） */
 const ZOOM: [number, number] = [1.0, 1.24];
 
