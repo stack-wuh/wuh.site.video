@@ -4,7 +4,7 @@
   "name": "20261108-feature-making-of-zhi-guo-xiang-production",
   "type": "feature",
   "scope": "video-materials",
-  "status": "committed",
+  "status": "published",
   "baseBranch": "main",
   "branch": "feature/20261108-feature-making-of-zhi-guo-xiang-production",
   "files": [
@@ -19,8 +19,8 @@
     "repository": "stack-wuh/wuh.site.video",
     "issue": 56,
     "issueUrl": "https://github.com/stack-wuh/wuh.site.video/issues/56",
-    "pullRequest": null,
-    "pullRequestUrl": null
+    "pullRequest": 57,
+    "pullRequestUrl": "https://github.com/stack-wuh/wuh.site.video/pull/57"
   },
   "review": {
     "conclusion": "pending",
@@ -29,8 +29,8 @@
   },
   "workflow": {
     "operation": null,
-    "checkpoint": "6e043a9180551ec201879c478579ed2b4a3b3d85",
-    "planHash": "dc7c3138bd6a9b41186205975966c82b76f242c36401fa93b0ad4256a78cd6e9",
+    "checkpoint": "pr:57",
+    "planHash": "f6b4c0de45e02df00c63ca07c0598eee5e596356a1a6ae93ba3d193318bd4bbd",
     "updatedAt": null,
     "lastError": null,
     "issuePlan": {
