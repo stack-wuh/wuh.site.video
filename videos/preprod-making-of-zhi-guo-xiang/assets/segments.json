@@ -1,0 +1,32 @@
+{
+  "$comment": "《致郭襄》创作历程片 · 素材片段清单（scripts/prep-making-of.mjs 的真源）。masters 键 = materials.md §2 的母带编号；segments 产段入 public/making-of-zhi-guo-xiang/segments/，一律无声、1080p30。换内容必升 version（-vN 纪律）。正式段表待剧本/分镜定稿后回填。",
+  "mastersDir": "~/Desktop/remotion",
+  "masters": {
+    "M1": { "file": "2026110101-zhi-guo-xiang.mp4", "version": "v8", "frames": 7500, "duration": 250.0 },
+    "M2": { "file": "20261102000434-zhi-guo-xiang.mp4", "version": "中间版A", "frames": 7100, "duration": 236.666667 },
+    "M3": { "file": "20261102145146-zhi-guo-xiang.mp4", "version": "中间版B", "frames": 7100, "duration": 236.666667 },
+    "M4": { "file": "20261103010105-zhi-guo-xiang.mp4", "version": "v9", "frames": 7350, "duration": 245.0 },
+    "M5": { "file": "20261107041725-zhi-guo-xiang.mp4", "version": "v10", "frames": 7350, "duration": 245.0 },
+    "M6": { "file": "20261107044211-zhi-guo-xiang.mp4", "version": "v11", "frames": 9060, "duration": 302.0 },
+    "M7": { "file": "zhi-guo-xiang-animatic.mp4", "version": "animatic", "frames": 7500, "duration": 250.0 },
+    "M8": { "file": "v12-final/20261107082556-zhi-guo-xiang.mp4", "version": "v12", "frames": 9060, "duration": 302.0 }
+  },
+  "segments": [
+    {
+      "id": "seg-evolution-v8-open",
+      "master": "M1",
+      "in": 0.0,
+      "out": 8.0,
+      "version": 1,
+      "note": "v8（52镜首渲）开场——演化快剪第一个画面态"
+    },
+    {
+      "id": "seg-animatic-open",
+      "master": "M7",
+      "in": 0.0,
+      "out": 8.0,
+      "version": 1,
+      "note": "前期 animatic 开场——与 v12 成品开场对置（先简后精）"
+    }
+  ]
+}

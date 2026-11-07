@@ -1,0 +1,426 @@
+{
+  "film": "making-of-zhi-guo-xiang",
+  "fps": 30,
+  "totalFrames": 7680,
+  "acts": [
+    {
+      "act": 1,
+      "title": "钩子",
+      "startFrame": 0,
+      "endFrame": 360
+    },
+    {
+      "act": 2,
+      "title": "一切从素材开始",
+      "startFrame": 360,
+      "endFrame": 1500
+    },
+    {
+      "act": 3,
+      "title": "第一版成片",
+      "startFrame": 1500,
+      "endFrame": 2400
+    },
+    {
+      "act": 4,
+      "title": "故事错了",
+      "startFrame": 2400,
+      "endFrame": 3450
+    },
+    {
+      "act": 5,
+      "title": "镜头也错了",
+      "startFrame": 3450,
+      "endFrame": 4830
+    },
+    {
+      "act": 6,
+      "title": "声音的进化",
+      "startFrame": 4830,
+      "endFrame": 5730
+    },
+    {
+      "act": 7,
+      "title": "幕后",
+      "startFrame": 5730,
+      "endFrame": 6480
+    },
+    {
+      "act": 8,
+      "title": "执念",
+      "startFrame": 6480,
+      "endFrame": 7680
+    }
+  ],
+  "shots": [
+    {
+      "id": "s01",
+      "act": 1,
+      "title": "黑场起，M8 风陵渡一闪（母带 32.0–32.",
+      "startFrame": 0,
+      "durationFrames": 102,
+      "transition": "这条片子，你可能看过。",
+      "source": "M8"
+    },
+    {
+      "id": "s02",
+      "act": 1,
+      "title": "M1→M2→M4→M5→M6→M7 六版同位快闪",
+      "startFrame": 102,
+      "durationFrames": 198,
+      "transition": "但它的十一个版本，你没见过。",
+      "source": "M1"
+    },
+    {
+      "id": "s03",
+      "act": 1,
+      "title": "M2/M3/M4 三连闪（各 40f）后停黑场呼",
+      "startFrame": 300,
+      "durationFrames": 60,
+      "transition": "无",
+      "source": "M2"
+    },
+    {
+      "id": "s04",
+      "act": 2,
+      "title": "文档快照卡",
+      "startFrame": 360,
+      "durationFrames": 150,
+      "transition": "第一次想拍郭襄，是十一月初。",
+      "source": ""
+    },
+    {
+      "id": "s05",
+      "act": 2,
+      "title": "素材库快照卡",
+      "startFrame": 510,
+      "durationFrames": 210,
+      "transition": "那时候没有画面，没有配音，只有一份素材库。",
+      "source": ""
+    },
+    {
+      "id": "s06",
+      "act": 2,
+      "title": "查证三连卡",
+      "startFrame": 720,
+      "durationFrames": 255,
+      "transition": "原著里的每一枚金针、每一场雪，都得先查清楚从哪儿来。",
+      "source": ""
+    },
+    {
+      "id": "s07",
+      "act": 2,
+      "title": "v1→v7 文档卡堆叠成塔，计数角标 01→07",
+      "startFrame": 975,
+      "durationFrames": 165,
+      "transition": "第八版之前，先有前七版的纸面功夫。",
+      "source": ""
+    },
+    {
+      "id": "s08",
+      "act": 2,
+      "title": "animatic 开场实拍段",
+      "startFrame": 1140,
+      "durationFrames": 195,
+      "transition": "然后，是一块单色的分镜板。",
+      "source": ""
+    },
+    {
+      "id": "s09",
+      "act": 2,
+      "title": "M7 与 M1 同帧位对切（0.5s 间隔两次对",
+      "startFrame": 1335,
+      "durationFrames": 165,
+      "transition": "先简后精——节奏对了，才配拥有颜色。",
+      "source": "M7"
+    },
+    {
+      "id": "s10",
+      "act": 3,
+      "title": "v8 开场实拍段",
+      "startFrame": 1500,
+      "durationFrames": 300,
+      "transition": "十一月一号，五十二个镜头，第一次能从头放到尾。",
+      "source": ""
+    },
+    {
+      "id": "s11",
+      "act": 3,
+      "title": "CI 矩阵动画",
+      "startFrame": 1800,
+      "durationFrames": 180,
+      "transition": "五十两个任务同时跑，一次全绿。",
+      "source": ""
+    },
+    {
+      "id": "s12",
+      "act": 3,
+      "title": "M1 续放（母带 10–17s 段）",
+      "startFrame": 1980,
+      "durationFrames": 210,
+      "transition": "那天我以为，最难的部分已经过去了。",
+      "source": "M1"
+    },
+    {
+      "id": "s12b",
+      "act": 3,
+      "title": "M1 高光纯放（母带 74–81s 面具段），无",
+      "startFrame": 2190,
+      "durationFrames": 210,
+      "transition": "无",
+      "source": "M1"
+    },
+    {
+      "id": "s13",
+      "act": 4,
+      "title": "文档快照卡",
+      "startFrame": 2400,
+      "durationFrames": 165,
+      "transition": "后来发现，错的不是画面，是故事。",
+      "source": ""
+    },
+    {
+      "id": "s14",
+      "act": 4,
+      "title": "诗六行卡",
+      "startFrame": 2565,
+      "durationFrames": 150,
+      "transition": "片头那首诗，金庸从来没写过。",
+      "source": ""
+    },
+    {
+      "id": "s15",
+      "act": 4,
+      "title": "M8 金针三连",
+      "startFrame": 2715,
+      "durationFrames": 255,
+      "transition": "三枚金针，原著里她全用了——最后一枚，是求他别死。",
+      "source": "M8"
+    },
+    {
+      "id": "s16",
+      "act": 4,
+      "title": "M8 揭面段续（母带 86–90s）",
+      "startFrame": 2970,
+      "durationFrames": 165,
+      "transition": "揭掉面具在十六岁，不是二十四年后。",
+      "source": "M8"
+    },
+    {
+      "id": "s17",
+      "act": 4,
+      "title": "文档快照卡",
+      "startFrame": 3135,
+      "durationFrames": 195,
+      "transition": "评审留了底稿：初稿十条事实错误，一条一条列着。",
+      "source": ""
+    },
+    {
+      "id": "s18",
+      "act": 4,
+      "title": "M8 风陵渡→万兽山庄（母带 32–35.5s ",
+      "startFrame": 3330,
+      "durationFrames": 120,
+      "transition": "于是故事按原著，全部重写。",
+      "source": "M8"
+    },
+    {
+      "id": "s19",
+      "act": 5,
+      "title": "M6 金针手镜整镜（v11 独有，母带内定位待抽",
+      "startFrame": 3450,
+      "durationFrames": 210,
+      "transition": "最后一版做了个狠决定：删掉一整个镜头。",
+      "source": "M6"
+    },
+    {
+      "id": "s20",
+      "act": 5,
+      "title": "M6 手掌特写放大",
+      "startFrame": 3660,
+      "durationFrames": 150,
+      "transition": "线描的手掌，和水墨不是一个族。",
+      "source": "M6"
+    },
+    {
+      "id": "s21",
+      "act": 5,
+      "title": "M6 手镜段 → M8 同段位对切（删镜前后对切",
+      "startFrame": 3810,
+      "durationFrames": 165,
+      "transition": "删掉的四秒，分给了别人的戏。",
+      "source": "M6"
+    },
+    {
+      "id": "s22",
+      "act": 5,
+      "title": "帧数卡",
+      "startFrame": 3975,
+      "durationFrames": 120,
+      "transition": "删完，总长一秒没变。",
+      "source": ""
+    },
+    {
+      "id": "s22b",
+      "act": 5,
+      "title": "M8 万兽山庄扩段纯放（母带 78–86.5s，",
+      "startFrame": 4095,
+      "durationFrames": 255,
+      "transition": "无",
+      "source": "M8"
+    },
+    {
+      "id": "s22c",
+      "act": 5,
+      "title": "文档快照卡",
+      "startFrame": 4350,
+      "durationFrames": 240,
+      "transition": "AI 画她的正脸，四轮全崩成动漫脸。",
+      "source": ""
+    },
+    {
+      "id": "s22d",
+      "act": 5,
+      "title": "对照卡",
+      "startFrame": 4590,
+      "durationFrames": 240,
+      "transition": "后来不画脸了，画剪影，反而像了。",
+      "source": ""
+    },
+    {
+      "id": "s23",
+      "act": 6,
+      "title": "正片 TTS 段（M8 母带 168–172s）",
+      "startFrame": 4830,
+      "durationFrames": 135,
+      "transition": "前几版的旁白，是 AI 念的。",
+      "source": "M8"
+    },
+    {
+      "id": "s24",
+      "act": 6,
+      "title": "录音花絮",
+      "startFrame": 4965,
+      "durationFrames": 180,
+      "transition": "倒数第二版，我自己的声音进来了。",
+      "source": ""
+    },
+    {
+      "id": "s25",
+      "act": 6,
+      "title": "漂移示意卡",
+      "startFrame": 5145,
+      "durationFrames": 255,
+      "transition": "但更大的坑在排队：旁白按幕铺，最重漂到负十六秒。",
+      "source": ""
+    },
+    {
+      "id": "s26",
+      "act": 6,
+      "title": "对齐示意卡",
+      "startFrame": 5400,
+      "durationFrames": 180,
+      "transition": "改成按镜铺，中位误差一点五秒。",
+      "source": ""
+    },
+    {
+      "id": "s26b",
+      "act": 6,
+      "title": "真声段纯放",
+      "startFrame": 5580,
+      "durationFrames": 150,
+      "transition": "无",
+      "source": ""
+    },
+    {
+      "id": "s27",
+      "act": 7,
+      "title": "CI 卡",
+      "startFrame": 5730,
+      "durationFrames": 120,
+      "transition": "深夜里，机器也会罢工。",
+      "source": ""
+    },
+    {
+      "id": "s28",
+      "act": 7,
+      "title": "三级兜底流程卡",
+      "startFrame": 5850,
+      "durationFrames": 195,
+      "transition": "重试、子集、拆段拼，三级兜底救回来。",
+      "source": ""
+    },
+    {
+      "id": "s29",
+      "act": 7,
+      "title": "CI 卡",
+      "startFrame": 6045,
+      "durationFrames": 150,
+      "transition": "平时改一镜、看一帧，从不重渲整片。",
+      "source": ""
+    },
+    {
+      "id": "s29b",
+      "act": 7,
+      "title": "深夜空镜",
+      "startFrame": 6195,
+      "durationFrames": 285,
+      "transition": "无",
+      "source": ""
+    },
+    {
+      "id": "s30",
+      "act": 8,
+      "title": "黑场，计数角标「11」定格放大",
+      "startFrame": 6480,
+      "durationFrames": 240,
+      "transition": "有人问：一条四分半的片子，至于改十一版吗。",
+      "source": ""
+    },
+    {
+      "id": "s31",
+      "act": 8,
+      "title": "M8 风陵渡（母带 32–34.5s）",
+      "startFrame": 6720,
+      "durationFrames": 105,
+      "transition": "风陵渡口初相遇。",
+      "source": "M8"
+    },
+    {
+      "id": "s32",
+      "act": 8,
+      "title": "M8 青驴等待蒙太奇（母带 196–202s）",
+      "startFrame": 6825,
+      "durationFrames": 180,
+      "transition": "她的执念，是等一个不会回头的人。",
+      "source": "M8"
+    },
+    {
+      "id": "s33",
+      "act": 8,
+      "title": "M8 诗行段（母带 244–249.5s）",
+      "startFrame": 7005,
+      "durationFrames": 165,
+      "transition": "我的执念，是让她被讲对。",
+      "source": "M8"
+    },
+    {
+      "id": "s34",
+      "act": 8,
+      "title": "M8 片尾念念段（母带 270–278.5s）",
+      "startFrame": 7170,
+      "durationFrames": 255,
+      "transition": "最后一版，只比第一版多了一件事：她的事，是真的。",
+      "source": "M8"
+    },
+    {
+      "id": "s35",
+      "act": 8,
+      "title": "落版卡",
+      "startFrame": 7425,
+      "durationFrames": 255,
+      "transition": "《风陵 · 致郭襄》。现在，是她该有的样子。",
+      "source": ""
+    }
+  ]
+}
