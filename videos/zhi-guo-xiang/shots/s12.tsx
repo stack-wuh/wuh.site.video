@@ -16,6 +16,7 @@ import type { FC } from 'react';
 import { AbsoluteFill, interpolate, useCurrentFrame } from 'remotion';
 import { colors } from '../../../brand/tokens';
 import { ShotScene } from '../components/e-scene';
+import { Caption } from '../components/Caption';
 import { LocalMist } from '../components/c-fog';
 import { DustField } from '../components/DustField';
 import { CLAMP, CURVES } from '../motion-tokens';
@@ -48,7 +49,7 @@ const S12: FC = () => {
           height: halo * 1.64,
           borderRadius: '50%',
           background: 'radial-gradient(ellipse 50% 50% at 50% 50%, #f7edd2 0%, #e9d9ae 34%, transparent 72%)',
-          opacity: 0.1 + 0.24 * grow,
+          opacity: 0.06 + 0.16 * grow,
           filter: 'blur(74px)',
           mixBlendMode: 'screen',
           pointerEvents: 'none',
@@ -64,7 +65,7 @@ const S12: FC = () => {
           height: core * 2,
           borderRadius: '50%',
           background: 'radial-gradient(circle, #fdf6e2 0%, #f0dfb4 38%, transparent 70%)',
-          opacity: 0.16 + 0.34 * grow + 0.26 * flash,
+          opacity: 0.1 + 0.22 * grow + 0.24 * flash,
           filter: 'blur(38px)',
           mixBlendMode: 'screen',
           pointerEvents: 'none',
@@ -73,8 +74,8 @@ const S12: FC = () => {
       {/* ①c 洗掉脸：一层纸色从面具位置泛开（不画五官，只让五官读不出来） */}
       <AbsoluteFill
         style={{
-          background: `radial-gradient(ellipse 34% 27% at ${(MASK.x / 1920) * 100}% ${(MASK.y / 1080) * 100}%, rgba(247,237,210,0.92) 0%, rgba(247,237,210,0.42) 46%, transparent 74%)`,
-          opacity: 0.14 + 0.3 * grow,
+          background: `radial-gradient(ellipse 27% 22% at ${(MASK.x / 1920) * 100}% ${(MASK.y / 1080) * 100}%, rgba(247,237,210,0.9) 0%, rgba(247,237,210,0.38) 46%, transparent 76%)`,
+          opacity: 0.08 + 0.22 * grow,
           mixBlendMode: 'screen',
           pointerEvents: 'none',
         }}
@@ -95,6 +96,7 @@ const S12: FC = () => {
           pointerEvents: 'none',
         }}
       />
+      <Caption cue="s12" tone="ink" />
     </ShotScene>
   );
 };

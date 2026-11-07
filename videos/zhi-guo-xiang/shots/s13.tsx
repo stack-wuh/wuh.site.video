@@ -12,6 +12,7 @@
 import type { FC } from 'react';
 import { AbsoluteFill, useCurrentFrame } from 'remotion';
 import { ShotScene } from '../components/e-scene';
+import { Caption } from '../components/Caption';
 import { WaveField } from '../components/WaveField';
 import { MistFlow } from '../components/b-mistflow';
 import { WarmBloom } from '../components/e-firelight';
@@ -48,6 +49,7 @@ const S13: FC = () => {
           pointerEvents: 'none',
         }}
       />
+      <Caption cue="s13" tone="paper" />
     </ShotScene>
   );
 };

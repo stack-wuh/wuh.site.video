@@ -13,6 +13,7 @@
 import type { FC } from 'react';
 import { AbsoluteFill, interpolate, useCurrentFrame } from 'remotion';
 import { PhotoPlate, INK_SUN } from '../components/e-photo';
+import { Caption } from '../components/Caption';
 import { WarmBloom } from '../components/e-firelight';
 import { DustField } from '../components/DustField';
 import { CLAMP } from '../motion-tokens';
@@ -43,6 +44,7 @@ const S03: FC = () => {
       />
       {/* 逆光浮尘 */}
       <DustField act={1} count={12} seedBase="s03-motes" wind={4} />
+      <Caption cue="s03" tone="paper" />
     </PhotoPlate>
   );
 };

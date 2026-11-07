@@ -17,6 +17,7 @@ import type { FC } from 'react';
 import { AbsoluteFill, Img, interpolate, staticFile, useCurrentFrame } from 'remotion';
 import { colors } from '../../../brand/tokens';
 import { ShotSlide } from '../components/e-scene';
+import { Caption } from '../components/Caption';
 import { Needles } from '../components/Needles';
 import { WarmBloom } from '../components/e-firelight';
 import { CLAMP, FILM } from '../motion-tokens';
@@ -175,6 +176,7 @@ const S11: FC = () => {
           pointerEvents: 'none',
         }}
       />
+      <Caption cue="s11" tone="ink" />
     </ShotSlide>
   );
 };

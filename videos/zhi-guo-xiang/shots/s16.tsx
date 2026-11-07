@@ -12,16 +12,17 @@
 import type { FC } from 'react';
 import { AbsoluteFill, interpolate, useCurrentFrame } from 'remotion';
 import { ShotScene } from '../components/e-scene';
+import { Caption } from '../components/Caption';
 import { A_Fireworks, CloudGlow, type FireworkBurst } from '../components/a-fireworks';
 import { CLAMP, FILM } from '../motion-tokens';
 
 const TOTAL = 180;
 /** 第一朵：城头上空偏右（避开城楼正脊），起爆 34f */
-const MAIN = { x: 1050, y: 296, at: 34 } as const;
+const MAIN = { x: 1050, y: 236, at: 34 } as const;
 
 const BURSTS: FireworkBurst[] = [
-  { x: MAIN.x, y: MAIN.y, at: MAIN.at, scale: 1.5, hue: 'gold', rise: true },
-  { x: 430, y: 246, at: 104, scale: 0.58, hue: 'ochre' },
+  { x: MAIN.x, y: MAIN.y, at: MAIN.at, scale: 1.24, hue: 'gold', rise: true },
+  { x: 470, y: 196, at: 104, scale: 0.52, hue: 'ochre' },
 ];
 
 const S16: FC = () => {
@@ -31,7 +32,7 @@ const S16: FC = () => {
 
   return (
     <ShotScene name="p-citynight" total={TOTAL} frame={f} zoom={[1.0, 1.045]} dim={0.03}>
-      <CloudGlow at={MAIN.at} x={MAIN.x} y={690} intensity={glow} width={1400} height={600} />
+      <CloudGlow at={MAIN.at} x={MAIN.x} y={690} intensity={glow * 0.66} width={1320} height={480} />
       <A_Fireworks seed="s16" bursts={BURSTS} />
       {/* 城头被照亮的一线：贴着城墙天际线的暖反光（只染光，不重画底图） */}
       <div
@@ -57,6 +58,7 @@ const S16: FC = () => {
           pointerEvents: 'none',
         }}
       />
+      <Caption cue="s16" tone="paper" />
     </ShotScene>
   );
 };

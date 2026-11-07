@@ -13,6 +13,7 @@
 import type { FC } from 'react';
 import { AbsoluteFill, useCurrentFrame } from 'remotion';
 import { ShotScene } from '../components/e-scene';
+import { Caption } from '../components/Caption';
 import { WarmBloom, RimLight } from '../components/e-firelight';
 import { EmberField } from '../components/e-emberfield';
 import { DustField } from '../components/DustField';
@@ -52,6 +53,7 @@ const S10: FC = () => {
           pointerEvents: 'none',
         }}
       />
+      <Caption cue="s10" tone="paper" />
     </ShotScene>
   );
 };

@@ -15,6 +15,7 @@ import type { FC } from 'react';
 import { AbsoluteFill, interpolate, useCurrentFrame } from 'remotion';
 import { colors } from '../../../brand/tokens';
 import { ShotScene } from '../components/e-scene';
+import { Caption } from '../components/Caption';
 import { WarmBloom } from '../components/e-firelight';
 import { EmberField } from '../components/e-emberfield';
 import { CLAMP, FILM } from '../motion-tokens';
@@ -151,6 +152,7 @@ const S07: FC = () => {
           pointerEvents: 'none',
         }}
       />
+      <Caption cue="s07" tone="paper" />
     </ShotScene>
   );
 };

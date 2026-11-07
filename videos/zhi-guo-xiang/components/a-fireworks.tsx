@@ -129,7 +129,8 @@ const Burst: FC<{ b: FireworkBurst; seed: string; f: number }> = ({ b, seed, f }
         const h = size * (0.42 + random(`${s}-h`) * 0.55);
         const rot = random(`${s}-rot`) * 180;
         const op = (0.56 + random(`${s}-o`) * 0.36) * fade * (0.75 + 0.45 * grow) * dim;
-        const col = random(`${s}-c`) < 0.45 ? inner : outer;
+        /* 只有不到两成的团块用亮核色：全是奶白就烧成一片（v12 抽帧返工） */
+        const col = random(`${s}-c`) < 0.18 ? inner : outer;
         return (
           <div
             key={i}
@@ -218,7 +219,7 @@ const Burst: FC<{ b: FireworkBurst; seed: string; f: number }> = ({ b, seed, f }
             const sy = b.y + 20 * sc + k * (0.9 + random(`${s}-v`) * 0.75) * sc;
             const w = (52 + random(`${s}-w`) * 50) * sc;
             const h = (70 + random(`${s}-h`) * 80) * sc * (1 + k / 130);
-            const op = (0.1 + random(`${s}-o`) * 0.1) * (1 - clamp01(k / (LIFE - PEAK)));
+            const op = (0.06 + random(`${s}-o`) * 0.07) * (1 - clamp01(k / (LIFE - PEAK)));
             const col = i % 2 === 0 ? ACCENT : SMOKE;
             return (
               <div

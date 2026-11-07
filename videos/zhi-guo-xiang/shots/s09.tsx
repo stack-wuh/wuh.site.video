@@ -11,6 +11,7 @@
 import type { FC } from 'react';
 import { AbsoluteFill, useCurrentFrame } from 'remotion';
 import { ShotScene } from '../components/e-scene';
+import { Caption } from '../components/Caption';
 import { FireLine, WarmBloom } from '../components/e-firelight';
 import { EmberField } from '../components/e-emberfield';
 import { GroundMist } from '../components/c-fog';
@@ -21,11 +22,15 @@ const TOTAL = 210;
 const S09: FC = () => {
   const f = useCurrentFrame();
   return (
-    <ShotScene name="p-beast-villa" total={TOTAL} frame={f} zoom={[1.07, 1.0]} dim={0.04}>
+    <ShotScene name="p-beast-villa" total={TOTAL} frame={f} zoom={[1.07, 1.0]} dim={0.07}>
       {/* ② 院中火把：四个暖点，各自闪 */}
-      <FireLine seedBase="s09-torch" band={{ x0: 600, x1: 1340, y0: 552, y1: 640 }} count={3} halo={62} core={2.2} opacity={0.5} period={26} />
+      <FireLine seedBase="s09-torch" band={{ x0: 600, x1: 1340, y0: 552, y1: 640 }} count={3} halo={80} core={2.6} opacity={0.8} period={26} />
+      {/* 廊下灯笼：比火把小、比火把低，沿台阶排一列 */}
+      <FireLine seedBase="s09-lantern" band={{ x0: 700, x1: 1200, y0: 640, y1: 720 }} count={4} halo={42} core={1.8} opacity={0.55} period={38} />
       {/* 火把在院墙上洇的暖光（很宽，很淡） */}
-      <WarmBloom at={{ x: 940, y: 640 }} r={560} squash={0.4} opacity={0.08} period={26} breath={0.35} blur={90} />
+      <WarmBloom at={{ x: 940, y: 640 }} r={600} squash={0.4} opacity={0.14} period={26} breath={0.35} blur={90} />
+      {/* 火光落在台阶与地面上的那一块（暖光要落地，人才站得住） */}
+      <WarmBloom at={{ x: 960, y: 760 }} r={520} squash={0.24} opacity={0.1} period={26} phase={1.2} breath={0.3} blur={70} />
 
       {/* ④ 余烬 */}
       <EmberField seedBase="s09" at={{ x: 940, y: 660 }} spread={520} rise={300} count={8} period={120} sizeBase={0.9} opacity={0.8} />
@@ -33,7 +38,16 @@ const S09: FC = () => {
       {/* ① 后拉时压一档夜色（退开之后庄园在外面，天更冷） */}
       <AbsoluteFill
         style={{
-          background: 'linear-gradient(180deg, rgba(20,26,34,0.62) 0%, rgba(20,26,34,0.3) 34%, rgba(20,26,34,0.46) 100%)',
+          background: 'linear-gradient(180deg, rgba(40,34,27,0.74) 0%, rgba(40,34,27,0.46) 32%, rgba(40,34,27,0.58) 100%)',
+          mixBlendMode: 'multiply',
+          pointerEvents: 'none',
+        }}
+      />
+
+      {/* 夜：只在最上面留一档冷（天比地冷），暗部仍旧是暖深墨褐 */}
+      <AbsoluteFill
+        style={{
+          background: 'linear-gradient(180deg, rgba(20,26,34,0.3) 0%, transparent 30%)',
           mixBlendMode: 'multiply',
           pointerEvents: 'none',
         }}
@@ -45,11 +59,12 @@ const S09: FC = () => {
 
       <AbsoluteFill
         style={{
-          background: 'radial-gradient(ellipse 82% 78% at 50% 50%, transparent 46%, rgba(20,26,34,0.5) 100%)',
+          background: 'radial-gradient(ellipse 80% 76% at 50% 52%, transparent 40%, rgba(36,31,26,0.62) 100%)',
           mixBlendMode: 'multiply',
           pointerEvents: 'none',
         }}
       />
+      <Caption cue="s09" tone="paper" />
     </ShotScene>
   );
 };

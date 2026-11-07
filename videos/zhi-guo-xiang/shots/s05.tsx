@@ -11,6 +11,7 @@
 import type { FC } from 'react';
 import { useCurrentFrame } from 'remotion';
 import { ShotScene } from '../components/e-scene';
+import { Caption } from '../components/Caption';
 import { WaveField } from '../components/WaveField';
 import { MistFlow } from '../components/b-mistflow';
 import { DustField } from '../components/DustField';
@@ -24,6 +25,7 @@ const S05: FC = () => {
       <WaveField seed="s05-river" band={[0.55, 0.8]} amp={4} speed={0.09} opacity={0.22} rows={8} />
       <MistFlow seed="s05-cloud" intensity={0.6} period={280} count={4} />
       <DustField act={2} count={16} seedBase="s05-air" wind={10} />
+      <Caption cue="s05" tone="ink" />
     </ShotScene>
   );
 };

@@ -15,6 +15,7 @@ import type { FC } from 'react';
 import { AbsoluteFill, interpolate, useCurrentFrame } from 'remotion';
 import { colors } from '../../../brand/tokens';
 import { ShotScene } from '../components/e-scene';
+import { Caption } from '../components/Caption';
 import { A_Fireworks, CloudGlow, type FireworkBurst } from '../components/a-fireworks';
 import { WarmBloom } from '../components/e-firelight';
 import { DustField } from '../components/DustField';
@@ -48,7 +49,7 @@ const S17: FC = () => {
       {/* ① 夜色：上缘压深（天暗下来），到她肩背那带收住 */}
       <AbsoluteFill
         style={{
-          background: 'linear-gradient(180deg, rgba(24,29,36,0.72) 0%, rgba(24,29,36,0.48) 26%, rgba(24,29,36,0.16) 52%, transparent 70%)',
+          background: 'linear-gradient(180deg, rgba(20,26,34,0.8) 0%, rgba(20,26,34,0.62) 30%, rgba(20,26,34,0.34) 56%, rgba(20,26,34,0.2) 78%, rgba(20,26,34,0.14) 100%)',
           mixBlendMode: 'multiply',
           pointerEvents: 'none',
         }}
@@ -56,7 +57,7 @@ const S17: FC = () => {
       {/* ①b 边缘收暗（长焦的暗角），她那一侧留亮 */}
       <AbsoluteFill
         style={{
-          background: 'radial-gradient(ellipse 92% 86% at 60% 46%, transparent 40%, rgba(24,29,36,0.42) 100%)',
+          background: 'radial-gradient(ellipse 92% 86% at 62% 44%, transparent 34%, rgba(16,21,28,0.6) 100%)',
           mixBlendMode: 'multiply',
           pointerEvents: 'none',
         }}
@@ -70,17 +71,18 @@ const S17: FC = () => {
       <A_Fireworks seed="s17" bursts={BURSTS} />
 
       {/* ③ 她的脸被烟花照亮：一次一朵，暖金、宽、软 */}
-      <WarmBloom at={FACE} r={340} squash={0.86} opacity={0.26 * faceLight} period={40} breath={0} blur={56} />
+      <WarmBloom at={FACE} r={300} squash={0.86} opacity={0.42 * faceLight} period={40} breath={0} blur={48} />
       {/* 脸上的光往下带一点到衣领（不给她整个人泛白） */}
-      <WarmBloom at={{ x: FACE.x - 40, y: FACE.y + 210 }} r={420} squash={0.5} opacity={0.1 * faceLight} period={40} breath={0} blur={80} />
+      <WarmBloom at={{ x: FACE.x - 40, y: FACE.y + 210 }} r={420} squash={0.5} opacity={0.18 * faceLight} period={40} breath={0} blur={80} />
 
       {/* 烟火灰与光尘：落在她肩上那层（故事里的「烟灰落在她肩上」就是这一层） */}
       <DustField act={4} count={24} seedBase="s17-ash" wind={6} />
 
       {/* 极轻的暖调：整帧往火金方向带一档，别让夜变成蓝夜 */}
-      <AbsoluteFill style={{ background: FILM.fireGold, opacity: 0.05 + 0.04 * faceLight, mixBlendMode: 'soft-light', pointerEvents: 'none' }} />
+      <AbsoluteFill style={{ background: FILM.fireGold, opacity: 0.05 + 0.06 * faceLight, mixBlendMode: 'soft-light', pointerEvents: 'none' }} />
       {/* 纸面回温：夜压过之后补一层纸色，保持绢本调子 */}
-      <AbsoluteFill style={{ background: colors.paper, opacity: 0.05, mixBlendMode: 'soft-light', pointerEvents: 'none' }} />
+      <AbsoluteFill style={{ background: colors.paper, opacity: 0.03, mixBlendMode: 'soft-light', pointerEvents: 'none' }} />
+      <Caption cue="s17" tone="paper" />
     </ShotScene>
   );
 };

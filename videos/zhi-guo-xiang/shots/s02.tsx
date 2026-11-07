@@ -13,6 +13,7 @@
 import type { FC } from 'react';
 import { AbsoluteFill, useCurrentFrame } from 'remotion';
 import { PhotoPlate, INK_SUN } from '../components/e-photo';
+import { Caption } from '../components/Caption';
 import { WarmBloom } from '../components/e-firelight';
 import { DustField } from '../components/DustField';
 
@@ -38,6 +39,7 @@ const S02: FC = () => {
           pointerEvents: 'none',
         }}
       />
+      <Caption cue="s02" tone="paper" />
     </PhotoPlate>
   );
 };

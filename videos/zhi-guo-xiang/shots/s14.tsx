@@ -14,6 +14,7 @@ import type { FC } from 'react';
 import { AbsoluteFill, interpolate, useCurrentFrame } from 'remotion';
 import { colors } from '../../../brand/tokens';
 import { ShotScene } from '../components/e-scene';
+import { Caption } from '../components/Caption';
 import { DustField } from '../components/DustField';
 import { CLAMP, FILM } from '../motion-tokens';
 
@@ -118,6 +119,7 @@ const S14: FC = () => {
           pointerEvents: 'none',
         }}
       />
+      <Caption cue="s14" tone="paper" />
     </ShotScene>
   );
 };
