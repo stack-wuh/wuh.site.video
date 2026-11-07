@@ -20,6 +20,7 @@
 | 20261101-build-quality-gate | ✅ 完成 | shadow-docs/changes/archive/20261101-build-quality-gate/brief.md |
 | 20261101-docs-zhi-guo-xiang-wrapup | ✅ 完成 | shadow-docs/changes/archive/20261101-docs-zhi-guo-xiang-wrapup/brief.md |
 | 20261101-feature-zhi-guo-xiang-preprod | ✅ 完成 | shadow-docs/changes/archive/20261101-feature-zhi-guo-xiang-preprod/brief.md |
+| 20261101-feature-zhi-guo-xiang-production | committed | shadow-docs/changes/20261101-feature-zhi-guo-xiang-production/brief.md |
 | 20261101-fix-output-naming | ✅ 完成 | shadow-docs/changes/archive/20261101-fix-output-naming/brief.md |
 | 20261101-fix-render-artifact-s58 | ✅ 完成 | shadow-docs/changes/archive/20261101-fix-render-artifact-s58/brief.md |
 | 20261101-fix-runner-image-pin | ✅ 完成 | shadow-docs/changes/archive/20261101-fix-runner-image-pin/brief.md |
@@ -28,3 +29,4 @@
 | 20261101-fix-wuh-site-intro-v2-r3 | ✅ 完成 | shadow-docs/changes/archive/20261101-fix-wuh-site-intro-v2-r3/brief.md |
 | 20261101-fix-wuh-site-intro-v2-r4 | published | shadow-docs/changes/20261101-fix-wuh-site-intro-v2-r4/brief.md |
 | 20261101-refactor-film-kit | ✅ 完成 | shadow-docs/changes/archive/20261101-refactor-film-kit/brief.md |
+| 20261107-feature-asset-registry-shot-schema | ✅ 完成 | shadow-docs/changes/archive/20261107-feature-asset-registry-shot-schema/brief.md |

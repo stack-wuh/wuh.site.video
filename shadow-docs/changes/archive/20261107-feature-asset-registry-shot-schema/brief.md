@@ -4,7 +4,7 @@
   "name": "20261107-feature-asset-registry-shot-schema",
   "type": "feature",
   "scope": "video-production",
-  "status": "published",
+  "status": "archived",
   "baseBranch": "main",
   "branch": "feature/20261107-feature-asset-registry-shot-schema",
   "files": [
@@ -23,13 +23,13 @@
   },
   "review": {
     "conclusion": "passed",
-    "verifiedCommit": "690da826d6f93b7db8e9bed8426fecb94a5a1fb5",
-    "verifiedAt": "2026-11-07T11:07:33.238Z"
+    "verifiedCommit": "db3530475df42c4503518c1590b583a2835a2581",
+    "verifiedAt": "2026-11-07T12:17:17.858Z"
   },
   "workflow": {
     "operation": null,
-    "checkpoint": "pr:53",
-    "planHash": "85bebde2169c60401f7e11e2f62418e3d185fa9282ee3032454938123bf7c217",
+    "checkpoint": "merged-pr:53",
+    "planHash": "a93659c67e61d92ce4b831c9d766f08aa2ddba33987de44ad7579db92bfc22d2",
     "updatedAt": null,
     "lastError": null,
     "issuePlan": {
@@ -58,7 +58,7 @@
   "knowledge": {
     "action": "更新",
     "target": "shadow-docs/knowledge/video-production-flow.md,shadow-docs/knowledge/video-studio-structure.md",
-    "reason": "资产登记表(C/S/P 编号真源)、导演列解析与 manifest 扩展四字段、INV-S7/字数硬表机检是新长期事实,两卡分别为流程与工具链登记处,已随本 change 回写并补 verified 2026-11-07/runtime/verified-scope(fixture 六轮红绿+三单元双绿+import 幂等;资产层生图生产流程待首片 runtime 实证,已在 verified-scope 注明)"
+    "reason": "合并后 HEAD 漂移重跑(review verifiedCommit 对齐 db35304):结论不变——资产登记表/导演列/INV-S7/字数硬表机检为长期事实,两卡已回写并补 verified 2026-11-07/runtime"
   }
 }
 ---
