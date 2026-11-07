@@ -4,7 +4,7 @@
   "name": "20261107-feature-making-of-zhi-guo-xiang-preprod",
   "type": "feature",
   "scope": "video-materials",
-  "status": "published",
+  "status": "committed",
   "baseBranch": "main",
   "branch": "feature/20261107-feature-making-of-zhi-guo-xiang-preprod",
   "files": [
@@ -30,8 +30,8 @@
   },
   "workflow": {
     "operation": null,
-    "checkpoint": "pr:55",
-    "planHash": "6982cea44b256d0ced9ef0f39e67db33bf43c7d2c5c4cac90c3302805c1bbbad",
+    "checkpoint": "91dd65e724c0760d98cdc2120be9375452ab7dfe",
+    "planHash": "f5f4aa3565995ca671b62774520a19399d30834f1e1df3c2729dc29eb86759a9",
     "updatedAt": null,
     "lastError": null,
     "issuePlan": {
@@ -45,16 +45,10 @@
     },
     "commit": {
       "files": [
-        ".github/workflows/render-animatic.yml",
-        "public/making-of-zhi-guo-xiang/segments/seg-animatic-open-v1.mp4",
-        "public/making-of-zhi-guo-xiang/segments/seg-evolution-v8-open-v1.mp4",
-        "scripts/prep-making-of.mjs",
-        "shadow-docs/changes/20261107-feature-making-of-zhi-guo-xiang-preprod",
-        "src/Root.tsx",
         "videos/making-of-zhi-guo-xiang/shots-manifest.json",
         "videos/preprod-making-of-zhi-guo-xiang"
       ],
-      "message": "feat(video-materials): 历程片前期——五件套 · 39 镜 · animatic 接线\n\n- materials.md：版本映射表（用户核对定稿）+ 母带/录音/CI 记录全溯源；M8 自 run 42354695452 artifact 取回（9060f 对账）\n- scripts/prep-making-of.mjs：母带裁段→1080p30 无声片段入 public/（干跑/实跑/check/--only 四路径，oxlint 绿）；segments.json 首批 2 段产出\n- 剧本 script.md：四线结构 35 句 + 字数硬表 35/35 绿；分镜 storyboard.md：39 镜 / 7200f 帧数对账闭合；动效规范 motion-spec.md：MO-* 令牌 + 39 镜覆盖矩阵\n- preprod-making-of-zhi-guo-xiang 单元：shots-data / boards / MakingOfZhiGuoXiangAnimatic / routes，Root 注册\n- videos/making-of-zhi-guo-xiang/shots-manifest.json 与 shots-data 同源生成（39 镜连续无缝 7200f 对账）\n- render-animatic.yml unit choice 增补 making-of-zhi-guo-xiang"
+      "message": "feat(video-materials): 历程片分镜 v2——增补生图审核环两镜（s22c/s22d）\n\n- 定稿意见落地：四·镜头也错了末尾增补 s22c（正脸四轮崩·MO-X-STAMP）/ s22d（剪影暗部主义对照卡），act5 900→1380f\n- 正片 7200→7680f（256s），全片 7980f（4:26），后续 15 镜起帧 +480，ANCHORS 同步\n- script.md 37 句 + 字数硬表 37/37 绿；storyboard v2 对账表闭合；motion-spec 41/41 覆盖 + MO-X-STAMP 令牌\n- manifest 与 shots-data 同源重生成（41 镜连续无缝对账）"
     }
   }
 }
@@ -104,7 +98,7 @@
 - [x] 剧本：四线结构章节化（演化骨架 + 每章转折故事 + 工作流穿插 + 情感收束），旁白逐句标素材编号 + 字数硬表 — `videos/preprod-making-of-zhi-guo-xiang/assets/script.md`
 - [x] 分镜：逐镜表（镜号/画面/镜头语言/文案/时长/转场/音效点）+ 帧数对账表；片长 4:00±30s 内定稿锁定 — `videos/preprod-making-of-zhi-guo-xiang/assets/storyboard.md`
 - [x] 动效规范：轻量令牌 + 全镜覆盖矩阵（对比滑动转场 / 版本计数角标 / 字幕系统） — `videos/preprod-making-of-zhi-guo-xiang/assets/motion-spec.md`
-- [ ] animatic：new-video 脚手架生成 preprod 单元 + 单色简板（真实内容构图节拍）+ Root 注册 + CI 出片交用户定稿 — `videos/preprod-making-of-zhi-guo-xiang/`, `src/Root.tsx`
+- [x] animatic：new-video 脚手架生成 preprod 单元 + 单色简板（真实内容构图节拍）+ Root 注册 + CI 出片交用户定稿 — `videos/preprod-making-of-zhi-guo-xiang/`, `src/Root.tsx`
 
 ### Phase 3 评审收口
 - [ ] 用户 animatic 定稿；记录定稿意见与正式制作 change 的输入清单 — brief 本节
