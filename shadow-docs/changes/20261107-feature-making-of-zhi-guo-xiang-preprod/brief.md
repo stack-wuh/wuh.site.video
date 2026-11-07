@@ -4,7 +4,7 @@
   "name": "20261107-feature-making-of-zhi-guo-xiang-preprod",
   "type": "feature",
   "scope": "video-materials",
-  "status": "published",
+  "status": "committed",
   "baseBranch": "main",
   "branch": "feature/20261107-feature-making-of-zhi-guo-xiang-preprod",
   "files": [
@@ -30,8 +30,8 @@
   },
   "workflow": {
     "operation": null,
-    "checkpoint": "pr:55",
-    "planHash": "b7a490db73f865977d70be8f6307078cb181f7245ff846563e829bc87b72fc57",
+    "checkpoint": "b1cc8619c83798aaf1a0de03215effaac30d39cc",
+    "planHash": "ba978f72a9e0dfb51fbe1e27a2371fa3c9da1aff201c741bc4fb91dc4480d412",
     "updatedAt": null,
     "lastError": null,
     "issuePlan": {
@@ -45,9 +45,9 @@
     },
     "commit": {
       "files": [
-        "shadow-docs/changes/20261107-feature-making-of-zhi-guo-xiang-preprod"
+        "shadow-docs/knowledge/video-production-flow.md"
       ],
-      "message": "docs(shadow): 历程片前期 review passed——task-8 定稿收口（s22c/s22d 增补即定稿意见）\n\n- 用户裁定：animatic v2 定稿，merge 指令即定稿确认\n- 知识动作：更新 video-production-flow.md（内联预览页交付口径 + 混剪型单元接线，合并后落卡）"
+      "message": "docs(knowledge): 流程卡补内联预览页交付口径与混剪型单元接线（making-of 前期实证）\n\n- 内联预览页：镜中点抽帧（+120f 片头偏移，镜首吃墨洇出黑帧）+ 元数据走查 fragment\n- 混剪单元接线：preprod 单元 + manifest + render-animatic unit choice；母带仓外清单化裁段（prep-making-of.mjs）\n- source 增补 making-of 前期 brief（归档路径）"
     }
   },
   "knowledge": {
