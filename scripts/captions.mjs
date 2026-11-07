@@ -231,9 +231,13 @@ for (const s of shots) {
       if (cur.end - cur.start < MIN_DUR) warn(`${s.id}：${cur.id} 后挪之后只剩 ${cur.end - cur.start}f（<${MIN_DUR}f）`);
       prev.end = cur.start - GAP;
     } else {
-      fail(`${s.id}：${prev.id} 与 ${cur.id} 在 ${s.durationFrames}f 的镜里挤不下（安全窗 ${s.inSide + PAD}–${hi}）`);
+      /* 一镜里旁白铺得太密（镜长 7s 却挤了两三句）：人声照常，**只丢后一句的字幕**。
+       * 宁可少一条字幕，也不要两条叠在一起闪。丢弃的句子记进 warnings，audit 里能查。 */
+      warn(`${s.id}：${prev.id} 与 ${cur.id} 在 ${s.durationFrames}f 镜里挤不下，丢弃 ${cur.id} 的字幕（人声继续）`);
+      cur.dropped = true;
     }
   }
+  for (let i = cues.length - 1; i >= 0; i -= 1) if (cues[i].dropped) cues.splice(i, 1);
   for (let i = 1; i < cues.length; i += 1) {
     if (cues[i].start < cues[i - 1].end + GAP) fail(`${s.id}：${cues[i - 1].id}/${cues[i].id} 仍重叠`);
   }

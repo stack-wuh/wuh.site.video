@@ -1,26 +1,40 @@
-/* S18 · 绝情谷 · 断肠崖（210f · 入「墨洇」）
+/* S18 · 崖边背影（240f · 入「墨洇」）
  *
- * v12 分镜 Act 5：大远景，断肠崖高耸，谷底云雾翻涌，崖壁松影。底图 `p-cliff`。
- * 崖、谷、云全在底图里（**本镜无人**）；代码只让这张画有空气：
- *   · CloudDrift —— 谷底的云海在走（灰影在白云上横向漂，period 不写死，speed 0.4px/f）；
- *   · DustField —— 崖壁间极少量光尘随崖风横掠，松影那阵风有了体积。
- * 镜头：固定 → 极缓推（1.0 → 1.045），推速交给 Scene 的 zoom 曲线，镜内不做第二套运镜。
- * 颜色只取 brand/tokens；随机只用 deterministic 的 seed（CloudDrift/DustField 内部已走 random）。
+ * v12 分镜 Act 5：他站在崖边，背影，右袖空垂，雾从谷底漫上来。底图 `p-cliff-edge`。
+ * **人物全在底图里**（背影 + 空袖是美术画的，代码不叠第二个身影），本镜只做「雾往上长」：
+ *   · RisingFog —— 从画面下缘那条崖线往上吃（ridgeY 880，吃满 ~360px），前 20f 归 inbound 墨洇，
+ *     20f 后雾才起；末段略过 1.0（1.06），像要漫出画面（末 30f/末 1f 跟本镜时长走，不写死）；
+ *   · CloudDrift —— 崖下云海本身在走（灰影压在白云上才看得见）；
+ *   · DustField —— 崖风（wind 负 = 向左，与他的长发同向）。
+ * 镜头：中景背影，1.0 → 1.05 缓推，越推越觉得他离崖口近。
  */
 import type { FC } from 'react';
-import { Scene } from '../components/SceneKit';
+import { interpolate, useCurrentFrame } from 'remotion';
+import { ShotScene } from '../components/e-scene';
 import { Caption } from '../components/Caption';
-import { CloudDrift } from '../components/f-clouddrift';
 import { DustField } from '../components/DustField';
+import { RisingFog } from '../components/c-fog';
+import { CloudDrift } from '../components/f-clouddrift';
+import { CLAMP } from '../motion-tokens';
 
-const S18: FC = () => (
-  <Scene name="p-cliff" zoom={[1.0, 1.045]} dim={0.02}>
-    {/* 云海两层不同速度：快的一层出「云在走」，慢的一层出「云很厚」 */}
-    <CloudDrift seed="s18-valley" count={7} intensity={1} band={[0.3, 0.99]} speed={0.4} dark={0.085} />
-    <CloudDrift seed="s18-valley-deep" count={5} intensity={0.6} band={[0.46, 0.99]} speed={0.16} dark={0.08} />
-    <DustField act={5} count={20} seedBase="s18-pine" wind={6} />
-    <Caption cue="s18" tone="ink" />
-  </Scene>
-);
+/** 他脚下那条崖线（1920×1080）：雾从这儿往上漫，先吃脚，再吃腰。 */
+const RIDGE_Y = 880;
 
-export default S18;
+/** 本镜时长（manifest durationFrames——ShotScene 用它算推拉进度，不读 useVideoConfig） */
+const TOTAL = 240;
+
+const S19: FC = () => {
+  const f = useCurrentFrame();
+  /* 210f → 240f 都成立：末 30f 吃满、末 1f 略过 1.0 */
+  const fog = interpolate(f, [20, TOTAL - 31, TOTAL - 1], [0.06, 1, 1.06], CLAMP);
+  return (
+    <ShotScene name="p-cliff-edge" total={TOTAL} frame={f} zoom={[1.0, 1.05]} dim={0.02}>
+      <CloudDrift seed="s19-cloud" count={6} intensity={0.7} band={[0.42, 0.99]} speed={0.34} />
+      <RisingFog progress={fog} seedBase="s19-valley" ridgeY={RIDGE_Y} rise={360} count={9} strength={0.95} />
+      <DustField act={5} count={22} seedBase="s19-wind" wind={-9} />
+      <Caption cue="s18" tone="ink" />
+    </ShotScene>
+  );
+};
+
+export default S19;

@@ -143,7 +143,7 @@ export const manifest: Manifest = {
       "act": 3,
       "title": "万兽山庄。",
       "startFrame": 1860,
-      "durationFrames": 240,
+      "durationFrames": 360,
       "transition": "ink",
       "source": "shots/s09.tsx"
     },
@@ -151,7 +151,7 @@ export const manifest: Manifest = {
       "id": "s10",
       "act": 3,
       "title": "他戴着面具，一只袖子是空的。",
-      "startFrame": 2100,
+      "startFrame": 2220,
       "durationFrames": 240,
       "transition": "ink",
       "source": "shots/s10.tsx"
@@ -159,71 +159,71 @@ export const manifest: Manifest = {
     {
       "id": "s11",
       "act": 3,
-      "title": "他给了她三枚金针。见此金针，如见你面。三个心愿，",
-      "startFrame": 2340,
-      "durationFrames": 240,
-      "transition": "ink",
+      "title": "（女）第一枚，我要看看你的脸。／他摘下面具。她看",
+      "startFrame": 2460,
+      "durationFrames": 360,
+      "transition": "cut",
       "source": "shots/s11.tsx"
     },
     {
       "id": "s12",
-      "act": 3,
-      "title": "（女）第一枚，我要看看你的脸。／他摘下面具。她看",
-      "startFrame": 2580,
-      "durationFrames": 240,
-      "transition": "cut",
+      "act": 4,
+      "title": "第二枚金针，她用在了生日。",
+      "startFrame": 2820,
+      "durationFrames": 210,
+      "transition": "ink",
       "source": "shots/s12.tsx"
     },
     {
       "id": "s13",
       "act": 4,
-      "title": "第二枚金针，她用在了生日。",
-      "startFrame": 2820,
-      "durationFrames": 210,
+      "title": "（女）生日那天，你来襄阳看我。",
+      "startFrame": 3030,
+      "durationFrames": 180,
       "transition": "ink",
       "source": "shots/s13.tsx"
     },
     {
       "id": "s14",
       "act": 4,
-      "title": "（女）生日那天，你来襄阳看我。",
-      "startFrame": 3030,
-      "durationFrames": 180,
+      "title": "他来了。他带来的礼，全是给襄阳的。",
+      "startFrame": 3210,
+      "durationFrames": 210,
       "transition": "ink",
       "source": "shots/s14.tsx"
     },
     {
       "id": "s15",
       "act": 4,
-      "title": "他来了。他带来的礼，全是给襄阳的。",
-      "startFrame": 3210,
-      "durationFrames": 210,
-      "transition": "ink",
+      "title": "只有满天的烟花，是给她的。",
+      "startFrame": 3420,
+      "durationFrames": 180,
+      "transition": "cut",
       "source": "shots/s15.tsx"
     },
     {
       "id": "s16",
       "act": 4,
-      "title": "只有满天的烟花，是给她的。",
-      "startFrame": 3420,
+      "title": "烟花炸出十个字：恭祝郭二姑娘多福多寿。",
+      "startFrame": 3600,
       "durationFrames": 180,
       "transition": "cut",
       "source": "shots/s16.tsx"
     },
     {
       "id": "s17",
-      "act": 4,
-      "title": "烟花炸出十个字：恭祝郭二姑娘多福多寿。",
-      "startFrame": 3600,
-      "durationFrames": 180,
-      "transition": "cut",
+      "act": 5,
+      "title": "后来她才知道，他心里有一个人。",
+      "startFrame": 3780,
+      "durationFrames": 240,
+      "transition": "ink",
       "source": "shots/s17.tsx"
     },
     {
       "id": "s18",
       "act": 5,
-      "title": "后来她才知道，他心里有一个人。",
-      "startFrame": 3780,
+      "title": "小龙女。他等了她十六年。",
+      "startFrame": 4020,
       "durationFrames": 240,
       "transition": "ink",
       "source": "shots/s18.tsx"
@@ -231,8 +231,8 @@ export const manifest: Manifest = {
     {
       "id": "s19",
       "act": 5,
-      "title": "小龙女。他等了她十六年。",
-      "startFrame": 4020,
+      "title": "十六年到了，他去了绝情谷。",
+      "startFrame": 4260,
       "durationFrames": 240,
       "transition": "ink",
       "source": "shots/s19.tsx"
@@ -240,26 +240,26 @@ export const manifest: Manifest = {
     {
       "id": "s20",
       "act": 5,
-      "title": "十六年到了，他去了绝情谷。",
-      "startFrame": 4260,
-      "durationFrames": 240,
-      "transition": "ink",
+      "title": "她赶到的时候，他刚从断肠崖上跳下去。她想都没想，",
+      "startFrame": 4500,
+      "durationFrames": 210,
+      "transition": "cut",
       "source": "shots/s20.tsx"
     },
     {
       "id": "s21",
       "act": 5,
-      "title": "她赶到的时候，他刚从断肠崖上跳下去。她想都没想，",
-      "startFrame": 4500,
+      "title": "（女）就是不想让他一个人。",
+      "startFrame": 4710,
       "durationFrames": 210,
-      "transition": "cut",
+      "transition": "ink",
       "source": "shots/s21.tsx"
     },
     {
       "id": "s22",
       "act": 5,
-      "title": "（女）就是不想让他一个人。",
-      "startFrame": 4710,
+      "title": "（女）第三枚金针。你以后，不许再寻死。／她把最后",
+      "startFrame": 4920,
       "durationFrames": 210,
       "transition": "ink",
       "source": "shots/s22.tsx"
@@ -267,17 +267,17 @@ export const manifest: Manifest = {
     {
       "id": "s23",
       "act": 5,
-      "title": "（女）第三枚金针。你以后，不许再寻死。／她把最后",
-      "startFrame": 4920,
+      "title": "那天，小龙女也回来了。／（女）我该走了。",
+      "startFrame": 5130,
       "durationFrames": 210,
       "transition": "ink",
       "source": "shots/s23.tsx"
     },
     {
       "id": "s24",
-      "act": 5,
-      "title": "那天，小龙女也回来了。／（女）我该走了。",
-      "startFrame": 5130,
+      "act": 6,
+      "title": "华山一别，他和小龙女再没出现过。",
+      "startFrame": 5340,
       "durationFrames": 210,
       "transition": "ink",
       "source": "shots/s24.tsx"
@@ -285,8 +285,8 @@ export const manifest: Manifest = {
     {
       "id": "s25",
       "act": 6,
-      "title": "华山一别，他和小龙女再没出现过。",
-      "startFrame": 5340,
+      "title": "无",
+      "startFrame": 5550,
       "durationFrames": 210,
       "transition": "ink",
       "source": "shots/s25.tsx"
@@ -294,8 +294,8 @@ export const manifest: Manifest = {
     {
       "id": "s26",
       "act": 6,
-      "title": "无",
-      "startFrame": 5550,
+      "title": "她骑着一头青驴，一个渡口一个渡口地找。找了二十年",
+      "startFrame": 5760,
       "durationFrames": 210,
       "transition": "ink",
       "source": "shots/s26.tsx"
@@ -303,8 +303,8 @@ export const manifest: Manifest = {
     {
       "id": "s27",
       "act": 6,
-      "title": "她骑着一头青驴，一个渡口一个渡口地找。找了二十年",
-      "startFrame": 5760,
+      "title": "有人说，他三天前来过。／（女）每次都晚三天。",
+      "startFrame": 5970,
       "durationFrames": 210,
       "transition": "ink",
       "source": "shots/s27.tsx"
@@ -312,44 +312,44 @@ export const manifest: Manifest = {
     {
       "id": "s28",
       "act": 6,
-      "title": "有人说，他三天前来过。／（女）每次都晚三天。",
-      "startFrame": 5970,
+      "title": "江湖上，把这事编成了童谣。说书人说，她这一生，误",
+      "startFrame": 6180,
       "durationFrames": 210,
-      "transition": "ink",
+      "transition": "cut",
       "source": "shots/s28.tsx"
     },
     {
       "id": "s29",
       "act": 6,
-      "title": "江湖上，把这事编成了童谣。说书人说，她这一生，误",
-      "startFrame": 6180,
+      "title": "峨眉有个郭女侠，等郎等到白了发。",
+      "startFrame": 6390,
       "durationFrames": 210,
-      "transition": "cut",
+      "transition": "ink",
       "source": "shots/s29.tsx"
     },
     {
       "id": "s30",
       "act": 6,
-      "title": "峨眉有个郭女侠，等郎等到白了发。",
-      "startFrame": 6390,
-      "durationFrames": 210,
+      "title": "后来襄阳城破了。她的爹娘，她的弟弟，都死在城里。",
+      "startFrame": 6600,
+      "durationFrames": 180,
       "transition": "ink",
       "source": "shots/s30.tsx"
     },
     {
       "id": "s31",
-      "act": 6,
-      "title": "后来襄阳城破了。她的爹娘，她的弟弟，都死在城里。",
-      "startFrame": 6600,
-      "durationFrames": 180,
+      "act": 7,
+      "title": "四十岁那年，她在峨眉山出家。",
+      "startFrame": 6780,
+      "durationFrames": 210,
       "transition": "ink",
       "source": "shots/s31.tsx"
     },
     {
       "id": "s32",
       "act": 7,
-      "title": "四十岁那年，她在峨眉山出家。",
-      "startFrame": 6780,
+      "title": "三枚金针，一枚也没留下。",
+      "startFrame": 6990,
       "durationFrames": 210,
       "transition": "ink",
       "source": "shots/s32.tsx"
@@ -357,8 +357,8 @@ export const manifest: Manifest = {
     {
       "id": "s33",
       "act": 7,
-      "title": "三枚金针，一枚也没留下。",
-      "startFrame": 6990,
+      "title": "有人说，她在峨眉山上留下一首诗。",
+      "startFrame": 7200,
       "durationFrames": 210,
       "transition": "ink",
       "source": "shots/s33.tsx"
@@ -366,44 +366,44 @@ export const manifest: Manifest = {
     {
       "id": "s34",
       "act": 7,
-      "title": "有人说，她在峨眉山上留下一首诗。",
-      "startFrame": 7200,
+      "title": "写的是十六岁那年的烟花。／诗 L1–L2",
+      "startFrame": 7410,
       "durationFrames": 210,
-      "transition": "ink",
+      "transition": "cut",
       "source": "shots/s34.tsx"
     },
     {
       "id": "s35",
       "act": 7,
-      "title": "写的是十六岁那年的烟花。／诗 L1–L2",
-      "startFrame": 7410,
-      "durationFrames": 210,
-      "transition": "cut",
+      "title": "诗 L3–L4",
+      "startFrame": 7620,
+      "durationFrames": 180,
+      "transition": "ink",
       "source": "shots/s35.tsx"
     },
     {
       "id": "s36",
       "act": 7,
-      "title": "诗 L3–L4",
-      "startFrame": 7620,
+      "title": "诗 L5–L6",
+      "startFrame": 7800,
       "durationFrames": 180,
       "transition": "ink",
       "source": "shots/s36.tsx"
     },
     {
       "id": "s37",
-      "act": 7,
-      "title": "诗 L5–L6",
-      "startFrame": 7800,
-      "durationFrames": 180,
-      "transition": "ink",
+      "act": 8,
+      "title": "念念。郭襄的三枚金针，都用完了。",
+      "startFrame": 7980,
+      "durationFrames": 210,
+      "transition": "cut",
       "source": "shots/s37.tsx"
     },
     {
       "id": "s38",
       "act": 8,
-      "title": "念念。郭襄的三枚金针，都用完了。",
-      "startFrame": 7980,
+      "title": "第一枚，她看了他的脸。第二枚，她看了一夜烟花。",
+      "startFrame": 8190,
       "durationFrames": 210,
       "transition": "cut",
       "source": "shots/s38.tsx"
@@ -411,29 +411,20 @@ export const manifest: Manifest = {
     {
       "id": "s39",
       "act": 8,
-      "title": "第一枚，她看了他的脸。第二枚，她看了一夜烟花。",
-      "startFrame": 8190,
-      "durationFrames": 210,
+      "title": "第三枚，她让他活了下来。我没有金针。",
+      "startFrame": 8400,
+      "durationFrames": 180,
       "transition": "cut",
       "source": "shots/s39.tsx"
     },
     {
       "id": "s40",
       "act": 8,
-      "title": "第三枚，她让他活了下来。我没有金针。",
-      "startFrame": 8400,
-      "durationFrames": 180,
-      "transition": "cut",
-      "source": "shots/s40.tsx"
-    },
-    {
-      "id": "s41",
-      "act": 8,
       "title": "我只有以后的每一个落日。你回头，我就在。现在，你",
       "startFrame": 8580,
       "durationFrames": 180,
       "transition": "ink",
-      "source": "shots/s41.tsx"
+      "source": "shots/s40.tsx"
     }
   ]
 };

@@ -1,41 +1,32 @@
-/* S23 · 第三枚金针（180f · 入「墨洇」）
+/* S23 · 雾里走出的白衣女子（210f · 入「墨洇」）
  *
- * v12 分镜 Act 5：她的指间夹着第三枚金针，举到他面前（只见手与针，不见他的脸）。底图 `p-needle-third`。
- * **手与针都在底图里**——所以代码**不再画一枚针**（再画一枚就会出现「两根针」）：
- * 本镜只做雾的呼吸：
- *   · CloudDrift —— 背景全是雾，雾在针后面慢慢走（intensity 0.5：很淡，不能把手和针洗掉）；
- *   · 针尖的一点火光金 —— 全镜唯一的暖（很淡的呼吸，不重画针）；
- *   · DustField —— 雾里那点极少的浮尘（金尘配比取 Act 5），让雾有厚度。
- * 镜头：特写，1.0 → 1.04，慢到几乎不动。
+ * v12 分镜 Act 5：雾里走出一个白衣女子（小龙女，背/侧，无脸）；她站在一边，看他们抱在一起，
+ * 退后一步。底图 `p-white-figure` —— **三个人都在这张画里**，代码不叠任何人物，只做「雾漫」：
+ *   · RisingFog —— 雾从画面下缘往上吃，只吃到膝下（白衣女子本身就白，雾再高就把她洗没了）；
+ *   · CloudDrift —— 雾本身在走（灰影压在白云上才看得见；纸白 screen 在这张留白底图上是隐形的）。
+ * 镜头：全·固定（1.0 → 1.02，几乎定死），雾自己在走。
  */
 import type { FC } from 'react';
-import { useCurrentFrame } from 'remotion';
-import { Scene } from '../components/SceneKit';
+import { interpolate, useCurrentFrame } from 'remotion';
+import { ShotScene } from '../components/e-scene';
 import { Caption } from '../components/Caption';
 import { CloudDrift } from '../components/f-clouddrift';
-import { InkBloom } from '../components/InkBloom';
-import { FILM } from '../motion-tokens';
-import { DustField } from '../components/DustField';
+import { RisingFog } from '../components/c-fog';
+import { CLAMP } from '../motion-tokens';
 
-const S23: FC = () => {
+/** 本镜时长（manifest durationFrames——ShotScene 用它算推拉进度，不读 useVideoConfig） */
+const TOTAL = 210;
+
+const S24: FC = () => {
   const f = useCurrentFrame();
-  /* 针尖的呼吸：很慢的一条正弦，只改亮度不改位置 */
-  const breath = 0.5 + 0.5 * Math.sin((f / 100) * Math.PI * 2);
+  const fog = interpolate(f, [10, TOTAL - 36, TOTAL - 1], [0.14, 0.82, 0.95], CLAMP);
   return (
-  <Scene name="p-needle-third" zoom={[1.0, 1.04]} dim={0.02}>
-    <CloudDrift seed="s23-fog" count={5} intensity={0.5} band={[0.05, 0.92]} speed={0.22} dark={0.055} />
-    <InkBloom
-      progress={0.42 + 0.1 * breath}
-      at={{ x: 1148, y: 178, r: 30 }}
-      color={FILM.fireGold}
-      opacity={0.09 + 0.04 * breath}
-      blur={10}
-      style={{ mixBlendMode: 'screen' }}
-    />
-    <DustField act={5} count={18} seedBase="s23-air" wind={3} />
-    <Caption cue="s23" tone="ink" />
-  </Scene>
+    <ShotScene name="p-white-figure" total={TOTAL} frame={f} zoom={[1.0, 1.02]} dim={0.02}>
+      <RisingFog progress={fog} seedBase="s24-white" ridgeY={900} rise={260} count={8} strength={0.8} />
+      <CloudDrift seed="s24-front" count={5} intensity={0.62} band={[0.36, 0.99]} speed={0.3} dark={0.065} />
+      <Caption cue="s23" tone="ink" />
+    </ShotScene>
   );
 };
 
-export default S23;
+export default S24;

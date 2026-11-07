@@ -1,82 +1,70 @@
-/* S28 · 雪山独行 · 每次都晚三天（210f · 入「墨洇」）
+/* S28 · 茶馆 · 醒木落下（210f · 入「硬切」）
  *
- * v12 分镜 Act 6：雪山脊大远景，她极小的背影朝深处走，一串脚印，新雪把最近两枚盖住。
- * 底图 `p-snow-walk`（人物约 10% 画高，雪脊对角线，枯木，留白多）。
- *
- * 孤独感不靠代码画人，靠三件「留不住」：
- *   · 镜头极缓后拉 1.06 → 1.0 —— 她越走越小，观众留在原地看她走远；
- *   · 雪片斜落（风向右 12px/s，与 DustField 同口径）；
- *   · 她走过处一串脚印（FootprintTrail，近大远小），末 30f 新雪把最近两枚盖住——
- *     连痕迹也留不住。
- * 人物在底图里，本镜不叠第二个身影；随机全部走 random(seed)。 */
+ * v12 分镜 Act 6：茶馆，说书人醒木落下，茶烟散开；她坐在最外圈，背向镜头。底图 `p-teahouse`。
+ * 人物全在底图里（说书人侧后、满屋过客背影、左下最小那个背影是她）；代码只做这间屋子的空气：
+ *   · 同一间屋子的窗光与茶烟（c-teahouse 的 ROOM 唯一真值，与 S20/S24 同源）；
+ *   · 醒木落下那一下（84f，留一条可与混音对齐的帧）：画面轻震 2px（30f 内停）+
+ *     接触点一记淡墨 + 一记暖光脉冲 + 茶烟被震散一下；
+ *   · 光柱里的浮尘。
+ * 无代码人物 → 无纯黑剪影风险；入硬切，动作从第 0 帧成立。
+ */
 import type { FC } from 'react';
-import { AbsoluteFill, Img, interpolate, staticFile, useCurrentFrame } from 'remotion';
+import { AbsoluteFill, interpolate, useCurrentFrame } from 'remotion';
 import { colors } from '../../../brand/tokens';
-import { InkGrade } from '../components/SceneKit';
+import { CLAMP } from '../motion-tokens';
+import { ShotScene } from '../components/e-scene';
 import { Caption } from '../components/Caption';
-import { FootprintTrail, footprintTrail } from '../components/b-footprints';
-import { MistFlow } from '../components/b-mistflow';
-import { SnowFall } from '../components/b-snowfall';
-import { CLAMP, CURVES } from '../motion-tokens';
+import { DustField } from '../components/DustField';
+import { InkBloom } from '../components/InkBloom';
+import { RoomVignette, SoundPulse, TeaRoomLight } from '../components/c-teahouse';
 
-/** 底图：雪山脊大远景（她极小背影在雪脊上，朝景深走） */
-const BASE = 'p-snow-walk';
-const EASE = { ...CLAMP, easing: CURVES.cineEaseInOut };
+/** 醒木位置（量自 p-teahouse：说书人案上那截深木块 ≈ (1205, 552)）。 */
+const GAVEL = { x: 1205, y: 552, r: 200 };
+/** 醒木落点：210f 里第 84f（4 拍多一点，后面留足余韵）。 */
+const HIT = 84;
+
+/** 本镜时长（manifest durationFrames——ShotScene 用它算推拉进度，不读 useVideoConfig） */
 const TOTAL = 210;
 
-/** 脚印这条路（量自 p-snow-walk 雪脊走线）：前景下缘 → 她的脚下。
- *  from 最近（大），to 最远（小）；ctrl 让整串跟着雪脊的弯走。 */
-const TRAIL = {
-  from: { x: 250, y: 1062, s: 34 },
-  ctrl: { x: 430, y: 952, s: 14 },
-  to: { x: 606, y: 852, s: 6 },
-  count: 16,
-};
-
-const S28: FC = () => {
+const S29: FC = () => {
   const f = useCurrentFrame();
+  const since = f - HIT;
 
-  /* 极缓后拉：1.06 → 1.0（前 34f 先定住，让墨洇退完之后再动） */
-  const pull = interpolate(f, [34, TOTAL - 1], [0, 1], EASE);
-  const scale = 1.06 - 0.06 * pull;
+  /* 落下前 1px 提气（14f）+ 落下后阻尼回摆（振幅 2px、30f 内停）；只震画面层，不震字幕 */
+  const preLift = interpolate(f, [HIT - 14, HIT - 2], [0, -1], CLAMP);
+  const decay = since >= 0 ? Math.exp(-since / 6.5) : 0;
+  const shake = since >= 0 && since < 30 ? 1.9 * decay : 0;
+  const sx = Math.sin((since / 2.3) * Math.PI) * shake;
+  const sy = Math.cos((since / 2.3) * Math.PI) * shake * 0.55 + preLift;
 
-  /* 末 30f：新雪把最近两枚脚印盖住 */
-  const cover = interpolate(f, [TOTAL - 30, TOTAL - 3], [0, 1], EASE);
-
-  const points = footprintTrail(TRAIL.from, TRAIL.ctrl, TRAIL.to, TRAIL.count, 's28-prints');
+  /* 那一声的两层回执：暖光脉冲（快起慢收）+ 茶烟被震散 */
+  const pulse = since >= 0 && since < 36 ? Math.exp(-since / 8) : 0;
+  const scatter = since >= 0 && since < 28 ? interpolate(since, [0, 6, 28], [0, 1, 0], CLAMP) : 0;
 
   return (
-    <AbsoluteFill style={{ background: colors.paper, overflow: 'hidden' }}>
-      <Img
-        src={staticFile(`zhi-guo-xiang/scene/${BASE}.jpg`)}
-        style={{
-          position: 'absolute',
-          inset: 0,
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover',
-          transform: `scale(${scale})`,
-        }}
-      />
-      <InkGrade />
-
-      {/* 贴雪脊走的薄雾：只在雪面上浮，不遮人（她没有脸） */}
-      <MistFlow seed="s28-mist" intensity={0.5} period={260} count={3} />
-
-      {/* 一串脚印：近大远小、左右脚交错；末 30f 最近两枚被新雪盖掉 */}
-      <FootprintTrail points={points} cover={cover} coverCount={2} opacity={0.95} />
-
-      {/* 雪片斜落：风向右 12px/s */}
-      <SnowFall seed="s28-snow" count={130} wind={12} opacity={0.85} />
-
-      {/* 新雪起时，画面末段再飘一层极淡的白（只压雪脊，不压字幕） */}
-      {cover > 0.01 ? (
-        <AbsoluteFill style={{ background: colors.paper, opacity: 0.08 * cover, pointerEvents: 'none' }} />
-      ) : null}
-
+    <AbsoluteFill>
+      <div style={{ position: 'absolute', inset: -10, transform: `translate(${sx}px, ${sy}px)` }}>
+        <ShotScene name="p-teahouse" total={TOTAL} frame={f} zoom={[1.0, 1.038]} driftX={[0, -6]} dim={0.02} warm={0.05}>
+          {/* 同一间屋子：窗光 + 茶烟（本镜整幅不裁，锚点用 ROOM 原值） */}
+          <TeaRoomLight intensity={0.55 + 0.1 * pulse} scatter={scatter} smokeDrift={-4} />
+          {/* 醒木落下：案上接触点一记暖光 + 一记淡墨 */}
+          <SoundPulse pulse={pulse} at={GAVEL} />
+          {since >= 0 ? (
+            <InkBloom
+              progress={interpolate(since, [0, 8], [0.3, 1], CLAMP)}
+              at={GAVEL}
+              color={colors.ink}
+              opacity={0.38 * (1 - interpolate(since, [4, 26], [0, 1], CLAMP))}
+              blur={2}
+            />
+          ) : null}
+          <DustField act={6} count={30} seedBase="s29-room" wind={4} />
+          <RoomVignette />
+        </ShotScene>
+      </div>
       <Caption cue="s28" tone="ink" />
     </AbsoluteFill>
   );
 };
 
-export default S28;
+export default S29;

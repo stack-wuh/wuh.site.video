@@ -40,7 +40,6 @@ import S37 from './s37';
 import S38 from './s38';
 import S39 from './s39';
 import S40 from './s40';
-import S41 from './s41';
 
 export const shotRegistry: Record<string, FC> = {
   s01: S01,
@@ -83,5 +82,4 @@ export const shotRegistry: Record<string, FC> = {
   s38: S38,
   s39: S39,
   s40: S40,
-  s41: S41,
 };

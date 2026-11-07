@@ -1,79 +1,43 @@
-/* S20 · 崖边空了（180f · 入「墨洇」）
+/* S20 · 她跟着跳下去（210f · 入「硬切」）
  *
- * v12 分镜 Act 5：崖边空了；雾里一道下坠的身影（极小），衣摆翻起。底图 `p-cliff` + 代码。
- *
- * 取舍（本轮最硬的规矩）：**不用代码画人**。所以「一道下坠的身影」不画身子、不画头，
- * 改成**一滴墨坠进谷底**——极小的一粒墨心 + 一线被风拉长的墨尾，从崖口落向云海，
- * 74f 时没入雾里。抽帧读作「有东西下去了」，不会读出一个贴纸人。
- * 另外两件事都在雾上：雾比 S18 急（他刚跳下去）、崖风把雾面压低。
- * 镜头：大远固定，1.0 → 1.03（几乎不动，让画面自己往下坠）。
+ * v12 分镜 Act 5：她冲到崖边，往下看一眼，跟着跳下去；衣摆与斗篷翻起。底图 `p-jump-her`。
+ * **人物在底图里**（侧后、倾身向崖外、斗篷被风翻起），代码不叠第二个身影，只做三件：
+ *   · 手持微晃 —— 两个不同周期的正弦叠出「手托着机器」的漂移，幅度 2–3px（不是整镜摇）；
+ *   · RisingFog —— 谷底雾往上涌，吃掉她脚边那一截崖石；
+ *   · DustField —— 斗篷那一侧的风（wind 正 = 向右，与底图翻向右边的斗篷同向）。
+ * 入硬切：动作从第 0 帧就成立，镜内不做淡入。
  */
 import type { FC } from 'react';
 import { AbsoluteFill, interpolate, useCurrentFrame } from 'remotion';
-import { colors } from '../../../brand/tokens';
-import { Scene } from '../components/SceneKit';
+import { ShotScene } from '../components/e-scene';
 import { Caption } from '../components/Caption';
-import { MistFlow } from '../components/b-mistflow';
 import { DustField } from '../components/DustField';
-import { CLAMP, CURVES } from '../motion-tokens';
+import { RisingFog } from '../components/c-fog';
+import { CloudDrift } from '../components/f-clouddrift';
+import { CLAMP } from '../motion-tokens';
 
-/** 墨滴路径：断肠崖口（量自 p-cliff：崖顶小峰右缘外侧 ≈ 800, 548）→ 云海（806, 936）。
- *  必须落在崖壁**外**的白云里：落在深色的崖面上会看不见（第一版抽帧就是这个问题）。 */
-const FALL = { x0: 800, y0: 548, x1: 806, y1: 936 };
-const T0 = 18;
-const T1 = 74;
+/** 本镜时长（manifest durationFrames——ShotScene 用它算推拉进度，不读 useVideoConfig） */
+const TOTAL = 210;
 
-const S20: FC = () => {
+const S21: FC = () => {
   const f = useCurrentFrame();
-  /* 水平匀速、竖直二次方——自由落体；cinEaseIn 让「起跳那一下」慢、越落越快 */
-  const k = interpolate(f, [T0, T1], [0, 1], { ...CLAMP, easing: CURVES.cineEaseIn });
-  const x = FALL.x0 + (FALL.x1 - FALL.x0) * k;
-  const y = FALL.y0 + (FALL.y1 - FALL.y0) * k * k;
-  /* 没入雾的最后 8f 淡掉（雾吃墨，不是凭空消失） */
-  const visible = f >= T0 && f <= T1 ? 1 - interpolate(f, [T1 - 8, T1], [0, 1], CLAMP) : 0;
-  const tail = 26 + 46 * k;
+  /* 手持：20–30f 周期各一条，相位错开；分量加起来不超过 3px，观众只觉得机器在人手里 */
+  const sx = Math.sin(f / 23) * 2.2 + Math.sin(f / 9.5 + 1.7) * 0.9;
+  const sy = Math.cos(f / 19 + 0.6) * 1.8 + Math.cos(f / 11.3) * 0.7;
+  const fog = interpolate(f, [0, TOTAL - 31, TOTAL - 1], [0.2, 0.9, 1], CLAMP);
 
   return (
-    <Scene name="p-cliff" zoom={[1.0, 1.03]} dim={0.03}>
-      <MistFlow seed="s20-cloud" intensity={1.05} period={180} count={6} />
-
-      {/* 下坠的一滴墨：墨尾在上、墨心在下，都在云海后面（multiply 压进雾里） */}
-      {visible > 0.01 ? (
-        <AbsoluteFill style={{ pointerEvents: 'none' }}>
-          <div
-            style={{
-              position: 'absolute',
-              left: x - 1.6,
-              top: y - tail,
-              width: 3.2,
-              height: tail,
-              background: `linear-gradient(180deg, transparent 0%, ${colors.ink} 90%)`,
-              opacity: 0.5 * visible,
-              filter: 'blur(2px)',
-              mixBlendMode: 'multiply',
-            }}
-          />
-          <div
-            style={{
-              position: 'absolute',
-              left: x - 2.4,
-              top: y - 2.4,
-              width: 4.8,
-              height: 4.8,
-              borderRadius: 3,
-              background: colors.ink,
-              opacity: 0.74 * visible,
-              filter: 'blur(1px)',
-              mixBlendMode: 'multiply',
-            }}
-          />
-        </AbsoluteFill>
-      ) : null}
-
-      <DustField act={5} count={26} seedBase="s20-wind" wind={-12} />
-      <Caption cue="s20" tone="ink" />
-    </Scene>
+    <AbsoluteFill>
+      <div style={{ position: 'absolute', inset: -12, transform: `translate(${sx}px, ${sy}px)` }}>
+        <ShotScene name="p-jump-her" total={TOTAL} frame={f} zoom={[1.0, 1.045]} dim={0.03}>
+          <CloudDrift seed="s21-cloud" count={6} intensity={0.62} band={[0.5, 0.99]} speed={0.3} />
+          <RisingFog progress={fog} seedBase="s21-valley" ridgeY={900} rise={430} count={10} strength={1} />
+          <DustField act={5} count={40} seedBase="s21-wind" wind={22} />
+          <Caption cue="s20" tone="ink" />
+        </ShotScene>
+      </div>
+    </AbsoluteFill>
   );
 };
 
-export default S20;
+export default S21;

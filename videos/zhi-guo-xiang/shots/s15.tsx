@@ -1,57 +1,59 @@
-/* S15 · 英雄大会：火把与人群剪影铺满城下，城头高处一个空袖身影站着，背对 210f
+/* S15 · 第一朵烟花在城头上空炸开，火金铺开，烟尾下垂 180f
  *
- * v12 分镜：全·固定，火光层层。底图 `p-hero-gathering`（新，art-v12；火把、人群背影、城头那个空袖身影都在画里）。
- * 火把要先「层层」：前景几把、中景几把、远处一片更小更淡的——但**都是光，不是火把的形状**。
+ * v12 分镜：大远·固定。底图 `p-citynight`（旧图：城楼剪影横贯下方、夜空压得低，烟花由代码画）。
  *
- * 代码只做火：
- *   ① 近景火把：FireLine 一盏盏（halo 大、闪得慢）
- *   ② 远景火把：FireLine 更小更密更淡（另一条 band）
- *   ③ 火光在人群上方洇的一层暖雾（WarmBloom 横躺）
- *   ④ 灰烬：从人群里升起来的余烬
- * 不推不摇（固定），把「满」交给底图。
- * 转场：入「墨洇」，出「墨洇」。
+ * 烟花语言沿用 A 组私有 `a-fireworks.tsx` 的**团块**（宋代烟花是低空一团团火金/赭红爆开，
+ * 不是球形对称的菊球）：一团主爆在城头上空，起花先上冲；末段远处再补一小朵赭红，
+ * 让夜空不是「放完就死」。城头天际线被照亮的一线与云光都只加光、不泛白。
+ *
+ * 时间：0–20f 硬切入场；34f 主爆；104f 远处小朵（景深最远那层）。
+ * 转场：入「切」，出「切」（下一镜 s17 是抬头看她，同级亮度接得上）。
  */
 import type { FC } from 'react';
-import { AbsoluteFill, useCurrentFrame } from 'remotion';
+import { AbsoluteFill, interpolate, useCurrentFrame } from 'remotion';
 import { ShotScene } from '../components/e-scene';
 import { Caption } from '../components/Caption';
-import { FireLine, WarmBloom } from '../components/e-firelight';
-import { EmberField } from '../components/e-emberfield';
-import { GroundMist } from '../components/c-fog';
-import { DustField } from '../components/DustField';
+import { A_Fireworks, CloudGlow, type FireworkBurst } from '../components/a-fireworks';
+import { CLAMP, FILM } from '../motion-tokens';
 
-const TOTAL = 210;
+const TOTAL = 180;
+/** 第一朵：城头上空偏右（避开城楼正脊），起爆 34f */
+const MAIN = { x: 1050, y: 236, at: 34 } as const;
 
-const S15: FC = () => {
+const BURSTS: FireworkBurst[] = [
+  { x: MAIN.x, y: MAIN.y, at: MAIN.at, scale: 1.24, hue: 'gold', rise: true },
+  { x: 470, y: 196, at: 104, scale: 0.52, hue: 'ochre' },
+];
+
+const S16: FC = () => {
   const f = useCurrentFrame();
+  /* 云被由下往上照亮：起爆后 18f 达峰，之后留一条余晖（不做整屏泛白） */
+  const glow = interpolate(f, [MAIN.at, MAIN.at + 18, MAIN.at + 46, TOTAL - 1], [0, 1, 0.78, 0.3], CLAMP);
+
   return (
-    <ShotScene name="p-hero-gathering" total={TOTAL} frame={f} zoom={[1.0, 1.03]} dim={0.04}>
-      {/* ③ 火光在人群上方洇开的一层暖雾（先给底，再点火） */}
-      <WarmBloom at={{ x: 960, y: 690 }} r={780} squash={0.32} opacity={0.1} period={30} breath={0.4} blur={92} />
-
-      {/* ① 近景火把 */}
-      <FireLine seedBase="s15-near" band={{ x0: 140, x1: 1780, y0: 600, y1: 820 }} count={7} halo={66} core={2.6} opacity={0.6} period={24} />
-      {/* ② 远景火把：小、密、淡（景深最外那层） */}
-      <FireLine seedBase="s15-far" band={{ x0: 200, x1: 1720, y0: 560, y1: 650 }} count={11} halo={26} core={1.4} opacity={0.4} period={32} />
-
-      {/* ④ 余烬 */}
-      <EmberField seedBase="s15" at={{ x: 960, y: 830 }} spread={1500} rise={340} count={12} period={160} sizeBase={0.85} opacity={0.7} />
-
-      {/* 人群上方的烟与尘 */}
-      <GroundMist seedBase="s15" y={880} drift={0.6} opacity={0.42} />
-      <DustField act={3} count={20} seedBase="s15-torchlight" wind={5} />
-
-      {/* 城头高处那个人不动，压一档暗让他的轮廓立起来 */}
-      <AbsoluteFill
+    <ShotScene name="p-citynight" total={TOTAL} frame={f} zoom={[1.0, 1.045]} dim={0.03}>
+      <CloudGlow at={MAIN.at} x={MAIN.x} y={690} intensity={glow * 0.66} width={1320} height={480} />
+      <A_Fireworks seed="s16" bursts={BURSTS} />
+      {/* 城头被照亮的一线：贴着城墙天际线的暖反光（只染光，不重画底图） */}
+      <div
         style={{
-          background: 'linear-gradient(180deg, rgba(24,29,36,0.42) 0%, rgba(24,29,36,0.1) 30%, transparent 52%)',
-          mixBlendMode: 'multiply',
+          position: 'absolute',
+          left: 0,
+          right: 0,
+          top: 636,
+          height: 128,
+          background: FILM.fireGold,
+          opacity: 0.12 * glow,
+          mixBlendMode: 'screen',
+          maskImage: 'linear-gradient(180deg, transparent 0%, #000 48%, transparent 100%)',
+          WebkitMaskImage: 'linear-gradient(180deg, transparent 0%, #000 48%, transparent 100%)',
           pointerEvents: 'none',
         }}
       />
+      {/* 夜色：上缘再压一档，城楼那一带留亮 */}
       <AbsoluteFill
         style={{
-          background: 'radial-gradient(ellipse 84% 80% at 50% 56%, transparent 46%, rgba(24,29,36,0.36) 100%)',
+          background: 'linear-gradient(180deg, rgba(24,29,36,0.34) 0%, transparent 40%)',
           mixBlendMode: 'multiply',
           pointerEvents: 'none',
         }}
@@ -61,4 +63,4 @@ const S15: FC = () => {
   );
 };
 
-export default S15;
+export default S16;

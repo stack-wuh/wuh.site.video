@@ -1,26 +1,44 @@
-/* S22 · 谷底水潭（180f · 入「墨洇」）
+/* S22 · 第三枚金针（210f · 入「墨洇」）
  *
- * v12 分镜 Act 5：谷底水潭，水面雾，石岸，两个人（她从水里抬头，剪影）。底图 `p-pool`。
- * **两个人都在底图里**；代码只给水光与水面那层雾：
- *   · WaveField —— 只铺**两个人头以下**的水面带（band 0.58–0.97，水纹不横过他们的脸），相位慢推；
- *   · CloudDrift —— 水面上的雾在走（灰影压在灰青水面上，才看得见）；
- *   · GroundMist —— 贴水的一层薄雾，横向极慢漂（drift 负），和「她从水里抬头」的呼吸同速。
- * 镜头：低机位，1.0 → 1.035 极缓推。
+ * v12 分镜 Act 5：她的指间夹着第三枚金针，举到他面前（只见手与针，不见他的脸）。底图 `p-needle-third`。
+ * **手与针都在底图里**——所以代码**不再画一枚针**（再画一枚就会出现「两根针」）：
+ * 本镜只做雾的呼吸：
+ *   · CloudDrift —— 背景全是雾，雾在针后面慢慢走（intensity 0.5：很淡，不能把手和针洗掉）；
+ *   · 针尖的一点火光金 —— 全镜唯一的暖（很淡的呼吸，不重画针）；
+ *   · DustField —— 雾里那点极少的浮尘（金尘配比取 Act 5），让雾有厚度。
+ * 镜头：特写，1.0 → 1.04，慢到几乎不动。
  */
 import type { FC } from 'react';
-import { Scene } from '../components/SceneKit';
+import { useCurrentFrame } from 'remotion';
+import { ShotScene } from '../components/e-scene';
 import { Caption } from '../components/Caption';
-import { GroundMist } from '../components/c-fog';
 import { CloudDrift } from '../components/f-clouddrift';
-import { WaveField } from '../components/WaveField';
+import { InkBloom } from '../components/InkBloom';
+import { FILM } from '../motion-tokens';
+import { DustField } from '../components/DustField';
 
-const S22: FC = () => (
-  <Scene name="p-pool" zoom={[1.0, 1.035]} dim={0.03}>
-    <WaveField seed="s22-pool" band={[0.58, 0.97]} amp={5} speed={0.1} opacity={0.32} rows={9} />
-    <CloudDrift seed="s22-water" count={5} intensity={0.55} band={[0.24, 0.62]} speed={0.24} dark={0.055} />
-    <GroundMist seedBase="s22-water" opacity={0.5} y={640} drift={-2} />
+/** 本镜时长（manifest durationFrames——ShotScene 用它算推拉进度，不读 useVideoConfig） */
+const TOTAL = 210;
+
+const S23: FC = () => {
+  const f = useCurrentFrame();
+  /* 针尖的呼吸：很慢的一条正弦，只改亮度不改位置 */
+  const breath = 0.5 + 0.5 * Math.sin((f / 100) * Math.PI * 2);
+  return (
+  <ShotScene name="p-needle-third" total={TOTAL} frame={f} zoom={[1.0, 1.04]} dim={0.02}>
+    <CloudDrift seed="s23-fog" count={5} intensity={0.5} band={[0.05, 0.92]} speed={0.22} dark={0.055} />
+    <InkBloom
+      progress={0.42 + 0.1 * breath}
+      at={{ x: 1148, y: 178, r: 30 }}
+      color={FILM.fireGold}
+      opacity={0.09 + 0.04 * breath}
+      blur={10}
+      style={{ mixBlendMode: 'screen' }}
+    />
+    <DustField act={5} count={18} seedBase="s23-air" wind={3} />
     <Caption cue="s22" tone="ink" />
-  </Scene>
-);
+  </ShotScene>
+  );
+};
 
-export default S22;
+export default S23;

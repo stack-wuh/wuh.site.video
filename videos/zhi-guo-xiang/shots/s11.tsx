@@ -1,184 +1,104 @@
-/* S11 · 她的手掌摊开，三枚金针逐枚落下，手指一分一分收拢 210f
+/* S11 · 她的肩后视角：他抬手到面具，面具离脸的一瞬，光从面具边缘漫出来吞掉他的脸 210f
  *
- * v12 分镜：微距·俯，动作三段。底图 `p-palm`（她的手，**针由代码画**——针的形制必须对：
- * 细长针身、缠丝针柄、发丝针尖，见 Needles.tsx）。
+ * v12 分镜：中·过肩，双人同框，光驱动。观众**看不见他的脸**——这是全片的铁律（杨过永远不给脸），
+ * 所以这一镜的戏是「光把脸吃掉」，不是「摘下了一张面具」。
  *
- * 时间轴（入场墨洇 20f 之后才起手）：
- *   58f / 70f / 82f  三枚针依次落下（间隔 12f，每枚落 8f，越落越快 = 重力）；
- *   66f / 78f / 90f  各自落定，落定那一帧一点火金反光；
- *   66→104f          她的手指随每枚落定收一档（掌形微收 + 内旋 + 指根压影），一共三档；
- *   150→180f         掌中亮一次（火塘的光经过掌面），三枚针的金身横闪一道。
- *
- * 她「收拢手指」在静态底上演不出来，所以用四个弱线索叠：整掌 scale 3%、内旋 1.6°、
- * 指侧 multiply 压影加深、末端掌中火金高光。不重画手指、不画他的袖子。
- * 转场：入「墨洇」，出「墨洇」。
+ * 底图 `p-unmask-her`（新，art-v12；她的侧后剪影在前景、他抬手到面具、两人间留雾）。
+ * 代码只做光：
+ *   ① 面具边缘亮起：64f 起，先一下短闪，再从面具位置漫开一大团暖白（screen）——
+ *      光越大、越软，他的五官就越读不出来；末段用一层纸色洗过去，把「脸」彻底抹平；
+ *   ② 两人之间的雾：LocalMist 从中间长起来（湿接，不是贴片）；
+ *   ③ 光里的尘：光一起来，空气里的尘才看得见。
+ * 光的位置按 art 口径（他抬手、面具在画面中偏右上方）给一个宽容的大圆，不追具体五官。
+ * 转场：入「切」，出「墨洇」。
  */
 import type { FC } from 'react';
-import { AbsoluteFill, Img, interpolate, staticFile, useCurrentFrame } from 'remotion';
+import { AbsoluteFill, interpolate, useCurrentFrame } from 'remotion';
 import { colors } from '../../../brand/tokens';
-import { ShotSlide } from '../components/e-scene';
+import { ShotScene } from '../components/e-scene';
 import { Caption } from '../components/Caption';
-import { Needles } from '../components/Needles';
-import { WarmBloom } from '../components/e-firelight';
-import { CLAMP, FILM } from '../motion-tokens';
+import { LocalMist } from '../components/c-fog';
+import { DustField } from '../components/DustField';
+import { CLAMP, CURVES } from '../motion-tokens';
 
 const TOTAL = 210;
-const BASE = 'p-palm';
+/** 面具 / 脸的位置（宽容取值：光是大圆，不追五官） */
+const MASK = { x: 1245, y: 252 };
+/** 两人之间的雾 */
+const BETWEEN = { x: 900, y: 640 };
 
-/** 针槽：针柄靠腕侧，针尖朝指尖（左上→右上那条掌轴），三枚散在掌心。
- *  与 Needles 的槽位公式一致：off = (i-1)*SPREAD，angle = TILT + (i-1)*3.2 */
-const SLOT = { x: 700, y: 648, len: 400, spread: 44, tilt: -34 };
-const FALL = 8;
-const RELEASE = [58, 70, 82] as const;
-const LAND = RELEASE.map((r) => r + FALL);
-
-const slotOf = (i: number) => {
-  const off = (i - 1) * SLOT.spread;
-  return { x: SLOT.x + off * 0.35, y: SLOT.y + off, tilt: SLOT.tilt + (i - 1) * 3.2 };
-};
-
-const S11: FC = () => {
+const S12: FC = () => {
   const f = useCurrentFrame();
-
-  /* 手指收拢：每落一枚收 1/3，收完再微调一档 */
-  const closed =
-    interpolate(f, [LAND[0], LAND[1], LAND[2]], [0, 1 / 3, 2 / 3], CLAMP) + interpolate(f, [LAND[2], LAND[2] + 14], [0, 1 / 3], CLAMP);
-
-  /* 掌中高光：150–180f 一次（淡入 8f、峰值 8f、余晖 22f） */
-  const glint = interpolate(f, [150, 158, 166, 180], [0, 0.95, 1, 0.5], CLAMP);
-
-  /* 落定反光：落定那一帧起 6f 的短闪 */
-  const landGlint = (land: number) => interpolate(f, [land - 1, land, land + 2, land + 6], [0, 1, 0.7, 0], CLAMP);
+  /* ① 光的生长：64f 短闪，110f 撑满，之后缓慢再涨一点（不收回——脸不能再露出来） */
+  const flash = interpolate(f, [64, 70, 88], [0, 1, 0], CLAMP);
+  const grow = interpolate(f, [64, 130, TOTAL - 1], [0, 0.86, 1], { ...CLAMP, easing: CURVES.cineEaseOut });
+  const halo = 240 + 660 * grow;
+  const core = 90 + 300 * grow;
+  /* ② 雾：80f 后从两人之间长起来 */
+  const mist = interpolate(f, [80, 170], [0, 0.85], { ...CLAMP, easing: CURVES.cineEaseInOut });
 
   return (
-    <ShotSlide total={TOTAL} frame={f} zoom={[1.02, 1.07]} origin="54% 56%">
-      {/* 底图：她的手。收指时整掌微微内收（scale + 腕部内旋），手指本身不重画 */}
-      <AbsoluteFill style={{ overflow: 'hidden' }}>
-        <Img
-          src={staticFile(`zhi-guo-xiang/scene/${BASE}.jpg`)}
-          style={{
-            position: 'absolute',
-            inset: 0,
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            transform: `scale(${1 + 0.03 * closed}) rotate(${-1.6 * closed}deg)`,
-            transformOrigin: '32% 76%',
-          }}
-        />
-      </AbsoluteFill>
-
-      {/* 指侧的收拢压影：手指合过来时，掌面与指腹之间会暗一条 */}
-      <AbsoluteFill
-        style={{
-          background: `radial-gradient(ellipse 30% 22% at 62% 34%, ${colors.ink} 0%, transparent 68%)`,
-          opacity: 0.26 * closed,
-          mixBlendMode: 'multiply',
-          filter: 'blur(14px)',
-          pointerEvents: 'none',
-        }}
-      />
-      <AbsoluteFill
-        style={{
-          background: `radial-gradient(ellipse 26% 14% at 40% 46%, ${colors.ink} 0%, transparent 70%)`,
-          opacity: 0.16 * closed,
-          mixBlendMode: 'multiply',
-          filter: 'blur(17px)',
-          pointerEvents: 'none',
-        }}
-      />
-
-      {/* 正在落下的针：8f 一枚，落定后交给 Needles 真值层 */}
-      <svg viewBox="0 0 1920 1080" style={{ position: 'absolute', inset: 0 }} preserveAspectRatio="none">
-        {RELEASE.map((rel, i) => {
-          const t = (f - rel) / FALL;
-          if (t < 0 || t >= 1) return null;
-          const s = slotOf(i);
-          const k = t * t; // 重力：越落越快
-          const hx = s.x + 40 * (1 - k);
-          const hy = s.y - 520 * (1 - k);
-          const ang = ((52 + (s.tilt - 52) * t) * Math.PI) / 180;
-          const tx = hx + Math.cos(ang) * SLOT.len;
-          const ty = hy + Math.sin(ang) * SLOT.len;
-          const wx = hx + Math.cos(ang) * SLOT.len * 0.28;
-          const wy = hy + Math.sin(ang) * SLOT.len * 0.28;
-          return (
-            <g key={`fall-${i}`} opacity={0.94}>
-              <line x1={hx} y1={hy} x2={tx} y2={ty} stroke={FILM.fireGold} strokeWidth={1.7} strokeLinecap="round" />
-              <line x1={hx} y1={hy} x2={wx} y2={wy} stroke={colors.gold} strokeWidth={6.4} strokeLinecap="round" />
-              <circle cx={tx} cy={ty} r={1.7} fill={colors.gold} />
-            </g>
-          );
-        })}
-      </svg>
-
-      {/* 落定的针：逐枚叠 Needles（单枚模式，槽位与上面一致） */}
-      {RELEASE.map((_, i) => {
-        const s = slotOf(i);
-        return (
-          <Needles
-            key={`made-${i}`}
-            count={1}
-            origin={[s.x, s.y]}
-            len={SLOT.len}
-            spread={0}
-            tilt={s.tilt}
-            width={2.5}
-            opacity={f >= LAND[i] ? 0.96 : 0}
-          />
-        );
-      })}
-
-      {/* 落点的火金反光（落定那一瞬，针身亮一下） */}
-      {LAND.map((land, i) => {
-        const g = landGlint(land);
-        if (g <= 0.01) return null;
-        const s = slotOf(i);
-        return (
-          <WarmBloom
-            key={`land-${i}`}
-            at={{ x: s.x + SLOT.len * 0.45, y: s.y - SLOT.len * 0.22 }}
-            r={120}
-            squash={0.42}
-            opacity={0.3 * g}
-            period={60}
-            breath={0}
-            blur={16}
-          />
-        );
-      })}
-
-      {/* 掌中高光：火塘的光经过掌面 + 三枚针横闪一道 */}
-      <WarmBloom at={{ x: 900, y: 470 }} r={330} squash={0.7} opacity={0.16 * glint} period={60} breath={0} blur={44} />
+    <ShotScene name="p-unmask-her" total={TOTAL} frame={f} zoom={[1.0, 1.05]} dim={0.03}>
+      {/* ①a 大光晕：面具边缘漫出来的那一片（screen，宽而软） */}
       <div
         style={{
           position: 'absolute',
-          left: 780,
-          top: 520,
-          width: 330,
-          height: 7,
-          borderRadius: 4,
-          background: colors.gold,
-          opacity: 0.5 * glint,
+          left: MASK.x - halo,
+          top: MASK.y - halo * 0.82,
+          width: halo * 2,
+          height: halo * 1.64,
+          borderRadius: '50%',
+          background: `radial-gradient(ellipse 50% 50% at 50% 50%, ${colors.paper} 0%, ${colors.gold} 34%, transparent 72%)`,
+          opacity: 0.06 + 0.16 * grow,
+          filter: 'blur(74px)',
           mixBlendMode: 'screen',
-          filter: 'blur(1.4px)',
-          transform: 'rotate(-30deg)',
-          transformOrigin: 'left center',
+          pointerEvents: 'none',
+        }}
+      />
+      {/* ①b 光心：面具那一圈金边被点亮（短闪叠在上面） */}
+      <div
+        style={{
+          position: 'absolute',
+          left: MASK.x - core,
+          top: MASK.y - core,
+          width: core * 2,
+          height: core * 2,
+          borderRadius: '50%',
+          background: `radial-gradient(circle, ${colors.paper} 0%, ${colors.gold} 38%, transparent 70%)`,
+          opacity: 0.1 + 0.22 * grow + 0.24 * flash,
+          filter: 'blur(38px)',
+          mixBlendMode: 'screen',
+          pointerEvents: 'none',
+        }}
+      />
+      {/* ①c 洗掉脸：一层纸色从面具位置泛开（不画五官，只让五官读不出来） */}
+      <AbsoluteFill
+        style={{
+          background: `radial-gradient(ellipse 27% 22% at ${(MASK.x / 1920) * 100}% ${(MASK.y / 1080) * 100}%, rgba(245,240,232,0.9) 0%, rgba(245,240,232,0.38) 46%, transparent 76%)`,
+          opacity: 0.08 + 0.22 * grow,
+          mixBlendMode: 'screen',
           pointerEvents: 'none',
         }}
       />
 
-      {/* 掌下压一点暖影：微距特写下掌面才有厚度 */}
+      {/* ② 两人之间的雾（湿接） */}
+      <LocalMist at={BETWEEN} progress={mist} seedBase="s12-between" spread={300} rise={260} count={4} strength={0.8} />
+
+      {/* ③ 光里的尘：光一起来，尘才显影 */}
+      <DustField act={3} count={26} seedBase="s12-motes" wind={3} />
+
+      {/* 她的肩背那一侧压一档（前景剪影），光从他那一侧来 */}
       <AbsoluteFill
         style={{
-          background: 'radial-gradient(ellipse 46% 34% at 52% 58%, transparent 52%, rgba(43,38,32,0.2) 100%)',
+          background: `linear-gradient(90deg, ${colors.ink} 0%, transparent 34%)`,
+          opacity: 0.24,
           mixBlendMode: 'multiply',
           pointerEvents: 'none',
         }}
       />
       <Caption cue="s11" tone="ink" />
-    </ShotSlide>
+    </ShotScene>
   );
 };
 
-export default S11;
+export default S12;

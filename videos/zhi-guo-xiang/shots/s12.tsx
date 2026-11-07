@@ -1,104 +1,57 @@
-/* S12 · 她的肩后视角：他抬手到面具，面具离脸的一瞬，光从面具边缘漫出来吞掉他的脸 210f
+/* S12 · 襄阳城头黄昏：城墙横贯下方三分之一，垛口灯笼，护城河反光，远处蒙古营火连成一线 210f
  *
- * v12 分镜：中·过肩，双人同框，光驱动。观众**看不见他的脸**——这是全片的铁律（杨过永远不给脸），
- * 所以这一镜的戏是「光把脸吃掉」，不是「摘下了一张面具」。
- *
- * 底图 `p-unmask-her`（新，art-v12；她的侧后剪影在前景、他抬手到面具、两人间留雾）。
- * 代码只做光：
- *   ① 面具边缘亮起：64f 起，先一下短闪，再从面具位置漫开一大团暖白（screen）——
- *      光越大、越软，他的五官就越读不出来；末段用一层纸色洗过去，把「脸」彻底抹平；
- *   ② 两人之间的雾：LocalMist 从中间长起来（湿接，不是贴片）；
- *   ③ 光里的尘：光一起来，空气里的尘才看得见。
- * 光的位置按 art 口径（他抬手、面具在画面中偏右上方）给一个宽容的大圆，不追具体五官。
- * 转场：入「切」，出「墨洇」。
+ * v12 分镜：大远·固定，云压得低。底图 `p-city-wall`（新，art-v12；城墙、垛口灯笼、护城河都在画里）。
+ * 战云压城的一镜，什么都不该动得太快：
+ *   ① 云：MistFlow 压得很低、走得很慢（period 260）——云在山脊上翻；
+ *   ② 营火：地平线上一条极淡的暖光带在呼吸（远，所以不描点，只给一带光）；
+ *   ③ 护城河：WaveField 只铺在水带（y 0.72–0.90），低频低幅；
+ *   ④ 浮尘：一层薄薄的光尘。
+ * 不推不摇（固定）。
+ * 转场：入「墨洇」，出「墨洇」。
  */
 import type { FC } from 'react';
-import { AbsoluteFill, interpolate, useCurrentFrame } from 'remotion';
-import { colors } from '../../../brand/tokens';
+import { AbsoluteFill, useCurrentFrame } from 'remotion';
 import { ShotScene } from '../components/e-scene';
 import { Caption } from '../components/Caption';
-import { LocalMist } from '../components/c-fog';
+import { WaveField } from '../components/WaveField';
+import { MistFlow } from '../components/b-mistflow';
+import { WarmBloom } from '../components/e-firelight';
 import { DustField } from '../components/DustField';
-import { CLAMP, CURVES } from '../motion-tokens';
 
 const TOTAL = 210;
-/** 面具 / 脸的位置（宽容取值：光是大圆，不追五官） */
-const MASK = { x: 1245, y: 252 };
-/** 两人之间的雾 */
-const BETWEEN = { x: 900, y: 640 };
 
-const S12: FC = () => {
+const S13: FC = () => {
   const f = useCurrentFrame();
-  /* ① 光的生长：64f 短闪，110f 撑满，之后缓慢再涨一点（不收回——脸不能再露出来） */
-  const flash = interpolate(f, [64, 70, 88], [0, 1, 0], CLAMP);
-  const grow = interpolate(f, [64, 130, TOTAL - 1], [0, 0.86, 1], { ...CLAMP, easing: CURVES.cineEaseOut });
-  const halo = 240 + 660 * grow;
-  const core = 90 + 300 * grow;
-  /* ② 雾：80f 后从两人之间长起来 */
-  const mist = interpolate(f, [80, 170], [0, 0.85], { ...CLAMP, easing: CURVES.cineEaseInOut });
-
   return (
-    <ShotScene name="p-unmask-her" total={TOTAL} frame={f} zoom={[1.0, 1.05]} dim={0.03}>
-      {/* ①a 大光晕：面具边缘漫出来的那一片（screen，宽而软） */}
-      <div
-        style={{
-          position: 'absolute',
-          left: MASK.x - halo,
-          top: MASK.y - halo * 0.82,
-          width: halo * 2,
-          height: halo * 1.64,
-          borderRadius: '50%',
-          background: `radial-gradient(ellipse 50% 50% at 50% 50%, ${colors.paper} 0%, ${colors.gold} 34%, transparent 72%)`,
-          opacity: 0.06 + 0.16 * grow,
-          filter: 'blur(74px)',
-          mixBlendMode: 'screen',
-          pointerEvents: 'none',
-        }}
-      />
-      {/* ①b 光心：面具那一圈金边被点亮（短闪叠在上面） */}
-      <div
-        style={{
-          position: 'absolute',
-          left: MASK.x - core,
-          top: MASK.y - core,
-          width: core * 2,
-          height: core * 2,
-          borderRadius: '50%',
-          background: `radial-gradient(circle, ${colors.paper} 0%, ${colors.gold} 38%, transparent 70%)`,
-          opacity: 0.1 + 0.22 * grow + 0.24 * flash,
-          filter: 'blur(38px)',
-          mixBlendMode: 'screen',
-          pointerEvents: 'none',
-        }}
-      />
-      {/* ①c 洗掉脸：一层纸色从面具位置泛开（不画五官，只让五官读不出来） */}
+    <ShotScene name="p-city-wall" total={TOTAL} frame={f} zoom={[1.0, 1.035]} warm={0.1}>
+      {/* ① 压得低的云 */}
+      <MistFlow seed="s13-cloud" intensity={0.75} period={260} count={5} />
+      {/* ② 远处营火连成的那一线：不描点，只在地平线上洇一带暖光，慢慢呼吸 */}
+      <WarmBloom at={{ x: 960, y: 722 }} r={980} squash={0.1} opacity={0.06} period={64} breath={0.45} blur={72} />
+
+      {/* ③ 护城河：横纹只在水带里 */}
+      <WaveField seed="s13-moat" band={[0.86, 0.99]} amp={2.6} speed={0.08} opacity={0.14} rows={5} />
+      {/* ④ 浮尘 */}
+      <DustField act={4} count={18} seedBase="s13-dusk" wind={8} />
+
+      {/* 战云压城：上缘压一档，城墙那一带留亮 */}
       <AbsoluteFill
         style={{
-          background: `radial-gradient(ellipse 27% 22% at ${(MASK.x / 1920) * 100}% ${(MASK.y / 1080) * 100}%, rgba(245,240,232,0.9) 0%, rgba(245,240,232,0.38) 46%, transparent 76%)`,
-          opacity: 0.08 + 0.22 * grow,
-          mixBlendMode: 'screen',
-          pointerEvents: 'none',
-        }}
-      />
-
-      {/* ② 两人之间的雾（湿接） */}
-      <LocalMist at={BETWEEN} progress={mist} seedBase="s12-between" spread={300} rise={260} count={4} strength={0.8} />
-
-      {/* ③ 光里的尘：光一起来，尘才显影 */}
-      <DustField act={3} count={26} seedBase="s12-motes" wind={3} />
-
-      {/* 她的肩背那一侧压一档（前景剪影），光从他那一侧来 */}
-      <AbsoluteFill
-        style={{
-          background: `linear-gradient(90deg, ${colors.ink} 0%, transparent 34%)`,
-          opacity: 0.24,
+          background: 'linear-gradient(180deg, rgba(24,29,36,0.34) 0%, rgba(24,29,36,0.08) 26%, transparent 44%)',
           mixBlendMode: 'multiply',
           pointerEvents: 'none',
         }}
       />
-      <Caption cue="s12" tone="ink" />
+      <AbsoluteFill
+        style={{
+          background: 'radial-gradient(ellipse 86% 82% at 52% 56%, transparent 46%, rgba(24,29,36,0.32) 100%)',
+          mixBlendMode: 'multiply',
+          pointerEvents: 'none',
+        }}
+      />
+      <Caption cue="s12" tone="paper" />
     </ShotScene>
   );
 };
 
-export default S12;
+export default S13;
