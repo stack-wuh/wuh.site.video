@@ -16,6 +16,7 @@ import { colors } from '../../../brand/tokens';
 import { ShotScene } from '../components/e-scene';
 import { Caption } from '../components/Caption';
 import { DustField } from '../components/DustField';
+import { LightWash } from '../components/LightWash';
 import { CLAMP, FILM } from '../motion-tokens';
 
 const TOTAL = 180;
@@ -110,14 +111,12 @@ const S14: FC = () => {
       {/* ③ 逆光里的浮尘 */}
       <DustField act={4} count={16} seedBase="s14-motes" wind={4} />
 
-      {/* 景深：前景与四角压暗（浅景深的框感），但别压掉她举着的那只手 */}
-      <AbsoluteFill
-        style={{
-          background: `radial-gradient(ellipse 76% 72% at 52% 46%, transparent 44%, ${colors.ink} 100%)`,
-          opacity: 0.22,
-          mixBlendMode: 'multiply',
-          pointerEvents: 'none',
-        }}
+      {/* 景深：前景与四角压暗（浅景深的框感），但别压掉她举着的那只手 —— 由 LightWash 铺一层 */}
+      <LightWash
+        shape="ellipse 76% 72% at 52% 46%"
+        stops={[['transparent', 44], [colors.ink, 100]]}
+        strength={0.22}
+        blend="multiply"
       />
       <Caption cue="s13" tone="paper" />
     </ShotScene>

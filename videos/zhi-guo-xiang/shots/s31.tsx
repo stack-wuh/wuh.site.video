@@ -13,6 +13,7 @@ import { ShotScene } from '../components/e-scene';
 import { Caption } from '../components/Caption';
 import { DustField } from '../components/DustField';
 import { MistFlow } from '../components/b-mistflow';
+import { useBreath } from '../components/use-breath';
 import { CLAMP } from '../motion-tokens';
 
 /** 本镜时长（manifest durationFrames——ShotScene 用它算推拉进度，不读 useVideoConfig） */
@@ -21,7 +22,7 @@ const TOTAL = 210;
 const S32: FC = () => {
   const f = useCurrentFrame();
   /* 晨光呼吸：0.6 个周期走完本镜的慢正弦，只在 0.02 的幅度里 */
-  const breathe = 0.5 + 0.5 * Math.sin((f / Math.max(1, TOTAL)) * Math.PI * 2 * 0.6);
+  const breathe = useBreath(TOTAL / 0.6);
   const dim = interpolate(breathe, [0, 1], [0.022, 0.004], CLAMP);
   return (
     <ShotScene name="p-morning" total={TOTAL} frame={f} zoom={[1.0, 1.04]} dim={dim}>

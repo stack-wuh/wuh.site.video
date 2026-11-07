@@ -13,12 +13,13 @@
  * 转场：入「切」，出「切」。字幕本轮不接。
  */
 import type { FC } from 'react';
-import { AbsoluteFill, interpolate, useCurrentFrame } from 'remotion';
+import { interpolate, useCurrentFrame } from 'remotion';
 import { ShotScene } from '../components/e-scene';
 import { Caption } from '../components/Caption';
 import { DustField } from '../components/DustField';
 import { MistFlow } from '../components/b-mistflow';
 import { WarmBloom } from '../components/e-firelight';
+import { LightWash } from '../components/LightWash';
 import { CLAMP } from '../motion-tokens';
 
 const TOTAL = 210;
@@ -41,13 +42,12 @@ const S01: FC = () => {
       {/* ① 海风里的纸尘/金尘（风把衣角与尘一起掀起来） */}
       <DustField act={1} count={20} seedBase="s01-wind" wind={26} />
 
-      {/* 角晕：把视线收到礁石上那个人 */}
-      <AbsoluteFill
-        style={{
-          background: 'radial-gradient(ellipse 82% 78% at 52% 48%, transparent 46%, rgba(43,38,32,0.28) 100%)',
-          mixBlendMode: 'multiply',
-          pointerEvents: 'none',
-        }}
+      {/* 角晕：把视线收到礁石上那个人（由 LightWash 铺一层，参数照抄原手写值） */}
+      <LightWash
+        shape="ellipse 82% 78% at 52% 48%"
+        stops={[['transparent', 46], ['rgba(43,38,32,0.28)', 100]]}
+        strength={1}
+        blend="multiply"
       />
       <Caption cue="s01" tone="paper" />
     </ShotScene>

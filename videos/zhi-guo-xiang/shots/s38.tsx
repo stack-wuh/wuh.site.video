@@ -9,10 +9,12 @@
  * 不叠纸纹、不叠手持：这不是手里的物件，是天。
  */
 import type { FC } from 'react';
-import { AbsoluteFill, interpolate, useCurrentFrame } from 'remotion';
+import { interpolate, useCurrentFrame } from 'remotion';
 import { colors } from '../../../brand/tokens';
 import { ShotScene } from '../components/e-scene';
 import { Caption } from '../components/Caption';
+import { LightWash } from '../components/LightWash';
+import { useBreath } from '../components/use-breath';
 import { FILM, CLAMP } from '../motion-tokens';
 
 /** 本镜时长（manifest durationFrames——ShotScene 用它算推拉进度，不读 useVideoConfig） */
@@ -20,17 +22,16 @@ const TOTAL = 210;
 
 const S39: FC = () => {
   const f = useCurrentFrame();
-  const breath = 0.5 + 0.5 * Math.sin((f / 90) * Math.PI * 2);
+  const breath = useBreath(90);
   const glow = interpolate(breath, [0, 1], [0.02, 0.055], CLAMP);
   return (
     <ShotScene name="photo-nianian-ink" total={TOTAL} frame={f} zoom={[1.0, 1.05]} warm={0.03} dim={0.02}>
-      <AbsoluteFill
-        style={{
-          pointerEvents: 'none',
-          mixBlendMode: 'screen',
-          background: `radial-gradient(ellipse 38% 26% at 46% 86%, ${FILM.fireGold} 0%, ${colors.gold} 34%, transparent 72%)`,
-          opacity: glow,
-        }}
+      {/* 落日的暖光（由 LightWash 铺）：screen 极淡的一层，光心压在那轮太阳上 */}
+      <LightWash
+        shape="ellipse 38% 26% at 46% 86%"
+        stops={[[FILM.fireGold, 0], [colors.gold, 34], ['transparent', 72]]}
+        strength={glow}
+        blend="screen"
       />
       <Caption cue="s38" tone="ink" />
     </ShotScene>

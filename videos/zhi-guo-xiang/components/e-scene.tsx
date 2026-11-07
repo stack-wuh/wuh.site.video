@@ -30,8 +30,10 @@ export const ShotScene: FC<{
   warm?: number;
   /** 覆盖进度（0–1）：镜头自己给的缓动曲线（默认按 frame/total 线性） */
   progress?: number;
+  /** 底图 CSS filter 串（如三拍季节的 `saturate() brightness() sepia()`）；不传则不加滤镜 */
+  grade?: string;
   children?: ReactNode;
-}> = ({ name, total, frame, zoom = [1.0, 1.045], driftX = [0, 0], driftY = [0, 0], dim = 0, warm = 0, progress, children }) => {
+}> = ({ name, total, frame, zoom = [1.0, 1.045], driftX = [0, 0], driftY = [0, 0], dim = 0, warm = 0, progress, grade, children }) => {
   const base = useShotT(frame, total);
   const t = progress ?? base;
   const scale = interpolate(t, [0, 1], zoom, clampOpts);
@@ -48,6 +50,7 @@ export const ShotScene: FC<{
           height: '100%',
           objectFit: 'cover',
           transform: `scale(${scale}) translate(${x}px, ${y}px)`,
+          filter: grade,
         }}
       />
       {warm > 0 ? <AbsoluteFill style={{ background: '#e9d9ae', mixBlendMode: 'soft-light', opacity: warm }} /> : null}

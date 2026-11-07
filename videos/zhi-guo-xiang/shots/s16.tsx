@@ -18,6 +18,7 @@ import { ShotScene } from '../components/e-scene';
 import { Caption } from '../components/Caption';
 import { A_Fireworks, CloudGlow, type FireworkBurst } from '../components/a-fireworks';
 import { WarmBloom } from '../components/e-firelight';
+import { LightWash } from '../components/LightWash';
 import { DustField } from '../components/DustField';
 import { CLAMP, FILM } from '../motion-tokens';
 
@@ -54,13 +55,12 @@ const S17: FC = () => {
           pointerEvents: 'none',
         }}
       />
-      {/* ①b 边缘收暗（长焦的暗角），她那一侧留亮 */}
-      <AbsoluteFill
-        style={{
-          background: 'radial-gradient(ellipse 92% 86% at 62% 44%, transparent 34%, rgba(16,21,28,0.6) 100%)',
-          mixBlendMode: 'multiply',
-          pointerEvents: 'none',
-        }}
+      {/* ①b 边缘收暗（长焦的暗角），她那一侧留亮（由 LightWash 铺一层，参数照抄） */}
+      <LightWash
+        shape="ellipse 92% 86% at 62% 44%"
+        stops={[['transparent', 34], ['rgba(16,21,28,0.6)', 100]]}
+        strength={1}
+        blend="multiply"
       />
 
       {/* ④ 云被由下往上照亮 */}

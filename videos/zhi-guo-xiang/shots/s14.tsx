@@ -16,6 +16,7 @@ import { AbsoluteFill, useCurrentFrame } from 'remotion';
 import { ShotScene } from '../components/e-scene';
 import { Caption } from '../components/Caption';
 import { FireLine, WarmBloom } from '../components/e-firelight';
+import { LightWash } from '../components/LightWash';
 import { EmberField } from '../components/e-emberfield';
 import { GroundMist } from '../components/c-fog';
 import { DustField } from '../components/DustField';
@@ -49,12 +50,11 @@ const S15: FC = () => {
           pointerEvents: 'none',
         }}
       />
-      <AbsoluteFill
-        style={{
-          background: 'radial-gradient(ellipse 84% 80% at 50% 56%, transparent 46%, rgba(24,29,36,0.36) 100%)',
-          mixBlendMode: 'multiply',
-          pointerEvents: 'none',
-        }}
+      <LightWash
+        shape="ellipse 84% 80% at 50% 56%"
+        stops={[['transparent', 46], ['rgba(24,29,36,0.36)', 100]]}
+        strength={1}
+        blend="multiply"
       />
       <Caption cue="s14" tone="paper" />
     </ShotScene>

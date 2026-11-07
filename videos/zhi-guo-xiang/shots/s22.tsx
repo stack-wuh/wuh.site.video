@@ -14,6 +14,7 @@ import { ShotScene } from '../components/e-scene';
 import { Caption } from '../components/Caption';
 import { CloudDrift } from '../components/f-clouddrift';
 import { InkBloom } from '../components/InkBloom';
+import { useBreath } from '../components/use-breath';
 import { FILM } from '../motion-tokens';
 import { DustField } from '../components/DustField';
 
@@ -22,8 +23,8 @@ const TOTAL = 210;
 
 const S23: FC = () => {
   const f = useCurrentFrame();
-  /* 针尖的呼吸：很慢的一条正弦，只改亮度不改位置 */
-  const breath = 0.5 + 0.5 * Math.sin((f / 100) * Math.PI * 2);
+  /* 针尖的呼吸：很慢的一条正弦（周期 100f），只改亮度不改位置 */
+  const breath = useBreath(100);
   return (
   <ShotScene name="p-needle-third" total={TOTAL} frame={f} zoom={[1.0, 1.04]} dim={0.02}>
     <CloudDrift seed="s23-fog" count={5} intensity={0.5} band={[0.05, 0.92]} speed={0.22} dark={0.055} />

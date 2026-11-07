@@ -13,12 +13,14 @@
  * 墨点会从纸面上滑走；光尘不缩放（尘在空气里，不在纸上）。
  */
 import type { FC } from 'react';
-import { AbsoluteFill, interpolate, useCurrentFrame } from 'remotion';
+import {interpolate, useCurrentFrame} from 'remotion';
 import { colors } from '../../../brand/tokens';
 import { ShotScene } from '../components/e-scene';
 import { Caption } from '../components/Caption';
+import { useBreathBetween } from '../components/use-breath';
 import { DustField } from '../components/DustField';
 import { InkBloom } from '../components/InkBloom';
+import { LightWash } from '../components/LightWash';
 import { CLAMP, CURVES } from '../motion-tokens';
 
 /** 抄本最上面那页的左前角（1920×1080，量自 p-copy：那处纸边本来就翘着）：风掀的就是这一角。 */
@@ -42,7 +44,7 @@ const S35: FC = () => {
   /* 落笔：112f × k 起，墨在纸上洇 28f × k */
   const touch = interpolate(f, [112 * k, 140 * k], [0, 1], CLAMP);
   /* 案头暖光呼吸（灯不在画里，只有光） */
-  const warm = 0.035 + 0.012 * Math.sin((f / 96) * Math.PI * 2);
+  const warm = useBreathBetween(0.023, 0.047, 96);
 
   return (
     <ShotScene name="p-copy" total={TOTAL} frame={f} zoom={[1.0, 1.06]} warm={warm} dim={0.02}>
@@ -59,33 +61,21 @@ const S35: FC = () => {
         {/* 风掀纸角：角上反光 + 抬起来那一角投在案面上的软影（没有一块三角形） */}
         {lift > 0.01 ? (
           <>
-            <div
-              style={{
-                position: 'absolute',
-                left: CURL.x - 190 - lift * 12,
-                top: CURL.y - 150 - lift * 8,
-                width: 420,
-                height: 330,
-                borderRadius: '50%',
-                background: `radial-gradient(ellipse at 54% 50%, ${colors.paper} 0%, transparent 66%)`,
-                mixBlendMode: 'screen',
-                opacity: 0.15 * lift,
-                filter: 'blur(6px)',
-              }}
+            <LightWash
+              box={{ left: CURL.x - 190 - lift * 12, top: CURL.y - 150 - lift * 8, width: 420, height: 330, radius: '50%' }}
+              shape="ellipse at 54% 50%"
+              stops={[[colors.paper, 0], ['transparent', 66]]}
+              strength={0.15 * lift}
+              blur={6}
+              blend="screen"
             />
-            <div
-              style={{
-                position: 'absolute',
-                left: CURL.x - 250 - lift * 16,
-                top: CURL.y - 90 + lift * 10,
-                width: 300,
-                height: 380,
-                borderRadius: '50%',
-                background: `radial-gradient(ellipse at 62% 52%, ${colors.ink} 0%, transparent 68%)`,
-                mixBlendMode: 'multiply',
-                opacity: 0.26 * lift,
-                filter: 'blur(10px)',
-              }}
+            <LightWash
+              box={{ left: CURL.x - 250 - lift * 16, top: CURL.y - 90 + lift * 10, width: 300, height: 380, radius: '50%' }}
+              shape="ellipse at 62% 52%"
+              stops={[[colors.ink, 0], ['transparent', 68]]}
+              strength={0.26 * lift}
+              blur={10}
+              blend="multiply"
             />
           </>
         ) : null}

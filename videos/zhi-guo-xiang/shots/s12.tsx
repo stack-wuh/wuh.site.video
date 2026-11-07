@@ -16,6 +16,7 @@ import { Caption } from '../components/Caption';
 import { WaveField } from '../components/WaveField';
 import { MistFlow } from '../components/b-mistflow';
 import { WarmBloom } from '../components/e-firelight';
+import { LightWash } from '../components/LightWash';
 import { DustField } from '../components/DustField';
 
 const TOTAL = 210;
@@ -42,12 +43,11 @@ const S13: FC = () => {
           pointerEvents: 'none',
         }}
       />
-      <AbsoluteFill
-        style={{
-          background: 'radial-gradient(ellipse 86% 82% at 52% 56%, transparent 46%, rgba(24,29,36,0.32) 100%)',
-          mixBlendMode: 'multiply',
-          pointerEvents: 'none',
-        }}
+      <LightWash
+        shape="ellipse 86% 82% at 52% 56%"
+        stops={[['transparent', 46], ['rgba(24,29,36,0.32)', 100]]}
+        strength={1}
+        blend="multiply"
       />
       <Caption cue="s12" tone="paper" />
     </ShotScene>

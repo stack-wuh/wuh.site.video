@@ -10,6 +10,7 @@ import type { FC } from 'react';
 import { interpolate, useCurrentFrame } from 'remotion';
 import { ShotScene } from '../components/e-scene';
 import { Caption } from '../components/Caption';
+import { useBreath } from '../components/use-breath';
 import { CLAMP } from '../motion-tokens';
 
 /** 本镜时长（manifest durationFrames——ShotScene 用它算推拉进度，不读 useVideoConfig） */
@@ -18,7 +19,7 @@ const TOTAL = 210;
 const S32: FC = () => {
   const f = useCurrentFrame();
   /* 灯火呼吸：极浅，只在 0.012 的幅度里，避免变成「特效」 */
-  const breathe = 0.5 + 0.5 * Math.sin((f / Math.max(1, TOTAL)) * Math.PI * 2 * 0.5);
+  const breathe = useBreath(TOTAL / 0.5);
   const dim = interpolate(breathe, [0, 1], [0.014, 0.004], CLAMP);
   return (
     <ShotScene name="p-sword-case" total={TOTAL} frame={f} zoom={[1.0, 1.03]} warm={0.03} dim={dim}>

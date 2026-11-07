@@ -31,8 +31,10 @@ export const WarmBloom: FC<{
   /** 形状：圆 / 横躺的椭圆（火塘、被照亮的一带） */
   squash?: number;
   blur?: number;
+  /** 渐变收口位置（%）：这是各镜手写 `transparent 66%/64%` 时唯一会飘的数，显式传才像素一致 */
+  edge?: number;
   style?: CSSProperties;
-}> = ({ at, r, opacity, period = 48, phase = 0, breath = 0.35, color = FILM.fireGold, squash = 1, blur = 30, style }) => {
+}> = ({ at, r, opacity, period = 48, phase = 0, breath = 0.35, color = FILM.fireGold, squash = 1, blur = 30, edge = 68, style }) => {
   const f = useCurrentFrame();
   const b = 1 - breath + breath * (0.5 + 0.5 * Math.sin((f / period) * TAU + phase));
   if (opacity * b <= 0.004) return null;
@@ -45,7 +47,7 @@ export const WarmBloom: FC<{
         width: r * 2,
         height: r * 2 * squash,
         borderRadius: '50%',
-        background: `radial-gradient(ellipse 50% 50% at 50% 50%, ${color} 0%, transparent 68%)`,
+        background: `radial-gradient(ellipse 50% 50% at 50% 50%, ${color} 0%, transparent ${edge}%)`,
         opacity: opacity * b,
         filter: `blur(${blur}px)`,
         mixBlendMode: 'screen',

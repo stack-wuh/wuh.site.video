@@ -16,6 +16,7 @@ import { AbsoluteFill, useCurrentFrame } from 'remotion';
 import { ShotScene } from '../components/e-scene';
 import { Caption } from '../components/Caption';
 import { FireLine, WarmBloom } from '../components/e-firelight';
+import { LightWash } from '../components/LightWash';
 import { GroundMist } from '../components/c-fog';
 import { DustField } from '../components/DustField';
 
@@ -55,13 +56,12 @@ const S08: FC = () => {
       <GroundMist seedBase="s08" y={860} drift={-0.8} opacity={0.6} />
       <DustField act={2} count={14} seedBase="s08-night" wind={-8} />
 
-      {/* 角晕 */}
-      <AbsoluteFill
-        style={{
-          background: 'radial-gradient(ellipse 80% 76% at 54% 52%, transparent 48%, rgba(24,29,36,0.42) 100%)',
-          mixBlendMode: 'multiply',
-          pointerEvents: 'none',
-        }}
+      {/* 角晕（由 LightWash 铺一层，参数照抄） */}
+      <LightWash
+        shape="ellipse 80% 76% at 54% 52%"
+        stops={[['transparent', 48], ['rgba(24,29,36,0.42)', 100]]}
+        strength={1}
+        blend="multiply"
       />
       <Caption cue="s08" tone="paper" />
     </ShotScene>

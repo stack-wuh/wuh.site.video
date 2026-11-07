@@ -14,9 +14,8 @@
  * 底图人物/毛驴已在画里，本镜不叠第二个人、第二头驴。随机全部走 random(seed)（组件内部）。
  */
 import type { FC } from 'react';
-import { AbsoluteFill, Img, interpolate, staticFile, useCurrentFrame } from 'remotion';
-import { colors } from '../../../brand/tokens';
-import { InkGrade } from '../components/SceneKit';
+import { AbsoluteFill, interpolate, useCurrentFrame } from 'remotion';
+import { ShotScene } from '../components/e-scene';
 import { Caption } from '../components/Caption';
 import { DustField } from '../components/DustField';
 import { MistFlow } from '../components/b-mistflow';
@@ -46,7 +45,6 @@ const S27: FC = () => {
 
   /* 150f 起极缓后拉；三拍期间定在 1.08 = 同一构图 */
   const pull = interpolate(f, [150, TOTAL - 1], [0, 1], EASE);
-  const scale = 1.08 - 0.08 * pull;
 
   /* 底图逐拍调色：冬去饱和、秋 sepia 暖、春略提亮——比只叠一层色雾更容易一眼读出来 */
   const saturate = 1 - 0.46 * winter - 0.06 * spring - 0.1 * autumn;
@@ -59,20 +57,7 @@ const S27: FC = () => {
   const reedGrow = interpolate(f, [128, 160], [0.25, 1], EASE);
 
   return (
-    <AbsoluteFill style={{ background: colors.paper, overflow: 'hidden' }}>
-      <Img
-        src={staticFile(`zhi-guo-xiang/scene/${BASE}.jpg`)}
-        style={{
-          position: 'absolute',
-          inset: 0,
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover',
-          transform: `scale(${scale})`,
-          filter: grade,
-        }}
-      />
-      <InkGrade />
+    <ShotScene name={BASE} total={TOTAL} frame={f} zoom={[1.08, 1.0]} progress={pull} grade={grade}>
 
       <SeasonVeil spring={spring} winter={winter} autumn={autumn} exposure={flashUp - flashDown} />
 
@@ -95,7 +80,7 @@ const S27: FC = () => {
       {autumn > 0.02 ? <Reeds seed="s27-reeds" opacity={Math.min(1, autumn)} grow={reedGrow} /> : null}
 
       <Caption cue="s26" tone="ink" />
-    </AbsoluteFill>
+    </ShotScene>
   );
 };
 

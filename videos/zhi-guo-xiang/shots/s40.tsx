@@ -7,9 +7,10 @@
  * 镜头：空镜·固定（1.0 → 1.02）。末镜 outbound 记「切」，镜内不做淡出。
  */
 import type { FC } from 'react';
-import { AbsoluteFill, interpolate, useCurrentFrame } from 'remotion';
+import {interpolate, useCurrentFrame} from 'remotion';
 import { ShotScene } from '../components/e-scene';
 import { Caption } from '../components/Caption';
+import { LightWash } from '../components/LightWash';
 import { WaveField } from '../components/WaveField';
 import { FILM, CLAMP } from '../motion-tokens';
 
@@ -23,7 +24,7 @@ const S41: FC = () => {
   return (
     <ShotScene name="p-sea" total={TOTAL} frame={f} zoom={[1.0, 1.02]} warm={0.01}>
       <WaveField seed="s41-sea" band={[0.66, 1.0]} amp={6} speed={0.08} opacity={0.26} rows={10} />
-      <AbsoluteFill style={{ pointerEvents: 'none', mixBlendMode: 'screen', background: FILM.snowCyan, opacity: cool }} />
+      <LightWash type="solid" stops={[[FILM.snowCyan, 0]]} strength={cool} blend="screen" />
       <Caption cue="s40" tone="ink" />
     </ShotScene>
   );

@@ -11,10 +11,12 @@
  * 转场：入「墨洇」，出「墨洇」。
  */
 import type { FC } from 'react';
-import { AbsoluteFill, useCurrentFrame } from 'remotion';
+import { useCurrentFrame } from 'remotion';
 import { ShotScene } from '../components/e-scene';
 import { Caption } from '../components/Caption';
 import { WarmBloom, RimLight } from '../components/e-firelight';
+import { LightWash } from '../components/LightWash';
+import { useBreath } from '../components/use-breath';
 import { EmberField } from '../components/e-emberfield';
 import { DustField } from '../components/DustField';
 
@@ -24,11 +26,10 @@ const BACKLIGHT = { x: 1380, y: 520 };
 /** 轮廓金边贴的那条线（近后脑—肩—右袖一侧） */
 const RIM = { x: 1108, y: 470 };
 
-const TAU = Math.PI * 2;
-
 const S10: FC = () => {
   const f = useCurrentFrame();
-  const flick = 0.82 + 0.18 * Math.sin((f / 32) * TAU);
+  /* 火的抖动：0.82 + 0.18·sin 就是深度 0.36 的呼吸，周期 32f 不变 */
+  const flick = useBreath(32, 0, 0.36);
 
   return (
     <ShotScene name="p-masked-man" total={TOTAL} frame={f} zoom={[1.0, 1.06]} dim={0.02}>
@@ -45,13 +46,12 @@ const S10: FC = () => {
       <EmberField seedBase="s10" at={{ x: 1200, y: 1120 }} spread={880} rise={630} count={11} period={140} sizeBase={0.9} opacity={0.75} windX={-0.05} />
       <DustField act={3} count={16} seedBase="s10-firelight" wind={4} />
 
-      {/* 角晕：把剪影压到画中间 */}
-      <AbsoluteFill
-        style={{
-          background: 'radial-gradient(ellipse 78% 74% at 56% 50%, transparent 44%, rgba(24,29,36,0.45) 100%)',
-          mixBlendMode: 'multiply',
-          pointerEvents: 'none',
-        }}
+      {/* 角晕：把剪影压到画中间（由 LightWash 铺一层，参数照抄） */}
+      <LightWash
+        shape="ellipse 78% 74% at 56% 50%"
+        stops={[['transparent', 44], ['rgba(24,29,36,0.45)', 100]]}
+        strength={1}
+        blend="multiply"
       />
       <Caption cue="s10" tone="paper" />
     </ShotScene>

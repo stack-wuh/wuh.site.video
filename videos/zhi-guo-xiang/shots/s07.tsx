@@ -17,6 +17,8 @@ import { colors } from '../../../brand/tokens';
 import { ShotScene } from '../components/e-scene';
 import { Caption } from '../components/Caption';
 import { WarmBloom } from '../components/e-firelight';
+import { LightWash } from '../components/LightWash';
+import { useBreath } from '../components/use-breath';
 import { EmberField } from '../components/e-emberfield';
 import { CLAMP, FILM } from '../motion-tokens';
 
@@ -27,23 +29,20 @@ const PUPILS = [
   { x: 919, y: 419 },
 ] as const;
 
-const TAU = Math.PI * 2;
-
 const S07: FC = () => {
   const f = useCurrentFrame();
-  /* 抬眼：52–74f 瞳光亮到峰；之后按火光频率抖 */
+  /* 抬眼：52–74f 瞳光亮到峰；之后按火光频率抖（0.78 + 0.22·sin = 深度 0.44 的呼吸） */
   const lift = interpolate(f, [52, 74], [0, 1], { ...CLAMP, easing: (t) => t * t * (3 - 2 * t) });
-  const flick = 0.78 + 0.22 * Math.sin((f / 24) * TAU);
+  const flick = useBreath(24, 0, 0.44);
 
   return (
     <ShotScene name="p-eyefire" total={TOTAL} frame={f} zoom={[1.02, 1.09]} driftY={[4, -4]} dim={0.18}>
-      {/* ① 暗部：外圈吃掉，只留眼周 */}
-      <AbsoluteFill
-        style={{
-          background: 'radial-gradient(ellipse 36% 30% at 43% 40%, rgba(43,38,32,0) 0%, rgba(43,38,32,0.62) 58%, rgba(43,38,32,0.9) 100%)',
-          mixBlendMode: 'multiply',
-          pointerEvents: 'none',
-        }}
+      {/* ① 暗部：外圈吃掉，只留眼周（由 LightWash 铺一层，三段色标照抄） */}
+      <LightWash
+        shape="ellipse 36% 30% at 43% 40%"
+        stops={[['rgba(43,38,32,0)', 0], ['rgba(43,38,32,0.62)', 58], ['rgba(43,38,32,0.9)', 100]]}
+        strength={1}
+        blend="multiply"
       />
       {/* ①b 上缘再压一道：客栈屋顶在头顶，暗从上面来 */}
       <AbsoluteFill
@@ -144,13 +143,12 @@ const S07: FC = () => {
         }}
       />
 
-      {/* 角晕：把她从客栈的背景里拔出来 */}
-      <AbsoluteFill
-        style={{
-          background: 'radial-gradient(ellipse 74% 70% at 46% 44%, transparent 40%, rgba(43,38,32,0.56) 100%)',
-          mixBlendMode: 'multiply',
-          pointerEvents: 'none',
-        }}
+      {/* 角晕：把她从客栈的背景里拔出来（由 LightWash 铺一层，参数照抄） */}
+      <LightWash
+        shape="ellipse 74% 70% at 46% 44%"
+        stops={[['transparent', 40], ['rgba(43,38,32,0.56)', 100]]}
+        strength={1}
+        blend="multiply"
       />
       <Caption cue="s07" tone="paper" />
     </ShotScene>

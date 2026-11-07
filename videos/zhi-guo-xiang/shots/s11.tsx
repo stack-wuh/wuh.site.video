@@ -17,6 +17,7 @@ import { colors } from '../../../brand/tokens';
 import { ShotScene } from '../components/e-scene';
 import { Caption } from '../components/Caption';
 import { LocalMist } from '../components/c-fog';
+import { LightWash } from '../components/LightWash';
 import { DustField } from '../components/DustField';
 import { CLAMP, CURVES } from '../motion-tokens';
 
@@ -77,14 +78,12 @@ const S11: FC = () => {
           pointerEvents: 'none',
         }}
       />
-      {/* ①c 洗掉脸：一层纸色从面具位置泛开（不画五官，只让五官读不出来） */}
-      <AbsoluteFill
-        style={{
-          background: `radial-gradient(ellipse 27% 22% at ${(MASK.x / 1920) * 100}% ${(MASK.y / 1080) * 100}%, rgba(245,240,232,0.9) 0%, rgba(245,240,232,0.38) 46%, transparent 76%)`,
-          opacity: 0.08 + 0.22 * grow,
-          mixBlendMode: 'screen',
-          pointerEvents: 'none',
-        }}
+      {/* ①c 洗掉脸：一层纸色从面具位置泛开（不画五官，只让五官读不出来；由 LightWash 铺一层） */}
+      <LightWash
+        shape={`ellipse 27% 22% at ${(MASK.x / 1920) * 100}% ${(MASK.y / 1080) * 100}%`}
+        stops={[['rgba(245,240,232,0.9)', 0], ['rgba(245,240,232,0.38)', 46], ['transparent', 76]]}
+        strength={0.08 + 0.22 * grow}
+        blend="screen"
       />
 
       {/* ② 两人之间的雾（湿接） */}

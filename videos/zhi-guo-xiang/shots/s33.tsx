@@ -11,11 +11,13 @@
  * 镜头：微距·俯，1.0 → 1.045，慢到像呼吸。
  */
 import type { FC } from 'react';
-import { AbsoluteFill, interpolate, useCurrentFrame } from 'remotion';
+import {interpolate, useCurrentFrame} from 'remotion';
 import { colors } from '../../../brand/tokens';
 import { ShotScene } from '../components/e-scene';
 import { Caption } from '../components/Caption';
 import { DustField } from '../components/DustField';
+import { LightWash } from '../components/LightWash';
+import { useBreath } from '../components/use-breath';
 import { FILM, CLAMP } from '../motion-tokens';
 
 /** 本镜时长（manifest durationFrames——ShotScene 用它算推拉进度，不读 useVideoConfig） */
@@ -23,27 +25,21 @@ const TOTAL = 210;
 
 const S34: FC = () => {
   const f = useCurrentFrame();
-  /* 灯焰呼吸：本镜 210f，走约 1.3 个来回；亮度只在 0.07–0.11 里走，不抢底图的暖纸 */
-  const breath = 0.5 + 0.5 * Math.sin((f / 150) * Math.PI * 2);
+  /* 灯焰呼吸（useBreath 150f）：本镜 210f，走约 1.3 个来回；亮度只在 0.07–0.11 里走，不抢底图的暖纸 */
+  const breath = useBreath(150);
   const glow = interpolate(breath, [0, 1], [0.07, 0.11], CLAMP);
 
   return (
     <ShotScene name="p-sutra" total={TOTAL} frame={f} zoom={[1.0, 1.045]} warm={0.04} dim={0.02}>
-      {/* 灯的光（灯不在画里）：从抄本受光的那一侧漫过来 */}
-      <AbsoluteFill style={{ pointerEvents: 'none', mixBlendMode: 'screen', opacity: glow }}>
-        <div
-          style={{
-            position: 'absolute',
-            left: 180,
-            top: 60,
-            width: 1180,
-            height: 900,
-            borderRadius: '50%',
-            background: `radial-gradient(ellipse at 38% 34%, ${FILM.fireGold} 0%, ${colors.gold} 34%, transparent 70%)`,
-            filter: 'blur(60px)',
-          }}
-        />
-      </AbsoluteFill>
+      {/* 灯的光（灯不在画里）：从抄本受光的那一侧漫过来 —— 盒子形态的 LightWash */}
+      <LightWash
+        box={{ left: 180, top: 60, width: 1180, height: 900, radius: '50%' }}
+        shape="ellipse at 38% 34%"
+        stops={[[FILM.fireGold, 0], [colors.gold, 34], ['transparent', 70]]}
+        strength={glow}
+        blur={60}
+        blend="screen"
+      />
       <DustField act={6} count={22} seedBase="s34-sutra" wind={3} />
       <Caption cue="s33" tone="ink" />
     </ShotScene>

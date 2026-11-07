@@ -8,10 +8,11 @@
  * 镜头：空镜·固定（1.0 → 1.025）。
  */
 import type { FC } from 'react';
-import { AbsoluteFill, interpolate, useCurrentFrame } from 'remotion';
+import {interpolate, useCurrentFrame} from 'remotion';
 import { colors } from '../../../brand/tokens';
 import { ShotScene } from '../components/e-scene';
 import { Caption } from '../components/Caption';
+import { LightWash } from '../components/LightWash';
 import { WaveField } from '../components/WaveField';
 import { FILM, CLAMP } from '../motion-tokens';
 
@@ -27,20 +28,15 @@ const S40: FC = () => {
     <ShotScene name="p-sea" total={TOTAL} frame={f} zoom={[1.0, 1.025]} warm={0.02}>
       <WaveField seed="s40-sea" band={[0.62, 1.0]} amp={8} speed={0.1} opacity={0.3} rows={12} />
       {/* 云霞那层金：贴着地平线的一条，不是全屏暖色 */}
-      <AbsoluteFill style={{ pointerEvents: 'none', mixBlendMode: 'screen' }}>
-        <div
-          style={{
-            position: 'absolute',
-            left: -60,
-            right: -60,
-            top: '52%',
-            height: '22%',
-            background: `linear-gradient(180deg, transparent 0%, ${colors.accent} 34%, ${FILM.fireGold} 58%, transparent 100%)`,
-            opacity: gold,
-            filter: 'blur(18px)',
-          }}
-        />
-      </AbsoluteFill>
+      <LightWash
+        type="linear"
+        angle={180}
+        box={{ left: -60, right: -60, top: '52%', height: '22%' }}
+        stops={[['transparent', 0], [colors.accent, 34], [FILM.fireGold, 58], ['transparent', 100]]}
+        strength={gold}
+        blur={18}
+        blend="screen"
+      />
       <Caption cue="s39" tone="ink" />
     </ShotScene>
   );

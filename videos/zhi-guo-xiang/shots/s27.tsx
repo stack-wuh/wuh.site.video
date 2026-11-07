@@ -10,9 +10,9 @@
  *     连痕迹也留不住。
  * 人物在底图里，本镜不叠第二个身影；随机全部走 random(seed)。 */
 import type { FC } from 'react';
-import { AbsoluteFill, Img, interpolate, staticFile, useCurrentFrame } from 'remotion';
+import { AbsoluteFill, interpolate, useCurrentFrame } from 'remotion';
 import { colors } from '../../../brand/tokens';
-import { InkGrade } from '../components/SceneKit';
+import { ShotScene } from '../components/e-scene';
 import { Caption } from '../components/Caption';
 import { FootprintTrail, footprintTrail } from '../components/b-footprints';
 import { MistFlow } from '../components/b-mistflow';
@@ -38,7 +38,6 @@ const S28: FC = () => {
 
   /* 极缓后拉：1.06 → 1.0（前 34f 先定住，让墨洇退完之后再动） */
   const pull = interpolate(f, [34, TOTAL - 1], [0, 1], EASE);
-  const scale = 1.06 - 0.06 * pull;
 
   /* 末 30f：新雪把最近两枚脚印盖住 */
   const cover = interpolate(f, [TOTAL - 30, TOTAL - 3], [0, 1], EASE);
@@ -46,19 +45,7 @@ const S28: FC = () => {
   const points = footprintTrail(TRAIL.from, TRAIL.ctrl, TRAIL.to, TRAIL.count, 's28-prints');
 
   return (
-    <AbsoluteFill style={{ background: colors.paper, overflow: 'hidden' }}>
-      <Img
-        src={staticFile(`zhi-guo-xiang/scene/${BASE}.jpg`)}
-        style={{
-          position: 'absolute',
-          inset: 0,
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover',
-          transform: `scale(${scale})`,
-        }}
-      />
-      <InkGrade />
+    <ShotScene name={BASE} total={TOTAL} frame={f} zoom={[1.06, 1.0]} progress={pull}>
 
       {/* 贴雪脊走的薄雾：只在雪面上浮，不遮人（她没有脸） */}
       <MistFlow seed="s28-mist" intensity={0.5} period={260} count={3} />
@@ -75,7 +62,7 @@ const S28: FC = () => {
       ) : null}
 
       <Caption cue="s27" tone="ink" />
-    </AbsoluteFill>
+    </ShotScene>
   );
 };
 

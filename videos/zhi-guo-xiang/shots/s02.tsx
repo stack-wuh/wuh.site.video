@@ -11,10 +11,11 @@
  * 转场：入「切」，出「切」。
  */
 import type { FC } from 'react';
-import { AbsoluteFill, useCurrentFrame } from 'remotion';
+import { useCurrentFrame } from 'remotion';
 import { PhotoPlate, INK_SUN } from '../components/e-photo';
 import { Caption } from '../components/Caption';
 import { WarmBloom } from '../components/e-firelight';
+import { LightWash } from '../components/LightWash';
 import { DustField } from '../components/DustField';
 
 const TOTAL = 210;
@@ -31,13 +32,12 @@ const S02: FC = () => {
       <WarmBloom at={{ x: INK_SUN.x * 1920, y: INK_SUN.y * 1080 }} r={340} squash={0.72} opacity={0.1} period={110} breath={0.4} blur={54} />
       {/* 逆光里的浮尘：极慢、极小，读作空气里的尘而不是粒子特效 */}
       <DustField act={1} count={14} seedBase="s02-motes" wind={3} />
-      {/* 极轻的角晕 */}
-      <AbsoluteFill
-        style={{
-          background: 'radial-gradient(ellipse 88% 84% at 55% 62%, transparent 52%, rgba(43,38,32,0.18) 100%)',
-          mixBlendMode: 'multiply',
-          pointerEvents: 'none',
-        }}
+      {/* 极轻的角晕（由 LightWash 铺一层，参数照抄原手写值） */}
+      <LightWash
+        shape="ellipse 88% 84% at 55% 62%"
+        stops={[['transparent', 52], ['rgba(43,38,32,0.18)', 100]]}
+        strength={1}
+        blend="multiply"
       />
       <Caption cue="s02" tone="paper" />
     </PhotoPlate>
