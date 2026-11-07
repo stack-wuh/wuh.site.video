@@ -1,32 +1,280 @@
 {
-  "$comment": "《致郭襄》创作历程片 · 素材片段清单（scripts/prep-making-of.mjs 的真源）。masters 键 = materials.md §2 的母带编号；segments 产段入 public/making-of-zhi-guo-xiang/segments/，一律无声、1080p30。换内容必升 version（-vN 纪律）。正式段表待剧本/分镜定稿后回填。",
+  "$comment": "《致郭襄》创作历程片 · 素材片段清单（scripts/prep-making-of.mjs 的真源）。masters 键 = materials.md §2 的母带编号；segments 产段入 public/making-of-zhi-guo-xiang/segments/，一律无声、1080p30。换内容必升 version（-vN 纪律）。段表 = storyboard v3 §五（2026-11-08 回填）；多段跳切镜按 a/b/c 子段。seg-v11-needle-hand 的 in–out 待 task-2 抽帧定位后回填重产。",
   "mastersDir": "~/Desktop/remotion",
   "masters": {
-    "M1": { "file": "2026110101-zhi-guo-xiang.mp4", "version": "v8", "frames": 7500, "duration": 250.0 },
-    "M2": { "file": "20261102000434-zhi-guo-xiang.mp4", "version": "中间版A", "frames": 7100, "duration": 236.666667 },
-    "M3": { "file": "20261102145146-zhi-guo-xiang.mp4", "version": "中间版B", "frames": 7100, "duration": 236.666667 },
-    "M4": { "file": "20261103010105-zhi-guo-xiang.mp4", "version": "v9", "frames": 7350, "duration": 245.0 },
-    "M5": { "file": "20261107041725-zhi-guo-xiang.mp4", "version": "v10", "frames": 7350, "duration": 245.0 },
-    "M6": { "file": "20261107044211-zhi-guo-xiang.mp4", "version": "v11", "frames": 9060, "duration": 302.0 },
-    "M7": { "file": "zhi-guo-xiang-animatic.mp4", "version": "animatic", "frames": 7500, "duration": 250.0 },
-    "M8": { "file": "v12-final/20261107082556-zhi-guo-xiang.mp4", "version": "v12", "frames": 9060, "duration": 302.0 }
+    "M1": {
+      "file": "2026110101-zhi-guo-xiang.mp4",
+      "version": "v8",
+      "frames": 7500,
+      "duration": 250
+    },
+    "M2": {
+      "file": "20261102000434-zhi-guo-xiang.mp4",
+      "version": "中间版A",
+      "frames": 7100,
+      "duration": 236.666667
+    },
+    "M3": {
+      "file": "20261102145146-zhi-guo-xiang.mp4",
+      "version": "中间版B",
+      "frames": 7100,
+      "duration": 236.666667
+    },
+    "M4": {
+      "file": "20261103010105-zhi-guo-xiang.mp4",
+      "version": "v9",
+      "frames": 7350,
+      "duration": 245
+    },
+    "M5": {
+      "file": "20261107041725-zhi-guo-xiang.mp4",
+      "version": "v10",
+      "frames": 7350,
+      "duration": 245
+    },
+    "M6": {
+      "file": "20261107044211-zhi-guo-xiang.mp4",
+      "version": "v11",
+      "frames": 9060,
+      "duration": 302
+    },
+    "M7": {
+      "file": "zhi-guo-xiang-animatic.mp4",
+      "version": "animatic",
+      "frames": 7500,
+      "duration": 250
+    },
+    "M8": {
+      "file": "v12-final/20261107082556-zhi-guo-xiang.mp4",
+      "version": "v12",
+      "frames": 9060,
+      "duration": 302
+    }
   },
   "segments": [
     {
       "id": "seg-evolution-v8-open",
       "master": "M1",
-      "in": 0.0,
-      "out": 8.0,
+      "in": 0,
+      "out": 8,
       "version": 1,
-      "note": "v8（52镜首渲）开场——演化快剪第一个画面态"
+      "note": "v8（52镜首渲）开场——s10 变速 0.8×（8s→10s=300f）"
     },
     {
       "id": "seg-animatic-open",
       "master": "M7",
-      "in": 0.0,
-      "out": 8.0,
+      "in": 0,
+      "out": 8,
       "version": 1,
-      "note": "前期 animatic 开场——与 v12 成品开场对置（先简后精）"
+      "note": "前期 animatic 开场——s08（195f 取前 6.5s）"
+    },
+    {
+      "id": "seg-evolution-reel-m1",
+      "master": "M1",
+      "in": 2,
+      "out": 2.933,
+      "version": 1,
+      "note": "s02 七态快闪第1态（各28f）"
+    },
+    {
+      "id": "seg-evolution-reel-m2",
+      "master": "M2",
+      "in": 2,
+      "out": 2.933,
+      "version": 1,
+      "note": "s02 第2态"
+    },
+    {
+      "id": "seg-evolution-reel-m3",
+      "master": "M3",
+      "in": 2,
+      "out": 2.933,
+      "version": 1,
+      "note": "s02 第3态"
+    },
+    {
+      "id": "seg-evolution-reel-m4",
+      "master": "M4",
+      "in": 2,
+      "out": 2.933,
+      "version": 1,
+      "note": "s02 第4态"
+    },
+    {
+      "id": "seg-evolution-reel-m5",
+      "master": "M5",
+      "in": 2,
+      "out": 2.933,
+      "version": 1,
+      "note": "s02 第5态"
+    },
+    {
+      "id": "seg-evolution-reel-m6",
+      "master": "M6",
+      "in": 2,
+      "out": 2.933,
+      "version": 1,
+      "note": "s02 第6态"
+    },
+    {
+      "id": "seg-evolution-reel-m7",
+      "master": "M7",
+      "in": 2,
+      "out": 2.933,
+      "version": 1,
+      "note": "s02 第7态"
+    },
+    {
+      "id": "seg-flash-a",
+      "master": "M2",
+      "in": 2,
+      "out": 2.667,
+      "version": 1,
+      "note": "s03 三连闪 a（各20f）"
+    },
+    {
+      "id": "seg-flash-b",
+      "master": "M3",
+      "in": 2,
+      "out": 2.667,
+      "version": 1,
+      "note": "s03 三连闪 b"
+    },
+    {
+      "id": "seg-flash-c",
+      "master": "M4",
+      "in": 2,
+      "out": 2.667,
+      "version": 1,
+      "note": "s03 三连闪 c"
+    },
+    {
+      "id": "seg-v8-open-cont",
+      "master": "M1",
+      "in": 10,
+      "out": 17,
+      "version": 1,
+      "note": "s12 M1 续放（7s=210f）"
+    },
+    {
+      "id": "seg-v8-mask",
+      "master": "M1",
+      "in": 74,
+      "out": 81,
+      "version": 1,
+      "note": "s13 面具段高光（7s=210f）"
+    },
+    {
+      "id": "seg-v12-needle-trilogy-a",
+      "master": "M8",
+      "in": 86,
+      "out": 88.5,
+      "version": 1,
+      "note": "s16 金针三连 a：揭面（2.5s=75f）"
+    },
+    {
+      "id": "seg-v12-needle-trilogy-b",
+      "master": "M8",
+      "in": 98,
+      "out": 100.5,
+      "version": 1,
+      "note": "s16 金针三连 b：生日"
+    },
+    {
+      "id": "seg-v12-needle-trilogy-c",
+      "master": "M8",
+      "in": 168,
+      "out": 170.5,
+      "version": 1,
+      "note": "s16 金针三连 c：第三针"
+    },
+    {
+      "id": "seg-v12-unmask",
+      "master": "M8",
+      "in": 86,
+      "out": 90,
+      "version": 1,
+      "note": "s17 揭面续（4s=120f）"
+    },
+    {
+      "id": "seg-v12-fengling-wanbeast-a",
+      "master": "M8",
+      "in": 32,
+      "out": 35.5,
+      "version": 1,
+      "note": "s19 双段跳切 a：风陵渡（3.5s，镜内取 2s）"
+    },
+    {
+      "id": "seg-v12-fengling-wanbeast-b",
+      "master": "M8",
+      "in": 78,
+      "out": 81.5,
+      "version": 1,
+      "note": "s19 双段跳切 b：万兽山庄"
+    },
+    {
+      "id": "seg-v11-needle-hand",
+      "master": "M6",
+      "in": 82.0,
+      "out": 90.0,
+      "version": 1,
+      "note": "s20/s21/s22 金针手镜（v11 原 S11，startFrame 2340/240f 整镜 8s；实测 M6 82.0–90.0s，git ce0fd7c 删镜）"
+    },
+    {
+      "id": "seg-v12-wanbeast-long",
+      "master": "M8",
+      "in": 78,
+      "out": 86.5,
+      "version": 1,
+      "note": "s24 万兽山庄扩段（8.5s=255f）；s22 对切 M8 侧"
+    },
+    {
+      "id": "seg-v12-third-needle",
+      "master": "M8",
+      "in": 168,
+      "out": 172,
+      "version": 1,
+      "note": "s27 TTS 段（4s=120f）"
+    },
+    {
+      "id": "seg-v12-real-voice-open",
+      "master": "M8",
+      "in": 4,
+      "out": 9,
+      "version": 1,
+      "note": "s31 真声开场段（5s=150f）"
+    },
+    {
+      "id": "seg-v12-fengling",
+      "master": "M8",
+      "in": 32,
+      "out": 34.5,
+      "version": 1,
+      "note": "s37 风陵渡（2.5s=75f）"
+    },
+    {
+      "id": "seg-v12-donkey",
+      "master": "M8",
+      "in": 196,
+      "out": 202,
+      "version": 1,
+      "note": "s38 青驴等待（6s=180f）"
+    },
+    {
+      "id": "seg-v12-poem",
+      "master": "M8",
+      "in": 244,
+      "out": 249.5,
+      "version": 1,
+      "note": "s39 诗行段（5.5s=165f）"
+    },
+    {
+      "id": "seg-v12-ending",
+      "master": "M8",
+      "in": 270,
+      "out": 278.5,
+      "version": 1,
+      "note": "s40 片尾念念（8.5s=255f）"
     }
   ]
 }
