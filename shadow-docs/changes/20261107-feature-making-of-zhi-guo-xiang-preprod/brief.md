@@ -4,7 +4,7 @@
   "name": "20261107-feature-making-of-zhi-guo-xiang-preprod",
   "type": "feature",
   "scope": "video-materials",
-  "status": "committed",
+  "status": "published",
   "baseBranch": "main",
   "branch": "feature/20261107-feature-making-of-zhi-guo-xiang-preprod",
   "files": [
@@ -30,8 +30,8 @@
   },
   "workflow": {
     "operation": null,
-    "checkpoint": "2f9992d617b11eac01ea61d20d04102bd87ed270",
-    "planHash": "9ce15bff09a0d9642181c87ffad2537ccb9f9f34a1218c2915d893b2326e649b",
+    "checkpoint": "pr:55",
+    "planHash": "b7a490db73f865977d70be8f6307078cb181f7245ff846563e829bc87b72fc57",
     "updatedAt": null,
     "lastError": null,
     "issuePlan": {
