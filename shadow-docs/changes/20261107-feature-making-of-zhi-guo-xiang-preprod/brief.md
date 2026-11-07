@@ -4,7 +4,7 @@
   "name": "20261107-feature-making-of-zhi-guo-xiang-preprod",
   "type": "feature",
   "scope": "video-materials",
-  "status": "published",
+  "status": "reviewed",
   "baseBranch": "main",
   "branch": "feature/20261107-feature-making-of-zhi-guo-xiang-preprod",
   "files": [
@@ -24,14 +24,14 @@
     "pullRequestUrl": "https://github.com/stack-wuh/wuh.site.video/pull/55"
   },
   "review": {
-    "conclusion": "pending",
-    "verifiedCommit": null,
-    "verifiedAt": null
+    "conclusion": "passed",
+    "verifiedCommit": "c5e986b160885ede59e3443838172cde51bb9d62",
+    "verifiedAt": "2026-11-07T15:51:48.341Z"
   },
   "workflow": {
     "operation": null,
     "checkpoint": "pr:55",
-    "planHash": "51b3b0b992a2ffcbbac3c9c17807d924d6c1ffa9df8c759707e54313be9dd15d",
+    "planHash": "9ce15bff09a0d9642181c87ffad2537ccb9f9f34a1218c2915d893b2326e649b",
     "updatedAt": null,
     "lastError": null,
     "issuePlan": {
@@ -45,11 +45,15 @@
     },
     "commit": {
       "files": [
-        "videos/making-of-zhi-guo-xiang/shots-manifest.json",
-        "videos/preprod-making-of-zhi-guo-xiang"
+        "shadow-docs/changes/20261107-feature-making-of-zhi-guo-xiang-preprod"
       ],
-      "message": "feat(video-materials): 历程片分镜 v2——增补生图审核环两镜（s22c/s22d）\n\n- 定稿意见落地：四·镜头也错了末尾增补 s22c（正脸四轮崩·MO-X-STAMP）/ s22d（剪影暗部主义对照卡），act5 900→1380f\n- 正片 7200→7680f（256s），全片 7980f（4:26），后续 15 镜起帧 +480，ANCHORS 同步\n- script.md 37 句 + 字数硬表 37/37 绿；storyboard v2 对账表闭合；motion-spec 41/41 覆盖 + MO-X-STAMP 令牌\n- manifest 与 shots-data 同源重生成（41 镜连续无缝对账）"
+      "message": "docs(shadow): 历程片前期 review passed——task-8 定稿收口（s22c/s22d 增补即定稿意见）\n\n- 用户裁定：animatic v2 定稿，merge 指令即定稿确认\n- 知识动作：更新 video-production-flow.md（内联预览页交付口径 + 混剪型单元接线，合并后落卡）"
     }
+  },
+  "knowledge": {
+    "action": "更新",
+    "target": "shadow-docs/knowledge/video-production-flow.md",
+    "reason": null
   }
 }
 ---
@@ -101,7 +105,7 @@
 - [x] animatic：new-video 脚手架生成 preprod 单元 + 单色简板（真实内容构图节拍）+ Root 注册 + CI 出片交用户定稿 — `videos/preprod-making-of-zhi-guo-xiang/`, `src/Root.tsx`
 
 ### Phase 3 评审收口
-- [ ] 用户 animatic 定稿；记录定稿意见与正式制作 change 的输入清单 — brief 本节
+- [x] 用户 animatic 定稿；记录定稿意见与正式制作 change 的输入清单 — brief 本节
 
 ## 结果
 
