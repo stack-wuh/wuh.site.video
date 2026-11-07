@@ -1,7 +1,7 @@
 ---
 title: 视频制作流程（前期五件套 → 正式制作 → 渲染出片）
 domain: video-materials
-keywords: [制作流程, 前期, 分镜, storyboard, motion-spec, animatic, 正式制作, 素材库, 分镜师, UE, 多代理, 多片, FilmShell, shell, 三段装配, 诗电影, 文学改编, character-design, 本地 BGM mux, unit, scope]
+keywords: [制作流程, 前期, 分镜, storyboard, motion-spec, animatic, 正式制作, 素材库, 分镜师, UE, 多代理, 多片, FilmShell, shell, 三段装配, 诗电影, 文学改编, character-design, 本地 BGM mux, unit, scope, 资产层, 资产登记表, asset-registry, 导演列, 尾帧, 字数硬表, 风格锚点, 定妆三视图, INV-S7]
 scope: [videos/, shadow-docs/knowledge/, scripts/, src/Root.tsx, .github/workflows/]
 status: active
 source:
@@ -10,9 +10,10 @@ source:
   - changes/20261031-feature-wuh-site-intro-v2-production/brief.md
   - changes/archive/20261101-feature-zhi-guo-xiang-preprod/brief.md
   - changes/20261101-feature-zhi-guo-xiang-production/brief.md
-verified: 2026-11-01
+  - changes/20261107-feature-asset-registry-shot-schema/brief.md
+verified: 2026-11-07
 verified-depth: runtime
-verified-scope: site-film《朝朝如念》4:00 成片全流程实证（素材库→分镜 45 镜→动效规范 108 令牌→animatic→正式制作→分段渲染出片）；2026-11-01 第二片 wuh-site-intro-v2 正式制作落地（57 镜 / 124 令牌 / FilmShell 三段装配 / render-film --unit + CI film 输入），本片出片待 CI 实证；2026-11-01 第三片《风陵·致郭襄》前期：52 镜 / 7200f、人物视觉设定、106 令牌 / 52×4 矩阵、animatic 7500f CI 出片（run 41260324683）、本地 BGM 4320 断点 mux 试听版；2026-11-01 第三片正式制作出片：52 镜一镜一文件 + 共享件整合，CI run 41270162934 全绿（bundle → 52 镜矩阵 → assemble），ffprobe 7500f / 250s，本地 mux 250s，断点静默实测 137.8–148.8s
+verified-scope: 2026-11-07 资产层机检落地（asset-registry.md 登记表 + 导演列解析 + 字数硬表 + INV-S7：fixture 六轮红绿拒绝路径 + site-film/wuh-site-intro-v2/zhi-guo-xiang 三单元双绿 + zhi-guo-xiang import 幂等 diff 为空；资产层生图生产流程本身待首片 runtime 实证）。site-film《朝朝如念》4:00 成片全流程实证（素材库→分镜 45 镜→动效规范 108 令牌→animatic→正式制作→分段渲染出片）；2026-11-01 第二片 wuh-site-intro-v2 正式制作落地（57 镜 / 124 令牌 / FilmShell 三段装配 / render-film --unit + CI film 输入），本片出片待 CI 实证；2026-11-01 第三片《风陵·致郭襄》前期：52 镜 / 7200f、人物视觉设定、106 令牌 / 52×4 矩阵、animatic 7500f CI 出片（run 41260324683）、本地 BGM 4320 断点 mux 试听版；2026-11-01 第三片正式制作出片：52 镜一镜一文件 + 共享件整合，CI run 41270162934 全绿（bundle → 52 镜矩阵 → assemble），ffprobe 7500f / 250s，本地 mux 250s，断点静默实测 137.8–148.8s
 ---
 
 # 视频制作流程（前期五件套 → 正式制作 → 渲染出片）
@@ -25,7 +26,8 @@ verified-scope: site-film《朝朝如念》4:00 成片全流程实证（素材�
    - 素材库 `materials.md`：全节真实素材全溯源（源码细节/API 数据/金句库），每条标注来源
    - 剧本 `script.md`：用户与编剧 subagent 对话定稿；叙事轴、幕结构、情绪曲线、全片文案（每处标素材编号）
    - 人物视觉设定 `character-design.md`：与分镜并行；剪影/服饰/物/面部等级/标准姿态
-   - 分镜脚本 `storyboard.md`：逐镜表（镜号/画面/镜头语言/文案/时长/转场/音效点）+ **帧数对账表**（各幕相加=总帧数）
+   - **资产层（2026-11-07 新增，与分镜并行）**：风格锚点（冻结风格块+参考机制三选一）→ 角色定妆图+正/侧/背三视图（身份锚：PuLID / --oref / 角色 LoRA 三选一）→ 场景空镜图（prompt 必写「无人物」）；产出登记进**资产登记表** `videos/preprod-<unit>/assets/asset-registry.md`（编号三型 C=角色 / S=场景 / P=底图·道具，文件 `∅`=未入库）——方法论基座见 shadow-dev-workflow 技能 `ai-director.md`
+   - 分镜脚本 `storyboard.md`：逐镜表（镜号/画面/镜头语言/文案/时长/转场/音效点）+ **导演列（2026-11-07：第 8 列「资产」= C/S/P 编号外键、第 9 列「尾帧」= 本镜结束停在哪；表头声明「资产外键」才激活，strictTransitions 同构）**+ **旁白字数硬表**（三锚点 (2.5s,20)/(5s,40)/(10s,82) 分段线性内插）+ **帧数对账表**（各幕相加=总帧数）
    - 动效规范 `motion-spec.md`：令牌化（曲线/弹性/镜头/粒子/转场/调色）+ **全镜覆盖矩阵**（每镜入场/持续/出场/转场必有令牌）
    - Animatic 分镜板：真实内容**单色简板**（非空框）预演节奏，用户定稿后进正式制作
 2. **正式制作**：令牌库先行（motion-tokens.ts 落地规范）→ 七幕场景实装 → 配乐多轨接线（90 BPM 对拍）→ 分段渲染出片
@@ -50,6 +52,14 @@ verified-scope: site-film《朝朝如念》4:00 成片全流程实证（素材�
 - **片头/片尾**：CI assemble 未跑成时，用 CI 的 `remotion-bundle` artifact + 本机 `@remotion/renderer` 的 `renderMedia({frameRange:[0,119] / [7170,7349]})` 补渲（本机 `npx remotion render` 会 exit 139，别用 CLI）。
 - **抽帧偏移**：成片帧号 = manifest 帧号 + FilmShell 片头 120f；按 manifest 直接抽帧会抽到前一镜。
 - **v10 出品**：38 镜 / 正片 7050f / 全片 7350f / 245.0s；转场 12 处非硬切；配音 v6（22 段 140.16s）+ mix v6（峰值 −1.0 dBFS、0 削波）。细节见 change brief 与 `design-v10.md`。
+
+## 资产层机检口径（2026-11-07 落地，shots.mjs）
+
+- **import 落 manifest 新字段**（表头声明「资产外键」的单元）：P 编号→`firstFrameAsset`（经登记表映射文件路径，∅ 引用落 null）、C→`characterIds`、S→`environmentId`（**每镜一场景**，多场景 import 拒绝）、尾帧→`endFrameDesc`
+- **import 只挡结构错误**：未登记编号（die）/多场景（die）/字数硬表（die）/字段不一致——∅ 引用与文件存在性**留给 check**，因为分镜（前期）先于资产生成（正式制作）是常态，animatic CI 依赖 manifest 先存在
+- **check 全量红**：引用 ∅ 资产、登记表非 ∅ 行文件不存在（全量查，不限被引用行）、firstFrameAsset 缺 `-vN` 版本后缀或文件不存在、字数超标——报错指名镜号与编号
+- **登记表即资产层待办**：首轮登记（致郭襄 v12）P 编号全部 `∅`，check 红到入库为止——这是特性不是缺陷
+- **引用即承诺已入库**；入库文件名必须带 `-vN` 后缀，**换图必升级版本号并同步改镜组件 `staticFile` 引用**（staticFile 资产不在镜级缓存键的 import 闭包内，只换内容不改引用=像素漂移）
 
 ## 执行约束
 
