@@ -39,11 +39,25 @@ export const Caption: FC<{
   if (!body || frame < from || frame > to) return null;
   const ink = tone === 'ink';
   const twoLines = hanzi(body) > 18;
-  const opacity = interpolate(frame, [from, from + 10, to - 12, to], [0, 1, 1, 0], {
+  /* 淡入/淡出窗自适应（2026-11-07）：
+   * 原先是写死 10f 进 / 12f 出 —— 一旦某条字幕短于 22f（比如 s35 那条只剩 18f），
+   * `to - 12` 就会小于 `from + 10`，inputRange 不再单调递增，Remotion 直接抛错、整镜报废。
+   * 现在按实际时长收缩（各占 30%，上限仍是 10/12，下限 3f），任何长度的字幕都不会再炸。 */
+  const span = to - from;
+  if (span < 4) return null; // 太短，宁可不显示，也不做一闪而过的字
+  let fadeIn = Math.max(2, Math.min(10, Math.round(span * 0.3)));
+  let fadeOut = Math.max(2, Math.min(12, Math.round(span * 0.3)));
+  /* 兜底：两段淡变加起来必须留出至少 1 帧的满亮度，否则区间仍会撞 */
+  const budget = Math.max(2, span - 1);
+  if (fadeIn + fadeOut > budget) {
+    fadeIn = Math.max(1, Math.floor(budget / 2));
+    fadeOut = Math.max(1, budget - fadeIn);
+  }
+  const opacity = interpolate(frame, [from, from + fadeIn, to - fadeOut, to], [0, 1, 1, 0], {
     extrapolateLeft: 'clamp',
     extrapolateRight: 'clamp',
   });
-  const lift = interpolate(frame, [from, from + 10], [2, 0], {
+  const lift = interpolate(frame, [from, from + fadeIn], [2, 0], {
     extrapolateLeft: 'clamp',
     extrapolateRight: 'clamp',
   });
