@@ -21,7 +21,7 @@ import { LocalMist } from '../components/c-fog';
 import { DustField } from '../components/DustField';
 import { CLAMP, CURVES } from '../motion-tokens';
 
-const TOTAL = 210;
+const TOTAL = 360;
 /** 面具 / 脸的位置（宽容取值：光是大圆，不追五官） */
 const MASK = { x: 1245, y: 252 };
 /** 两人之间的雾 */
@@ -30,12 +30,12 @@ const BETWEEN = { x: 900, y: 640 };
 const S12: FC = () => {
   const f = useCurrentFrame();
   /* ① 光的生长：64f 短闪，110f 撑满，之后缓慢再涨一点（不收回——脸不能再露出来） */
-  const flash = interpolate(f, [64, 70, 88], [0, 1, 0], CLAMP);
-  const grow = interpolate(f, [64, 130, TOTAL - 1], [0, 0.86, 1], { ...CLAMP, easing: CURVES.cineEaseOut });
+  const flash = interpolate(f, [110, 120, 151], [0, 1, 0], CLAMP);
+  const grow = interpolate(f, [110, 223, TOTAL - 1], [0, 0.86, 1], { ...CLAMP, easing: CURVES.cineEaseOut });
   const halo = 240 + 660 * grow;
   const core = 90 + 300 * grow;
   /* ② 雾：80f 后从两人之间长起来 */
-  const mist = interpolate(f, [80, 170], [0, 0.85], { ...CLAMP, easing: CURVES.cineEaseInOut });
+  const mist = interpolate(f, [137, 291], [0, 0.85], { ...CLAMP, easing: CURVES.cineEaseInOut });
 
   return (
     <ShotScene name="p-unmask-her" total={TOTAL} frame={f} zoom={[1.0, 1.05]} dim={0.03}>

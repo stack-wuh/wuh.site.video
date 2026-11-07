@@ -17,7 +17,7 @@ import { EmberField } from '../components/e-emberfield';
 import { GroundMist } from '../components/c-fog';
 import { DustField } from '../components/DustField';
 
-const TOTAL = 210;
+const TOTAL = 360;
 
 const S09: FC = () => {
   const f = useCurrentFrame();
