@@ -1,7 +1,27 @@
-/* S24 · 茶棚，她张了一下口；锣响；她把那碗茶喝完 210f */
+/* S24 · 华山一别（210f · 入「墨洇」）
+ *
+ * v12 分镜 Act 6：华山云海，他和小龙女的背影并肩走远，越来越小。底图 `p-huashan-farewell`。
+ * 两个人都在底图里，代码不叠人，只做两件「留不住」：
+ *   · CloudDrift —— 云海在走（灰影在白云上横向漂，speed 0.28：山里的云，慢）；
+ *   · 镜头极缓后拉（1.06 → 1.0）—— 画框往外让，他们被留在原地，越走越小。
+ */
 import type { FC } from 'react';
-import { Scene } from '../components/SceneKit';
+import { useCurrentFrame } from 'remotion';
+import { ShotScene } from '../components/e-scene';
+import { Caption } from '../components/Caption';
+import { CloudDrift } from '../components/f-clouddrift';
 
-const S24: FC = () => <Scene name="p-teastall" zoom={[1.0, 1.04]} dim={0.03} />;
+/** 本镜时长（manifest durationFrames——ShotScene 用它算推拉进度，不读 useVideoConfig） */
+const TOTAL = 210;
 
-export default S24;
+const S25: FC = () => {
+  const f = useCurrentFrame();
+  return (
+    <ShotScene name="p-huashan-farewell" total={TOTAL} frame={f} zoom={[1.06, 1.0]} warm={0.03}>
+    <CloudDrift seed="s25-cloud" count={7} intensity={0.9} band={[0.18, 0.99]} speed={0.28} />
+    <Caption cue="s24" tone="ink" />
+    </ShotScene>
+  );
+};
+
+export default S25;

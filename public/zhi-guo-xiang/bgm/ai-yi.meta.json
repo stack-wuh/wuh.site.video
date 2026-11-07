@@ -1,0 +1,26 @@
+{
+  "musicId": "424495709",
+  "musicName": "爱意 (金风玉露变奏)",
+  "artist": [
+    [
+      "陈致逸",
+      "963431"
+    ]
+  ],
+  "albumId": "3430405",
+  "album": "《天涯明月刀》游戏配乐 陈致逸",
+  "albumPicDocId": "109951172175189657",
+  "albumPic": "http://p3.music.126.net/DK-W8xxHAeQhFaGoHef7Gg==/109951172175189657.jpg",
+  "bitrate": 5999000,
+  "mp3DocId": "ed1daf9e78d9ccf0e2cc47ab4171497b",
+  "duration": 139459,
+  "mvId": "",
+  "alias": [],
+  "transNames": [],
+  "format": "flac",
+  "fee": 8,
+  "volumeDelta": -7.8168,
+  "privilege": {
+    "flag": 3637510
+  }
+}

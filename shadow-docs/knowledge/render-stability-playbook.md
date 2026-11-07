@@ -18,6 +18,14 @@ verified-scope: site-film 正式制作全天实战（十数小时渲染攻坚）
 
 ## 当前结论
 
+**渲染一律走 GitHub Actions，本机不跑渲染**（2026-11-04 用户定策）。成片、单镜、静帧/抽帧核对全部从 CI 拿像素；本机只保留版权 BGM 的 mux 与静态门（`shots.mjs check` / `typecheck` / `oxlint`）。
+
+- **出全片**：`gh workflow run render-film.yml --ref <分支> -f film=<unit>`
+- **改一镜看一帧**：`gh workflow run render-film.yml --ref <分支> -f film=<unit> -f shots="s10 s25 s29"`——`assemble` 条件是 `shots == ''`，子集跑只出镜级产物、不拼全片，一两分钟回结果
+- **抽帧**：`gh run download <runId> -n shot-s25 -D /tmp/ci` → `ffmpeg -y -i /tmp/ci/s25-*.mp4 -vf "select=eq(n\,120)" -vframes 1 /tmp/ci/s25-f120.png`
+
+理由：本机（Intel MBP 2019）段错误风暴 + Chrome 确定性崩溃，「本机调一镜看一帧」经常几十分钟拿不到一张图且无结果；CI 一镜一 job、互不牵连，一条命令就出图。下文「环境态」各条（端口僵尸、收敛梯、清场）只在**本机兜底路径**下才需要。
+
 本机渲染的坑分四类：**环境态**（端口/僵尸/风暴）、**代码逻辑**（帧号/引用/参数）、**流程纪律**（检查/验证/清理）、**装配工艺**（拼接/音轨/终装）。每条都是真实耗时点，按此卡逐个预防。
 
 ## 执行约束（坑位清单）
@@ -31,7 +39,7 @@ verified-scope: site-film 正式制作全天实战（十数小时渲染攻坚）
 ### 代码逻辑
 - **帧号双重偏移**：Sequence 挂载后 `useCurrentFrame()` 已是局部帧，场景内再减幕起点 → 整幕冻结在首镜、镜头错位。幕组件用局部帧；镜内动画一律 `frame - shotStart`。typecheck 抓不住，必须成片走查
 - **ReferenceError 漏网**：改 N 处引用必须 `grep` 清零；typecheck 必须跑出**明确绿/红**（静默失败=没验证，不算数）
-- **全屏动画 radial-gradient 崩溃**：动画的 `radial-gradient` + screen/soft-light 混合在本机 Chrome 确定性崩溃（Act3 红晕、Act7 光圈都栽过）。改用纯色 opacity 渐隐；样片级半透明渐变用 2-3 帧硬切
+- **全屏动画 radial-gradient 崩溃**：动画的 `radial-gradient` + screen/soft-light 混合在本机 Chrome 确定性崩溃（Act3 红晕、Act7 光圈都栽过）。改用纯色 opacity 渐隐；样片级半透明渐变用 2-3 帧硬切。**⚠️ 本条 superseded（仅本机 Chrome 专属）：2026-11-04 起渲染一律走 GitHub Actions ubuntu-24.04 + 完整 Chrome stable，本机不渲；且 `InkPaper.tsx:134` 生产里已用 `radial-gradient` + `blur()` 正常（s34 墨滴洇开）。v10 镜内转场（`ShotShell` 的墨洇）据此使用径向渐变遮罩，勿再按旧规打回硬切（design-v10 §3.5）。**
 - **Audio startFrom 超出曲长** → 尾段静音。`startFrom ≤ 曲长 − 段时长`；出片后 ffprobe 对比 video/audio 两路时长
 - **分段音量必须扫到片尾**（2026-11-01 wuh-site-intro-v2 r1 实证）：终章 `startFrom=8100` 越过 `lead.m4a` 实际曲长 224.6s，最后 46.9s 全静音；`volumedetect` 的 5s 窗必须覆盖到末帧（含片尾），末窗 mean_volume 不得 ≤ −80dB；`startFrom` 先按曲长校验再进编排，不能只看 ffprobe 两路时长（静音段不影响时长）
 - **`<Audio loop>` 的 `volume` 回调按轮重置**（2026-10-29 实证）：每轮循环音量从起点重新求值——循环点出现 1s 淡入凹陷（实测 15.5s 处 −28.7dB vs 稳态 −24.5dB），依赖序列末尾的淡出永不触发（末 30f 仍 −24.5dB）。对策：不用 loop；显式两遍播放（第一遍播满曲目、第二遍续播）+ 独立尾段 Sequence 做淡出，尾段 `startFrom = 主段帧数 % 曲目帧数`；音量曲线用 440Hz 测试音整片渲染 + 分段 `volumedetect` 验证

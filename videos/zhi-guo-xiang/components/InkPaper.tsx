@@ -4,6 +4,7 @@
 import type { FC, ReactNode } from 'react';
 import { AbsoluteFill, Img, interpolate, staticFile } from 'remotion';
 import { colors, fontFamilies } from '../../../brand/tokens';
+import { InkBloom } from './InkBloom';
 
 /** 诗六行。逐字不改。 */
 export const POEM = [
@@ -123,20 +124,7 @@ export const InkPaper: FC<InkPaperProps> = ({
       })}
       </AbsoluteFill>
       {blot > 0 && blotAt ? (
-        <div
-          style={{
-            position: 'absolute',
-            left: blotAt.x - (blotAt.r ?? size * 1.9) * blot,
-            top: blotAt.y - (blotAt.r ?? size * 1.9) * blot * 0.55,
-            width: (blotAt.r ?? size * 1.9) * 2 * blot,
-            height: (blotAt.r ?? size * 1.9) * 1.8 * blot,
-            borderRadius: '50%',
-            background: `radial-gradient(ellipse, ${colors.ink} 0%, rgba(24,21,18,0.85) 34%, rgba(24,21,18,0.22) 62%, transparent 76%)`,
-            filter: `blur(${1 + blot * 2.5}px)`,
-            mixBlendMode: 'multiply',
-            opacity: 0.95,
-          }}
-        />
+        <InkBloom progress={blot} at={blotAt} r={blotAt.r ?? size * 1.9} />
       ) : null}
       {children}
     </AbsoluteFill>

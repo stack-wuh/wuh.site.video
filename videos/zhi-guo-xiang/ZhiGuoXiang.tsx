@@ -20,11 +20,12 @@ const META: FilmMeta = {
 export const ZhiGuoXiang: FC = () => (
   <AbsoluteFill style={{ background: colors.bg }}>
     <FilmShell meta={META} contentFrames={manifest.totalFrames}>
-      {manifest.shots.map((s) => {
+      {manifest.shots.map((s, i) => {
         const Shot = shotRegistry[s.id];
+        const next = manifest.shots[i + 1];
         return (
           <Sequence key={s.id} from={s.startFrame} durationInFrames={s.durationFrames}>
-            <ShotShell>
+            <ShotShell in={s.transition} out={next?.transition} duration={s.durationFrames}>
               <Shot />
             </ShotShell>
           </Sequence>

@@ -10,9 +10,10 @@ import { manifest } from './shots/manifest';
 const shotRoute = (id: string): VideoRoute => {
   const entry = manifest.shots.find((s) => s.id === id);
   if (!entry) throw new Error(`manifest 缺镜 ${id}`);
+  const next = manifest.shots[manifest.shots.indexOf(entry) + 1];
   const Shot = shotRegistry[id];
   const ShotComposition: FC = () => (
-    <ShotShell>
+    <ShotShell in={entry.transition} out={next?.transition} duration={entry.durationFrames}>
       <Shot />
     </ShotShell>
   );
@@ -20,7 +21,7 @@ const shotRoute = (id: string): VideoRoute => {
 };
 
 export const zhiGuoXiangRoutes: VideoRoute[] = [
-  { id: 'ZhiGuoXiang', component: ZhiGuoXiang, durationInFrames: 7350 },
-  { id: 'ZhiGuoXiangAudio', component: ZhiGuoXiangAudio, durationInFrames: 7350 },
+  { id: 'ZhiGuoXiang', component: ZhiGuoXiang, durationInFrames: 9060 },
+  { id: 'ZhiGuoXiangAudio', component: ZhiGuoXiangAudio, durationInFrames: 9060 },
   ...manifest.shots.map((s) => shotRoute(s.id)),
 ];

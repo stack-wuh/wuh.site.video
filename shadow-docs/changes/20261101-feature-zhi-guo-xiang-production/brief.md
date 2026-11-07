@@ -4,13 +4,15 @@
   "name": "20261101-feature-zhi-guo-xiang-production",
   "type": "feature",
   "scope": "video-production",
-  "status": "published",
+  "status": "committed",
   "baseBranch": "main",
   "branch": "feature/20261101-feature-zhi-guo-xiang-production",
   "files": [
     ".github/workflows/render-film.yml",
-    "scripts/mux-bgm.mjs",
+    "public/zhi-guo-xiang",
+    "scripts",
     "shadow-docs/changes/20261101-feature-zhi-guo-xiang-production",
+    "shadow-docs/knowledge",
     "src/Root.tsx",
     "videos/zhi-guo-xiang"
   ],
@@ -18,104 +20,30 @@
     "repository": null,
     "issue": null,
     "issueUrl": null,
-    "pullRequest": 48,
-    "pullRequestUrl": "https://github.com/stack-wuh/wuh.site.video/pull/48"
+    "pullRequest": 50,
+    "pullRequestUrl": "https://github.com/stack-wuh/wuh.site.video/pull/50"
   },
   "review": {
-    "conclusion": "passed",
-    "verifiedCommit": "b4b8b406712f765c5248bdb07526e803b952ca56",
-    "verifiedAt": "2026-11-01T03:56:11.291Z"
+    "conclusion": "pending",
+    "verifiedCommit": null,
+    "verifiedAt": null
   },
   "workflow": {
     "operation": null,
-    "checkpoint": "pr:48",
-    "planHash": "1379493eaf17281a77af9838f9664fcbf93aed5af94714bad7655f3c00e87e8e",
+    "checkpoint": "7b81452afb1b89c9ca6a17523177f7ed5b744cc2",
+    "planHash": "4b991229aaf9d2ba7b82ce84bdcaf08ff286d8d8bd3413467f114dc9c747ba31",
     "updatedAt": null,
     "lastError": null,
     "worktree": "/Users/wuhong/shadow-desktop/github/wuh.site.video/.worktrees/20261101-feature-zhi-guo-xiang-production",
     "commit": {
       "files": [
-        "brand/ident/BrandIntro.tsx",
-        "public/zhi-guo-xiang/scene/p-ash.jpg",
-        "public/zhi-guo-xiang/scene/p-brush.jpg",
-        "public/zhi-guo-xiang/scene/p-citynight.jpg",
-        "public/zhi-guo-xiang/scene/p-daogu.jpg",
-        "public/zhi-guo-xiang/scene/p-drunk.jpg",
-        "public/zhi-guo-xiang/scene/p-eyefire.jpg",
-        "public/zhi-guo-xiang/scene/p-ferry.jpg",
-        "public/zhi-guo-xiang/scene/p-firecircle.jpg",
-        "public/zhi-guo-xiang/scene/p-footprints.jpg",
-        "public/zhi-guo-xiang/scene/p-her-up.jpg",
-        "public/zhi-guo-xiang/scene/p-high.jpg",
-        "public/zhi-guo-xiang/scene/p-him-ink.jpg",
-        "public/zhi-guo-xiang/scene/p-hoof.jpg",
-        "public/zhi-guo-xiang/scene/p-kids.jpg",
-        "public/zhi-guo-xiang/scene/p-lamp.jpg",
-        "public/zhi-guo-xiang/scene/p-morning.jpg",
-        "public/zhi-guo-xiang/scene/p-needle-look.jpg",
-        "public/zhi-guo-xiang/scene/p-noturn.jpg",
-        "public/zhi-guo-xiang/scene/p-palm.jpg",
-        "public/zhi-guo-xiang/scene/p-palm2.jpg",
-        "public/zhi-guo-xiang/scene/p-rescue.jpg",
-        "public/zhi-guo-xiang/scene/p-sea.jpg",
-        "public/zhi-guo-xiang/scene/p-sleeve.jpg",
-        "public/zhi-guo-xiang/scene/p-stall.jpg",
-        "public/zhi-guo-xiang/scene/p-sutra.jpg",
-        "public/zhi-guo-xiang/scene/p-teastall.jpg",
-        "public/zhi-guo-xiang/scene/p-window.jpg",
-        "public/zhi-guo-xiang/scene/p-xiang-sword-ferry.jpg",
-        "public/zhi-guo-xiang/scene/p-xiang-sword-road.jpg",
-        "scripts/mux-bgm.mjs",
-        "shadow-docs/changes/20261101-feature-zhi-guo-xiang-production/brief.md",
-        "videos/preprod-zhi-guo-xiang/assets/music.md",
-        "videos/preprod-zhi-guo-xiang/assets/storyboard.md",
+        "shadow-docs/changes/20261101-feature-zhi-guo-xiang-production/design-v10.md",
         "videos/zhi-guo-xiang/assets/art-direction.md",
+        "videos/zhi-guo-xiang/assets/bgm-ai-yi-map.md",
         "videos/zhi-guo-xiang/assets/script-v9.md",
-        "videos/zhi-guo-xiang/assets/storyboard-v9.md",
-        "videos/zhi-guo-xiang/components/Caption.tsx",
-        "videos/zhi-guo-xiang/routes.tsx",
-        "videos/zhi-guo-xiang/shots-manifest.json",
-        "videos/zhi-guo-xiang/shots/manifest.ts",
-        "videos/zhi-guo-xiang/shots/registry.ts",
-        "videos/zhi-guo-xiang/shots/s01.tsx",
-        "videos/zhi-guo-xiang/shots/s02.tsx",
-        "videos/zhi-guo-xiang/shots/s03.tsx",
-        "videos/zhi-guo-xiang/shots/s04.tsx",
-        "videos/zhi-guo-xiang/shots/s05.tsx",
-        "videos/zhi-guo-xiang/shots/s06.tsx",
-        "videos/zhi-guo-xiang/shots/s07.tsx",
-        "videos/zhi-guo-xiang/shots/s08.tsx",
-        "videos/zhi-guo-xiang/shots/s09.tsx",
-        "videos/zhi-guo-xiang/shots/s10.tsx",
-        "videos/zhi-guo-xiang/shots/s11.tsx",
-        "videos/zhi-guo-xiang/shots/s12.tsx",
-        "videos/zhi-guo-xiang/shots/s13.tsx",
-        "videos/zhi-guo-xiang/shots/s14.tsx",
-        "videos/zhi-guo-xiang/shots/s16.tsx",
-        "videos/zhi-guo-xiang/shots/s17.tsx",
-        "videos/zhi-guo-xiang/shots/s18.tsx",
-        "videos/zhi-guo-xiang/shots/s19.tsx",
-        "videos/zhi-guo-xiang/shots/s20.tsx",
-        "videos/zhi-guo-xiang/shots/s21.tsx",
-        "videos/zhi-guo-xiang/shots/s22.tsx",
-        "videos/zhi-guo-xiang/shots/s23.tsx",
-        "videos/zhi-guo-xiang/shots/s24.tsx",
-        "videos/zhi-guo-xiang/shots/s25.tsx",
-        "videos/zhi-guo-xiang/shots/s26.tsx",
-        "videos/zhi-guo-xiang/shots/s27.tsx",
-        "videos/zhi-guo-xiang/shots/s28.tsx",
-        "videos/zhi-guo-xiang/shots/s29.tsx",
-        "videos/zhi-guo-xiang/shots/s30.tsx",
-        "videos/zhi-guo-xiang/shots/s31.tsx",
-        "videos/zhi-guo-xiang/shots/s32.tsx",
-        "videos/zhi-guo-xiang/shots/s33.tsx",
-        "videos/zhi-guo-xiang/shots/s34.tsx",
-        "videos/zhi-guo-xiang/shots/s35.tsx",
-        "videos/zhi-guo-xiang/shots/s36.tsx",
-        "videos/zhi-guo-xiang/shots/s37.tsx",
-        "videos/zhi-guo-xiang/shots/s38.tsx"
+        "videos/zhi-guo-xiang/assets/storyboard-v9.md"
       ],
-      "message": "feat(zhi-guo-xiang): v9 剧本与 38 镜 · 全片底图统一水墨\n\n- 剧本 v9：新增「差一点」「拈针」两场，字幕压到 21 条只给事实，结尾改为「她写完了 / 这个故事，我讲完了」\n- 分镜 38 镜 · 7050 帧 · 4:05，镜头长度只有 5/6/7 秒三档\n- 全片三十张底图统一为宣纸淡墨；杨过永不给脸，郭襄只给三次\n- 字幕深浅按每张底图实测亮度逐张对齐\n- 配乐第二遍改为曲子 45.46–139.46s，结尾落在曲子自己的静默\n- 片头仍 120f，内部节拍重排：钤印尾巴从 0.67s 拉到 1.27s"
+      "message": "docs(script): v10 路 B 定调 —— 金针求揭面 · 面具回归 · 四席评审重写方案\n\n- S21 由「扎进落水者的穴道」（救人）改为「把唯一那枚递到他面前，求他取下面具」；补「剩下两枚此后再没动过」\n- 时间线自洽：那一夜一枚没用，寻访多年、每次都晚三天，直到唯一一次赶上才用掉 → S21 留在 act4 原位，S20 醒木↔S21 用针的「同一时刻」成立\n- §4.4 铁律理由改写：从「郭襄自己就没看见」→「她拿唯一一次机会换了一张脸，观众仍然不给；她看见了，我们没有」\n- 金针定义按原著更正（如见你面／托人持针传命），并修 script-v9 §3.2 的「凭此来找我」\n- S25「剩两枚」读法变为舍不得用，与 S26 戏眼「舍不得用掉那枚针」第一次呼应；S25/S29/b11 账目不动\n- art-direction 新增 §十二：面具回归形制、弃用 p-giving 改代码剪影、针位子集约束、手的统一规格、露脸双参考图、生图只认 wan2.7-image-pro、金针无针眼、南宋形制\n- 新增 design-v10.md（四席评审后重写版，含初稿 10 条事实错误留痕）"
     }
   },
   "knowledge": {
@@ -126,101 +54,125 @@
 }
 ---
 
-# 《风陵 · 致郭襄》正式制作：52 镜实装 · 106 令牌 · 三段装配 · 本地 BGM mux
+# 《风陵 · 致郭襄》v10 定稿：38 镜 · 7050f · 镜内转场 · 求揭面 · 配音 v6
 
 ## 动机
 
-前期五件套、人物视觉设定、动效规范与 animatic 已定稿并归档（PR #37、#39）。本 change 进入第二段：把 52 镜分镜照 106 令牌落成 Remotion 镜头文件，经 manifest 驱动装配成 FilmShell 7500f（片头 120 + 正片 7200 + 片尾 180），由 `render-film.yml` CI 出无声画面，再按 `music.md` 做本地 BGM mux，交用户验收。
+v9（38 镜 / 7050f）在四席评审（导演分镜 / 编剧 / 美术 / 声效）后暴露四处来源：剧本误写金针用途（S21 扎针救人 → 与 S25「剩两枚」账目冲突）、手不合人物、男声生硬、转场无设计。v10 按 `design-v10.md` 重写：路 B「第一枚·求揭面」、转场大幅收、杨过给背影、22 个空镜接线、配音 v6 与混音 v6，最后 CI 逐镜出片 + 本地 concat/mux 交片。
 
 ## 复杂度评级
 
 - **评级:** L
-- **理由:** 契约变更——新增生产单元 `videos/zhi-guo-xiang` 的 52 个镜头、106 令牌、FilmShell 装配、静默音轨与本地 BGM mux；触及面大（52 镜 + 装配 + 渲染链路）；可发现性高——`shots.mjs sync/check`、typecheck、CI 7500f ffprobe、本地 mux 250s 均可机检。
+- **理由:** 契约变更——分镜真源第 7 列转场进 manifest、ShotShell 镜内遮罩（帧数不变）、22 个空镜接线、S21 重做、S25 针位子集、配音 v6 重配与混音链路修坑；触及面大（38 镜 + 8 个共享件 + 5 个音频脚本）；可发现性高——`shots.mjs check`、typecheck、lint、CI 抽帧、ffprobe 帧数/时长、mix 峰值与余量表均可机检。
 - **期望验证深度:** runtime
 - **取证策略:** observation
 
 ## 领域模型
 
-- **限界上下文:** video-materials — 视频工程、品牌令牌、分镜组件与素材的唯一维护地。上游只读：已归档的 `preprod-zhi-guo-xiang` 五件套与 `music.md`；下游：B 站成片发布。反腐边界：不修改前期资产、不把版权音频提交进仓库。
+- **限界上下文:** video-materials — 视频工程、品牌令牌、分镜组件与素材的唯一维护地。上游只读：`preprod-zhi-guo-xiang` 的分镜真源；下游：B 站成片发布。反腐边界：不把版权 BGM 提交进仓库；自制旁白 wav 入库。
 - **统一语言增量:**
-  - **生产单元 `zhi-guo-xiang`**：`videos/zhi-guo-xiang/`，52 镜 + 令牌 + 装配 + 静默音轨；`shots-manifest.json` 为帧数真源。
-  - **标准背影 `AscendScene`**：4-4（S30）与 5-1（S31）共用的同一组件，各自 local 帧 0–239；第 239 帧像素差分 0。
-  - **本地 BGM mux**：成片保持无声；CI 出画面后按 `music.md` 在 4320 断点做两遍混音；音频不入仓。
+  - **生产单元 `zhi-guo-xiang`**：`videos/zhi-guo-xiang/`，38 镜 + 106 令牌 + 装配 + 静默音轨；`shots-manifest.json` 为帧数与转场真源。
+  - **镜内转场**：第 7 列 = 进入本镜的 inbound；`page` 纸翻 18f/侧、`dry` 飞白 10f、`ink` 墨洇 12f、`cut` 0；只在 ShotShell 首尾占用，`durationFrames`/`startFrame` 永不动。
+  - **求揭面 S21**：她终于赶上一次，把唯一那枚金针递到他面前求取下面具；他抬手到面具为止、转身走进垭口雾里；针 112–145f 淡出，末 45f 她手还举着、针已不在。
+  - **针位子集**：S10/S25 同一底图 `p-palm2`、同一 zoom `[1.04,1.1]`、同一 `PALM2_NEEDLES` 真值；S25 `drop=0` 严格只少一枚。
+  - **配音 v6 / 混音 v6**：`lines.json` 22 段；`voice-track-v6.wav` 245.000s；`mix-v6.wav` = BGM 两遍（PASS2 零交叉 45.45754）+ 逐段实测 ducking + 人声；成片 245.0s。
 - **聚合与不变量:**
-  - `INV-1 生产单元`：`shots.mjs sync --unit zhi-guo-xiang` 生成 52 镜 manifest/registry/routes；正片 7200f；Composition `ZhiGuoXiang` 与 `ZhiGuoXiangAudio` 均为 7500f（`totalFilmFrames(7200)`）。
-  - `INV-2 镜头实装`：52 个 `shots/sNN.tsx` 全部存在，local 帧 0 起；每个镜按分镜画面/镜头语言与动效矩阵令牌实装；零内联 hex/字体字面量（`brand/tokens` + `motion-tokens`）。
-  - `INV-3 装配`：FilmShell 120 + 7200 + 180 = 7500f；meta = 《风陵 · 致郭襄》/「四分钟武侠诗电影」/「网络流传 · 托名程灵素」；正片末帧 7199。
-  - `INV-4 重讲`：S30/S31 共用 `<AscendScene />`（无 props，各自 local 帧 0–239）；第 239 帧像素差分 0。
-  - `INV-5 原片`：`videos/site-film/`、`videos/self-intro/`、`videos/wuh-site-intro-v2/`、`videos/preprod-wuh-site-intro-v2/`、`videos/preprod-zhi-guo-xiang/` 零改动。
-  - `INV-6 音频`：成片与 CI 产物无声；`ZhiGuoXiangAudio` 不含 `<Audio>`；BGM 仅本地 mux，250s；音频不入仓。
-  - `INV-7 验证`：typecheck 绿；`shots.mjs check --unit zhi-guo-xiang` 绿；CI `render-film.yml` `film=zhi-guo-xiang` 出 7500f；ffprobe 帧数/时长/静默音轨；本地 mux ffprobe 250s。
-- **领域事件:** CI 7500f 出片 → 本地 BGM mux → 用户验收 → 另立 change 发布/归档。
+  - `INV-1 生产单元`：`shots.mjs sync --unit zhi-guo-xiang` 生成 38 镜 manifest/registry/routes；正片 7050f；Composition `ZhiGuoXiang` 与 `ZhiGuoXiangAudio` 均 7350f（120 + 7050 + 180）。
+  - `INV-2 镜头实装`：38 个 `shots/sNN.tsx` 全部存在，local 帧 0 起；22 个空镜各接 1–2 层真实动效；零内联 hex/字体字面量、无 `Math.random`、无 `<Audio>`。
+  - `INV-3 装配`：FilmShell 120 + 7050 + 180 = 7350f / 245.0s；meta = 《风陵 · 致郭襄》/「四分钟武侠诗电影」/「网络流传 · 托名程灵素」。
+  - `INV-4 转场`：manifest 每镜带 `transition`；非硬切 12 处（纸翻 s03/s27/s36、飞白 s17/s23、墨洇 s04/s06/s15/s18/s19/s28/s38）；必硬切 s10→s11、s19→s20、s23→s24、s24→s25、S26 入场全部满足；14 条字幕全在安全窗（start ≥ in+12、end ≤ dur−out−12）。
+  - `INV-5 原片`：`videos/site-film/`、`videos/self-intro/`、`videos/wuh-site-intro-v2/`、`videos/preprod-wuh-site-intro-v2/` 零改动。
+  - `INV-6 音频`：CI 产物无声；`ZhiGuoXiangAudio` 不含 `<Audio>`；BGM 版权文件不入仓、自制旁白 wav 入 `public/zhi-guo-xiang/tts/`；成片 = BGM 两遍 + 人声一路 = 245.0s。
+  - `INV-7 验证`：`pnpm typecheck:ci` 绿；`pnpm lint` 0/0；`shots.mjs check --unit zhi-guo-xiang` 绿（38 镜 Σ=7050）；ffprobe 7350f / 245.000s；mix 峰值 −1.0 dBFS、0 削波、人声余量最小 5.7dB。
+  - `INV-8 旧件`：`AscendScene`（旧 52 镜 4-4/5-1 共用件）在 38 镜版被 0 镜引用，属遗留件；S30/S31 未共用它（旧 INV-4 作废）。
+- **领域事件:** CI 逐镜出片 → 本地 concat + mux → 用户验收 → 另立 change 发布/归档。
 
 ## 引用规范
 
 - shadow-docs/knowledge/video-production-flow.md
-  - 当前结论: 两段式；前期五件套 + 人物视觉设定；文学改编/诗电影；animatic CI 多片；本地 BGM mux
+  - 当前结论: 两段式；分镜真源第 7 列转场；镜内遮罩不改帧；CI 逐镜 + 本地 concat 兜底；配音 v6 / 混音 v6
   - 适用 scope: videos/, shadow-docs/knowledge/
 - shadow-docs/knowledge/video-studio-structure.md
   - 当前结论: 工作室三层；FilmShell 120+180；`render-film.mjs --unit` 多片；node 22 / port 3211 / crf16；staticFile 以 public/ 为根
   - 适用 scope: brand/, videos/, scripts/, src/Root.tsx, public/
 - shadow-docs/knowledge/render-stability-playbook.md
-  - 当前结论: 渲染前清场；镜级缓存；分块收敛梯；`<Audio loop>` 禁用；半透明渐变改硬切
+  - 当前结论: 渲染前清场；镜级缓存；分块收敛梯；`<Audio loop>` 禁用；radial-gradient 本机崩溃条已标 superseded（现走 CI）
   - 适用 scope: videos/, scripts/, out/
+- shadow-docs/knowledge/tts-voiceover-pipeline.md
+  - 当前结论: edge-tts 男女声 22 段 140.16s；ducking 实测 12 段 3–9dB；mux PASS2 45.45754；男声真声待替换
+  - 适用 scope: scripts/voice/, public/zhi-guo-xiang/tts/, scripts/build-bgm-mix.py
 - norms/code-style.md
   - 当前结论: TS 禁 any、单一职责、无 TODO；分镜组件禁内联色值/字体
   - 适用 scope: 全部新增 TS 代码
 
 ## 决策
 
-- **选型:** 照 intro-v2 生产骨架——`film.config.json` shell 120/180 → `shots.mjs sync --unit zhi-guo-xiang` 反生成 `shots/manifest.ts`/`registry.ts`/`routes.tsx` → `ZhiGuoXiang.tsx` 遍历 manifest + `ShotShell` → `ZhiGuoXiangAudio` 静默轨 → Root 注册。
-- **对比方案:** 单文件 52 镜（改一镜重渲全片，弃）；复用 animatic 简板（不是正式视觉，弃）。
-- **令牌:** `motion-tokens.ts` 落地 106 枚（brand 再导出 + 影片私有 `FILM.snowCyan/nightBlue/fireGold` + FIGURE/POSE/STROKE/GR/CV/SP/RH/CM/PT/TR/FN）；分镜只引用令牌。
-- **实装编排:** 骨架先行；52 镜按幕六批（Act1 S1–S4 / Act2 S5–S12 / Act3 S13–S24 / Act4 S25–S30 / Act5 S31–S44 / Act6 S45–S52），独立文件、零共享状态，可并行 subagent。
-- **音频:** 成片与 CI 无声；`scripts/mux-bgm.mjs` 按 `music.md` 做「第一遍 → 门开静默 → 4320 重启 → 末 3s 淡出」；音频路径由用户本地提供，不入仓。
-- **渲染:** `render-film.mjs --unit zhi-guo-xiang` / CI `render-film.yml` `film=zhi-guo-xiang`；本地渲染 exit 139 已知，以 CI 出片为准，ffprobe 7500f。
-- **隔离手段:** 主仓 main 干净；本 change 用独立 worktree `.worktrees/20261101-feature-zhi-guo-xiang-production`，基线 main，不碰其它 worktree。
-- **非目标:** 不改前期资产、不改分镜/动效规范、不改品牌令牌、不提交版权音频。
+- **金针口径（路 B）**：她一生只用掉一枚（求看一眼他的脸），剩下两枚舍不得用；S21 留 act4 原位，「S20 醒木 ↔ S21 用针」同一时刻成立；S25 剩两枚 = 舍不得，与 S26 戏眼呼应；S25/S29/b11 账目不动。
+- **杨过永远不给脸**：理由改写为「她拿唯一一次机会换了一张脸，观众仍然不给」；面具回到形制，S21 由 `YangGuoFigure`（背影 + 空袖 + 面具 + 抬手）承担，弃 `p-rescue`/`p-giving`，底图用 `p-footprints` 的无人物雪径。
+- **转场**：类型进 manifest（真源分镜表第 7 列），ShotShell 镜内占用首尾帧；不做跨镜图层（CI 逐镜渲 + concat，跨镜层产 0 像素）；不新增音效（复用陷阱 + 混音余量）。
+- **接线而非重画**：22 个空镜用已写好的 Figure/Objects/DustField/Fireworks 接入；新增 `WaveField`、从 `InkPaper` 抽出 `InkBloom`、`DustField` 加 `wind`、`Needles` 加 `drop`、Figure 加 `raise/mask/needle`，默认参数保旧像素。
+- **配音**：`lines.json` 为唯一事实源；开场 a01–a05 重写、b08 拆两条、b06 前移 129.4；edge-tts 云健/晓晓重配；男声真声本轮不做。
+- **混音**：修 `duck-voice.mjs` BUG1/BUG2、PASS2 改零交叉 45.45754；BGM 两遍 + 逐段实测 ducking（不盲目抬人声）；峰值 0.891 上限。
+- **出片**：CI `render-film.yml` 逐镜渲；CI assemble 首跑因 5 个矩阵 job 在 runner `apt-get install` 步骤撞 15 分钟 job 超时被取消而缺镜（基础设施抖动，非代码），改用「逐镜 artifact + 本地 concat + 本地 mux」兜底；intro/outro 用 CI bundle + 本机 `@remotion/renderer` 渲染。
+- **非目标**：不改前期资产（除机器真源分镜表）、不改品牌令牌、不提交版权 BGM、不重出 `p-needle-look`（需外部生图额度，留待下轮）。
 
 ## 任务
 
-### Phase 1 骨架与令牌
+### Phase 1 转场与分镜真源
 
-- [x] `motion-tokens.ts`：106 令牌落地（brand 再导出 + FILM 私有色 + FIGURE/POSE/STROKE + CV/SP/RH/CM/PT/TR/GR/FN）— `videos/zhi-guo-xiang/motion-tokens.ts`
-- [x] `ShotShell` / `CameraRig` / `DustField`：全局视觉、视差景深、光尘 — `videos/zhi-guo-xiang/components/`
-- [x] `ZhiGuoXiang.tsx`（FilmShell 7200f）+ `ZhiGuoXiangAudio.tsx`（静默）+ `film.config.json` — `videos/zhi-guo-xiang/`
-- [x] `shots.mjs sync --unit zhi-guo-xiang` 生成 manifest/registry/routes；Root 注册 `zhiGuoXiangRoutes` — `videos/zhi-guo-xiang/`, `src/Root.tsx`
+- [x] 分镜真源第 7 列定语义并落 38 行；S21 改求揭面；s01/s38 字幕补「念念」— `videos/preprod-zhi-guo-xiang/assets/storyboard.md`
+- [x] `shots.mjs` 解析 transition（别名 → page/dry/ink/cut）+ manifest + 生成物透传 in/out/duration — `scripts/shots.mjs`
+- [x] `ShotShell` 镜内遮罩（纸翻/飞白/墨洇/cut）+ 字幕安全窗 — `videos/zhi-guo-xiang/components/ShotShell.tsx`
 
-### Phase 2 52 镜实装（按幕六批）
+### Phase 2 视觉与接线
 
-- [x] Act 1 S1–S4（720f）— `videos/zhi-guo-xiang/shots/`
-- [x] Act 2 S5–S12（900f）— `videos/zhi-guo-xiang/shots/`
-- [x] Act 3 S13–S24（1500f）— `videos/zhi-guo-xiang/shots/`
-- [x] Act 4 S25–S30（960f）— `videos/zhi-guo-xiang/shots/`
-- [x] Act 5 S31–S44（1920f）— `videos/zhi-guo-xiang/shots/`
-- [x] Act 6 S45–S52（1200f）— `videos/zhi-guo-xiang/shots/`
+- [x] 新组件 `WaveField`、`InkBloom`；`DustField.wind`、`Needles.drop + PALM2_NEEDLES`、`Figure.raise/mask/needle` — `components/`
+- [x] S21 四段重做（她举针 → 他抬手到面具 → 走进垭口雾 → 手还举着针已不在）；抽帧后修正人物尺寸/墨色与走位 — `shots/s21.tsx`
+- [x] S10/S25 同底图同 zoom 同针位，S25 严格少一枚；`p-palm2` 采 cand-3 — `shots/s10.tsx`、`s25.tsx`、`public/.../p-palm2.jpg`
+- [x] 22 个空镜接 1–2 层动效；14 条字幕按安全窗重排 — `shots/`
 
-### Phase 3 音频与出片
+### Phase 3 配音与出片
 
-- [x] `scripts/mux-bgm.mjs`：按 `music.md` 两遍 mux（静默成片 + 本地音频 → 250s）— `scripts/mux-bgm.mjs`
-- [x] CI `render-film.yml` `film=zhi-guo-xiang` 出 7500f → ffprobe 对账 → 本地 BGM mux → 交用户验收 — `out/`
+- [x] `lines.json` 22 段定稿；edge-tts 重配 → `voice-track-v6.wav`（245.000s，22 落点全有声、10 对照区静音）— `scripts/voice/`、`public/zhi-guo-xiang/tts/`
+- [x] 混音 v6：`mix-v6.wav`（245.000s、峰值 −1.0 dBFS、0 削波、12 段 ducking、余量最小 5.7dB）；修 duck-voice BUG1/2 与 PASS2 — `scripts/build-bgm-mix.py`、`scripts/duck-voice.mjs`、`scripts/mux-bgm.mjs`
+- [x] CI 逐镜出片（38 镜）→ 本地 concat 7350f → 与 mix-v6 mux → 抽帧验收 — `out/20261106233000-zhi-guo-xiang-v10-final.mp4`
 
 ## 结果
 
-- 实际耗时: 2026-11-01 单日（六幕交 subagent 并行实装 + 主代理整合）
+- 实际耗时: 2026-11-06 单日（5 个并行 stream：转场 / 视觉组件 / 配音混音 / 两批接线）
 - 验证:
-  - INV-1 ✅ `shots.mjs check`：52 镜 Σ=7200；`ZhiGuoXiang` / `ZhiGuoXiangAudio` 均 7500f
-  - INV-2 ✅ 52 个 `shots/sNN.tsx` 齐备；禁用项扫描 clean（无内联 hex/字体、无 `Math.random`、无 `<Audio>`）
-  - INV-3 ✅ FilmShell 120 + 7200 + 180 = 7500；meta 三行；正片末帧 7199
-  - INV-4 ✅ S30/S31 同一 `AscendScene`、同一 local 帧；S30 字幕于 220 结束，f239 组件树仅剩 AscendScene
-  - INV-5 ✅ `git diff main...HEAD` 对五套原片目录为空
-  - INV-6 ✅ `ZhiGuoXiangAudio` 为纯静默 `AbsoluteFill`；无音频文件入仓
-  - INV-7 ✅ CI run 41270162934 全绿（52 镜矩阵）；ffprobe 7500f / 250.000s；本地 mux 250s，断点静默实测 137.8–148.8s
-  - 证据缺口：本机 `tsc` 间歇段错误（exit 139、无输出），本地不作为判据；类型门由 CI 兜底
-  - 类型门 ✅ `pnpm typecheck:ci`（`tsconfig.ci.json`）已挂回 bundle 任务，run 41271456208 该步绿。范围收窄到 `videos/zhi-guo-xiang` + `brand`：intro-v2 的 8 处存量 TS2339 本 change 不修；`src` 因 `Root.tsx` 汇总所有单元 routes、经导入图会把 intro-v2 拉进程序而排除（已知覆盖缺口，intro-v2 修复后删该文件、换回全仓 `pnpm typecheck`）
+  - INV-1 ✅ `shots.mjs check`：38 镜 Σ=7050；`ZhiGuoXiang` / `ZhiGuoXiangAudio` 均 7350f
+  - INV-2 ✅ 38 镜齐备；禁用项扫描 clean（无新增内联 hex/字体、无 `Math.random`、无 `<Audio>`）
+  - INV-3 ✅ FilmShell 120 + 7050 + 180 = 7350f；ffprobe 7350f / 245.000s / 1920×1080 / 30fps
+  - INV-4 ✅ 非硬切 12 处（纸翻 3 / 飞白 2 / 墨洇 7），必硬切 5 处全满足；14 条字幕全在安全窗（脚本核对）
+  - INV-5 ✅ 四套原片目录零改动
+  - INV-6 ✅ `ZhiGuoXiangAudio` 纯静默；CI 逐镜产物无声；成片音频 = mix-v6（BGM 两遍 + 人声 v6），245.0s
+  - INV-7 ✅ `pnpm typecheck:ci` 绿、`pnpm lint` 0/0、`shots.mjs check` 绿；成片峰值 −1.0 dBFS、0 削波
+  - 出片证据：CI run 42240447786（33/38 镜首轮绿；s01/s08/s13/s17 重跑成功，s19 二度撞 apt 超时）→ s19 走子集 run 42246154138、s21 修正版走子集 run 42248238613；主 run 37 镜 artifact + 两个子集成片镜 = 38 镜全 CI 渲染；intro/outro 用 CI bundle + 本机 renderMedia；本地 ffmpeg concat + mux
+  - 证据缺口：CI 全片 assemble 未能在 runner 完成（矩阵 apt 争用 → job 超时），最终 concat/mux 在本机执行，已用 ffprobe 与抽帧对账
 
 ## 知识评估
 
 - **预期影响:** 更新
-- **候选卡片:** `shadow-docs/knowledge/video-production-flow.md`、`shadow-docs/knowledge/video-studio-structure.md`
-- **理由:** 本片是首支「文学改编 / 诗电影」从前期到正式制作的全链路；52 镜实装、静默音轨 + 本地 BGM mux、`render-film --unit` 的多片生产口径应写入流程与结构卡。
+- **候选卡片:** `shadow-docs/knowledge/video-production-flow.md`、`render-stability-playbook.md`、`tts-voiceover-pipeline.md`
+- **理由:** 镜内转场口径（真源第 7 列 + 帧数不动）、CI 矩阵 apt 争用与「逐镜 artifact + 本地 concat」兜底、配音 v6 与 ducking 实测，均应写入知识卡；`tts-voiceover-pipeline.md` 已由本轮重写为 v6。
+
+---
+
+## v11 结果（2026-11-07，对 v10 成片 16 条逐帧意见的回应）
+
+- 成片：`out/202611070425-zhi-guo-xiang-v11-final.mp4` · 7350f / 245.000s / 1920×1080 / 30fps / h264+AAC · 232MB
+- 验证：
+  - INV-1 ✅ `shots.mjs check --unit zhi-guo-xiang`：38 镜 Σ=7050
+  - INV-2 ✅ typecheck 绿、`pnpm lint` 0/0、禁用项 clean
+  - INV-3 ✅ ffprobe 7350f / 245.000s；42 段逐镜产物 trim 对齐拼接（intro 120 + 38 镜 7050 + outro 180）
+  - INV-4 ✅ 转场只剩两种：墨洇 32 处（单侧 20f）+ 硬切 6 处（含 s01/s38 端点）；字幕 21 条全部在安全窗内（脚本核对：12 条跟人声、8 条 BGM 段点睛、诗六行不锚定）
+  - INV-5 ✅ 四套原片目录零改动
+  - INV-6 ✅ 成片音频 = mix-v7（人声 25 条 + BGM 五态），peak −1.003 dBFS、0 削波
+  - INV-7 ✅ **鬼帧逐帧全扫 7350 帧干净**（`scripts/check-ghost-frames.py`）
+- 出片链路：本机 `RENDER_CONCURRENCY=1` + `chromiumOptions.disableSharedMemoryCapture` + `--force` 逐镜渲染（38 镜，~28 分钟）→ `out/concat-v11.mjs` concat + mux。**CI 未参与本轮**（v10 的 apt 争用问题未复现机会）。
+- 事故与处方：
+  1. **鬼帧**（随机帧变 3×3 平铺）——Chrome 156 + 并发截图 shared-memory capture 竞态；关掉后消失，判据与检测器入库。
+  2. **缓存键不含装配层**——改了 `ShotShell` 但逐镜仍命中旧缓存，墨洇 12f→20f 白渲一轮；已把 `ZhiGuoXiang.tsx`/`ShotShell.tsx`/`motion-tokens.ts`/`tokens.ts` 并入缓存键（schema 3）。
+  3. **bundle-only 静默失败**——高 load 下 SIGSEGV，脚本吞掉退出码后用旧 bundle 渲，导致 s10/s27 白渲一次；处方是渲染前校验 bundle 目录 mtime。
+- 未做/遗留：`p-needle-look`（S26 针形制仍是旧图）、S34 墨盖字约七成、S28「合盖」放弃（底图剑是死像素）、男声仍是 edge-tts 占位。
