@@ -2,13 +2,14 @@
  *
  * v1→v7 文档卡堆叠成塔：7 张纸面卡自画面上方依次落下（MO-CARD-STACK：每张 stackStep 4f 间隔
  * 落下 + stackBounce 2f 微弹，落地位置带 random(seed) 撒纸抖动，向上垒成塔），
- * 末卡落稳后整塔定格；右下角计数角标 01→07 随落卡翻动（MO-COUNTER-DIGIT-POP 弹跳）。
+ * 末卡落稳后整塔定格；右下角计数角标 01→07 随落卡翻动（**MO-NUM-ODOMETER 逐位滚轮** + MO-COUNTER-DIGIT-POP 弹跳）。
  * 转场：入「切」/ 出「切」。字幕窗 [12,153]。
  */
 import type { FC } from 'react';
 import { AbsoluteFill, interpolate, random, useCurrentFrame } from 'remotion';
 import { colors, fontFamilies } from '../../../brand/tokens';
 import { Caption } from '../components/Caption';
+import { Odometer } from '../components/Odometer';
 import { CLAMP, MO_CARD, MO_COUNTER, MO_EASE } from '../motion-tokens';
 
 const TOTAL = 165;
@@ -118,7 +119,14 @@ const S07: FC = () => {
             fontWeight: 700,
           }}
         >
-          {String(Math.max(1, count)).padStart(2, '0')}
+          <Odometer
+            count={Math.max(1, count)}
+            changedAt={T0 + (Math.max(1, count) - 1) * STEP}
+            pad={2}
+            size={40}
+            color={colors.ink}
+            fontFamily={fontFamilies.serif}
+          />
         </div>
       </div>
       <Caption text="第八版之前，先有前七版的纸面功夫。" start={12} end={153} duration={TOTAL} inSide={0} outSide={0} />

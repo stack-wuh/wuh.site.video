@@ -8,7 +8,7 @@
 import type { FC } from 'react';
 import { AbsoluteFill, interpolate, random, useCurrentFrame } from 'remotion';
 import { colors, fontFamilies } from '../../../brand/tokens';
-import { CLAMP, MO_CARD, MO_EASE } from '../motion-tokens';
+import { CLAMP, MO_CARD, MO_CHART, MO_EASE } from '../motion-tokens';
 import { Caption } from '../components/Caption';
 
 const DURATION = 165;
@@ -86,12 +86,15 @@ const S28: FC = () => {
               >
                 {BAR_BASE[ci].map((base, i) => {
                   const h = base * (1 + 0.13 * Math.sin(f * 0.16 + i * 0.52 + ci * 1.7));
+                  /* MO-CHART-GROW：卡落定后波形从中线错峰生长（凡量必动） */
+                  const g0 = enterAt + MO_CARD.riseFrames + i * 1;
+                  const grow = interpolate(f, [g0, g0 + MO_CHART.growFrames], [0, 1], { ...CLAMP, easing: MO_EASE.out });
                   return (
                     <div
                       key={i}
                       style={{
                         width: 10,
-                        height: h,
+                        height: Math.max(2, h * grow),
                         borderRadius: 5,
                         background: colors.paper,
                         opacity: 0.32 + 0.22 * breathe,

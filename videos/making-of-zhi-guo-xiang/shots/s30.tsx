@@ -7,7 +7,7 @@
 import type { FC } from 'react';
 import { AbsoluteFill, interpolate, random, useCurrentFrame } from 'remotion';
 import { colors, fontFamilies } from '../../../brand/tokens';
-import { CLAMP, MO_EASE, MO_WAVE } from '../motion-tokens';
+import { CLAMP, MO_CHART, MO_EASE, MO_WAVE } from '../motion-tokens';
 import { Caption } from '../components/Caption';
 
 const DURATION = 180;
@@ -32,6 +32,11 @@ const S30: FC = () => {
   const f = useCurrentFrame();
   // 中位标注：全部吸附完成后定场
   const stampIn = interpolate(f, [142, 142 + 12], [0, 1], { ...CLAMP, easing: MO_EASE.out });
+  // MO-NUM-ROLL：中位误差随标注显影滚动到位（凡量必滚）
+  const shown = 1.51 * stampIn;
+  // MO-CHART-GROW：条形入场错峰生长（段内逐根 +1f，吸附开始前立好）
+  const grow = (i: number, j: number) =>
+    interpolate(f, [4 + i * 2 + j, 4 + i * 2 + j + MO_CHART.growFrames], [0, 1], { ...CLAMP, easing: MO_EASE.out });
 
   return (
     <AbsoluteFill style={{ background: colors.bg }}>
@@ -99,7 +104,7 @@ const S30: FC = () => {
             }}
           >
             {seg.bars.map((h, j) => (
-              <div key={j} style={{ width: 6, height: h, borderRadius: 3, background: colors.paper, opacity: 0.5 }} />
+              <div key={j} style={{ width: 6, height: Math.max(2, h * grow(i, j)), borderRadius: 3, background: colors.paper, opacity: 0.5 }} />
             ))}
           </div>
         ))}
@@ -125,7 +130,7 @@ const S30: FC = () => {
               }}
             >
               {seg.bars.map((h, j) => (
-                <div key={j} style={{ width: 6, height: h, borderRadius: 3, background: colors.accent, opacity: 0.38 }} />
+                <div key={j} style={{ width: 6, height: Math.max(2, h * grow(i, j)), borderRadius: 3, background: colors.accent, opacity: 0.38 }} />
               ))}
             </div>
           );
@@ -145,8 +150,17 @@ const S30: FC = () => {
             opacity: stampIn,
           }}
         >
-          <div style={{ fontFamily: fontFamilies.mono, fontSize: 84, letterSpacing: 2, color: colors.gold, lineHeight: 1 }}>
-            中位 1.51s
+          <div
+            style={{
+              fontFamily: fontFamilies.mono,
+              fontSize: 84,
+              letterSpacing: 2,
+              color: colors.gold,
+              lineHeight: 1,
+              fontVariantNumeric: 'tabular-nums',
+            }}
+          >
+            中位 {shown.toFixed(2)}s
           </div>
           <div style={{ fontFamily: fontFamilies.mono, fontSize: 19, letterSpacing: 3, color: colors.muted }}>
             按镜铺 · 落点中位误差

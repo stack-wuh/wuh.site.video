@@ -8,7 +8,7 @@
 import type { FC } from 'react';
 import { AbsoluteFill, interpolate, random, useCurrentFrame } from 'remotion';
 import { colors, fontFamilies } from '../../../brand/tokens';
-import { CLAMP, MO_EASE, MO_WAVE } from '../motion-tokens';
+import { CLAMP, MO_CHART, MO_EASE, MO_WAVE } from '../motion-tokens';
 import { Caption } from '../components/Caption';
 
 const DURATION = 255;
@@ -20,9 +20,6 @@ const BAR_PITCH = 70;
 /** 波形基高（确定性） */
 const BAR_BASE = Array.from({ length: BAR_COUNT }, (_, i) => 30 + random(`s29-bar-${i}`) * 80);
 
-/** 漂移标注文案由令牌派生：MO_WAVE.driftPeakSec = -16.17 → 「−16.17s」 */
-const DRIFT_LABEL = `−${Math.abs(MO_WAVE.driftPeakSec).toFixed(2)}s`;
-
 const S29: FC = () => {
   const f = useCurrentFrame();
   // 拉开过程：MO-WAVE-DRIFT 全镜 MO-EASE.inout 缓动
@@ -31,6 +28,15 @@ const S29: FC = () => {
   const measureIn = interpolate(p, [0.02, 0.1], [0, 1], CLAMP);
   // 峰值标注：位移接近峰值才显影，随后定场
   const stampIn = interpolate(p, [0.82, 0.95], [0, 1], CLAMP);
+  // MO-NUM-ROLL：−16.17s 随标注显影滚动到位（凡量必滚）
+  const driftShown = Math.abs(MO_WAVE.driftPeakSec) * stampIn;
+  // MO-CHART-GROW：条形入场错峰生长（两条轨同谱，共用一个错峰表）
+  const grow = BAR_BASE.map((_, i) =>
+    interpolate(f, [26 + i * MO_CHART.growStagger, 26 + i * MO_CHART.growStagger + MO_CHART.growFrames], [0, 1], {
+      ...CLAMP,
+      easing: MO_EASE.out,
+    }),
+  );
 
   const cursorX = LANE_X - DRIFT_PX * p; // 人声轨前缘（游标）
   const arrowCenter = LANE_X - (DRIFT_PX * p) / 2;
@@ -109,13 +115,13 @@ const S29: FC = () => {
           }}
         />
 
-        {/* 上轨：画面轨（静止） */}
+        {/* 上轨：画面轨（静止；条形错峰生长） */}
         <div style={{ position: 'absolute', left: LANE_X, top: 270, display: 'flex', alignItems: 'center', gap: BAR_PITCH - 30 }}>
           {BAR_BASE.map((h, i) => (
-            <div key={i} style={{ width: 30, height: h, borderRadius: 6, background: colors.paper, opacity: 0.5 }} />
+            <div key={i} style={{ width: 30, height: Math.max(2, h * grow[i]), borderRadius: 6, background: colors.paper, opacity: 0.5 }} />
           ))}
         </div>
-        {/* 下轨：人声轨（整体向左错位 = 负漂移） */}
+        {/* 下轨：人声轨（整体向左错位 = 负漂移；条形错峰生长） */}
         <div
           style={{
             position: 'absolute',
@@ -128,7 +134,7 @@ const S29: FC = () => {
           }}
         >
           {BAR_BASE.map((h, i) => (
-            <div key={i} style={{ width: 30, height: h, borderRadius: 6, background: colors.accent, opacity: 0.34 }} />
+            <div key={i} style={{ width: 30, height: Math.max(2, h * grow[i]), borderRadius: 6, background: colors.accent, opacity: 0.34 }} />
           ))}
         </div>
 
@@ -173,8 +179,17 @@ const S29: FC = () => {
             opacity: stampIn,
           }}
         >
-          <div style={{ fontFamily: fontFamilies.mono, fontSize: 84, letterSpacing: 2, color: colors.gold, lineHeight: 1 }}>
-            {DRIFT_LABEL}
+          <div
+            style={{
+              fontFamily: fontFamilies.mono,
+              fontSize: 84,
+              letterSpacing: 2,
+              color: colors.gold,
+              lineHeight: 1,
+              fontVariantNumeric: 'tabular-nums',
+            }}
+          >
+            −{driftShown.toFixed(2)}s
           </div>
           <div style={{ fontFamily: fontFamilies.mono, fontSize: 19, letterSpacing: 3, color: colors.muted }}>
             旁白相对画面 · 最重一句

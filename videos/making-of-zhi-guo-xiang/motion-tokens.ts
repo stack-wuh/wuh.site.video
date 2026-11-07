@@ -60,6 +60,21 @@ export const MO_WAVE = { driftPeakSec: -16.17, snapFrames: 4 } as const;
 /* MO-CAP-* 字幕系统：一镜一句；安全窗 = 镜首入遮罩后 side / 镜尾出遮罩前 side */
 export const MO_CAP = { inFrames: 4, outFrames: 4, side: 12, shiftPx: 6 } as const;
 
+/* MO-NUM-* / MO-CHART-* 数据动效（2026-11-08 增补，ai-director §7.5：凡量必滚、静态展示=违规）。
+ * 纪律：量才滚、标识不滚（run 号/ID 是身份）；数字落定帧对齐音效点；tabular-nums 防抖。 */
+export const MO_NUM = {
+  rollFrames: 40, // 普通量 0→N 滚动（ease-out 收尾）
+  odometerFrames: 8, // 滚轮每一位滚动一档
+  odometerStagger: 2, // 滚轮位间错峰
+  slamFrames: 40, // 冲线落定：双数同滚同停
+  slamPop: 0.05, // 落定回弹幅度（1.05→1）
+} as const;
+export const MO_CHART = {
+  growFrames: 20, // 单根条形从基线立起
+  growStagger: 2, // 条形间错峰
+  drawFrames: 60, // 折线描画
+} as const;
+
 /* 八幕帧界（真源 shots-manifest.json acts，此处为人读镜像，供分幕调色/节拍用） */
 export const ACT_FRAMES = [
   { act: 1, start: 0, end: 360 },

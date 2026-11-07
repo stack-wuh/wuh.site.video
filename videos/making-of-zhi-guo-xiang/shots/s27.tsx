@@ -10,7 +10,7 @@
 import type { FC } from 'react';
 import { AbsoluteFill, Freeze, OffthreadVideo, interpolate, staticFile, useCurrentFrame } from 'remotion';
 import { colors, fontFamilies } from '../../../brand/tokens';
-import { CLAMP, MO_CMP, MO_EASE } from '../motion-tokens';
+import { CLAMP, MO_CHART, MO_CMP, MO_EASE } from '../motion-tokens';
 import { Caption } from '../components/Caption';
 
 const DURATION = 150;
@@ -71,12 +71,19 @@ const S27: FC = () => {
         <div style={{ display: 'flex', alignItems: 'flex-end', gap: 6, height: 32, marginRight: 8 }}>
           {Array.from({ length: BAR_COUNT }).map((_, i) => {
             const pulse = 0.5 + 0.5 * Math.sin(f * 0.21 + i * 1.7);
+            /* MO-CHART-GROW：入场从基线错峰立起（凡量必动） */
+            const grow = interpolate(
+              f,
+              [18 + i * MO_CHART.growStagger, 18 + i * MO_CHART.growStagger + MO_CHART.growFrames],
+              [0, 1],
+              { ...CLAMP, easing: MO_EASE.out },
+            );
             return (
               <div
                 key={i}
                 style={{
                   width: 7,
-                  height: 10 + 22 * pulse,
+                  height: Math.max(2, (10 + 22 * pulse) * grow),
                   borderRadius: 3.5,
                   background: rgba(colors.accent, 0.45 + 0.55 * pulse),
                 }}

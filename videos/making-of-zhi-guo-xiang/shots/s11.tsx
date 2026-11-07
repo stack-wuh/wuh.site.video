@@ -5,7 +5,7 @@
  * → ink（点亮）的墨纸对比表达「全绿」，✓ 用琥珀 accent。末格（右下）为 assemble 格：
  * 全场点亮后单发起跳（缩 1.4→1 砸定）+ 一圈墨环扩散，格下 mono 标签「assemble」；
  * 随后整片汇拢（gap 14→0，MO-EASE-INOUT）收格成一块整墨——52 个任务拼成一部片。
- * 头行 run 号 + 点亮计数翻动（呼应本片计数角标签声）。
+ * 头行 run 号（标识不滚）+ 点亮计数 MO-NUM-ROLL：0→51 平滑滚随波次、52 随 assemble 砸定（凡量必滚）。
  * 转场：入「切」/ 出「切」。字幕窗 [12,168]。
  */
 import type { CSSProperties, FC } from 'react';
@@ -58,6 +58,13 @@ const S11: FC = () => {
   }
   const allDone = lit === COLS * ROWS;
 
+  /* MO-NUM-ROLL：计数平滑滚动随波次（0→51），assemble 格砸定时补到 52 */
+  const lastWave = cellStart(COLS - 2, 0);
+  const rolled = Math.round(
+    interpolate(f, [MO_GRID.waveStep, lastWave], [0, COLS * ROWS - 1], { ...CLAMP, easing: MO_EASE.out }),
+  );
+  const shown = f >= ASSEMBLE_AT ? COLS * ROWS : Math.min(rolled, lit);
+
   /* 末格起跳（96→104 砸定）+ 墨环扩散 + 格下标签 */
   const asmPop = interpolate(f, [ASSEMBLE_AT, ASSEMBLE_AT + 8], [1.4, 1], {
     ...CLAMP,
@@ -87,7 +94,7 @@ const S11: FC = () => {
         >
           <span>run 41270162934</span>
           <span style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
-            <span style={{ color: colors.ink }}>{String(lit).padStart(2, '0')} / 52</span>
+            <span style={{ color: colors.ink }}>{String(shown).padStart(2, '0')} / 52</span>
             {allDone ? <span style={{ color: colors.accent, fontSize: 20 }}>✓</span> : null}
           </span>
         </div>
