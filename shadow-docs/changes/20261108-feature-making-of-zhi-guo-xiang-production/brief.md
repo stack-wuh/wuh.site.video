@@ -4,7 +4,7 @@
   "name": "20261108-feature-making-of-zhi-guo-xiang-production",
   "type": "feature",
   "scope": "video-materials",
-  "status": "committed",
+  "status": "published",
   "baseBranch": "main",
   "branch": "feature/20261108-feature-making-of-zhi-guo-xiang-production",
   "files": [
@@ -29,8 +29,8 @@
   },
   "workflow": {
     "operation": null,
-    "checkpoint": "848057b0185cc9c0ac4d3de6abdb8da5b2b072ff",
-    "planHash": "1a8e67fa3f6deb11effbaa4dbd832cbc72a958c871651031a99a5dba0793a6f3",
+    "checkpoint": "pr:57",
+    "planHash": "7351d77958aeb945cdfde90808c13b2a81eb9856d938372cd04b98b6c850dc72",
     "updatedAt": null,
     "lastError": null,
     "issuePlan": {
