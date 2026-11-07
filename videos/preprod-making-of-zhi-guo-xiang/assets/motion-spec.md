@@ -40,6 +40,7 @@
 | MO-CARD-RISE | 卡片自下 12f 淡入上浮，MO-EASE-OUT |
 | MO-CARD-STACK | 堆塔：每张 4f 间隔落下 + 2f 微弹 |
 | MO-TYPE-WRITER | 打字机：2f/字，光标闪烁 8f 周期 |
+| MO-X-STAMP | 红叉缩放砸落（SEAL 同构，×4 连击，间隔 12f）——生图翻车卡专用 |
 | MO-GRID-LIGHT | CI 方块：波次点亮，每波 6f，绿变 4f |
 | MO-WAVE-DRIFT | 波形错位：正弦漂移，峰值标注 −16.17s |
 | MO-WAVE-SNAP | 波形吸附：每句 4f 吸附归位 |
@@ -62,7 +63,7 @@
 | MO-GRADE-SEAL | 朱印红（引 brand/tokens 印章色）——仅伪托印/落版印 |
 | 纪律 | 素材镜（M1–M8 片段）不调色，保母带原貌（演化对比的真实性优先） |
 
-## 二 · 全镜覆盖矩阵（39 镜 × 入场/持续/出场/转场）
+## 二 · 全镜覆盖矩阵（41 镜 × 入场/持续/出场/转场）
 
 | 镜 | 入场 | 持续 | 出场 | 转场(in) |
 |---|---|---|---|---|
@@ -90,6 +91,8 @@
 | s21 | MO-CUT-FLIP | 对切×2 | — | cut |
 | s22 | MO-CARD-RISE | 双数字对置 | 中缝划痕 4f | cut |
 | s22b | —（直放） | 原速直放 | — | cut |
+| s22c | MO-CARD-RISE | MO-TYPE-WRITER + MO-X-STAMP×4 | 末叉定格 | cut |
+| s22d | MO-CMP-LABEL 淡入 | 左右分屏对置（左黑底剪影 + 反光点） | 反光点闪烁定格 | cut |
 | s23 | MO-CMP-LABEL「TTS」 | 波形条律动 | — | dry |
 | s24 | MO-CARD-RISE×3 | MO-WAVE 呼吸 | — | cut |
 | s25 | MO-CARD-RISE | MO-WAVE-DRIFT | 峰值标注定格 | cut |
@@ -106,7 +109,7 @@
 | s34 | MO-EASE-INOUT 缓推 | 原速直放 | — | cut |
 | s35 | MO-CARD-RISE | 片名定场 | MO-GRADE-SEAL 印 + BGM 淡出 | ink |
 
-39/39 全覆盖：每镜入场/持续/出场/转场四格均有令牌，无空格。
+41/41 全覆盖：每镜入场/持续/出场/转场四格均有令牌，无空格。
 
 ## 三 · 素材镜纪律
 

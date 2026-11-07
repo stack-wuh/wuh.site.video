@@ -13,17 +13,17 @@ export type AnimaticShot = {
 
 export type AnimaticAct = { act: number; title: string; startFrame: number; endFrame: number };
 
-export const TOTAL_FRAMES = 7200;
+export const TOTAL_FRAMES = 7680;
 
 export const ACTS: AnimaticAct[] = [
   { act: 1, title: '钩子', startFrame: 0, endFrame: 360 },
   { act: 2, title: '一切从素材开始', startFrame: 360, endFrame: 1500 },
   { act: 3, title: '第一版成片', startFrame: 1500, endFrame: 2400 },
   { act: 4, title: '故事错了', startFrame: 2400, endFrame: 3450 },
-  { act: 5, title: '镜头也错了', startFrame: 3450, endFrame: 4350 },
-  { act: 6, title: '声音的进化', startFrame: 4350, endFrame: 5250 },
-  { act: 7, title: '幕后', startFrame: 5250, endFrame: 6000 },
-  { act: 8, title: '执念', startFrame: 6000, endFrame: 7200 },
+  { act: 5, title: '镜头也错了', startFrame: 3450, endFrame: 4830 },
+  { act: 6, title: '声音的进化', startFrame: 4830, endFrame: 5730 },
+  { act: 7, title: '幕后', startFrame: 5730, endFrame: 6480 },
+  { act: 8, title: '执念', startFrame: 6480, endFrame: 7680 },
 ];
 
 export const SHOTS: AnimaticShot[] = [
@@ -51,19 +51,21 @@ export const SHOTS: AnimaticShot[] = [
   { id: 's21', n: 22, act: 5, startFrame: 3810, durationFrames: 165, visual: 'M6 手镜段 → M8 同段位对切（删镜前后对切两次）', cam: '对切闪烁', caption: '删掉的四秒，分给了别人的戏。', transition: 'cut' },
   { id: 's22', n: 23, act: 5, startFrame: 3975, durationFrames: 120, visual: '帧数卡：9060f = 9060f 两行数字对置，中缝一道划痕', cam: '定场卡', caption: '删完，总长一秒没变。', transition: 'cut' },
   { id: 's22b', n: 24, act: 5, startFrame: 4095, durationFrames: 255, visual: 'M8 万兽山庄扩段纯放（母带 78–86.5s，删镜后变长的戏），无字幕', cam: '原速直放', caption: '无', transition: 'cut' },
-  { id: 's23', n: 25, act: 6, startFrame: 4350, durationFrames: 135, visual: '正片 TTS 段（M8 母带 168–172s）+ 屏幕角标「TTS」合成声波形条', cam: '原速直放+波形条', caption: '前几版的旁白，是 AI 念的。', transition: 'dry' },
-  { id: 's24', n: 26, act: 6, startFrame: 4485, durationFrames: 180, visual: '录音花絮：A1/A2/A3 波形卡三连（配真声试听短促采样）', cam: '波形呼吸律动', caption: '倒数第二版，我自己的声音进来了。', transition: 'cut' },
-  { id: 's25', n: 27, act: 6, startFrame: 4665, durationFrames: 255, visual: '漂移示意卡：两条 cue 波形错位拉开至 −16.17s 标注', cam: '波形错位动画', caption: '但更大的坑在排队：旁白按幕铺，最重漂到负十六秒。', transition: 'cut' },
-  { id: 's26', n: 28, act: 6, startFrame: 4920, durationFrames: 180, visual: '对齐示意卡：波形逐句吸附归位，中位 1.51s 标注', cam: '逐句吸附', caption: '改成按镜铺，中位误差一点五秒。', transition: 'cut' },
-  { id: 's26b', n: 29, act: 6, startFrame: 5100, durationFrames: 150, visual: '真声段纯放：A2 开头.m4a 对应正片段（M8 母带 4–9s），无字幕', cam: '原速直放', caption: '无', transition: 'cut' },
-  { id: 's27', n: 30, act: 7, startFrame: 5250, durationFrames: 120, visual: 'CI 卡：cancelled 红色日志滚动（run 42258912553）', cam: '日志滚动', caption: '深夜里，机器也会罢工。', transition: 'dry' },
-  { id: 's28', n: 31, act: 7, startFrame: 5370, durationFrames: 195, visual: '三级兜底流程卡：重试 → 子集 → 拆段拼，三步箭头推进', cam: '步进动画', caption: '重试、子集、拆段拼，三级兜底救回来。', transition: 'cut' },
-  { id: 's29', n: 32, act: 7, startFrame: 5565, durationFrames: 150, visual: 'CI 卡：样片子集「s06 s21」两格点亮（run 41285587793）', cam: '两格点亮', caption: '平时改一镜、看一帧，从不重渲整片。', transition: 'cut' },
-  { id: 's29b', n: 33, act: 7, startFrame: 5715, durationFrames: 285, visual: '深夜空镜：代码窗与日志流在暗色里滚动（原生绘制，非屏录）', cam: '缓推近', caption: '无', transition: 'cut' },
-  { id: 's30', n: 34, act: 8, startFrame: 6000, durationFrames: 240, visual: '黑场，计数角标「11」定格放大', cam: '缓慢放大定格', caption: '有人问：一条四分半的片子，至于改十一版吗。', transition: 'ink' },
-  { id: 's31', n: 35, act: 8, startFrame: 6240, durationFrames: 105, visual: 'M8 风陵渡（母带 32–34.5s）', cam: '原速直放', caption: '风陵渡口初相遇。', transition: 'cut' },
-  { id: 's32', n: 36, act: 8, startFrame: 6345, durationFrames: 180, visual: 'M8 青驴等待蒙太奇（母带 196–202s）', cam: '原速直放', caption: '她的执念，是等一个不会回头的人。', transition: 'cut' },
-  { id: 's33', n: 37, act: 8, startFrame: 6525, durationFrames: 165, visual: 'M8 诗行段（母带 244–249.5s）', cam: '原速直放', caption: '我的执念，是让她被讲对。', transition: 'cut' },
-  { id: 's34', n: 38, act: 8, startFrame: 6690, durationFrames: 255, visual: 'M8 片尾念念段（母带 270–278.5s）', cam: '缓推近', caption: '最后一版，只比第一版多了一件事：她的事，是真的。', transition: 'cut' },
-  { id: 's35', n: 39, act: 8, startFrame: 6945, durationFrames: 255, visual: '落版卡：片名《风陵 · 致郭襄》+「现在，是她该有的样子。」+ 计数「11 versions」', cam: '定场，印章+BGM 淡出', caption: '《风陵 · 致郭襄》。现在，是她该有的样子。', transition: 'ink' },
+  { id: 's22c', n: 25, act: 5, startFrame: 4350, durationFrames: 240, visual: '文档快照卡：四次正脸生图样缩略（马赛克 + 红叉砸落），「动漫先验 · 四轮实证」标签', cam: '打字机 + 红叉×4', caption: 'AI 画她的正脸，四轮全崩成动漫脸。', transition: 'cut' },
+  { id: 's22d', n: 26, act: 5, startFrame: 4590, durationFrames: 240, visual: '对照卡：左侧黑底侧影 + 两枚金色反光点（代码画点示意），右侧「剪影暗部主义」标签', cam: '左右分屏对置', caption: '后来不画脸了，画剪影，反而像了。', transition: 'cut' },
+  { id: 's23', n: 27, act: 6, startFrame: 4830, durationFrames: 135, visual: '正片 TTS 段（M8 母带 168–172s）+ 屏幕角标「TTS」合成声波形条', cam: '原速直放+波形条', caption: '前几版的旁白，是 AI 念的。', transition: 'dry' },
+  { id: 's24', n: 28, act: 6, startFrame: 4965, durationFrames: 180, visual: '录音花絮：A1/A2/A3 波形卡三连（配真声试听短促采样）', cam: '波形呼吸律动', caption: '倒数第二版，我自己的声音进来了。', transition: 'cut' },
+  { id: 's25', n: 29, act: 6, startFrame: 5145, durationFrames: 255, visual: '漂移示意卡：两条 cue 波形错位拉开至 −16.17s 标注', cam: '波形错位动画', caption: '但更大的坑在排队：旁白按幕铺，最重漂到负十六秒。', transition: 'cut' },
+  { id: 's26', n: 30, act: 6, startFrame: 5400, durationFrames: 180, visual: '对齐示意卡：波形逐句吸附归位，中位 1.51s 标注', cam: '逐句吸附', caption: '改成按镜铺，中位误差一点五秒。', transition: 'cut' },
+  { id: 's26b', n: 31, act: 6, startFrame: 5580, durationFrames: 150, visual: '真声段纯放：A2 开头.m4a 对应正片段（M8 母带 4–9s），无字幕', cam: '原速直放', caption: '无', transition: 'cut' },
+  { id: 's27', n: 32, act: 7, startFrame: 5730, durationFrames: 120, visual: 'CI 卡：cancelled 红色日志滚动（run 42258912553）', cam: '日志滚动', caption: '深夜里，机器也会罢工。', transition: 'dry' },
+  { id: 's28', n: 33, act: 7, startFrame: 5850, durationFrames: 195, visual: '三级兜底流程卡：重试 → 子集 → 拆段拼，三步箭头推进', cam: '步进动画', caption: '重试、子集、拆段拼，三级兜底救回来。', transition: 'cut' },
+  { id: 's29', n: 34, act: 7, startFrame: 6045, durationFrames: 150, visual: 'CI 卡：样片子集「s06 s21」两格点亮（run 41285587793）', cam: '两格点亮', caption: '平时改一镜、看一帧，从不重渲整片。', transition: 'cut' },
+  { id: 's29b', n: 35, act: 7, startFrame: 6195, durationFrames: 285, visual: '深夜空镜：代码窗与日志流在暗色里滚动（原生绘制，非屏录）', cam: '缓推近', caption: '无', transition: 'cut' },
+  { id: 's30', n: 36, act: 8, startFrame: 6480, durationFrames: 240, visual: '黑场，计数角标「11」定格放大', cam: '缓慢放大定格', caption: '有人问：一条四分半的片子，至于改十一版吗。', transition: 'ink' },
+  { id: 's31', n: 37, act: 8, startFrame: 6720, durationFrames: 105, visual: 'M8 风陵渡（母带 32–34.5s）', cam: '原速直放', caption: '风陵渡口初相遇。', transition: 'cut' },
+  { id: 's32', n: 38, act: 8, startFrame: 6825, durationFrames: 180, visual: 'M8 青驴等待蒙太奇（母带 196–202s）', cam: '原速直放', caption: '她的执念，是等一个不会回头的人。', transition: 'cut' },
+  { id: 's33', n: 39, act: 8, startFrame: 7005, durationFrames: 165, visual: 'M8 诗行段（母带 244–249.5s）', cam: '原速直放', caption: '我的执念，是让她被讲对。', transition: 'cut' },
+  { id: 's34', n: 40, act: 8, startFrame: 7170, durationFrames: 255, visual: 'M8 片尾念念段（母带 270–278.5s）', cam: '缓推近', caption: '最后一版，只比第一版多了一件事：她的事，是真的。', transition: 'cut' },
+  { id: 's35', n: 41, act: 8, startFrame: 7425, durationFrames: 255, visual: '落版卡：片名《风陵 · 致郭襄》+「现在，是她该有的样子。」+ 计数「11 versions」', cam: '定场，印章+BGM 淡出', caption: '《风陵 · 致郭襄》。现在，是她该有的样子。', transition: 'ink' },
 ];

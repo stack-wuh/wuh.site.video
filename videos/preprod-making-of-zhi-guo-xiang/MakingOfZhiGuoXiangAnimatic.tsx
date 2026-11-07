@@ -24,11 +24,12 @@ const ANCHORS = [
   { frame: 2400, label: '故事错了' },
   { frame: 2565, label: '伪托印' },
   { frame: 3450, label: '删镜' },
-  { frame: 4350, label: '声音' },
-  { frame: 5250, label: '幕后' },
-  { frame: 6000, label: '执念' },
-  { frame: 6945, label: '落版' },
-  { frame: 7199, label: '末帧' },
+  { frame: 4350, label: '审核环' },
+  { frame: 4830, label: '声音' },
+  { frame: 5730, label: '幕后' },
+  { frame: 6480, label: '执念' },
+  { frame: 7425, label: '落版' },
+  { frame: 7679, label: '末帧' },
 ];
 
 const AnimaticBody: FC = () => {
@@ -133,7 +134,7 @@ const AnimaticBody: FC = () => {
         <p style={{ fontFamily: mono, fontSize: 16, color: colors.muted, marginTop: 10, display: 'flex', justifyContent: 'space-between' }}>
           <span>preprod making-of-zhi-guo-xiang · MakingOfZhiGuoXiangAnimatic</span>
           <span>
-            Act {act.act}/{ACTS.length} {act.title} · 帧 {frame} / {TOTAL_FRAMES} · {(frame / 30).toFixed(1)}s / 240.0s
+            Act {act.act}/{ACTS.length} {act.title} · 帧 {frame} / {TOTAL_FRAMES} · {(frame / 30).toFixed(1)}s / 256.0s
           </span>
         </p>
       </div>

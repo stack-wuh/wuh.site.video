@@ -1,7 +1,7 @@
 {
   "film": "making-of-zhi-guo-xiang",
   "fps": 30,
-  "totalFrames": 7200,
+  "totalFrames": 7680,
   "acts": [
     {
       "act": 1,
@@ -31,25 +31,25 @@
       "act": 5,
       "title": "镜头也错了",
       "startFrame": 3450,
-      "endFrame": 4350
+      "endFrame": 4830
     },
     {
       "act": 6,
       "title": "声音的进化",
-      "startFrame": 4350,
-      "endFrame": 5250
+      "startFrame": 4830,
+      "endFrame": 5730
     },
     {
       "act": 7,
       "title": "幕后",
-      "startFrame": 5250,
-      "endFrame": 6000
+      "startFrame": 5730,
+      "endFrame": 6480
     },
     {
       "act": 8,
       "title": "执念",
-      "startFrame": 6000,
-      "endFrame": 7200
+      "startFrame": 6480,
+      "endFrame": 7680
     }
   ],
   "shots": [
@@ -270,10 +270,28 @@
       "source": "M8"
     },
     {
+      "id": "s22c",
+      "act": 5,
+      "title": "文档快照卡",
+      "startFrame": 4350,
+      "durationFrames": 240,
+      "transition": "AI 画她的正脸，四轮全崩成动漫脸。",
+      "source": ""
+    },
+    {
+      "id": "s22d",
+      "act": 5,
+      "title": "对照卡",
+      "startFrame": 4590,
+      "durationFrames": 240,
+      "transition": "后来不画脸了，画剪影，反而像了。",
+      "source": ""
+    },
+    {
       "id": "s23",
       "act": 6,
       "title": "正片 TTS 段（M8 母带 168–172s）",
-      "startFrame": 4350,
+      "startFrame": 4830,
       "durationFrames": 135,
       "transition": "前几版的旁白，是 AI 念的。",
       "source": "M8"
@@ -282,7 +300,7 @@
       "id": "s24",
       "act": 6,
       "title": "录音花絮",
-      "startFrame": 4485,
+      "startFrame": 4965,
       "durationFrames": 180,
       "transition": "倒数第二版，我自己的声音进来了。",
       "source": ""
@@ -291,7 +309,7 @@
       "id": "s25",
       "act": 6,
       "title": "漂移示意卡",
-      "startFrame": 4665,
+      "startFrame": 5145,
       "durationFrames": 255,
       "transition": "但更大的坑在排队：旁白按幕铺，最重漂到负十六秒。",
       "source": ""
@@ -300,7 +318,7 @@
       "id": "s26",
       "act": 6,
       "title": "对齐示意卡",
-      "startFrame": 4920,
+      "startFrame": 5400,
       "durationFrames": 180,
       "transition": "改成按镜铺，中位误差一点五秒。",
       "source": ""
@@ -309,7 +327,7 @@
       "id": "s26b",
       "act": 6,
       "title": "真声段纯放",
-      "startFrame": 5100,
+      "startFrame": 5580,
       "durationFrames": 150,
       "transition": "无",
       "source": ""
@@ -318,7 +336,7 @@
       "id": "s27",
       "act": 7,
       "title": "CI 卡",
-      "startFrame": 5250,
+      "startFrame": 5730,
       "durationFrames": 120,
       "transition": "深夜里，机器也会罢工。",
       "source": ""
@@ -327,7 +345,7 @@
       "id": "s28",
       "act": 7,
       "title": "三级兜底流程卡",
-      "startFrame": 5370,
+      "startFrame": 5850,
       "durationFrames": 195,
       "transition": "重试、子集、拆段拼，三级兜底救回来。",
       "source": ""
@@ -336,7 +354,7 @@
       "id": "s29",
       "act": 7,
       "title": "CI 卡",
-      "startFrame": 5565,
+      "startFrame": 6045,
       "durationFrames": 150,
       "transition": "平时改一镜、看一帧，从不重渲整片。",
       "source": ""
@@ -345,7 +363,7 @@
       "id": "s29b",
       "act": 7,
       "title": "深夜空镜",
-      "startFrame": 5715,
+      "startFrame": 6195,
       "durationFrames": 285,
       "transition": "无",
       "source": ""
@@ -354,7 +372,7 @@
       "id": "s30",
       "act": 8,
       "title": "黑场，计数角标「11」定格放大",
-      "startFrame": 6000,
+      "startFrame": 6480,
       "durationFrames": 240,
       "transition": "有人问：一条四分半的片子，至于改十一版吗。",
       "source": ""
@@ -363,7 +381,7 @@
       "id": "s31",
       "act": 8,
       "title": "M8 风陵渡（母带 32–34.5s）",
-      "startFrame": 6240,
+      "startFrame": 6720,
       "durationFrames": 105,
       "transition": "风陵渡口初相遇。",
       "source": "M8"
@@ -372,7 +390,7 @@
       "id": "s32",
       "act": 8,
       "title": "M8 青驴等待蒙太奇（母带 196–202s）",
-      "startFrame": 6345,
+      "startFrame": 6825,
       "durationFrames": 180,
       "transition": "她的执念，是等一个不会回头的人。",
       "source": "M8"
@@ -381,7 +399,7 @@
       "id": "s33",
       "act": 8,
       "title": "M8 诗行段（母带 244–249.5s）",
-      "startFrame": 6525,
+      "startFrame": 7005,
       "durationFrames": 165,
       "transition": "我的执念，是让她被讲对。",
       "source": "M8"
@@ -390,7 +408,7 @@
       "id": "s34",
       "act": 8,
       "title": "M8 片尾念念段（母带 270–278.5s）",
-      "startFrame": 6690,
+      "startFrame": 7170,
       "durationFrames": 255,
       "transition": "最后一版，只比第一版多了一件事：她的事，是真的。",
       "source": "M8"
@@ -399,7 +417,7 @@
       "id": "s35",
       "act": 8,
       "title": "落版卡",
-      "startFrame": 6945,
+      "startFrame": 7425,
       "durationFrames": 255,
       "transition": "《风陵 · 致郭襄》。现在，是她该有的样子。",
       "source": ""
