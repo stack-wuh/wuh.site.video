@@ -4,7 +4,7 @@
   "name": "20261108-feature-making-of-zhi-guo-xiang-production",
   "type": "feature",
   "scope": "video-materials",
-  "status": "published",
+  "status": "committed",
   "baseBranch": "main",
   "branch": "feature/20261108-feature-making-of-zhi-guo-xiang-production",
   "files": [
@@ -29,8 +29,8 @@
   },
   "workflow": {
     "operation": null,
-    "checkpoint": "pr:57",
-    "planHash": "f6b4c0de45e02df00c63ca07c0598eee5e596356a1a6ae93ba3d193318bd4bbd",
+    "checkpoint": "8aeee39cad15e358d1ba385904357fa8fddb6234",
+    "planHash": "b2b21aaaac91b71202d6eec295bf47793c201ad8d5f638a989eebf1d1249895f",
     "updatedAt": null,
     "lastError": null,
     "issuePlan": {
@@ -46,12 +46,10 @@
     "commit": {
       "files": [
         "public/making-of-zhi-guo-xiang",
-        "shadow-docs/changes/20261108-feature-making-of-zhi-guo-xiang-production",
-        "src/Root.tsx",
         "videos/making-of-zhi-guo-xiang",
         "videos/preprod-making-of-zhi-guo-xiang"
       ],
-      "message": "feat(making-of): 历程片正式制作——shots.mjs 机器接线（分镜 v3.2 重排/重编号/重导入三绿）+ 28 素材段产段入库 + 生产单元骨架 + 41 镜全彩实装 + 真声录音稿（36 句/7 紧句）"
+      "message": "fix(making-of): s02 七版快闪改取各版正片开场 5.0–5.933s（v2 段）——2s 处是各版自己的片头标题卡，七闪同质看不出演化"
     }
   }
 }
@@ -121,7 +119,7 @@
 - [ ] BGM 床：版权曲两遍铺 266s + 按正片判据重算 ducking → 本地 mux（BGM/人声/静默底；峰值/断点/余量三验）— 本机，不入库
 
 ### Phase 4 · CI 出片与验收
-- [ ] push → `gh workflow run render-film.yml --ref <branch> -f film=making-of-zhi-guo-xiang` → 矩阵 41 job → assemble → 下载 → ffprobe 7980f 对账
+- [x] push → `gh workflow run render-film.yml --ref <branch> -f film=making-of-zhi-guo-xiang` → 矩阵 41 job → assemble → 下载 → ffprobe 7980f 对账
 - [ ] 抽帧走查（镜中点帧 = 内容帧 +120f）+ 内联预览页交用户定稿意见
 - [ ] 意见单镜返工（workflow_dispatch shots 子集）→ 终验 → review/publish/release
 
