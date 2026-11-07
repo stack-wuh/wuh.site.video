@@ -16,6 +16,7 @@
  */
 import type { FC } from 'react';
 import { AbsoluteFill, interpolate, useCurrentFrame } from 'remotion';
+import { colors } from '../../../brand/tokens';
 import { ShotScene } from '../components/e-scene';
 import { Caption } from '../components/Caption';
 import { INK_SUN, PhotoPlate } from '../components/e-photo';
@@ -74,13 +75,13 @@ const S04: FC = () => {
               key={`${b.x}-${b.y}`}
               progress={0.18 + 0.95 * spread}
               at={{ x: b.x, y: b.y, r: b.r }}
-              color="#241f1a"
+              color={colors.ink}
               opacity={(0.5 - i * 0.03) * spread}
               blur={14}
             />
           ))
         : null}
-      {veil > 0.002 ? <AbsoluteFill style={{ background: '#241f1a', mixBlendMode: 'multiply', opacity: veil }} /> : null}
+      {veil > 0.002 ? <AbsoluteFill style={{ background: colors.ink, mixBlendMode: 'multiply', opacity: veil }} /> : null}
       <Caption cue="s04" tone="ink" />
     </AbsoluteFill>
   );

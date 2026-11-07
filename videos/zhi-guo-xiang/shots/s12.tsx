@@ -48,7 +48,7 @@ const S12: FC = () => {
           width: halo * 2,
           height: halo * 1.64,
           borderRadius: '50%',
-          background: 'radial-gradient(ellipse 50% 50% at 50% 50%, #f7edd2 0%, #e9d9ae 34%, transparent 72%)',
+          background: `radial-gradient(ellipse 50% 50% at 50% 50%, ${colors.paper} 0%, ${colors.gold} 34%, transparent 72%)`,
           opacity: 0.06 + 0.16 * grow,
           filter: 'blur(74px)',
           mixBlendMode: 'screen',
@@ -64,7 +64,7 @@ const S12: FC = () => {
           width: core * 2,
           height: core * 2,
           borderRadius: '50%',
-          background: 'radial-gradient(circle, #fdf6e2 0%, #f0dfb4 38%, transparent 70%)',
+          background: `radial-gradient(circle, ${colors.paper} 0%, ${colors.gold} 38%, transparent 70%)`,
           opacity: 0.1 + 0.22 * grow + 0.24 * flash,
           filter: 'blur(38px)',
           mixBlendMode: 'screen',
@@ -74,7 +74,7 @@ const S12: FC = () => {
       {/* ①c 洗掉脸：一层纸色从面具位置泛开（不画五官，只让五官读不出来） */}
       <AbsoluteFill
         style={{
-          background: `radial-gradient(ellipse 27% 22% at ${(MASK.x / 1920) * 100}% ${(MASK.y / 1080) * 100}%, rgba(247,237,210,0.9) 0%, rgba(247,237,210,0.38) 46%, transparent 76%)`,
+          background: `radial-gradient(ellipse 27% 22% at ${(MASK.x / 1920) * 100}% ${(MASK.y / 1080) * 100}%, rgba(245,240,232,0.9) 0%, rgba(245,240,232,0.38) 46%, transparent 76%)`,
           opacity: 0.08 + 0.22 * grow,
           mixBlendMode: 'screen',
           pointerEvents: 'none',
