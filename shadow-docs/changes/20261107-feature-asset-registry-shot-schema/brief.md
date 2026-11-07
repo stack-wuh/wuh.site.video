@@ -4,7 +4,7 @@
   "name": "20261107-feature-asset-registry-shot-schema",
   "type": "feature",
   "scope": "video-production",
-  "status": "reviewed",
+  "status": "published",
   "baseBranch": "main",
   "branch": "feature/20261107-feature-asset-registry-shot-schema",
   "files": [
@@ -18,8 +18,8 @@
     "repository": "stack-wuh/wuh.site.video",
     "issue": 52,
     "issueUrl": "https://github.com/stack-wuh/wuh.site.video/issues/52",
-    "pullRequest": null,
-    "pullRequestUrl": null
+    "pullRequest": 53,
+    "pullRequestUrl": "https://github.com/stack-wuh/wuh.site.video/pull/53"
   },
   "review": {
     "conclusion": "passed",
@@ -28,7 +28,7 @@
   },
   "workflow": {
     "operation": null,
-    "checkpoint": "issue:52",
+    "checkpoint": "pr:53",
     "planHash": "85bebde2169c60401f7e11e2f62418e3d185fa9282ee3032454938123bf7c217",
     "updatedAt": null,
     "lastError": null,
