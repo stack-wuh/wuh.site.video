@@ -1,131 +1,101 @@
-/* S12 · 满城烟花炸开，火金铺满夜空 210f
- * v11 §3.3（用户意见 5）：底图沿用现有 p-citynight；烟花语言换成团块（见 a-fireworks.tsx），
- * 并补上 design 要求的第三件事——**城中屋脊被照亮**：暖光从烟花落点扩散到屋顶，
- * 用几片低不透明度、错开角度的暖色光斑染色（screen），不是全屏泛白。
+/* S12 · 她的肩后视角：他抬手到面具，面具离脸的一瞬，光从面具边缘漫出来吞掉他的脸 210f
  *
- * 三层景深错峰（每 18–24f 一朵，远的先画）：
- *   远 s≈0.6 → 中 s≈1.0 → 近 s≈1.5（近景大而亮、远景小而糊）
- * 时间：34f 中景 → 54f 远 → 76f 近 → 94f 远 → 120f 中 → 142f 远 → 164f 近 → 186f 中收尾。
- * 0–20f 是入本镜的墨洇（转场归 ShotShell），第一朵 34f 才爆——入场动效不会被墨吃掉。
- * 本镜无字幕（旁白无此镜）。
+ * v12 分镜：中·过肩，双人同框，光驱动。观众**看不见他的脸**——这是全片的铁律（杨过永远不给脸），
+ * 所以这一镜的戏是「光把脸吃掉」，不是「摘下了一张面具」。
+ *
+ * 底图 `p-unmask-her`（新，art-v12；她的侧后剪影在前景、他抬手到面具、两人间留雾）。
+ * 代码只做光：
+ *   ① 面具边缘亮起：64f 起，先一下短闪，再从面具位置漫开一大团暖白（screen）——
+ *      光越大、越软，他的五官就越读不出来；末段用一层纸色洗过去，把「脸」彻底抹平；
+ *   ② 两人之间的雾：LocalMist 从中间长起来（湿接，不是贴片）；
+ *   ③ 光里的尘：光一起来，空气里的尘才看得见。
+ * 光的位置按 art 口径（他抬手、面具在画面中偏右上方）给一个宽容的大圆，不追具体五官。
+ * 转场：入「切」，出「墨洇」。
  */
 import type { FC } from 'react';
-import { interpolate, useCurrentFrame } from 'remotion';
-import { Scene } from '../components/SceneKit';
-import { A_Fireworks, CloudGlow, type FireworkBurst } from '../components/a-fireworks';
+import { AbsoluteFill, interpolate, useCurrentFrame } from 'remotion';
 import { colors } from '../../../brand/tokens';
-import { CLAMP, FILM } from '../motion-tokens';
+import { ShotScene } from '../components/e-scene';
+import { LocalMist } from '../components/c-fog';
+import { DustField } from '../components/DustField';
+import { CLAMP, CURVES } from '../motion-tokens';
 
-/** 三层景深的烟花表：at 错峰 18–24f，x 分散满城，火金与赭红交替。 */
-const BURSTS: FireworkBurst[] = [
-  { x: 830, y: 318, at: 34, scale: 1.0, hue: 'gold' },
-  { x: 400, y: 246, at: 54, scale: 0.6, hue: 'ochre' },
-  { x: 1000, y: 250, at: 76, scale: 1.5, hue: 'gold', rise: true },
-  { x: 1530, y: 232, at: 94, scale: 0.58, hue: 'gold' },
-  { x: 1330, y: 300, at: 120, scale: 1.05, hue: 'ochre' },
-  { x: 1180, y: 214, at: 142, scale: 0.6, hue: 'gold' },
-  { x: 560, y: 206, at: 164, scale: 1.45, hue: 'gold', rise: true },
-  { x: 620, y: 262, at: 186, scale: 1.0, hue: 'ochre' },
-];
-
-/** 一朵烟花「照亮屋顶」的包络：爆开后 20f 达峰，之后留一条余晖。 */
-const pulse = (f: number, at: number) => interpolate(f, [at, at + 20, at + 82], [0, 1, 0.22], CLAMP);
-
-/** 屋脊光斑：基准落在城墙/城楼那一带（art 实测 p-citynight 屋顶面 y≈700–760）；
- *  near 两朵里谁更亮，光心就朝谁偏——读作「光从烟花扩散到屋顶」。 */
-const ROOFS = [
-  { x: 330, y: 762, near: [54, 76] as const, w: 560, h: 190, rot: -5, gold: true },
-  { x: 900, y: 744, near: [34, 76] as const, w: 660, h: 205, rot: 3, gold: true },
-  { x: 1400, y: 716, near: [94, 120] as const, w: 620, h: 195, rot: -3, gold: false },
-];
-
-const RoofGlow: FC<{ f: number }> = ({ f }) => (
-  <>
-    {ROOFS.map((r) => {
-      const pA = pulse(f, r.near[0]);
-      const pB = pulse(f, r.near[1]);
-      const p = Math.max(pA, pB);
-      if (p <= 0.02) return null;
-      const drift = (pB > pA ? 1 : -1) * 40 * p;
-      const col = r.gold ? FILM.fireGold : colors.accent;
-      return (
-        <div
-          key={`${r.x}-${r.y}`}
-          style={{
-            position: 'absolute',
-            left: r.x - r.w / 2 + drift,
-            top: r.y - r.h / 2,
-            width: r.w,
-            height: r.h,
-            transform: `rotate(${r.rot}deg)`,
-            pointerEvents: 'none',
-          }}
-        >
-          {/* 片 1：大而虚的一层，给屋脊整体染色 */}
-          <div
-            style={{
-              position: 'absolute',
-              inset: 0,
-              borderRadius: '50%',
-              background: `radial-gradient(ellipse 58% 44% at 50% 54%, ${col} 0%, transparent 72%)`,
-              opacity: 0.17 * p,
-              filter: 'blur(26px)',
-              mixBlendMode: 'screen',
-            }}
-          />
-          {/* 片 2：偏左上一小块更亮的光，让照亮有「来源方向」而不是均匀铺开 */}
-          <div
-            style={{
-              position: 'absolute',
-              left: r.w * 0.12,
-              top: r.h * 0.18,
-              width: r.w * 0.46,
-              height: r.h * 0.4,
-              borderRadius: '50%',
-              background: `radial-gradient(ellipse, ${col} 0%, transparent 68%)`,
-              opacity: 0.13 * p,
-              filter: 'blur(16px)',
-              mixBlendMode: 'screen',
-            }}
-          />
-        </div>
-      );
-    })}
-  </>
-);
+const TOTAL = 210;
+/** 面具 / 脸的位置（宽容取值：光是大圆，不追五官） */
+const MASK = { x: 1245, y: 252 };
+/** 两人之间的雾 */
+const BETWEEN = { x: 900, y: 640 };
 
 const S12: FC = () => {
   const f = useCurrentFrame();
-
-  /* 三处云光（近景两朵 + 中景一朵）与整体亮度 */
-  const glowA = pulse(f, 76);
-  const glowB = pulse(f, 120);
-  const glowC = pulse(f, 164);
-  const overall = Math.max(glowA, glowB, glowC) * 0.7 + 0.3 * pulse(f, 34);
+  /* ① 光的生长：64f 短闪，110f 撑满，之后缓慢再涨一点（不收回——脸不能再露出来） */
+  const flash = interpolate(f, [64, 70, 88], [0, 1, 0], CLAMP);
+  const grow = interpolate(f, [64, 130, TOTAL - 1], [0, 0.86, 1], { ...CLAMP, easing: CURVES.cineEaseOut });
+  const halo = 240 + 660 * grow;
+  const core = 90 + 300 * grow;
+  /* ② 雾：80f 后从两人之间长起来 */
+  const mist = interpolate(f, [80, 170], [0, 0.85], { ...CLAMP, easing: CURVES.cineEaseInOut });
 
   return (
-    <Scene name="p-citynight" zoom={[1.04, 1.1]} dim={0.05}>
-      {/* 云被由下往上照亮：跟着近景两朵走，中景补一条赭红 */}
-      <CloudGlow at={76} x={1000} y={700} intensity={glowA} width={1500} height={600} />
-      <CloudGlow at={120} x={1330} y={710} intensity={glowB} width={1200} height={520} hue="ochre" />
-      <CloudGlow at={164} x={560} y={700} intensity={glowC} width={1320} height={560} />
-
-      <A_Fireworks seed="s12" bursts={BURSTS} />
-
-      {/* 城中屋脊被照亮：片状暖光（低不透明度、两片错角，避免读成一个大椭圆） */}
-      <RoofGlow f={f} />
-
-      {/* 整体暖光：很轻的一档，只把夜空从冷蓝往火金方向提一点（不是全屏泛白） */}
+    <ShotScene name="p-unmask-her" total={TOTAL} frame={f} zoom={[1.0, 1.05]} dim={0.03}>
+      {/* ①a 大光晕：面具边缘漫出来的那一片（screen，宽而软） */}
       <div
         style={{
           position: 'absolute',
-          inset: 0,
-          background: FILM.fireGold,
-          opacity: 0.05 * overall,
-          mixBlendMode: 'soft-light',
+          left: MASK.x - halo,
+          top: MASK.y - halo * 0.82,
+          width: halo * 2,
+          height: halo * 1.64,
+          borderRadius: '50%',
+          background: 'radial-gradient(ellipse 50% 50% at 50% 50%, #f7edd2 0%, #e9d9ae 34%, transparent 72%)',
+          opacity: 0.1 + 0.24 * grow,
+          filter: 'blur(74px)',
+          mixBlendMode: 'screen',
+          pointerEvents: 'none',
         }}
       />
-    </Scene>
+      {/* ①b 光心：面具那一圈金边被点亮（短闪叠在上面） */}
+      <div
+        style={{
+          position: 'absolute',
+          left: MASK.x - core,
+          top: MASK.y - core,
+          width: core * 2,
+          height: core * 2,
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, #fdf6e2 0%, #f0dfb4 38%, transparent 70%)',
+          opacity: 0.16 + 0.34 * grow + 0.26 * flash,
+          filter: 'blur(38px)',
+          mixBlendMode: 'screen',
+          pointerEvents: 'none',
+        }}
+      />
+      {/* ①c 洗掉脸：一层纸色从面具位置泛开（不画五官，只让五官读不出来） */}
+      <AbsoluteFill
+        style={{
+          background: `radial-gradient(ellipse 34% 27% at ${(MASK.x / 1920) * 100}% ${(MASK.y / 1080) * 100}%, rgba(247,237,210,0.92) 0%, rgba(247,237,210,0.42) 46%, transparent 74%)`,
+          opacity: 0.14 + 0.3 * grow,
+          mixBlendMode: 'screen',
+          pointerEvents: 'none',
+        }}
+      />
+
+      {/* ② 两人之间的雾（湿接） */}
+      <LocalMist at={BETWEEN} progress={mist} seedBase="s12-between" spread={300} rise={260} count={4} strength={0.8} />
+
+      {/* ③ 光里的尘：光一起来，尘才显影 */}
+      <DustField act={3} count={26} seedBase="s12-motes" wind={3} />
+
+      {/* 她的肩背那一侧压一档（前景剪影），光从他那一侧来 */}
+      <AbsoluteFill
+        style={{
+          background: `linear-gradient(90deg, ${colors.ink} 0%, transparent 34%)`,
+          opacity: 0.24,
+          mixBlendMode: 'multiply',
+          pointerEvents: 'none',
+        }}
+      />
+    </ShotScene>
   );
 };
 

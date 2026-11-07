@@ -1,17 +1,19 @@
-/* S26 · 拈针：侧脸；手举在面前，指间夹一枚金针——她看了很久 180f */
+/* S26 · 华山 · 她站在原地（210f · 入「墨洇」）
+ *
+ * v12 分镜 Act 6：她站在原地，风把斗篷吹向一侧；**脸 3**：眼泪掉下来（侧脸，极短）。底图 `p-tears`。
+ * 脸在底图里（只给侧脸轮廓，不画正脸），本镜无字幕、无代码人物，只做风与机位：
+ *   · DustField wind −26 —— 与底图吹向一侧的斗篷同向，风是这一镜唯一在动的东西；
+ *   · 镜头 「近·侧后 → 侧脸」：zoom 1.0→1.045 的同时横向让一点（driftX −8→10），
+ *     机位绕过去半寸，把一个背影看成一张侧脸——不靠代码转头。
+ */
 import type { FC } from 'react';
-import { interpolate, useCurrentFrame, useVideoConfig } from 'remotion';
 import { Scene } from '../components/SceneKit';
+import { DustField } from '../components/DustField';
 
-const S26: FC = () => {
-  const f = useCurrentFrame();
-  const { durationInFrames } = useVideoConfig();
-  /* 极缓推；灯在画外，暖光是唯一光源，前段亮一点，末段收一点——像她把针移出了光 */
-  const warm = interpolate(f, [0, durationInFrames * 0.5, durationInFrames], [0.04, 0.09, 0.05], {
-    extrapolateLeft: 'clamp',
-    extrapolateRight: 'clamp',
-  });
-  return <Scene name="p-needle-look" zoom={[1.0, 1.035]} warm={warm} dim={0.06} />;
-};
+const S26: FC = () => (
+  <Scene name="p-tears" zoom={[1.0, 1.045]} driftX={[-8, 10]} dim={0.02} warm={0.02}>
+    <DustField act={6} count={44} seedBase="s26-wind" wind={-26} />
+  </Scene>
+);
 
 export default S26;

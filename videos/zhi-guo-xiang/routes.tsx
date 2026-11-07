@@ -21,7 +21,7 @@ const shotRoute = (id: string): VideoRoute => {
 };
 
 export const zhiGuoXiangRoutes: VideoRoute[] = [
-  { id: 'ZhiGuoXiang', component: ZhiGuoXiang, durationInFrames: 7350 },
-  { id: 'ZhiGuoXiangAudio', component: ZhiGuoXiangAudio, durationInFrames: 7350 },
+  { id: 'ZhiGuoXiang', component: ZhiGuoXiang, durationInFrames: 9060 },
+  { id: 'ZhiGuoXiangAudio', component: ZhiGuoXiangAudio, durationInFrames: 9060 },
   ...manifest.shots.map((s) => shotRoute(s.id)),
 ];

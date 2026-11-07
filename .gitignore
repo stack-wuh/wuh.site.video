@@ -10,3 +10,9 @@ videos/site-film/assets/bgm2-candidate-*
 .tmp/
 __pycache__/
 scripts/voice/mp3/
+
+# 私人素材：她的原图、他的录音、合成到纸上的照片——不进公开仓
+public/zhi-guo-xiang/scene/photo-nianian-sunset.jpg
+public/zhi-guo-xiang/scene/p-him-photo.jpg
+videos/zhi-guo-xiang/assets/refs/
+videos/zhi-guo-xiang/assets/vo-pack/audio/

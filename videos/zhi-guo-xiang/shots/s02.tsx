@@ -1,37 +1,44 @@
-/* S02 · 纸正面：前四行旧墨，第五行只剩「其」 210f
- * v10 §五：墨团不再写死——把 InkPaper 接成「逐列落笔」：progress 0.35→1（前两列已带旧墨，
- * 后面几列在镜内一列列写出来，末段减速，收在 150f），墨团到末段才洇开（blot 0→0.55，150→188f），
- * 落点在最后一列「其」旁的纸面上。只改参数，不动文案、底图与时长。
- * 出镜转场：s02 的 out = s03 的 page（18f），192f 起画面被纸色擦走——写字与洇墨都收在 192f 之前。 */
+/* S02 · 落日：天空、云、树后那轮太阳，整幅铺满 16:9，缓推 180f
+ *
+ * v12 分镜（用户 2026-11-07 改）：特·微距，极缓推。
+ * 不再用真实照片：底图是**水墨化的落日** `photo-nianian-ink.jpg`（1920×1080，已经是 16:9 整幅），
+ * 没有纸边、没有照片的厚度——它就是落日本身。
+ *
+ * 推近的锚点钉在树后那轮太阳（实测 44.5% / 86.1%）：太阳不动，画面从边缘往里收，
+ * 读作镜头一路往那颗太阳里走。s02 推到 1.24，s03 从 1.24 接着推到 1.58（硬切处尺度接得上）。
+ *
+ * 代码只加两样：太阳的柔光（不改变落日的颜色，只把光往画面里带）与逆光里的浮尘。
+ * 转场：入「切」，出「切」。
+ */
 import type { FC } from 'react';
-import { interpolate, useCurrentFrame } from 'remotion';
-import { Slide } from '../components/SceneKit';
-import { InkPaper, POEM_COLS } from '../components/InkPaper';
-import { CLAMP, CURVES } from '../motion-tokens';
+import { AbsoluteFill, useCurrentFrame } from 'remotion';
+import { PhotoPlate, INK_SUN } from '../components/e-photo';
+import { WarmBloom } from '../components/e-firelight';
+import { DustField } from '../components/DustField';
 
-/* 末列的「其」在画面上的位置（1920×1080 基准）：
- * 列右边距 = 14% + 6 × 54 × 1.5 = 268.8 + 486 = 754.8 → 右缘 x ≈ 1165，字心 x ≈ 1138；
- * 纵向起点 9% = 97.2，首字中心 y ≈ 128。
- * 墨团落在它左下方一点（不压字）：x 1020 / y 200 / 基准半径 150。 */
-const BLOT_AT = { x: 1020, y: 200, r: 150 };
+const TOTAL = 180;
+/** 推近的终点 = s03 的起点（1.24） */
+const ZOOM: [number, number] = [1.0, 1.24];
 
 const S02: FC = () => {
   const f = useCurrentFrame();
-  const progress = interpolate(f, [0, 150], [0.35, 1], { ...CLAMP, easing: CURVES.cineEaseInOut });
-  const blot = interpolate(f, [150, 188], [0, 0.55], CLAMP);
+  const t = f / (TOTAL - 1);
+
   return (
-    <Slide zoom={[1.0, 1.035]} driftY={[0, 26]} dim={0.03}>
-      <InkPaper
-        base="p-paper-close-dusk"
-        lines={[...POEM_COLS.slice(0, 6), '其']}
-        progress={progress}
-        size={54}
-        right="14%"
-        top="9%"
-        blot={blot}
-        blotAt={BLOT_AT}
+    <PhotoPlate t={t} zoom={ZOOM}>
+      {/* 太阳的柔光：落日本身已经很亮，这里只把它的光晕往画面里带一点 */}
+      <WarmBloom at={{ x: INK_SUN.x * 1920, y: INK_SUN.y * 1080 }} r={340} squash={0.72} opacity={0.1} period={110} breath={0.4} blur={54} />
+      {/* 逆光里的浮尘：极慢、极小，读作空气里的尘而不是粒子特效 */}
+      <DustField act={1} count={14} seedBase="s02-motes" wind={3} />
+      {/* 极轻的角晕 */}
+      <AbsoluteFill
+        style={{
+          background: 'radial-gradient(ellipse 88% 84% at 55% 62%, transparent 52%, rgba(43,38,32,0.18) 100%)',
+          mixBlendMode: 'multiply',
+          pointerEvents: 'none',
+        }}
       />
-    </Slide>
+    </PhotoPlate>
   );
 };
 
