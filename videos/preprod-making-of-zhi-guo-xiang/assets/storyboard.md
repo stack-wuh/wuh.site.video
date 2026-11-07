@@ -122,7 +122,7 @@
 
 | 段 id | 母带 | in–out（母带秒） | 用途镜 |
 |---|---|---|---|
-| seg-evolution-reel-m1…m7 | M1–M7 | 各版 2.0–2.933s | s02 |
+| seg-evolution-reel-m1…m7 | M1–M7 | 各版 5.0–5.933s（v2：2s 处是各版片头标题卡，改取正片开场） | s02 |
 | seg-flash-a/b/c | M2/M3/M4 | 各 2.0–2.667s | s03 |
 | seg-animatic-open（已产 v1） | M7 | 0–8 | s08 |
 | seg-evolution-v8-open（已产 v1） | M1 | 0–8 | s10 |

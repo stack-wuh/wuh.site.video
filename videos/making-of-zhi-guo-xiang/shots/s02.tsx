@@ -35,7 +35,7 @@ const S02: FC = () => {
       {REELS.map((m, i) => (
         <Sequence key={m} from={PAD + i * BEAT} durationInFrames={BEAT}>
           <OffthreadVideo
-            src={staticFile(`making-of-zhi-guo-xiang/segments/seg-evolution-reel-${m}-v1.mp4`)}
+            src={staticFile(`making-of-zhi-guo-xiang/segments/seg-evolution-reel-${m}-v2.mp4`)}
             startFrom={0}
             endAt={BEAT}
             style={VIDEO}

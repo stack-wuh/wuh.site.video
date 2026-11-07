@@ -71,57 +71,57 @@
     {
       "id": "seg-evolution-reel-m1",
       "master": "M1",
-      "in": 2,
-      "out": 2.933,
-      "version": 1,
-      "note": "s02 七态快闪第1态（各28f）"
+      "in": 5.0,
+      "out": 5.933,
+      "version": 2,
+      "note": "s02 七态快闪第1态（各28f · v2：改取各版正片开场 5.0–5.933s——2s 处是各版自己的片头标题卡，七闪同质看不出演化）"
     },
     {
       "id": "seg-evolution-reel-m2",
       "master": "M2",
-      "in": 2,
-      "out": 2.933,
-      "version": 1,
+      "in": 5.0,
+      "out": 5.933,
+      "version": 2,
       "note": "s02 第2态"
     },
     {
       "id": "seg-evolution-reel-m3",
       "master": "M3",
-      "in": 2,
-      "out": 2.933,
-      "version": 1,
+      "in": 5.0,
+      "out": 5.933,
+      "version": 2,
       "note": "s02 第3态"
     },
     {
       "id": "seg-evolution-reel-m4",
       "master": "M4",
-      "in": 2,
-      "out": 2.933,
-      "version": 1,
+      "in": 5.0,
+      "out": 5.933,
+      "version": 2,
       "note": "s02 第4态"
     },
     {
       "id": "seg-evolution-reel-m5",
       "master": "M5",
-      "in": 2,
-      "out": 2.933,
-      "version": 1,
+      "in": 5.0,
+      "out": 5.933,
+      "version": 2,
       "note": "s02 第5态"
     },
     {
       "id": "seg-evolution-reel-m6",
       "master": "M6",
-      "in": 2,
-      "out": 2.933,
-      "version": 1,
+      "in": 5.0,
+      "out": 5.933,
+      "version": 2,
       "note": "s02 第6态"
     },
     {
       "id": "seg-evolution-reel-m7",
       "master": "M7",
-      "in": 2,
-      "out": 2.933,
-      "version": 1,
+      "in": 5.0,
+      "out": 5.933,
+      "version": 2,
       "note": "s02 第7态"
     },
     {
