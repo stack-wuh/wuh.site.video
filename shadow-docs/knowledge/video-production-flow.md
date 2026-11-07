@@ -11,6 +11,7 @@ source:
   - changes/archive/20261101-feature-zhi-guo-xiang-preprod/brief.md
   - changes/20261101-feature-zhi-guo-xiang-production/brief.md
   - changes/20261107-feature-asset-registry-shot-schema/brief.md
+  - changes/archive/20261107-feature-making-of-zhi-guo-xiang-preprod/brief.md
 verified: 2026-11-07
 verified-depth: runtime
 verified-scope: 2026-11-07 资产层机检落地（asset-registry.md 登记表 + 导演列解析 + 字数硬表 + INV-S7：fixture 六轮红绿拒绝路径 + site-film/wuh-site-intro-v2/zhi-guo-xiang 三单元双绿 + zhi-guo-xiang import 幂等 diff 为空；资产层生图生产流程本身待首片 runtime 实证）。site-film《朝朝如念》4:00 成片全流程实证（素材库→分镜 45 镜→动效规范 108 令牌→animatic→正式制作→分段渲染出片）；2026-11-01 第二片 wuh-site-intro-v2 正式制作落地（57 镜 / 124 令牌 / FilmShell 三段装配 / render-film --unit + CI film 输入），本片出片待 CI 实证；2026-11-01 第三片《风陵·致郭襄》前期：52 镜 / 7200f、人物视觉设定、106 令牌 / 52×4 矩阵、animatic 7500f CI 出片（run 41260324683）、本地 BGM 4320 断点 mux 试听版；2026-11-01 第三片正式制作出片：52 镜一镜一文件 + 共享件整合，CI run 41270162934 全绿（bundle → 52 镜矩阵 → assemble），ffprobe 7500f / 250s，本地 mux 250s，断点静默实测 137.8–148.8s
@@ -32,6 +33,7 @@ verified-scope: 2026-11-07 资产层机检落地（asset-registry.md 登记表 +
    - Animatic 分镜板：真实内容**单色简板**（非空框）预演节奏，用户定稿后进正式制作
 2. **正式制作**：令牌库先行（motion-tokens.ts 落地规范）→ 七幕场景实装 → 配乐多轨接线（90 BPM 对拍）→ 分段渲染出片
 3. **多片化（2026-11-01 落地）**：单元自包含——`videos/<unit>/film.config.json` 声明 shell（intro/outro 帧）时，`shots.mjs sync` 给 film/audio 路由算「片头+正片+片尾」时长；`render-film.mjs --unit` 派生 composition 前缀（site-film→SiteFilm、wuh-site-intro-v2→WuhSiteIntroV2）、缓存目录、音轨 id 与中间产物，并做三段装配（片头/片尾直接对 film comp 取 frameRange，与逐镜段一起 concat）；CI `render-film.yml` 用 `film` 输入跑任意单元。默认 `--unit site-film` 行为零变化
+4. **内联预览页交付（2026-11-07 落地，历程片 making-of 实证）**：animatic/成片评审交付走 Gen UI 内联预览 fragment——抽 12–16 帧**镜中点帧**（成片帧 = 内容帧 + 片头 120f；抽镜首会吃到墨洇/转场遮罩出黑帧）+ 读 `shots-data.ts`/manifest 镜元数据（章/帧窗/镜头语言/字幕），拼数据驱动 HTML：走片 player（缩略图跳镜 + 自动走片）+ 八幕结构条 + 镜头序列 chips + 动效令牌图例。**混剪型单元接线同正式单元**：preprod 单元（shots-data/boards/`<Pascal>Animatic`）+ manifest 放 `videos/<slug>/shots-manifest.json` + `render-animatic.yml` unit choice 增补即可 CI 出片；母带在仓库外（`~/Desktop/remotion`）由 `scripts/prep-making-of.mjs` 清单化裁段入 `public/`（无声、`-vN`、`--check` 对账）
 4. **专家多代理**：分镜师、UE 动效大师以专职 subagent 并行产出文档，协调方只做对账与整合；场景实装可多幕并行（独立文件、零共享状态）
 
 ## 文学改编 / 诗电影（2026-11-01 实证）
