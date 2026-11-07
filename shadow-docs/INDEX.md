@@ -30,3 +30,4 @@
 | 20261101-fix-wuh-site-intro-v2-r4 | published | shadow-docs/changes/20261101-fix-wuh-site-intro-v2-r4/brief.md |
 | 20261101-refactor-film-kit | ✅ 完成 | shadow-docs/changes/archive/20261101-refactor-film-kit/brief.md |
 | 20261107-feature-asset-registry-shot-schema | ✅ 完成 | shadow-docs/changes/archive/20261107-feature-asset-registry-shot-schema/brief.md |
+| 20261107-feature-making-of-zhi-guo-xiang-preprod | ✅ 完成 | shadow-docs/changes/archive/20261107-feature-making-of-zhi-guo-xiang-preprod/brief.md |
