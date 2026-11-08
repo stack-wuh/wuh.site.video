@@ -4,12 +4,13 @@
   "name": "20261108-feature-making-of-zhi-guo-xiang-production",
   "type": "feature",
   "scope": "video-materials",
-  "status": "published",
+  "status": "committed",
   "baseBranch": "main",
   "branch": "feature/20261108-feature-making-of-zhi-guo-xiang-production",
   "files": [
     "public/making-of-zhi-guo-xiang",
     "scripts/prep-making-of.mjs",
+    "scripts/voice",
     "shadow-docs/changes/20261108-feature-making-of-zhi-guo-xiang-production",
     "src/Root.tsx",
     "videos/making-of-zhi-guo-xiang",
@@ -29,8 +30,8 @@
   },
   "workflow": {
     "operation": null,
-    "checkpoint": "pr:57",
-    "planHash": "7351d77958aeb945cdfde90808c13b2a81eb9856d938372cd04b98b6c850dc72",
+    "checkpoint": "b77acccd8cc7e888b7a496eb468c3b6df8b0fd0b",
+    "planHash": "07bef72c65d39e99e661cf53e78303f296bcf888971b39fd4bf5b607a9197973",
     "updatedAt": null,
     "lastError": null,
     "issuePlan": {
@@ -45,10 +46,9 @@
     "worktree": "/Users/wuhong/shadow-desktop/github/wuh.site.video/.worktrees/20261108-feature-making-of-zhi-guo-xiang-production",
     "commit": {
       "files": [
-        "videos/making-of-zhi-guo-xiang",
-        "videos/preprod-making-of-zhi-guo-xiang"
+        "scripts/voice"
       ],
-      "message": "feat(making-of): 数据动效 retrofit 九镜——MO-NUM-ROLL/ODOMETER/SLAM + MO-CHART-GROW 令牌入库（motion-tokens/spec 矩阵 v3 重排），s02/s07 角标滚轮、s11 0→52 滚动、s23 双数冲线、s27/s28/s29/s30 生长入场、s29/s30 数字滚定、s36 1→11 逐版快滚；共享 Odometer 组件"
+      "message": "feat(making-of): 真声克隆配音链路脚本——gen-mo-bl.sh（cosyvoice-v3.5-flash 批量合成）+ build-mo-track.py（按镜铺对位拼轨 266s）+ build-mo-bed.py（两遍床+断点+目标电平避让，numpy venv）；床 v1 已按计划 cue 验证（断点全静默 7.5s）"
     }
   }
 }
