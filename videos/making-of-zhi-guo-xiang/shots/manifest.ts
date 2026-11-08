@@ -1,0 +1,439 @@
+/* 由 scripts/shots.mjs sync 生成——勿手改；真源 shots-manifest.json（类型化视图） */
+export type Transition = 'page' | 'dry' | 'ink' | 'cut';
+
+/** 转场单侧帧数（总帧 = 2×；cut = 0）：墨洇 20 / 纸翻 18 / 飞白 10。in = 镜首 inbound，out = 下一镜 inbound */
+export const TRANSITION_SIDE: Record<Transition, number> = {
+  "page": 18,
+  "dry": 10,
+  "ink": 20,
+  "cut": 0
+};
+
+export type Manifest = { film: string; fps: number; totalFrames: number; acts: Array<{ act: number; title: string; startFrame: number; endFrame: number }>; shots: Array<{ id: string; act: number; title: string; startFrame: number; durationFrames: number; transition: Transition; source: string; characterIds?: string[]; environmentId?: string | null; firstFrameAsset?: string | null; endFrameDesc?: string }> };
+
+export const manifest: Manifest = {
+  "film": "making-of-zhi-guo-xiang",
+  "fps": 30,
+  "totalFrames": 7680,
+  "acts": [
+    {
+      "act": 1,
+      "title": "序·钩子",
+      "startFrame": 0,
+      "endFrame": 360
+    },
+    {
+      "act": 2,
+      "title": "一·一切从素材开始",
+      "startFrame": 360,
+      "endFrame": 1500
+    },
+    {
+      "act": 3,
+      "title": "二·第一版成片",
+      "startFrame": 1500,
+      "endFrame": 2370
+    },
+    {
+      "act": 4,
+      "title": "三·故事错了",
+      "startFrame": 2370,
+      "endFrame": 3480
+    },
+    {
+      "act": 5,
+      "title": "四·镜头也错了",
+      "startFrame": 3480,
+      "endFrame": 4830
+    },
+    {
+      "act": 6,
+      "title": "五·声音的进化",
+      "startFrame": 4830,
+      "endFrame": 5730
+    },
+    {
+      "act": 7,
+      "title": "六·幕后",
+      "startFrame": 5730,
+      "endFrame": 6480
+    },
+    {
+      "act": 8,
+      "title": "终·执念",
+      "startFrame": 6480,
+      "endFrame": 7680
+    }
+  ],
+  "shots": [
+    {
+      "id": "s01",
+      "act": 1,
+      "title": "这条片子，你可能看过。",
+      "startFrame": 0,
+      "durationFrames": 102,
+      "transition": "cut",
+      "source": "shots/s01.tsx"
+    },
+    {
+      "id": "s02",
+      "act": 1,
+      "title": "但它的十一个版本，你没见过。",
+      "startFrame": 102,
+      "durationFrames": 198,
+      "transition": "cut",
+      "source": "shots/s02.tsx"
+    },
+    {
+      "id": "s03",
+      "act": 1,
+      "title": "留白",
+      "startFrame": 300,
+      "durationFrames": 60,
+      "transition": "cut",
+      "source": "shots/s03.tsx"
+    },
+    {
+      "id": "s04",
+      "act": 2,
+      "title": "第一次想拍郭襄，是十一月初。",
+      "startFrame": 360,
+      "durationFrames": 150,
+      "transition": "ink",
+      "source": "shots/s04.tsx"
+    },
+    {
+      "id": "s05",
+      "act": 2,
+      "title": "那时候没有画面，没有配音，只有一份素材库。",
+      "startFrame": 510,
+      "durationFrames": 195,
+      "transition": "cut",
+      "source": "shots/s05.tsx"
+    },
+    {
+      "id": "s06",
+      "act": 2,
+      "title": "原著里的每一枚金针、每一场雪，都得先查清楚从哪儿",
+      "startFrame": 705,
+      "durationFrames": 255,
+      "transition": "cut",
+      "source": "shots/s06.tsx"
+    },
+    {
+      "id": "s07",
+      "act": 2,
+      "title": "第八版之前，先有前七版的纸面功夫。",
+      "startFrame": 960,
+      "durationFrames": 165,
+      "transition": "cut",
+      "source": "shots/s07.tsx"
+    },
+    {
+      "id": "s08",
+      "act": 2,
+      "title": "然后，是一块单色的分镜板。",
+      "startFrame": 1125,
+      "durationFrames": 195,
+      "transition": "dry",
+      "source": "shots/s08.tsx"
+    },
+    {
+      "id": "s09",
+      "act": 2,
+      "title": "先简后精——节奏对了，才配拥有颜色。",
+      "startFrame": 1320,
+      "durationFrames": 180,
+      "transition": "cut",
+      "source": "shots/s09.tsx"
+    },
+    {
+      "id": "s10",
+      "act": 3,
+      "title": "十一月一号，五十二个镜头，第一次能从头放到尾。",
+      "startFrame": 1500,
+      "durationFrames": 300,
+      "transition": "ink",
+      "source": "shots/s10.tsx"
+    },
+    {
+      "id": "s11",
+      "act": 3,
+      "title": "五十两个任务同时跑，一次全绿。",
+      "startFrame": 1800,
+      "durationFrames": 180,
+      "transition": "cut",
+      "source": "shots/s11.tsx"
+    },
+    {
+      "id": "s12",
+      "act": 3,
+      "title": "那天我以为，最难的部分已经过去了。",
+      "startFrame": 1980,
+      "durationFrames": 180,
+      "transition": "cut",
+      "source": "shots/s12.tsx"
+    },
+    {
+      "id": "s13",
+      "act": 3,
+      "title": "留白",
+      "startFrame": 2160,
+      "durationFrames": 210,
+      "transition": "cut",
+      "source": "shots/s13.tsx"
+    },
+    {
+      "id": "s14",
+      "act": 4,
+      "title": "后来发现，错的不是画面，是故事。",
+      "startFrame": 2370,
+      "durationFrames": 180,
+      "transition": "ink",
+      "source": "shots/s14.tsx"
+    },
+    {
+      "id": "s15",
+      "act": 4,
+      "title": "片头那首诗，金庸从来没写过。",
+      "startFrame": 2550,
+      "durationFrames": 150,
+      "transition": "cut",
+      "source": "shots/s15.tsx"
+    },
+    {
+      "id": "s16",
+      "act": 4,
+      "title": "三枚金针，原著里她全用了——最后一枚，是求他别死",
+      "startFrame": 2700,
+      "durationFrames": 240,
+      "transition": "cut",
+      "source": "shots/s16.tsx"
+    },
+    {
+      "id": "s17",
+      "act": 4,
+      "title": "揭掉面具在十六岁，不是二十四年后。",
+      "startFrame": 2940,
+      "durationFrames": 165,
+      "transition": "cut",
+      "source": "shots/s17.tsx"
+    },
+    {
+      "id": "s18",
+      "act": 4,
+      "title": "评审留了底稿：初稿十条事实错误，一条一条列着。",
+      "startFrame": 3105,
+      "durationFrames": 225,
+      "transition": "cut",
+      "source": "shots/s18.tsx"
+    },
+    {
+      "id": "s19",
+      "act": 4,
+      "title": "于是故事按原著，全部重写。",
+      "startFrame": 3330,
+      "durationFrames": 150,
+      "transition": "cut",
+      "source": "shots/s19.tsx"
+    },
+    {
+      "id": "s20",
+      "act": 5,
+      "title": "最后一版做了个狠决定：删掉一整个镜头。",
+      "startFrame": 3480,
+      "durationFrames": 210,
+      "transition": "ink",
+      "source": "shots/s20.tsx"
+    },
+    {
+      "id": "s21",
+      "act": 5,
+      "title": "线描的手掌，和水墨不是一个族。",
+      "startFrame": 3690,
+      "durationFrames": 150,
+      "transition": "cut",
+      "source": "shots/s21.tsx"
+    },
+    {
+      "id": "s22",
+      "act": 5,
+      "title": "删掉的八秒，分给了别人的戏。",
+      "startFrame": 3840,
+      "durationFrames": 165,
+      "transition": "cut",
+      "source": "shots/s22.tsx"
+    },
+    {
+      "id": "s23",
+      "act": 5,
+      "title": "删完，总长一秒没变。",
+      "startFrame": 4005,
+      "durationFrames": 120,
+      "transition": "cut",
+      "source": "shots/s23.tsx"
+    },
+    {
+      "id": "s24",
+      "act": 5,
+      "title": "留白",
+      "startFrame": 4125,
+      "durationFrames": 225,
+      "transition": "cut",
+      "source": "shots/s24.tsx"
+    },
+    {
+      "id": "s25",
+      "act": 5,
+      "title": "AI 画她的正脸，四轮全崩成动漫脸。",
+      "startFrame": 4350,
+      "durationFrames": 240,
+      "transition": "cut",
+      "source": "shots/s25.tsx"
+    },
+    {
+      "id": "s26",
+      "act": 5,
+      "title": "后来不画脸了，画剪影，反而像了。",
+      "startFrame": 4590,
+      "durationFrames": 240,
+      "transition": "cut",
+      "source": "shots/s26.tsx"
+    },
+    {
+      "id": "s27",
+      "act": 6,
+      "title": "前几版的旁白，是 AI 念的。",
+      "startFrame": 4830,
+      "durationFrames": 150,
+      "transition": "dry",
+      "source": "shots/s27.tsx"
+    },
+    {
+      "id": "s28",
+      "act": 6,
+      "title": "倒数第二版，我自己的声音进来了。",
+      "startFrame": 4980,
+      "durationFrames": 165,
+      "transition": "cut",
+      "source": "shots/s28.tsx"
+    },
+    {
+      "id": "s29",
+      "act": 6,
+      "title": "但更大的坑在排队：旁白按幕铺，最重漂到负十六秒。",
+      "startFrame": 5145,
+      "durationFrames": 255,
+      "transition": "cut",
+      "source": "shots/s29.tsx"
+    },
+    {
+      "id": "s30",
+      "act": 6,
+      "title": "改成按镜铺，中位误差一点五秒。",
+      "startFrame": 5400,
+      "durationFrames": 180,
+      "transition": "cut",
+      "source": "shots/s30.tsx"
+    },
+    {
+      "id": "s31",
+      "act": 6,
+      "title": "留白",
+      "startFrame": 5580,
+      "durationFrames": 150,
+      "transition": "cut",
+      "source": "shots/s31.tsx"
+    },
+    {
+      "id": "s32",
+      "act": 7,
+      "title": "深夜里，机器也会罢工。",
+      "startFrame": 5730,
+      "durationFrames": 135,
+      "transition": "dry",
+      "source": "shots/s32.tsx"
+    },
+    {
+      "id": "s33",
+      "act": 7,
+      "title": "重试、子集、拆段拼，三级兜底救回来。",
+      "startFrame": 5865,
+      "durationFrames": 180,
+      "transition": "cut",
+      "source": "shots/s33.tsx"
+    },
+    {
+      "id": "s34",
+      "act": 7,
+      "title": "平时改一镜、看一帧，从不重渲整片。",
+      "startFrame": 6045,
+      "durationFrames": 165,
+      "transition": "cut",
+      "source": "shots/s34.tsx"
+    },
+    {
+      "id": "s35",
+      "act": 7,
+      "title": "留白",
+      "startFrame": 6210,
+      "durationFrames": 270,
+      "transition": "cut",
+      "source": "shots/s35.tsx"
+    },
+    {
+      "id": "s36",
+      "act": 8,
+      "title": "有人问：一条四分半的片子，至于改十一版吗。",
+      "startFrame": 6480,
+      "durationFrames": 240,
+      "transition": "ink",
+      "source": "shots/s36.tsx"
+    },
+    {
+      "id": "s37",
+      "act": 8,
+      "title": "风陵渡口初相遇。",
+      "startFrame": 6720,
+      "durationFrames": 105,
+      "transition": "cut",
+      "source": "shots/s37.tsx"
+    },
+    {
+      "id": "s38",
+      "act": 8,
+      "title": "她的执念，是等一个不会回头的人。",
+      "startFrame": 6825,
+      "durationFrames": 180,
+      "transition": "cut",
+      "source": "shots/s38.tsx"
+    },
+    {
+      "id": "s39",
+      "act": 8,
+      "title": "我的执念，是让她被讲对。",
+      "startFrame": 7005,
+      "durationFrames": 165,
+      "transition": "cut",
+      "source": "shots/s39.tsx"
+    },
+    {
+      "id": "s40",
+      "act": 8,
+      "title": "最后一版，只比第一版多了一件事：她的事，是真的。",
+      "startFrame": 7170,
+      "durationFrames": 255,
+      "transition": "cut",
+      "source": "shots/s40.tsx"
+    },
+    {
+      "id": "s41",
+      "act": 8,
+      "title": "《风陵 · 致郭襄》。现在，是她该有的样子。",
+      "startFrame": 7425,
+      "durationFrames": 255,
+      "transition": "ink",
+      "source": "shots/s41.tsx"
+    }
+  ]
+};
