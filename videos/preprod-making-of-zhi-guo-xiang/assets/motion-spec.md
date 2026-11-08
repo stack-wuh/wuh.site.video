@@ -1,5 +1,6 @@
 # 《致郭襄》创作历程片 · 动效规范 v1（轻量令牌 + 全镜覆盖矩阵）
 
+> 2026-11-08 · v1.1：数据动效令牌入库（MO-NUM-*/MO-CHART-*，凡量必滚）；覆盖矩阵重排 v3 连续镜号。
 > 2026-11-07 · 初稿。令牌前缀 `MO-`（making-of 私有），通用基元复用 `brand/motion` 与 film-kit；组件零内联色值，一切颜色/字体引 `brand/tokens`。
 > 转场占用镜内遮罩（ShotShell 同构）：`ink` 墨洇单侧 20f / `dry` 飞白 10f / `cut` 0f，不动 `durationFrames`/`startFrame`。
 
@@ -44,6 +45,12 @@
 | MO-GRID-LIGHT | CI 方块：波次点亮，每波 6f，绿变 4f |
 | MO-WAVE-DRIFT | 波形错位：正弦漂移，峰值标注 −16.17s |
 | MO-WAVE-SNAP | 波形吸附：每句 4f 吸附归位 |
+| MO-NUM-ROLL | 0→N ease-out 40f，tabular-nums 防抖；落定帧对音点 | 计数/帧数/秒数滚动 |
+| MO-NUM-ODOMETER | 逐位滚动（右先左后，每位 8f 错峰 2f） | 角标翻牌、计数母题 |
+| MO-NUM-SLAM | 双数同滚同停，末帧 1.05→1 落定 | 「两数相等」对比卡 |
+| MO-CHART-GROW | 条形基线错峰生长（20f/根，错峰 2f），线随后浮现 | 波形/柱状入场 |
+| MO-CHART-DRAW | 折线 dashoffset 描画 60f，条形跟随揭示 | 趋势卡（备选） |
+| 纪律 | **凡量必滚，静态数据展示=违规**（2026-11-08 用户裁定）；量才滚、标识不滚（run 号/ID 是身份）；落定帧对齐音效点——查 ai-director §7.5 | 全部含数据的镜 |
 
 ### 字幕系统
 
@@ -68,46 +75,46 @@
 | 镜 | 入场 | 持续 | 出场 | 转场(in) |
 |---|---|---|---|---|
 | s01 | MO-CARD-RISE | MO-GRADE-PAPER 静置 | 2f 硬收 | cut |
-| s02 | MO-COUNTER-POS 淡入 | MO-BEAT-FLASH×6 + MO-COUNTER-DIGIT-POP | MO-COUNTER-TICK 收 | cut |
+| s02 | MO-COUNTER-POS 淡入 | MO-BEAT-FLASH×7 + MO-COUNTER-DIGIT-POP + MO-NUM-ODOMETER 角标逐位滚 | MO-COUNTER-TICK 收 | cut |
 | s03 | MO-BEAT-TRIPLE | 三连闪 | MO-BREATHE 30f 黑场 | cut |
 | s04 | MO-CARD-RISE | MO-EASE-INOUT 缓推 | — | ink |
 | s05 | MO-CARD-RISE | 列表滚动定格 | — | cut |
 | s06 | MO-CARD-STACK | 横移叠换×3 | — | cut |
-| s07 | MO-CARD-STACK×7 | MO-COUNTER-DIGIT-POP×7 | 塔定格 | cut |
+| s07 | MO-CARD-STACK×7 | MO-COUNTER-DIGIT-POP×7 + MO-NUM-ODOMETER | 塔定格 | cut |
 | s08 | —（直放） | 原速直放 | 2f 硬收 | dry |
 | s09 | MO-CUT-FLIP | 对切×2 | — | cut |
 | s10 | MO-CMP-LABEL 淡入 | MO-SPEED-08 直放 | — | ink |
-| s11 | MO-GRID-LIGHT 首波 | 波次点亮×N | 汇拢收格 | cut |
+| s11 | MO-GRID-LIGHT 首波 | 波次点亮 + MO-NUM-ROLL 0→52 随点亮 | 汇拢收格 | cut |
 | s12 | —（直放） | 原速直放 | — | cut |
-| s12b | —（直放） | 原速直放 | — | cut |
-| s13 | MO-CARD-RISE | 逐行显影 | — | ink |
-| s14 | 诗行逐行浮现 | MO-GRADE-SEAL 印章砸落 | 印章定场 | cut |
-| s15 | —（跳切） | 三段跳切 | — | cut |
-| s16 | —（直放） | 原速直放 | — | cut |
-| s17 | MO-TYPE-WRITER | 逐条打字 | 末条定格 | cut |
-| s18 | —（跳切） | 双段跳切 | — | cut |
-| s19 | MO-CARD-RISE | MO-EASE-INOUT 缓推 | — | ink |
-| s20 | MO-EASE-OUT 急推 | 特写定住 | — | cut |
-| s21 | MO-CUT-FLIP | 对切×2 | — | cut |
-| s22 | MO-CARD-RISE | 双数字对置 | 中缝划痕 4f | cut |
-| s22b | —（直放） | 原速直放 | — | cut |
-| s22c | MO-CARD-RISE | MO-TYPE-WRITER + MO-X-STAMP×4 | 末叉定格 | cut |
-| s22d | MO-CMP-LABEL 淡入 | 左右分屏对置（左黑底剪影 + 反光点） | 反光点闪烁定格 | cut |
-| s23 | MO-CMP-LABEL「TTS」 | 波形条律动 | — | dry |
-| s24 | MO-CARD-RISE×3 | MO-WAVE 呼吸 | — | cut |
-| s25 | MO-CARD-RISE | MO-WAVE-DRIFT | 峰值标注定格 | cut |
-| s26 | MO-CARD-RISE | MO-WAVE-SNAP | 归位定格 | cut |
-| s26b | —（直放） | 原速直放 | — | cut |
-| s27 | MO-CARD-RISE | 日志滚动 | 红行定格 | dry |
-| s28 | MO-CARD-RISE | 步进箭头×3 | 末步定场 | cut |
-| s29 | MO-CARD-RISE | 两格点亮 | — | cut |
-| s29b | MO-CARD-RISE | 日志流滚动 + MO-EASE-INOUT 缓推 | 淡出 6f | cut |
-| s30 | MO-COUNTER-FINAL 起手 | 缓慢放大 | 定格 | ink |
+| s13 | —（直放） | 原速直放 | — | cut |
+| s14 | MO-CARD-RISE | 逐行显影 | — | ink |
+| s15 | 诗行逐行浮现 | MO-GRADE-SEAL 印章砸落 | 印章定场 | cut |
+| s16 | —（跳切） | 三段跳切 | — | cut |
+| s17 | —（直放） | 原速直放 | — | cut |
+| s18 | MO-TYPE-WRITER | 逐条打字 | 末条定格 | cut |
+| s19 | —（跳切） | 双段跳切 | — | cut |
+| s20 | MO-CARD-RISE | MO-EASE-INOUT 缓推 | — | ink |
+| s21 | MO-EASE-OUT 急推 | 特写定住 | — | cut |
+| s22 | MO-CUT-FLIP | 对切×2 | — | cut |
+| s23 | MO-CARD-RISE | MO-NUM-SLAM 双数同滚同停 + 中缝划痕 | 落定定格 | cut |
+| s24 | —（直放） | 原速直放 | — | cut |
+| s25 | MO-CARD-RISE | MO-TYPE-WRITER + MO-X-STAMP×4 | 末叉定格 | cut |
+| s26 | MO-CMP-LABEL 淡入 | 左右分屏对置（黑底剪影 + 反光点生长） | 反光点闪烁定格 | cut |
+| s27 | MO-CHART-GROW 波形条生长 + MO-CMP-LABEL「TTS」 | 波形条律动 | — | dry |
+| s28 | MO-CARD-RISE×3 | MO-CHART-GROW 卡内波形错峰生长 | — | cut |
+| s29 | MO-CHART-GROW | MO-WAVE-DRIFT + MO-NUM-ROLL −16.17s 到位定格 | 峰值标注定格 | cut |
+| s30 | MO-CHART-GROW | MO-WAVE-SNAP + MO-NUM-ROLL 1.51s 定格 | 归位定格 | cut |
 | s31 | —（直放） | 原速直放 | — | cut |
-| s32 | —（直放） | 原速直放 | — | cut |
-| s33 | —（直放） | 原速直放 | — | cut |
-| s34 | MO-EASE-INOUT 缓推 | 原速直放 | — | cut |
-| s35 | MO-CARD-RISE | 片名定场 | MO-GRADE-SEAL 印 + BGM 淡出 | ink |
+| s32 | MO-CARD-RISE | 日志滚动 | 红行定格 | dry |
+| s33 | MO-CARD-RISE | 步进箭头×3 | 末步定场 | cut |
+| s34 | MO-CARD-RISE | 两格点亮 | — | cut |
+| s35 | MO-CARD-RISE | 日志流滚动 + MO-EASE-INOUT 缓推 | 淡出 6f | cut |
+| s36 | MO-NUM-ROLL 1→11 逐版快滚（digit-pop 同构） | MO-COUNTER-FINAL 缓放 | 定格 | ink |
+| s37 | —（直放） | 原速直放 | — | cut |
+| s38 | —（直放） | 原速直放 | — | cut |
+| s39 | —（直放） | 原速直放 | — | cut |
+| s40 | MO-EASE-INOUT 缓推 | 原速直放 | — | cut |
+| s41 | MO-CARD-RISE | 片名定场 | MO-GRADE-SEAL 印 + BGM 淡出 | ink |
 
 41/41 全覆盖：每镜入场/持续/出场/转场四格均有令牌，无空格。
 
