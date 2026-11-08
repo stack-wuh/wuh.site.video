@@ -35,6 +35,7 @@ on:
           - zhi-guo-xiang
           - site-film
           - making-of-zhi-guo-xiang
+          - wuh-site-intro-v3
 
 concurrency:
   group: render-animatic
