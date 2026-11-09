@@ -22,7 +22,7 @@ const TOTAL = 150;
 /** FN-20 落笔微光：一粒暖金光点沿题记基线游走（36–90 走完一遍，之后停在尾端呼吸） */
 const penGlowAt = (frame: number): { x: number; opacity: number } => {
   const t = interpolate(frame, [36, 90], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: CURVES.cineEaseInOut });
-  const x = interpolate(t, [0, 1], 300, 1180);
+  const x = interpolate(t, [0, 1], [300, 1180]);
   const tail = frame >= 90;
   const opacity = tail ? interpolate(frame, [90, 100], [0.9, 0.55], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }) : 0.9;
   return { x, opacity };

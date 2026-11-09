@@ -13,7 +13,7 @@ import { AbsoluteFill, Img, interpolate, useCurrentFrame } from 'remotion';
 import { staticFile } from 'remotion';
 import { colors, fontFamilies } from '../../../brand/tokens';
 import { CURVES, writeFade } from '../../../brand/motion';
-import { numRoll, ROLL_DUR } from '../motion-tokens';
+import { FILM_COLORS, numRoll, ROLL_DUR } from '../motion-tokens';
 import { CameraRig } from '../components/CameraRig';
 import { DustField } from '../components/DustField';
 import { Grade } from '../components/Grade';

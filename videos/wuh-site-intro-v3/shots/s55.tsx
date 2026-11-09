@@ -42,7 +42,7 @@ const S55: FC = () => {
 
           {/* 收束残影：墙面/页面化墨点（0–24） */}
           {frame < 24 ? (
-            <div style={{ position: 'absolute', left: interpolate(frame, [0, 24], [300, 890]), top: interpolate(frame, [0, 24], [200, 470]), width: interpolate(frame, [0, 24], 1320, 40), height: interpolate(frame, [0, 24], 680, 40), borderRadius: 20, background: colors.paperDeep, opacity: 1 - pull, border: `1px solid ${colors.hairline}` }} />
+            <div style={{ position: 'absolute', left: interpolate(frame, [0, 24], [300, 890]), top: interpolate(frame, [0, 24], [200, 470]), width: interpolate(frame, [0, 24], [1320, 40]), height: interpolate(frame, [0, 24], [680, 40]), borderRadius: 20, background: colors.paperDeep, opacity: 1 - pull, border: `1px solid ${colors.hairline}` }} />
           ) : null}
           {/* 种子墨点（落地生根） */}
           <div style={{ position: 'absolute', left: 885, top: 470, width: 50, height: 50, borderRadius: 25, background: colors.ink, opacity: interpolate(frame, [18, 30], [0, 0.95], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }) }} />

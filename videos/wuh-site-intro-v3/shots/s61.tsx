@@ -62,7 +62,7 @@ const S61: FC = () => {
           </div>
 
           {/* 每字溅 2–3 颗墨点粒子（浮游未落尽） */}
-          {LINE.split('').map((_, i) => {
+            {LINE.split('').map((_, i) => {
             const t0 = TYPE_START + i * FPC;
             if (frame < t0) return null;
             const n = 2 + (i % 2);
@@ -70,6 +70,9 @@ const S61: FC = () => {
               const ang = random(`s61-${i}-${k}`) * Math.PI * 2;
               const dist = 12 + random(`s61-d-${i}-${k}`) * 26;
               const float = interpolate(frame, [t0, t0 + 30, TOTAL], [0, 1, 1.4], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+              // 渐变窗自适应（shot-spec v12-B2 教训）：t0+60 可能越过镜长，夹到 TOTAL 并保持严格递增
+              const tMid = Math.min(t0 + 8, TOTAL - 0.5);
+              const tEnd = Math.max(tMid + 0.5, Math.min(t0 + 60, TOTAL));
               return (
                 <div
                   key={`${i}-${k}`}
@@ -81,7 +84,7 @@ const S61: FC = () => {
                     height: 4,
                     borderRadius: 2,
                     background: colors.ink,
-                    opacity: interpolate(frame, [t0, t0 + 8, t0 + 60, TOTAL], [0, 0.7, 0.35, 0.2], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }),
+                    opacity: interpolate(frame, [t0, tMid, tEnd], [0, 0.7, 0.2], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }),
                   }}
                 />
               );
