@@ -13,7 +13,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const INTRO = 120;
+const INTRO = Number(process.env.PREVIEW_INTRO ?? 120);
 const MAX_STILLS = 16;
 
 const [unit, film, outPath] = process.argv.slice(2);
