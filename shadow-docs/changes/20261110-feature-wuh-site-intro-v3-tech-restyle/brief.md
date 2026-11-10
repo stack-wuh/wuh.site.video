@@ -4,7 +4,7 @@
   "name": "20261110-feature-wuh-site-intro-v3-tech-restyle",
   "type": "feature",
   "scope": "videos/wuh-site-intro-v3,public/wuh-site-intro-v3",
-  "status": "committed",
+  "status": "published",
   "baseBranch": "feature/20261109-feature-wuh-site-intro-v3-production",
   "branch": "feature/20261110-feature-wuh-site-intro-v3-tech-restyle",
   "files": [
@@ -19,8 +19,8 @@
     "repository": "stack-wuh/wuh.site.video",
     "issue": 61,
     "issueUrl": "https://github.com/stack-wuh/wuh.site.video/issues/61",
-    "pullRequest": null,
-    "pullRequestUrl": null
+    "pullRequest": 62,
+    "pullRequestUrl": "https://github.com/stack-wuh/wuh.site.video/pull/62"
   },
   "review": {
     "conclusion": "pending",
@@ -29,8 +29,8 @@
   },
   "workflow": {
     "operation": null,
-    "checkpoint": "93f529116c12a05c2b64a042c5ec71bd9ce71525",
-    "planHash": "3c94e8032abf78f3d691c33a222ea11a1cd0444a9c2189b23c3424ef7a36569f",
+    "checkpoint": "pr:62",
+    "planHash": "a849b2676dfc7ef0f88226badcd4aa344de990e89b500a0e592effe33eac3811",
     "updatedAt": null,
     "lastError": null,
     "issuePlan": {
