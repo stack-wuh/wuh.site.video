@@ -4,7 +4,7 @@
   "name": "20261110-feature-wuh-site-intro-v3-tech-restyle",
   "type": "feature",
   "scope": "videos/wuh-site-intro-v3,public/wuh-site-intro-v3",
-  "status": "published",
+  "status": "committed",
   "baseBranch": "feature/20261109-feature-wuh-site-intro-v3-production",
   "branch": "feature/20261110-feature-wuh-site-intro-v3-tech-restyle",
   "files": [
@@ -29,8 +29,8 @@
   },
   "workflow": {
     "operation": null,
-    "checkpoint": "pr:62",
-    "planHash": "a849b2676dfc7ef0f88226badcd4aa344de990e89b500a0e592effe33eac3811",
+    "checkpoint": "f8ef12d4253fafc3aaf52df27613a274ee93175f",
+    "planHash": "3d83d37779179d1434e934eb04aca66be66a25de8b0faa1cc00b9393ddaa32d4",
     "updatedAt": null,
     "lastError": null,
     "issuePlan": {
@@ -44,15 +44,10 @@
     },
     "commit": {
       "files": [
-        "videos/wuh-site-intro-v3/components/DeepSpace.tsx",
-        "videos/wuh-site-intro-v3/components/Grade2.tsx",
-        "videos/wuh-site-intro-v3/components/HudChrome.tsx",
-        "videos/wuh-site-intro-v3/motion-tokens.ts",
         "videos/wuh-site-intro-v3/shots/s01.tsx",
-        "videos/wuh-site-intro-v3/shots/s33.tsx",
         "videos/wuh-site-intro-v3/shots/s45.tsx"
       ],
-      "message": "feat(video-materials): V2 深空数据流风格系统 + 三镜样片（s01/s33/s45，用户定稿门）\n\n- FILM_COLORS2 深空色板 + GRADES2 八幕调色（色温推移：黎明蓝→青→琥珀对比幕→亮数据终幕）\n- 科技令牌：BIG-NUMBER 全屏大数字（spring 落定+辉光 SLAM）/CHART-FLOW 数据行生长/TIMELINE-FLOW 时间线流动/glowText 辉光文本\n- 组件：DeepSpace（noise 星点场+微网格+透视地平+扫描线+暗角）/HudChrome（四角刻度+读数 chip）/Grade2\n- 语法反转示范：s45 网站截图降级证据快闪、0→1,842 全屏主角化+榜单同窗生长；s33 仿真浏览器窗全拆、八年年轮改时间线数据流+线框数据唱片（唱针 74=拍245 对音保留）；s01 墨迹 wordmark 深空辉光主角化+印章手作签名点\n- 时间轴真源零改动（帧窗/字幕/交接态/对拍锚点全保留）"
+      "message": "fix(video-materials): 样片首轮自查三修——s01 年份千分位/wordmark 棕板改文字题记、s45 榜单条上移让位字幕带\n\n- s01: 年份 2019 走 numRoll 无分隔（bigNum 的 fmtNum 是给计数用的）；墨迹 wordmark PNG 在深空上是不透明棕板（screen 救不了）——弃图用字：文字题记「wuh.site · 朝朝如念」+ 原文案副题「雾失楼台，月迷津渡」+ 印章签名点保留\n- s45: 榜单条从 bottom 108 上移 210、行高 24——让位 Caption bottom150 字幕带（首轮帧实证撞条）"
     }
   }
 }
