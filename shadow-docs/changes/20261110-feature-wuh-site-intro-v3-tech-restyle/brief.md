@@ -4,7 +4,7 @@
   "name": "20261110-feature-wuh-site-intro-v3-tech-restyle",
   "type": "feature",
   "scope": "videos/wuh-site-intro-v3,public/wuh-site-intro-v3",
-  "status": "published",
+  "status": "committed",
   "baseBranch": "feature/20261109-feature-wuh-site-intro-v3-production",
   "branch": "feature/20261110-feature-wuh-site-intro-v3-tech-restyle",
   "files": [
@@ -29,8 +29,8 @@
   },
   "workflow": {
     "operation": null,
-    "checkpoint": "pr:62",
-    "planHash": "c209a1e6f479c3c572164c3fdc8b4720077bdf06ef08038c69302c514fba98fb",
+    "checkpoint": "3a79a3edd315ae33c2975a2126f8bbafd26e3be4",
+    "planHash": "f0f0c0acab32579dc38801d51ca8dd4d36175569d2fed5432a826a8d51683107",
     "updatedAt": null,
     "lastError": null,
     "issuePlan": {
@@ -44,15 +44,9 @@
     },
     "commit": {
       "files": [
-        "shadow-docs/changes/20261110-feature-wuh-site-intro-v3-tech-restyle/brief.md",
-        "videos/wuh-site-intro-v3/components/DeepSpace.tsx",
-        "videos/wuh-site-intro-v3/components/HudChrome.tsx",
-        "videos/wuh-site-intro-v3/motion-tokens.ts",
-        "videos/wuh-site-intro-v3/shots/s01.tsx",
-        "videos/wuh-site-intro-v3/shots/s33.tsx",
-        "videos/wuh-site-intro-v3/shots/s45.tsx"
+        "videos/wuh-site-intro-v3/components/ShotShell.tsx"
       ],
-      "message": "fix(video-materials): 主题色改品牌暖黑科技族 + s01 还原家族式设计\n\n- 站点同源色：底 #0f0e0c 暖黑、数据主色琥珀 #d4a373、落定暖金 #E9D9AE、钤印朱红 #7A1F16、文字暖纸白 #f5f0e8（FILM_COLORS2/GRADES2/DeepSpace/HudChrome/s33/s45 全线换肤；glowText 主色三元组参数化）\n- s01 从基线还原家族式原版（Intro 不重构）；Out 段 s60–s62 豁免"
+      "message": "feat(video-materials): 转场 V2——水墨家族遮罩退役，全片非切转场换光晕呼吸（用户拍板）\n\n- BloomMask：出镜侧缓亮+琥珀辉光自中心呼吸晕开→末段收进近黑；入镜侧从黑显影、辉光收敛\n- 两侧接缝帧同为整屏 spaceDeep 实色（同像素接缝，顶替满墨/满纸语义）\n- coverage 口径与单侧帧数（TRANSITION_SIDE）零改动——manifest 与字幕安全窗不动\n- ShotShell 精简：删 139 团墨洇/纸翻/飞白机器（~350 行死代码；家族原件仍在 zhi-guo-xiang 等单元）\n- children 包 brightness 呼吸层（出镜 1+0.08c / 入镜余亮 1+0.05c）"
     }
   }
 }
