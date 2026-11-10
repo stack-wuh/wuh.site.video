@@ -26,8 +26,8 @@ const BloomMask: FC<MaskProps & { dir: 'in' | 'out' }> = ({ coverage, dir }) => 
   // 辉光：out 随覆盖增强；in 随退场收敛（早期最亮，像曝光落定）
   const glow = dir === 'out' ? smoothstep(clamp01(c / 0.7)) : smoothstep(clamp01(c / 0.9));
   const glowR = 24 + glow * 76;
-  // 近黑收口：out 末段压黑 / in 首段从黑揭开——两侧在接缝帧都是整屏实色
-  const blackout = dir === 'out' ? smoothstep(clamp01((c - 0.72) / 0.28)) : smoothstep(clamp01((c - 0.28) / 0.28));
+  // 近黑收口：两侧镜像对称（出侧末 28% 压黑 / 入侧首 28% 从黑揭开）——呼吸同形
+  const blackout = smoothstep(clamp01((c - 0.72) / 0.28));
   return (
     <AbsoluteFill style={{ pointerEvents: 'none', zIndex: TRANSITION_MASK_Z }}>
       <AbsoluteFill

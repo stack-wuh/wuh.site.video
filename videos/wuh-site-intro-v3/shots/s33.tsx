@@ -72,7 +72,7 @@ const S33: FC = () => {
       <DeepSpace seed="s33v2" stars={60} grid horizon />
 
       {/* 时间线（发光主线 + 刻度） */}
-      <div style={{ position: 'absolute', left: TL_X0, width: TL_X1 - TL_X0, top: TL_Y, height: 2, background: 'rgba(120,170,240,0.14)' }} />
+      <div style={{ position: 'absolute', left: TL_X0, width: TL_X1 - TL_X0, top: TL_Y, height: 2, background: 'rgba(212,163,115,0.14)' }} />
       <div
         style={{
           position: 'absolute',

@@ -109,7 +109,7 @@ const S45: FC = () => {
           const sweepX = interpolate(sweepP, [0, 1], [-4, 104], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
           return (
             <div key={r.title} style={{ position: 'relative', height: 24, marginBottom: 9 }}>
-              <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: '100%', background: 'rgba(120,170,240,0.07)', borderRadius: 3 }} />
+              <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: '100%', background: 'rgba(212,163,115,0.07)', borderRadius: 3 }} />
               <div
                 style={{
                   position: 'absolute',
@@ -118,7 +118,7 @@ const S45: FC = () => {
                   bottom: 0,
                   width: `${bar.widthPct}%`,
                   borderRadius: 3,
-                  background: r.top ? `linear-gradient(90deg, ${FILM_COLORS2.dataDim}, ${FILM_COLORS2.data})` : 'rgba(120,170,240,0.3)',
+                  background: r.top ? `linear-gradient(90deg, ${FILM_COLORS2.dataDim}, ${FILM_COLORS2.data})` : 'rgba(212,163,115,0.3)',
                   boxShadow: r.top ? `0 0 ${10 + bar.glow * 16}px rgba(212,163,115,${bar.glow * 0.5})` : 'none',
                 }}
               />
