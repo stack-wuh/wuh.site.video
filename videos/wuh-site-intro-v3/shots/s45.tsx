@@ -102,13 +102,13 @@ const S45: FC = () => {
         <span style={{ display: 'block', marginTop: 12, fontFamily: fontFamilies.mono, fontSize: 17, letterSpacing: '0.3em', color: FILM_COLORS2.amber, opacity: 0.9 }}>全站阅读最多 · 非技术文</span>
       </div>
 
-      {/* CHART-FLOW：五条阅读横条（46–106 与数字同窗生长；落定后微辉光呼吸） */}
-      <div style={{ position: 'absolute', left: 330, right: 330, bottom: 108, zIndex: 29 }}>
+      {/* CHART-FLOW：五条阅读横条（46–106 与数字同窗生长；置于字幕带 bottom150 之上，不相撞） */}
+      <div style={{ position: 'absolute', left: 330, right: 330, bottom: 210, zIndex: 29 }}>
         {RANKS.map((r) => {
           const bar = chartBar(frame, 46, 60, r.views / 1842);
           const sweepX = interpolate(sweepP, [0, 1], [-4, 104], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
           return (
-            <div key={r.title} style={{ position: 'relative', height: 26, marginBottom: 12 }}>
+            <div key={r.title} style={{ position: 'relative', height: 24, marginBottom: 9 }}>
               <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: '100%', background: 'rgba(120,170,240,0.07)', borderRadius: 3 }} />
               <div
                 style={{

@@ -7,11 +7,10 @@
  * 尾帧：深空+wordmark+2019+时间线起步，全部稳定。
  */
 import type { FC } from 'react';
-import { AbsoluteFill, Img, interpolate, useCurrentFrame } from 'remotion';
-import { staticFile } from 'remotion';
+import { AbsoluteFill, interpolate, useCurrentFrame } from 'remotion';
 import { fontFamilies } from '../../../brand/tokens';
-import { CURVES, writeFade } from '../../../brand/motion';
-import { bigNum, FILM_COLORS2, glowText } from '../motion-tokens';
+import { CURVES, numRoll, writeFade } from '../../../brand/motion';
+import { FILM_COLORS2, glowText } from '../motion-tokens';
 import { DeepSpace } from '../components/DeepSpace';
 import { Grade2 } from '../components/Grade2';
 import { HudChrome } from '../components/HudChrome';
@@ -29,11 +28,13 @@ const S01: FC = () => {
   const frame = useCurrentFrame();
   /* 深空显影（0–14 从黑场起） */
   const reveal = interpolate(frame, [0, 14], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
-  /* wordmark 辉光主角（20–64 spring 显影） */
+  /* 题记标题（文字版手作签名——墨迹 PNG 在深空上是不透明棕板，弃图用字） */
   const mark = writeFade(frame, 20, true);
   const glow = penGlowAt(frame);
-  /* 大数字 2019（56–96 滚动，落定 96） */
-  const year = bigNum(frame, 56, 40, 0, 2019);
+  /* 大数字 2019（56–96 滚动，落定 96；年份不带千分位） */
+  const yearV = numRoll(frame, 56, 40, 0, 2019);
+  const yearGlow = frame >= 96 ? interpolate(frame, [96, 99, 122], [0.35, 1, 0.4], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }) : interpolate(frame, [56, 64], [0.12, 0.35], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  const yearSlam = frame >= 96 ? interpolate(frame, [96, 104], [1.045, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }) : 1;
   /* 副标 */
   const sub = writeFade(frame, 96);
   /* 底部时间线画入（104–146 走 22%，开往八幕） */
@@ -47,30 +48,31 @@ const S01: FC = () => {
         <DeepSpace seed="s01v2" stars={72} grid horizon={false} vignette={0.5} />
       </AbsoluteFill>
 
-      {/* 手作 wordmark 墨迹辉光主角（screen 混合在深空上显影；题记即字幕） */}
+      {/* 题记即字幕（同文同层）：文字版墨迹标题 + 游走数据光点 */}
       <div
         style={{
           position: 'absolute',
-          left: 340,
-          right: 340,
-          top: 300,
+          left: 0,
+          right: 0,
+          top: 330,
+          textAlign: 'center',
           zIndex: 30,
           opacity: mark.opacity,
           transform: `${mark.transform} scale(${interpolate(frame, [20, 64], [1.045, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: CURVES.cineEaseOut })})`,
         }}
       >
-        <Img
-          src={staticFile('wuh-site-intro-v3/site/p-hero-wordmark-v1.png')}
-          style={{ width: '100%', objectFit: 'contain', mixBlendMode: 'screen', filter: 'brightness(1.14)' }}
-        />
-        {/* 游走数据光点（青色笔尖余光 + 冻帧呼吸） */}
+        <span style={{ fontFamily: fontFamilies.serif, fontSize: 84, color: FILM_COLORS2.paperInk, letterSpacing: '0.06em', ...glowText(FILM_COLORS2.paperInk, 0.4) }}>
+          wuh.site<span style={{ color: FILM_COLORS2.sealRed, margin: '0 18px', fontSize: 56 }}>·</span>朝朝如念
+        </span>
+        <span style={{ display: 'block', marginTop: 26, fontFamily: fontFamilies.serif, fontSize: 26, color: FILM_COLORS2.dataWhite, opacity: 0.72, letterSpacing: '0.3em' }}>雾失楼台，月迷津渡</span>
+        {/* 游走数据光点（青色笔尖余光，压在题记基线上） */}
         <div
           style={{
             position: 'absolute',
-            left: glow.x - 900,
-            top: 56,
-            width: 12,
-            height: 12,
+            left: `calc(50% + ${glow.x - 620}px)`,
+            top: 96,
+            width: 11,
+            height: 11,
             borderRadius: 6,
             background: FILM_COLORS2.cyan,
             boxShadow: `0 0 20px 7px rgba(95,216,255,0.6)`,
@@ -79,7 +81,7 @@ const S01: FC = () => {
         />
       </div>
 
-      {/* 大数字 2019（BIG-NUMBER 落定 = 年度报告开场钉） */}
+      {/* 大数字 2019（落定 = 年度报告开场钉；年份无千分位） */}
       <div
         style={{
           position: 'absolute',
@@ -95,11 +97,11 @@ const S01: FC = () => {
           fontVariantNumeric: 'tabular-nums',
           letterSpacing: '0.06em',
           opacity: interpolate(frame, [56, 66], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }),
-          transform: `scale(${year.slam})`,
-          ...glowText(FILM_COLORS2.cyan, year.glow * 0.8),
+          transform: `scale(${yearSlam})`,
+          ...glowText(FILM_COLORS2.cyan, yearGlow * 0.8),
         }}
       >
-        {year.text}
+        {Math.round(yearV)}
       </div>
       {/* 副标 */}
       <div style={{ position: 'absolute', left: 0, right: 0, top: 800, textAlign: 'center', zIndex: 30, ...sub }}>
