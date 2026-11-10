@@ -4,7 +4,7 @@
   "name": "20261110-feature-wuh-site-intro-v3-tech-restyle",
   "type": "feature",
   "scope": "videos/wuh-site-intro-v3,public/wuh-site-intro-v3",
-  "status": "published",
+  "status": "committed",
   "baseBranch": "feature/20261109-feature-wuh-site-intro-v3-production",
   "branch": "feature/20261110-feature-wuh-site-intro-v3-tech-restyle",
   "files": [
@@ -29,8 +29,8 @@
   },
   "workflow": {
     "operation": null,
-    "checkpoint": "pr:62",
-    "planHash": "c209a1e6f479c3c572164c3fdc8b4720077bdf06ef08038c69302c514fba98fb",
+    "checkpoint": "64d2d57b5796503a8bfb98ede079b30546c2dd39",
+    "planHash": "e934625989150787cc7c4018ea5f6ad44f6265a97d23c40a591d0fc477f398db",
     "updatedAt": null,
     "lastError": null,
     "issuePlan": {
@@ -44,9 +44,11 @@
     },
     "commit": {
       "files": [
-        "videos/wuh-site-intro-v3/components/ShotShell.tsx"
+        "videos/wuh-site-intro-v3/components/ShotShell.tsx",
+        "videos/wuh-site-intro-v3/shots/s33.tsx",
+        "videos/wuh-site-intro-v3/shots/s45.tsx"
       ],
-      "message": "feat(video-materials): 转场 V2——水墨家族遮罩退役，全片非切转场换光晕呼吸（用户拍板）\n\n- BloomMask：出镜侧缓亮+琥珀辉光自中心呼吸晕开→末段收进近黑；入镜侧从黑显影、辉光收敛\n- 两侧接缝帧同为整屏 spaceDeep 实色（同像素接缝，顶替满墨/满纸语义）\n- coverage 口径与单侧帧数（TRANSITION_SIDE）零改动——manifest 与字幕安全窗不动\n- ShotShell 精简：删 139 团墨洇/纸翻/飞白机器（~350 行死代码；家族原件仍在 zhi-guo-xiang 等单元）\n- children 包 brightness 呼吸层（出镜 1+0.08c / 入镜余亮 1+0.05c）"
+      "message": "fix(video-materials): 转场呼吸对称化 + 蓝残留清零\n\n- BloomMask 入侧压黑窗改与出侧镜像（首 28% 从黑揭开）——首轮帧实证 0.3s 仍全黑（旧窗到 c<0.28 才开始揭）\n- s45 榜单条/轨道、s33 残留的 rgba(120,170,240,…) 蓝族全部换琥珀 212,163,115"
     }
   }
 }
