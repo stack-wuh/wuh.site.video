@@ -12,7 +12,7 @@ import type { FC } from 'react';
 import { AbsoluteFill, interpolate, useCurrentFrame } from 'remotion';
 import { colors, fontFamilies } from '../../../brand/tokens';
 import { CURVES } from '../../../brand/motion';
-import { dotCascade } from '../motion-tokens';
+import { inkDraw } from '../motion-tokens';
 import { CameraRig } from '../components/CameraRig';
 import { DustField } from '../components/DustField';
 import { Grade } from '../components/Grade';
@@ -31,7 +31,7 @@ const S19: FC = () => {
   };
   // 七点落位：前 4 点 12f 间隔，后 3 点 9/6/3f 加速
   const LANDS = [24, 36, 48, 60, 69, 75, 78];
-  // 七点弧线（CHART-DRAW 78–102）：path 长度取 1600
+  // 七点弧线（CHART-DRAW 78–102）：真长度由 evolvePath 计算
   const drawP = interpolate(frame, [78, 102], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: CURVES.cineEaseOut });
 
   // 七点坐标（左低右高的弧线段，接向右方主轴）
@@ -39,6 +39,7 @@ const S19: FC = () => {
     x: 330 + i * 175,
     y: 640 - Math.pow(i / 6, 1.4) * 210,
   }));
+  const ARC_D = `M ${pts.map((p) => `${p.x} ${p.y}`).join(' L ')} Q 1450 380, 1700 470`;
 
   return (
     <AbsoluteFill style={{ background: colors.bg }}>
@@ -52,12 +53,11 @@ const S19: FC = () => {
           {/* 七点弧线（CHART-DRAW 描画） */}
           <svg width={1920} height={1080} style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
             <path
-              d={`M ${pts.map((p) => `${p.x} ${p.y}`).join(' L ')} Q 1450 380, 1700 470`}
+              d={ARC_D}
               fill="none"
               stroke={colors.paper}
               strokeWidth={1.6}
-              strokeDasharray={1600}
-              strokeDashoffset={(1 - drawP) * 1600}
+              {...inkDraw(drawP, ARC_D)}
               opacity={0.75}
             />
           </svg>

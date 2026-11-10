@@ -33,8 +33,8 @@ const S20: FC = () => {
   };
   // 7 点余光熄灭（0–16）
   const afterglow = 1 - interpolate(frame, [0, 16], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
-  // ★DAT-06 断电：已描曲线反向收缩（16–52 骤停）
-  const cut = chartCut(frame, 16, 36, 1600);
+  // ★DAT-06 断电：已描曲线反向收缩（16–52 骤停；真长度驱动，路径 d 见 CURVE）
+  const cut = chartCut(frame, 16, 36, CURVE);
   // 四墨点坠落悬停（52 起，间隔 8/6/5/5）
   const DOT_DELAY = [52, 60, 66, 71];
   const DOT_XY = [
@@ -59,7 +59,7 @@ const S20: FC = () => {
 
           {/* 提交曲线（断电） */}
           <svg width={1920} height={1080} style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
-            <path d={CURVE} fill="none" stroke={colors.paper} strokeWidth={2.2} strokeDasharray={1600} strokeDashoffset={cut.dashoffset} opacity={cut.opacity} />
+            <path d={CURVE} fill="none" stroke={colors.paper} strokeWidth={2.2} {...cut.stroke} opacity={cut.opacity} />
           </svg>
           {/* 曲线分段熄灭后的残迹（52–72 折线收缩） */}
           {frame >= CUT_AT && frame < 76 ? (

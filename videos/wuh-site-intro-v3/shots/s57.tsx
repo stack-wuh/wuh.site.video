@@ -24,10 +24,12 @@ const ICONS = [
   { name: '插件沙箱', glyph: '▣' },
   { name: '四主题', glyph: '◐' },
 ];
+/** 枝 3（真长度由 evolvePath 计算，不再猜 900） */
+const B3_D = 'M 890 620 C 980 520 1090 460 1230 430';
 
 const S57: FC = () => {
   const frame = useCurrentFrame();
-  const b3 = treeGrow(frame, 6, 36, 900);
+  const b3 = treeGrow(frame, 6, 36, B3_D);
   const cam = { scale: 1.03, x: interpolate(frame, [0, TOTAL], [-30, 60], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: CURVES.cineEaseInOut }), y: 0, rot: 0 };
 
   return (
@@ -41,7 +43,7 @@ const S57: FC = () => {
             <path d="M 880 660 C 700 620 520 600 300 620" fill="none" stroke={colors.ink} strokeWidth={5} opacity={0.85} />
             <path d="M 880 700 C 1060 700 1240 720 1420 700" fill="none" stroke={colors.ink} strokeWidth={5} opacity={0.85} />
             {/* 枝 3（上挑） */}
-            <path d="M 890 620 C 980 520 1090 460 1230 430" fill="none" stroke={colors.ink} strokeWidth={4.5} strokeDasharray={900} strokeDashoffset={b3.dashoffset} opacity={0.85} />
+            <path d={B3_D} fill="none" stroke={colors.ink} strokeWidth={4.5} {...b3.stroke} opacity={0.85} />
           </svg>
 
           {/* 枝 3 标签卡 */}
@@ -62,7 +64,6 @@ const S57: FC = () => {
             </div>
             <div style={{ position: 'absolute', left: 0, right: 0, top: 100, display: 'flex', justifyContent: 'center', gap: 44 }}>
               {ICONS.map((ic, i) => {
-                const on = frame >= 30 + i * 15;
                 const lit = interpolate(frame, [30 + i * 15, 42 + i * 15], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: CURVES.cineEaseOut });
                 return (
                   <div key={ic.name} style={{ textAlign: 'center', opacity: 0.25 + lit * 0.75, transform: `translateY(${(1 - lit) * 8}px)` }}>

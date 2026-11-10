@@ -1,7 +1,8 @@
 import type { CSSProperties } from 'react';
 import { interpolate, random } from 'remotion';
 import { colors } from '../../brand/tokens';
-import { CURVES } from '../../brand/motion';
+import { CURVES, inkDraw } from '../../brand/motion';
+import type { InkStroke } from '../../brand/motion';
 
 /**
  * wuh-site-intro-v3 动效令牌库 —— motion-spec v3（123 枚）的 Remotion 落地。
@@ -30,6 +31,11 @@ export {
   dyeDrain,
   sealStamp,
   sealTilt,
+  inkDraw,
+  handheld,
+  driftAngle,
+  springEnter,
+  TRANS,
 } from '../../brand/motion';
 
 /* ─── 表 3.7.1 影片私有色（场景内禁止内联色值） ─── */
@@ -305,10 +311,11 @@ export const heatWave = (frame: number, delay: number, col: number, row: number,
   return { opacity: p, transform: `scaleY(${0.4 + p * 0.6})` };
 };
 
-/** FN-21 path-draw 描边生长 */
-export const pathDraw = (frame: number, delay: number, dur: number, length: number): CSSProperties => {
+/** FN-21 path-draw 描边生长（2026-11-10 升级：第 4 参从猜长度 pathLen 改收路径 d 字符串，
+ *  真长度由 @remotion/paths evolvePath 计算——猜大必歪：起步死区+变速扭曲） */
+export const pathDraw = (frame: number, delay: number, dur: number, pathD: string): CSSProperties => {
   const p = interpolate(frame - delay, [0, dur], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: CURVES.cineEaseInOut });
-  return { strokeDasharray: `${length}`, strokeDashoffset: `${length * (1 - p)}` };
+  return inkDraw(p, pathD);
 };
 
 /** FN-22 pen-glow 28px 笔尖微光（只允许固定小尺寸径向） */
@@ -564,10 +571,16 @@ export const slamSingle = (frame: number, delay: number, dur: number, from: numb
   return { v: r.va, slam: r.slam };
 };
 
-/** DAT-06 CHART-CUT 曲线断电：已描曲线反向收缩 + 分段熄灭（ease-in 骤停），断点由 PT-01 溅墨 */
-export const chartCut = (frame: number, start: number, dur: number, pathLen: number): { dashoffset: number; opacity: number } => {
+/** DAT-06 CHART-CUT 曲线断电：已描曲线反向收缩 + 分段熄灭（ease-in 骤停），断点由 PT-01 溅墨。
+ *  2026-11-10 升级：pathD 真长度驱动（stroke 供展开到 <path>，不再猜 pathLen） */
+export const chartCut = (
+  frame: number,
+  start: number,
+  dur: number,
+  pathD: string,
+): { stroke: InkStroke; opacity: number } => {
   const p = interpolate(frame - start, [0, dur], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: CURVES.cineEaseIn });
-  return { dashoffset: p * pathLen, opacity: 1 - p * 0.35 };
+  return { stroke: inkDraw(1 - p, pathD), opacity: 1 - p * 0.35 };
 };
 
 /** DAT-07 NUM-ZERO-HOLD 反衬档：指针 0→微偏→0（阻尼），无滚数——禁止假滚 */
@@ -602,10 +615,19 @@ export const dotCascade = (
 export const streamMerge = (frame: number, start: number, settle: number, sources = 4): Array<{ progress: number; arrive: number }> =>
   Array.from({ length: sources }, (_, i) => streamIn(frame, start + i * 16, settle));
 
-/** FN-45 tree-grow 树干/枝 path 生长 + 标签落位即现（镜 55–59） */
-export const treeGrow = (frame: number, start: number, dur: number, pathLen: number): { dashoffset: number; label: number } => {
+/** FN-45 tree-grow 树干/枝 path 生长 + 标签落位即现（镜 55–59）。
+ *  2026-11-10 升级：pathD 真长度驱动（stroke 供展开到 <path>） */
+export const treeGrow = (
+  frame: number,
+  start: number,
+  dur: number,
+  pathD: string,
+): { stroke: InkStroke; label: number } => {
   const p = interpolate(frame - start, [0, dur], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: CURVES.cineEaseOut });
-  return { dashoffset: (1 - p) * pathLen, label: interpolate(frame - start, [dur * 0.7, dur], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }) };
+  return {
+    stroke: inkDraw(p, pathD),
+    label: interpolate(frame - start, [dur * 0.7, dur], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }),
+  };
 };
 
 /** FN-46 motif-overlay 六母题依次叠印（镜 60）：12f 错峰 ×6，16f 淡入，opacity ≤12% */

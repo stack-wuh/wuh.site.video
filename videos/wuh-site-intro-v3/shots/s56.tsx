@@ -19,6 +19,8 @@ import { PaperGrain } from '../components/PaperGrain';
 
 const TOTAL = 154;
 const STAGES = ['propose', 'apply', 'review', 'release', '归档'];
+/** 枝 2（真长度由 evolvePath 计算，不再猜 1100） */
+const B2_D = 'M 880 700 C 1060 700 1240 720 1420 700';
 
 /** 树骨架（承接 s55；已生长态常驻） */
 const TreeTrunk: FC = () => (
@@ -31,7 +33,7 @@ const TreeTrunk: FC = () => (
 const S56: FC = () => {
   const frame = useCurrentFrame();
   // 枝 2 生长（向右横出，10–54）
-  const b2 = treeGrow(frame, 10, 44, 1100);
+  const b2 = treeGrow(frame, 10, 44, B2_D);
   const cam = { scale: 1.03, x: interpolate(frame, [0, TOTAL], [40, -10], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: CURVES.cineEaseInOut }), y: 0, rot: 0 };
 
   return (
@@ -42,7 +44,7 @@ const S56: FC = () => {
           <TreeTrunk />
           {/* 枝 2 生长 */}
           <svg width={1920} height={1080} style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
-            <path d="M 880 700 C 1060 700 1240 720 1420 700" fill="none" stroke={colors.ink} strokeWidth={5} strokeDasharray={1100} strokeDashoffset={b2.dashoffset} opacity={0.85} />
+            <path d={B2_D} fill="none" stroke={colors.ink} strokeWidth={5} {...b2.stroke} opacity={0.85} />
           </svg>
 
           {/* 枝 2 标签卡（落位即现） */}
@@ -56,7 +58,6 @@ const S56: FC = () => {
           {/* 五阶段闭环依次点亮（24–120） */}
           <div style={{ position: 'absolute', left: 480, top: 720, display: 'flex', gap: 34, zIndex: 30 }}>
             {STAGES.map((s, i) => {
-              const on = frame >= 24 + i * 19;
               const lit = interpolate(frame, [24 + i * 19, 34 + i * 19], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: CURVES.cineEaseOut });
               return (
                 <div key={s} style={{ display: 'flex', alignItems: 'center', gap: 34 }}>

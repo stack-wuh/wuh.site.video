@@ -11,7 +11,7 @@ import type { FC } from 'react';
 import { AbsoluteFill, Img, interpolate, useCurrentFrame } from 'remotion';
 import { staticFile } from 'remotion';
 import { colors, fontFamilies } from '../../../brand/tokens';
-import { CURVES, eqBars, writeFade } from '../../../brand/motion';
+import { CURVES, eqBars, inkDraw, writeFade } from '../../../brand/motion';
 import { eqBars as _eq } from '../motion-tokens';
 import { CameraRig } from '../components/CameraRig';
 import { Caption } from '../components/Caption';
@@ -26,6 +26,8 @@ const S51: FC = () => {
   const frame = useCurrentFrame();
   const playerIn = writeFade(frame, 0, true);
   const lineP = interpolate(frame, [20, 40], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: CURVES.cineEaseInOut });
+  // 连接线（真长度驱动，不再猜 1200）
+  const LINK_D = 'M 420 760 Q 760 620 1480 300';
   const grey = frame >= 40 && frame < 52;
   const playOn = frame >= 60;
   const bars = eqBars(frame);
@@ -45,7 +47,7 @@ const S51: FC = () => {
           </div>
           {/* 连接线（CHART-DRAW 20–40） */}
           <svg width={1920} height={1080} style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
-            <path d="M 420 760 Q 760 620 1480 300" fill="none" stroke={colors.gold} strokeWidth={2} strokeDasharray={1200} strokeDashoffset={(1 - lineP) * 1200} opacity={0.8} />
+            <path d={LINK_D} fill="none" stroke={colors.gold} strokeWidth={2} {...inkDraw(lineP, LINK_D)} opacity={0.8} />
           </svg>
 
           {/* p-music-player 前景（左下滑入接管） */}

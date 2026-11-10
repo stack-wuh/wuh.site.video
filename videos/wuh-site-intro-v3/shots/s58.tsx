@@ -9,7 +9,7 @@
 import type { FC } from 'react';
 import { AbsoluteFill, interpolate, useCurrentFrame } from 'remotion';
 import { colors, fontFamilies } from '../../../brand/tokens';
-import { CURVES, sealStamp, sealTilt, writeFade } from '../../../brand/motion';
+import { sealStamp, sealTilt, writeFade } from '../../../brand/motion';
 import { paperShake, treeGrow } from '../motion-tokens';
 import { CameraRig } from '../components/CameraRig';
 import { Caption } from '../components/Caption';
@@ -17,11 +17,12 @@ import { DustField } from '../components/DustField';
 import { Grade } from '../components/Grade';
 import { PaperGrain } from '../components/PaperGrain';
 
-const TOTAL = 118;
+/** 枝 4（真长度由 evolvePath 计算，不再猜 800） */
+const B4_D = 'M 895 600 C 830 520 760 470 640 445';
 
 const S58: FC = () => {
   const frame = useCurrentFrame();
-  const b4 = treeGrow(frame, 6, 34, 800);
+  const b4 = treeGrow(frame, 6, 34, B4_D);
   const shake = paperShake(frame, 84, 1.6, 9);
   const cam = { scale: 1.05, x: 0, y: interpolate(frame, [0, 30], [0, 20], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }), rot: 0 };
 
@@ -36,7 +37,7 @@ const S58: FC = () => {
             <path d="M 880 660 C 700 620 520 600 300 620" fill="none" stroke={colors.ink} strokeWidth={5} opacity={0.85} />
             <path d="M 880 700 C 1060 700 1240 720 1420 700" fill="none" stroke={colors.ink} strokeWidth={5} opacity={0.85} />
             <path d="M 890 620 C 980 520 1090 460 1230 430" fill="none" stroke={colors.ink} strokeWidth={4.5} opacity={0.85} />
-            <path d="M 895 600 C 830 520 760 470 640 445" fill="none" stroke={colors.ink} strokeWidth={4.5} strokeDasharray={800} strokeDashoffset={b4.dashoffset} opacity={0.85} />
+            <path d={B4_D} fill="none" stroke={colors.ink} strokeWidth={4.5} {...b4.stroke} opacity={0.85} />
           </svg>
 
           {/* 枝 4 标签卡 */}

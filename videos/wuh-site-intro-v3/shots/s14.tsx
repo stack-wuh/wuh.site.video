@@ -56,7 +56,7 @@ const S14: FC = () => {
                 {/* 纸页 */}
                 <div style={{ position: 'absolute', inset: 0, ...pageFlip(frame, t0 + WINDOW - 8, 8, 'left'), borderRadius: 6, background: colors.paper, border: `1px solid ${colors.paperMuted}`, boxShadow: '0 16px 44px rgba(0,0,0,0.22)', transform: `${pageFlip(frame, t0 + WINDOW - 8, 8, 'left').transform} translateY(${(1 - pageIn) * -24}px)` }}>
                   <div style={{ position: 'absolute', left: 90, right: 90, top: 150 }}>
-                    <div style={{ ...writeFade(local, 8, true), fontFamily: fontFamilies.serif, fontSize: 42, lineHeight: 1.75, color: colors.ink, opacity: writeFade(local, 8, true).opacity * (1 - pageOut) }}>{q}</div>
+                    <div style={{ ...writeFade(local, 8, true), fontFamily: fontFamilies.serif, fontSize: 42, lineHeight: 1.75, color: colors.ink, opacity: Number(writeFade(local, 8, true).opacity ?? 0) * (1 - pageOut) }}>{q}</div>
                     {/* 出处小字（画面文字：标注出处、不推进时间线） */}
                     <div style={{ position: 'absolute', right: 0, top: 170, fontFamily: fontFamilies.mono, fontSize: 15, color: colors.muted, opacity: 0.65 * (1 - pageOut) }}>#165《再读〈坐忘歌〉》· 2026-07-05</div>
                   </div>

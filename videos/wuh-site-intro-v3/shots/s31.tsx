@@ -10,7 +10,7 @@ import type { FC } from 'react';
 import { AbsoluteFill, Img, interpolate, useCurrentFrame } from 'remotion';
 import { staticFile } from 'remotion';
 import { colors, fontFamilies } from '../../../brand/tokens';
-import { CURVES, writeFade } from '../../../brand/motion';
+import { CURVES, inkDraw, writeFade } from '../../../brand/motion';
 import { ConsoleCursor, ConsolePanel } from '../components/ConsolePanel';
 import { ExpandWindow } from '../components/ExpandWindow';
 import { Caption } from '../components/Caption';
@@ -25,9 +25,11 @@ const S31: FC = () => {
   const frame = useCurrentFrame();
   const expanded = frame >= CLICK_AT + 2 && frame < TOTAL - 14;
   const tailPanel = frame >= TOTAL - 14;
-  // 双曲线逐段描边（24–64：山峦 24–44，涟漪 44–64）
+  // 双曲线逐段描边（24–64：山峦 24–44，涟漪 44–64；真长度驱动，不再猜 1800/1600）
   const mountain = interpolate(frame, [24, 44], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: CURVES.cineEaseInOut });
   const ripple = interpolate(frame, [44, 64], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: CURVES.cineEaseInOut });
+  const RIDGE_D = 'M 240 700 Q 560 420 880 640 T 1680 560';
+  const RIPPLE_D = 'M 240 760 Q 620 830 980 760 T 1680 780';
   const coverIn = writeFade(frame, 36, true);
   const cam = { scale: 1.04, x: 0, y: 0, rot: 0 };
 
@@ -45,11 +47,11 @@ const S31: FC = () => {
         <ExpandWindow startAt={CLICK_AT} total={TOTAL} block={2} asset="wuh-site-intro-v3/site/s03-post-165-v1.png" dim={0.3} objectPos="center 20%">
           {/* 山峦曲线（SVG 描边生长） */}
           <svg width={1920} height={1080} style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
-            <path d="M 240 700 Q 560 420 880 640 T 1680 560" fill="none" stroke={colors.ink} strokeWidth={3} strokeDasharray={1800} strokeDashoffset={(1 - mountain) * 1800} opacity={0.85} />
-            <path d="M 240 760 Q 620 830 980 760 T 1680 780" fill="none" stroke={colors.ink} strokeWidth={2} strokeDasharray={1600} strokeDashoffset={(1 - ripple) * 1600} opacity={0.55} />
+            <path d={RIDGE_D} fill="none" stroke={colors.ink} strokeWidth={3} {...inkDraw(mountain, RIDGE_D)} opacity={0.85} />
+            <path d={RIPPLE_D} fill="none" stroke={colors.ink} strokeWidth={2} {...inkDraw(ripple, RIPPLE_D)} opacity={0.55} />
           </svg>
           {/* p-post-cover-165 封面样本前景浮出 */}
-          <div style={{ position: 'absolute', right: 190, top: 300, width: 560, ...coverIn, transform: `${coverIn.transform} translateY(${(1 - Number(coverIn.opacity)) * 0}px)` }}>
+          <div style={{ position: 'absolute', right: 190, top: 300, width: 560, ...coverIn }}>
             <Img src={staticFile('wuh-site-intro-v3/site/p-post-cover-165-v1.png')} style={{ width: '100%', borderRadius: 8, border: `1px solid ${colors.hairline}`, boxShadow: '0 20px 60px rgba(0,0,0,0.4)' }} />
           </div>
           {/* 大标题 write-fade */}

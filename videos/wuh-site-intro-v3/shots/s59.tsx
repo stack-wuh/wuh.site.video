@@ -23,10 +23,12 @@ const FILMS = [
   { name: 'intro v2', dur: '4:46' },
   { name: '风陵·致郭襄', dur: '4:52' },
 ];
+/** 枝 5（真长度由 evolvePath 计算，不再猜 700） */
+const B5_D = 'M 905 560 C 1010 470 1130 420 1300 400';
 
 const S59: FC = () => {
   const frame = useCurrentFrame();
-  const b5 = treeGrow(frame, 6, 32, 700);
+  const b5 = treeGrow(frame, 6, 32, B5_D);
   const cam = { scale: 1.04, x: interpolate(frame, [0, TOTAL], [10, -60], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: CURVES.cineEaseInOut }), y: 0, rot: 0 };
   const filmGlow = interpolate(frame, [74, 96], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: CURVES.cineEaseOut });
 
@@ -42,7 +44,7 @@ const S59: FC = () => {
             <path d="M 880 700 C 1060 700 1240 720 1420 700" fill="none" stroke={colors.ink} strokeWidth={5} opacity={0.85} />
             <path d="M 890 620 C 980 520 1090 460 1230 430" fill="none" stroke={colors.ink} strokeWidth={4.5} opacity={0.85} />
             <path d="M 895 600 C 830 520 760 470 640 445" fill="none" stroke={colors.ink} strokeWidth={4.5} opacity={0.85} />
-            <path d="M 905 560 C 1010 470 1130 420 1300 400" fill="none" stroke={colors.ink} strokeWidth={4.5} strokeDasharray={700} strokeDashoffset={b5.dashoffset} opacity={0.85} />
+            <path d={B5_D} fill="none" stroke={colors.ink} strokeWidth={4.5} {...b5.stroke} opacity={0.85} />
           </svg>
 
           {/* 枝 5 标签卡 */}

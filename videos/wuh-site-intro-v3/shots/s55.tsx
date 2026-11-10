@@ -19,14 +19,17 @@ import { Grade } from '../components/Grade';
 import { PaperGrain } from '../components/PaperGrain';
 
 const TOTAL = 88;
+/** 树干/枝 1（真长度由 evolvePath 计算，不再猜 1500/700） */
+const TRUNK_D = 'M 910 520 C 900 640 880 760 850 880';
+const B1_D = 'M 880 660 C 700 620 520 600 300 620';
 
 const S55: FC = () => {
   const frame = useCurrentFrame();
   const pull = interpolate(frame, [0, 24], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: CURVES.cineEaseInOut });
-  // 树干生长（20–70，path 长度 1500）
-  const trunk = treeGrow(frame, 20, 50, 1500);
+  // 树干生长（20–70）
+  const trunk = treeGrow(frame, 20, 50, TRUNK_D);
   // 枝 1（44–78）
-  const b1 = treeGrow(frame, 44, 34, 700);
+  const b1 = treeGrow(frame, 44, 34, B1_D);
   const cam = {
     scale: interpolate(frame, [0, TOTAL], [1.18, 1.02], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: CURVES.cineEaseInOut }),
     x: 0,
@@ -49,9 +52,9 @@ const S55: FC = () => {
 
           {/* 纸质的树：树干（墨线+纸纤维 path 描边生长） */}
           <svg width={1920} height={1080} style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
-            <path d="M 910 520 C 900 640 880 760 850 880" fill="none" stroke={colors.ink} strokeWidth={10} strokeDasharray={1500} strokeDashoffset={trunk.dashoffset} opacity={0.9} />
+            <path d={TRUNK_D} fill="none" stroke={colors.ink} strokeWidth={10} {...trunk.stroke} opacity={0.9} />
             {/* 枝 1：向左横出 */}
-            <path d="M 880 660 C 700 620 520 600 300 620" fill="none" stroke={colors.ink} strokeWidth={5} strokeDasharray={700} strokeDashoffset={b1.dashoffset} opacity={0.85} />
+            <path d={B1_D} fill="none" stroke={colors.ink} strokeWidth={5} {...b1.stroke} opacity={0.85} />
             {/* 枝 1 预留分叉痕（后镜用，微亮） */}
             <path d="M 880 700 C 1060 700 1240 720 1420 700" fill="none" stroke={colors.muted} strokeWidth={1.2} strokeDasharray={6} opacity={0.35} />
           </svg>

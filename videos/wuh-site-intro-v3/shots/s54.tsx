@@ -12,8 +12,8 @@ import type { FC } from 'react';
 import { AbsoluteFill, Img, interpolate, useCurrentFrame } from 'remotion';
 import { staticFile } from 'remotion';
 import { colors, fontFamilies } from '../../../brand/tokens';
-import { CURVES, writeFade } from '../../../brand/motion';
-import { streamMerge } from '../motion-tokens';
+import { writeFade } from '../../../brand/motion';
+import { inkDraw, streamMerge } from '../motion-tokens';
 import { Caption } from '../components/Caption';
 import { DustField } from '../components/DustField';
 import { Grade } from '../components/Grade';
@@ -40,10 +40,11 @@ const S54: FC = () => {
           {SOURCES.map((src, i) => {
             const s = streams[i];
             const x0 = [140, 420, 700, 980][i];
+            const arcD = `M ${x0 - 360} -40 Q ${x0 - 200} 300 ${x0 - 330} 760`; // 真长度驱动，不再猜 900
             return (
               <div key={src}>
                 <svg width={1120} height={840} style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
-                  <path d={`M ${x0 - 360} -40 Q ${x0 - 200} 300 ${x0 - 330} 760`} fill="none" stroke={colors.gold} strokeWidth={1.6} strokeDasharray={900} strokeDashoffset={(1 - s.progress) * 900} opacity={0.55 + s.arrive * 0.4} />
+                  <path d={arcD} fill="none" stroke={colors.gold} strokeWidth={1.6} {...inkDraw(s.progress, arcD)} opacity={0.55 + s.arrive * 0.4} />
                 </svg>
                 <span style={{ position: 'absolute', left: x0 - 420, top: 40 + i * 44, fontFamily: fontFamilies.mono, fontSize: 16, color: colors.gold, opacity: writeFade(frame, 24 + i * 16).opacity }}>{src}</span>
               </div>

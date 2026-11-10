@@ -65,7 +65,7 @@ const S29: FC = () => {
               <div key={i} style={{ position: 'absolute', left: 90, top: 220 + i * 90, ...writeFade(frame, line.delay, true) }}>
                 <span style={{ fontFamily: fontFamilies.serif, fontSize: 40, color: colors.ink, opacity: 0.92, backgroundColor: i === 2 ? 'transparent' : 'transparent' }}>{line.text}</span>
                 {/* 铅字排入的基线 */}
-                <div style={{ position: 'absolute', left: 0, right: 0, bottom: -10, height: 2, background: colors.muted, opacity: writeFade(frame, line.delay).opacity * 0.2 }} />
+                <div style={{ position: 'absolute', left: 0, right: 0, bottom: -10, height: 2, background: colors.muted, opacity: Number(writeFade(frame, line.delay).opacity ?? 0) * 0.2 }} />
               </div>
             ))}
             {/* 重启钤印（206=拍223 对音，6f 落下 + 印泥晕开） */}
