@@ -96,10 +96,10 @@ const S45: FC = () => {
         <span style={{ fontFamily: fontFamilies.mono, fontSize: 18, letterSpacing: '0.5em', color: FILM_COLORS2.textMuted, opacity: interpolate(frame, [46, 60], [0, 0.9], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }) }}>次 阅读 · 全站之最</span>
       </div>
 
-      {/* 题名 + 副标（落定后显影） */}
-      <div style={{ position: 'absolute', left: 0, right: 0, top: 668, textAlign: 'center', zIndex: 30, ...titleIn }}>
-        <span style={{ fontFamily: fontFamilies.serif, fontSize: 58, color: FILM_COLORS2.dataWhite, ...glowText(FILM_COLORS2.dataWhite, 0.32) }}>《再读〈坐忘歌〉》</span>
-        <span style={{ display: 'block', marginTop: 12, fontFamily: fontFamilies.mono, fontSize: 17, letterSpacing: '0.3em', color: FILM_COLORS2.amber, opacity: 0.9 }}>全站阅读最多 · 非技术文</span>
+      {/* 题名 + 副标（落定后显影；在「次 阅读」行之下、榜单条之上，互不相撞） */}
+      <div style={{ position: 'absolute', left: 0, right: 0, top: 636, textAlign: 'center', zIndex: 30, ...titleIn }}>
+        <span style={{ fontFamily: fontFamilies.serif, fontSize: 46, color: FILM_COLORS2.dataWhite, ...glowText(FILM_COLORS2.dataWhite, 0.32) }}>《再读〈坐忘歌〉》</span>
+        <span style={{ fontFamily: fontFamilies.mono, fontSize: 16, letterSpacing: '0.26em', color: FILM_COLORS2.amber, opacity: 0.9, marginLeft: 26 }}>全站阅读最多 · 非技术文</span>
       </div>
 
       {/* CHART-FLOW：五条阅读横条（46–106 与数字同窗生长；置于字幕带 bottom150 之上，不相撞） */}
