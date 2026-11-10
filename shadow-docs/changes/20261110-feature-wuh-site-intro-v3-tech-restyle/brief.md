@@ -30,7 +30,7 @@
   "workflow": {
     "operation": null,
     "checkpoint": "pr:62",
-    "planHash": "499a24c3bf259a6f254db825eef2870f1aa20b25471ff0f44f8dd0211b70cfcb",
+    "planHash": "5037b05ccdd82bfdda580443241814ba5d45714099bb169d8c8820d46362beae",
     "updatedAt": null,
     "lastError": null,
     "issuePlan": {
@@ -44,9 +44,15 @@
     },
     "commit": {
       "files": [
+        "shadow-docs/changes/20261110-feature-wuh-site-intro-v3-tech-restyle/brief.md",
+        "videos/wuh-site-intro-v3/components/DeepSpace.tsx",
+        "videos/wuh-site-intro-v3/components/HudChrome.tsx",
+        "videos/wuh-site-intro-v3/motion-tokens.ts",
+        "videos/wuh-site-intro-v3/shots/s01.tsx",
+        "videos/wuh-site-intro-v3/shots/s33.tsx",
         "videos/wuh-site-intro-v3/shots/s45.tsx"
       ],
-      "message": "fix(video-materials): s45 题名上移至大数字与榜单条之间——首轮帧实证 4.5s 后题名压条"
+      "message": "fix(video-materials): 用户两道修正——主题色改品牌暖黑科技族 + s01 还原家族式设计\n\n- 主题色推倒重来：深空蓝青全族换站点同源色——底 #0f0e0c 暖黑、数据主色琥珀 #d4a373、落定高光暖金 #E9D9AE、强调钤印朱红 #7A1F16、文字暖纸白 #f5f0e8\n- s01 从基线还原家族式原版（Intro 属家族式设计不重构）；Out 段 s60–s62 Phase 3 一并豁免；转场遮罩（墨洇/纸翻/飞白）属家族视觉不换"
     }
   }
 }
