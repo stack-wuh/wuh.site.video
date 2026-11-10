@@ -4,7 +4,7 @@
   "name": "20261109-feature-wuh-site-intro-v3-production",
   "type": "feature",
   "scope": "video-materials",
-  "status": "branched",
+  "status": "committed",
   "baseBranch": "main",
   "branch": "feature/20261109-feature-wuh-site-intro-v3-production",
   "files": [
@@ -28,7 +28,7 @@
   },
   "workflow": {
     "operation": null,
-    "checkpoint": "issue:60",
+    "checkpoint": "64707e65818435f8e7034240c04832d50df3364a",
     "planHash": "bd9393aca87aa3ff0d36eebc7f87c92d363b1741f6612a594803a0ca2d18b3e8",
     "updatedAt": null,
     "lastError": null,
