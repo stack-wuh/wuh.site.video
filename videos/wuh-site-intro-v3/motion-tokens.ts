@@ -2,6 +2,7 @@ import type { CSSProperties } from 'react';
 import { interpolate, random } from 'remotion';
 import { colors } from '../../brand/tokens';
 import { CURVES, inkDraw } from '../../brand/motion';
+import { numRoll } from '../../brand/motion';
 import type { InkStroke } from '../../brand/motion';
 
 /**
@@ -672,3 +673,96 @@ export const fadeBlack = (frame: number, start: number, dur = 20): { bright: num
 export const PT = {
   paperGrain: { opacity: 0.05, blend: 'normal' },
 } as const;
+
+/* ═══ V2 深空数据流（2026-11-10 科技感重构，change 20261110-feature-…-tech-restyle）═══
+ * 参照系：年度报告数据流——深色底、多图表同屏生长、时间线流动、高信息密度。
+ * 语法反转：数据/内容当主角（全屏大数字/图表/kinetic typography），
+ * 网站截图降级为「证据快闪」（≤2s 辉光小窗）；手作签名点（印章/墨迹 wordmark）克制保留。
+ * 样片门：s01/s33/s45 先行，用户定稿后才全量铺开（不在错误风格上烧 62 镜工时）。 */
+
+/** V2 影片私有色（深空数据流；场景内禁止内联色值） */
+export const FILM_COLORS2 = {
+  space: '#05070D',
+  spaceDeep: '#020308',
+  panel: 'rgba(13,18,30,0.72)',
+  grid: 'rgba(96,150,220,0.09)',
+  line: 'rgba(120,170,240,0.24)',
+  cyan: '#5FD8FF',
+  cyanDim: '#39718C',
+  dataWhite: '#EAF2FF',
+  textMuted: '#7B8AA3',
+  amber: '#FFB454',
+  sealRed: '#C96F4A',
+  paperInk: '#F6F1E7',
+} as const;
+
+/** V2 八幕调色（GR2-01–08）：深空基调 + 幕间色温推移（黎明蓝→青→琥珀对比幕→亮数据终幕） */
+export type GradeId2 = 'GR2-01' | 'GR2-02' | 'GR2-03' | 'GR2-04' | 'GR2-05' | 'GR2-06' | 'GR2-07' | 'GR2-08';
+
+export type Grade2Def = {
+  id: GradeId2;
+  base: { color: string; blend: CSSProperties['mixBlendMode']; opacity: number };
+  veil?: { gradient: string; blend: CSSProperties['mixBlendMode']; opacity: number };
+  saturate: number;
+  brightness?: number;
+};
+
+const V2_VIGNETTE =
+  'radial-gradient(ellipse 118% 96% at 50% 46%, rgba(5,7,13,0) 52%, rgba(2,3,8,0.55) 88%, rgba(2,3,8,0.82) 100%)';
+
+export const GRADES2: Record<GradeId2, Grade2Def> = {
+  'GR2-01': { id: 'GR2-01', base: { color: '#0A1420', blend: 'screen', opacity: 0.16 }, veil: { gradient: 'linear-gradient(180deg, rgba(95,216,255,0.10), rgba(95,216,255,0) 46%)', blend: 'screen', opacity: 0.5 }, saturate: 1.0 },
+  'GR2-02': { id: 'GR2-02', base: { color: '#101A30', blend: 'screen', opacity: 0.14 }, saturate: 0.98 },
+  'GR2-03': { id: 'GR2-03', base: { color: '#08202C', blend: 'screen', opacity: 0.16 }, veil: { gradient: 'linear-gradient(180deg, rgba(95,216,255,0.07), rgba(95,216,255,0) 40%)', blend: 'screen', opacity: 0.5 }, saturate: 1.02 },
+  'GR2-04': { id: 'GR2-04', base: { color: '#010204', blend: 'multiply', opacity: 0.4 }, veil: { gradient: V2_VIGNETTE, blend: 'normal', opacity: 0.7 }, saturate: 0.9, brightness: 0.97 },
+  'GR2-05': { id: 'GR2-05', base: { color: '#241505', blend: 'screen', opacity: 0.14 }, veil: { gradient: 'linear-gradient(180deg, rgba(255,180,84,0.08), rgba(255,180,84,0) 44%)', blend: 'screen', opacity: 0.5 }, saturate: 1.04 },
+  'GR2-06': { id: 'GR2-06', base: { color: '#062020', blend: 'screen', opacity: 0.14 }, saturate: 1.0 },
+  'GR2-07': { id: 'GR2-07', base: { color: '#141031', blend: 'screen', opacity: 0.16 }, veil: { gradient: 'linear-gradient(180deg, rgba(130,120,255,0.07), rgba(130,120,255,0) 44%)', blend: 'screen', opacity: 0.5 }, saturate: 1.02 },
+  'GR2-08': { id: 'GR2-08', base: { color: '#0E1A2C', blend: 'screen', opacity: 0.14 }, veil: { gradient: 'linear-gradient(180deg, rgba(95,216,255,0.09), rgba(95,216,255,0) 42%)', blend: 'screen', opacity: 0.55 }, saturate: 1.02, brightness: 1.05 },
+};
+
+/* ─── V2 科技令牌 ─── */
+
+/** BIG-NUMBER 全屏大数字滚动：spring-out 落定 + 落定辉光脉冲（年度报告主角基元）。
+ *  返回千分位文本与辉光强度（落定瞬间 1→呼吸收敛）。 */
+export const bigNum = (
+  frame: number,
+  delay: number,
+  dur: number,
+  from: number,
+  to: number,
+): { text: string; glow: number; slam: number } => {
+  const v = numRoll(frame, delay, dur, from, to);
+  const landed = frame >= delay + dur;
+  const glow = landed ? interpolate(frame, [delay + dur, delay + dur + 3, delay + dur + 26], [0.35, 1, 0.4], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }) : interpolate(frame, [delay, delay + 8], [0.12, 0.35], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  const slam = landed ? interpolate(frame, [delay + dur, delay + dur + 8], [1.045, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }) : 1;
+  return { text: fmtNum(v), glow, slam };
+};
+
+/** 辉光文本样式：data 色 text-shadow 三段堆叠（intensity 0–1）。 */
+export const glowText = (color: string, intensity = 0.6): CSSProperties => ({
+  textShadow: `0 0 ${18 * intensity}px ${color}${Math.round(intensity * 160).toString(16).padStart(2, '0')}, 0 0 ${56 * intensity}px rgba(95,216,255,${0.28 * intensity}), 0 0 2px rgba(234,242,255,${0.6 * intensity})`,
+});
+
+/** CHART-FLOW 数据行生长：横条按比例生长（对齐大数字滚动窗），返回条宽百分比与辉光。 */
+export const chartBar = (
+  frame: number,
+  delay: number,
+  dur: number,
+  ratio: number,
+): { widthPct: number; glow: number } => {
+  const p = interpolate(frame - delay, [0, dur], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: CURVES.numRollOut });
+  return { widthPct: p * ratio * 100, glow: interpolate(p, [0.7, 1], [0.2, 0.55], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }) };
+};
+
+/** TIMELINE-FLOW 时间线流动：返回线已画比例（inkDraw 用）与第 i 节点的落点闪。 */
+export const timelineFlow = (frame: number, start: number, dur: number, nodes: number, nodeGap: number): { progress: number; nodeFlash: (i: number) => number } => {
+  const progress = interpolate(frame - start, [0, dur], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: CURVES.cineEaseInOut });
+  return {
+    progress,
+    nodeFlash: (i: number) => {
+      const at = start + (i + 1) * nodeGap;
+      return interpolate(frame, [at, at + 2, at + 10], [0, 0.95, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+    },
+  };
+};

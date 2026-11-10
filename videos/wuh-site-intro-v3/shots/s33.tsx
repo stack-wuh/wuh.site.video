@@ -1,25 +1,23 @@
 /* S33 · Act 6 入院 · 局部帧 [0,186) · 186f · 绝对 4826–5012
- *
- * 音乐年轮：光标移 04→点击→最大化（0–18）；S05 音乐页打底 + WIN-01；
- * 黑胶 5s/圈（150f 绝对时间不对拍，持续旋转）+ 俯拍同轴缓旋（cam-coax 仅此镜）；
- * 年份环走过一年（18–170，8 年 sweep ~19f/年，年度最爱逐环亮出——标识不滚数）；
- * 唱针 12f 落碟心（62–74，落定 74=绝对 4900=拍245 对音）；
- * ★DAT-04 EQ 三墨柱 CHART-GROW 起势（74–84）→ eqBars 相位差贴拍；
- * p-music-player 迷你播放器就位（114–134）+ 跑马灯；唱针抬起（164–170）→收束（170–186）。
- * 转场：入「切」，出「切」。两句字幕 ／ 分序：句 1 appearAt 20、句 2 appearAt 112（先后衔接，不叠字）。
+ * V2 深空数据流样片（2026-11-10 科技重构）：八年听歌年轮改写为「年度报告时间线」——
+ * 发光时间线横贯画入（TIMELINE-FLOW 6–40）；2018–2025 八个年节点沿落点闪（dot 闪+年份点亮
+ * 18+19i 原节奏）；线框数据唱片（同心辉光环自转 2.4°/f 保留）；唱针 12f 落碟心
+ * （62–74 落定 74=绝对 4900=拍245 对音，164–170 抬起）；★DAT-04 EQ 辉光柱起势（74–84）；
+ * 年度最爱歌名随扫掠点亮；p-music-player 截图降级为证据快闪小窗（114 出现→170 退场）。
+ * 转场：入「切」，出「切」。两句字幕 ／ 分序原样保留：句 1 appearAt 20、句 2 appearAt 112。
+ * 尾帧：时间线全亮 + 唱针抬起，元素稳定。
  */
 import type { FC } from 'react';
 import { AbsoluteFill, Img, interpolate, useCurrentFrame } from 'remotion';
 import { staticFile } from 'remotion';
-import { colors, fontFamilies } from '../../../brand/tokens';
+import { fontFamilies } from '../../../brand/tokens';
 import { CURVES, eqBars, writeFade } from '../../../brand/motion';
-import { ConsoleCursor, ConsolePanel } from '../components/ConsolePanel';
-import { ExpandWindow } from '../components/ExpandWindow';
-import { DustField } from '../components/DustField';
-import { Grade } from '../components/Grade';
-import { PaperGrain } from '../components/PaperGrain';
+import { FILM_COLORS2, glowText, timelineFlow } from '../motion-tokens';
+import { DeepSpace } from '../components/DeepSpace';
+import { Grade2 } from '../components/Grade2';
+import { HudChrome } from '../components/HudChrome';
 
-/* 年度最爱（八年歌单播放之最；materials v3 §2.8，沿 v2 私有快照 2026-10-25 抓取——标识不滚数） */
+/* 年度最爱（八年歌单播放之最；materials v3 §2.8——标识不滚数） */
 const YEARS_FAV = [
   { year: 2018, song: '《诱惑的街 (Live)》林志炫' },
   { year: 2019, song: '《腻味》金玟岐' },
@@ -31,96 +29,156 @@ const YEARS_FAV = [
   { year: 2025, song: '《爱意（金风玉露变奏）》陈致逸' },
 ];
 
-const TOTAL = 186;
 const NEEDLE_LAND = 74; // = 绝对 4900 = 拍245
+const TL_X0 = 150;
+const TL_X1 = 1770;
+const TL_Y = 700;
+const NODE_GAP = (TL_X1 - TL_X0) / YEARS_FAV.length;
 
-/** 顺序字幕（两句 ／ 同镜先后衔接，句窗不重叠；film-kit Caption 单 cue 版式） */
-const SeqCaption: FC<{ text: string; from: number; to: number; total: number }> = ({ text, from, to, total }) => {
+/** 顺序字幕（两句 ／ 同镜先后衔接，句窗不重叠） */
+const SeqCaption: FC<{ text: string; from: number; to: number }> = ({ text, from, to }) => {
   const frame = useCurrentFrame();
   if (frame < from || frame >= to) return null;
   const local = frame - from;
   const out = interpolate(local, [to - from - 12, to - from], [1, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
   return (
     <div style={{ position: 'absolute', left: 0, right: 0, bottom: 150, textAlign: 'center', zIndex: 30, opacity: Math.min(1, interpolate(local, [0, 10], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' })) * out }}>
-      <span style={{ fontFamily: fontFamilies.serif, fontSize: 40, color: colors.paper, textShadow: `0 2px 18px ${colors.bg}` }}>{text}</span>
-      <span style={{ display: 'block', height: 0 }} />
-      <span style={{ position: 'absolute', left: 0, right: 0, bottom: -30, textAlign: 'center', fontFamily: fontFamilies.mono, fontSize: 12, color: colors.muted, opacity: 0.5 }}>{total}</span>
+      <span style={{ fontFamily: fontFamilies.serif, fontSize: 40, color: FILM_COLORS2.dataWhite, textShadow: `0 2px 18px rgba(2,3,8,0.9), 0 0 26px rgba(95,216,255,0.14)` }}>{text}</span>
     </div>
   );
 };
 
 const S33: FC = () => {
   const frame = useCurrentFrame();
-  const expanded = frame >= 2 && frame < TOTAL - 16;
-  const tailPanel = frame >= TOTAL - 16;
   const vinylDeg = (frame * 2.4) % 360; // 黑胶 5s/圈 = 150f/圈 → 2.4°/f
-  // 年份环 sweep（18–170，8 年）
+  /* 时间线流动（6–40 画入；节点闪随画线推进） */
+  const tl = timelineFlow(frame, 6, 34, YEARS_FAV.length, NODE_GAP);
+  /* 年份扫掠（18–170，8 年） */
   const yearK = interpolate(frame, [18, 170], [0, 8], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
   const yearIdx = Math.min(7, Math.floor(yearK));
-  // 唱针（62–74 落下，落定=拍245；164–170 抬起）
+  /* 唱针（62–74 落下对音；164–170 抬起） */
   const needleDrop = interpolate(frame, [62, NEEDLE_LAND], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: CURVES.cineEaseOut });
   const needleUp = interpolate(frame, [164, 170], [1, 0.2], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
   const needle = Math.min(needleDrop, needleUp);
-  // ★DAT-04 EQ 起势（74–84）→ 相位差贴拍
+  /* ★DAT-04 EQ 起势（74–84）→ 相位差贴拍 */
   const eqGrow = interpolate(frame, [NEEDLE_LAND, 84], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: CURVES.cineEaseOut });
   const bars = eqBars(frame);
-  const playerIn = writeFade(frame, 114, true);
+  /* 证据快闪：p-music-player（114–170 辉光小窗） */
+  const proofIn = writeFade(frame, 114, true);
+  const proofOut = interpolate(frame, [162, 170], [1, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
 
   return (
-    <AbsoluteFill style={{ background: colors.bg }}>
-      {!expanded ? (
-        <>
-          <ConsolePanel lit={3} active={4} panelIn={1} />
-          <ConsoleCursor active={4} moveProgress={interpolate(frame, [0, 8], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' })} />
-          {tailPanel ? <ConsolePanel lit={4} active={5} panelIn={1} /> : null}
-          {tailPanel ? <ConsoleCursor active={5} moveProgress={interpolate(frame, [TOTAL - 16, TOTAL], [0, 0.6], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' })} /> : null}
-        </>
-      ) : (
-        <ExpandWindow startAt={2} total={TOTAL} block={4} asset="wuh-site-intro-v3/site/s05-music-v1.png" dim={0.24} objectPos="center">
-          {/* 黑胶（俯拍同轴缓旋：碟面自转） */}
-          <div style={{ position: 'absolute', left: 700, top: 300, width: 520, height: 520 }}>
-            <div style={{ position: 'absolute', inset: 0, borderRadius: 260, background: `radial-gradient(circle, #1a1512 0%, #241d18 30%, #16110d 62%)`, border: `1px solid ${colors.hairline}`, transform: `rotate(${vinylDeg}deg)` }}>
-              <div style={{ position: 'absolute', left: '50%', top: '50%', width: 150, height: 150, borderRadius: 75, transform: 'translate(-75px,-75px)', background: `radial-gradient(circle, ${colors.gold} 0%, transparent 70%)`, opacity: 0.35 }} />
-              {Array.from({ length: 5 }).map((_, i) => (
-                <div key={i} style={{ position: 'absolute', inset: 40 + i * 44, borderRadius: 260 - i * 88, border: `1px solid rgba(255,255,255,0.05)` }} />
-              ))}
+    <AbsoluteFill style={{ background: FILM_COLORS2.spaceDeep }}>
+      <DeepSpace seed="s33v2" stars={60} grid horizon />
+
+      {/* 时间线（发光主线 + 刻度） */}
+      <div style={{ position: 'absolute', left: TL_X0, width: TL_X1 - TL_X0, top: TL_Y, height: 2, background: 'rgba(120,170,240,0.14)' }} />
+      <div
+        style={{
+          position: 'absolute',
+          left: TL_X0,
+          top: TL_Y,
+          height: 2.5,
+          width: TL_X1 - TL_X0,
+          background: `linear-gradient(90deg, ${FILM_COLORS2.cyanDim}, ${FILM_COLORS2.cyan})`,
+          boxShadow: `0 0 14px 3px rgba(95,216,255,0.35)`,
+          opacity: 0.9,
+          clipPath: `inset(0 ${Math.max(0, (1 - tl.progress)) * 100}% 0 0)`,
+        }}
+      />
+
+      {/* 八个年节点（年份点亮 18+19i 原节奏；落点闪随线到） */}
+      {YEARS_FAV.map((y, i) => {
+        const x = TL_X0 + i * NODE_GAP;
+        const on = frame >= 18 + i * 19;
+        const flash = tl.nodeFlash(i);
+        const current = i === yearIdx;
+        return (
+          <div key={y.year}>
+            <div
+              style={{
+                position: 'absolute',
+                left: x - (5 + flash * 3),
+                top: TL_Y - (5 + flash * 3),
+                width: 10 + flash * 6,
+                height: 10 + flash * 6,
+                borderRadius: 8,
+                background: current ? FILM_COLORS2.cyan : FILM_COLORS2.dataWhite,
+                boxShadow: `0 0 ${12 + flash * 22}px ${3 + flash * 5}px rgba(95,216,255,${0.22 + flash * 0.4})`,
+                opacity: on ? 0.95 : 0.3,
+              }}
+            />
+            {/* 年份（当前扫掠位辉光） */}
+            <div style={{ position: 'absolute', left: x - 30, top: TL_Y - 96, width: 60, textAlign: 'center' }}>
+              <span style={{ fontFamily: fontFamilies.mono, fontSize: 26, fontWeight: 700, fontVariantNumeric: 'tabular-nums', color: current ? FILM_COLORS2.cyan : FILM_COLORS2.textMuted, opacity: on ? 1 : 0.35, ...(current ? glowText(FILM_COLORS2.cyan, 0.55) : {}) }}>{y.year}</span>
             </div>
-            {/* 唱针（12f 落碟心） */}
-            <div style={{ position: 'absolute', right: -20, top: 30, width: 130, height: 8, borderRadius: 4, background: colors.paper, opacity: 0.85, transform: `rotate(${18 + needle * 24}deg)`, transformOrigin: 'right center' }} />
-            <div style={{ position: 'absolute', right: -26, top: 20, width: 26, height: 26, borderRadius: 13, background: colors.muted, opacity: 0.7 }} />
-          </div>
-          {/* 年份环 + 年度最爱题签（逐环亮出，标识不滚数） */}
-          <div style={{ position: 'absolute', left: 200, top: 240, width: 380 }}>
-            {YEARS_FAV.map((y, i) => {
-              const on = frame >= 18 + i * 19;
-              return (
-                <div key={y.year} style={{ display: 'flex', alignItems: 'baseline', gap: 14, marginBottom: 12, opacity: on ? 0.95 : 0.25, transform: on ? 'translateX(0)' : 'translateX(-8px)' }}>
-                  <span style={{ fontFamily: fontFamilies.serif, fontSize: 26, color: i === yearIdx ? colors.gold : colors.paper, fontVariantNumeric: 'tabular-nums' }}>{y.year}</span>
-                  <span style={{ fontFamily: fontFamilies.serif, fontSize: 17, color: colors.muted }}>{on ? y.song : '· · ·'}</span>
-                </div>
-              );
-            })}
-          </div>
-          {/* EQ 三墨柱（CHART-GROW 起势 → 相位差贴拍） */}
-          <div style={{ position: 'absolute', left: 1210, top: 560, display: 'flex', gap: 26, alignItems: 'flex-end' }}>
-            {bars.map((v, i) => (
-              <div key={i} style={{ width: 34, height: eqGrow * (60 + v * 130), background: colors.ink, opacity: 0.85, borderRadius: 4 }} />
-            ))}
-          </div>
-          {/* p-music-player 迷你播放器就位（114–134）+ 跑马灯 */}
-          <div style={{ position: 'absolute', left: 120, bottom: 120, width: 440, ...playerIn }}>
-            <Img src={staticFile('wuh-site-intro-v3/site/p-music-player-v1.png')} style={{ width: '100%', borderRadius: 10, border: `1px solid ${colors.hairline}`, boxShadow: '0 18px 44px rgba(0,0,0,0.5)' }} />
-            <div style={{ position: 'absolute', left: 90, top: 24, width: 210, overflow: 'hidden' }}>
-              <div style={{ fontFamily: fontFamilies.mono, fontSize: 13, color: colors.paper, opacity: 0.75, whiteSpace: 'nowrap', transform: `translateX(${interpolate(frame % 120, [0, 120], [0, -60])}px)` }}>风月缠绵 · 陈致逸 · 金风玉露变奏</div>
+            {/* 年度最爱歌名 */}
+            <div style={{ position: 'absolute', left: x - 95, top: TL_Y + 26, width: 190, textAlign: 'center' }}>
+              <span style={{ fontFamily: fontFamilies.serif, fontSize: 15, color: FILM_COLORS2.dataWhite, opacity: on ? (current ? 0.95 : 0.6) : 0.25 }}>{on ? y.song : '· · ·'}</span>
             </div>
           </div>
-        </ExpandWindow>
-      )}
-      <DustField act={6} count={10} seedBase="s33" />
-      <PaperGrain opacity={0.05} />
-      <Grade id="GR-04" />
-      <SeqCaption text="时间的年轮，刻着每一年的歌。" from={20} to={106} total={TOTAL} />
-      <SeqCaption text="黑胶还在转，时光没走远。" from={112} to={168} total={TOTAL} />
+        );
+      })}
+
+      {/* 线框数据唱片（同心辉光环自转；唱针 62–74 落碟心对音） */}
+      <div style={{ position: 'absolute', left: 1140, top: 170, width: 480, height: 480 }}>
+        <div style={{ position: 'absolute', inset: 0, transform: `rotate(${vinylDeg}deg)` }}>
+          {[0, 1, 2, 3, 4].map((i) => (
+            <div
+              key={i}
+              style={{
+                position: 'absolute',
+                inset: 24 + i * 46,
+                borderRadius: 240,
+                border: `1px solid ${i % 2 === 0 ? FILM_COLORS2.line : FILM_COLORS2.cyanDim}`,
+                opacity: 0.5 - i * 0.06,
+                boxShadow: i === 2 ? `0 0 18px rgba(95,216,255,0.16), inset 0 0 18px rgba(95,216,255,0.1)` : 'none',
+              }}
+            />
+          ))}
+          <div style={{ position: 'absolute', left: '50%', top: '50%', width: 12, height: 12, borderRadius: 6, transform: 'translate(-6px,-6px)', background: FILM_COLORS2.cyan, boxShadow: `0 0 18px 6px rgba(95,216,255,0.5)` }} />
+        </div>
+        {/* 唱针（线框光针） */}
+        <div style={{ position: 'absolute', right: -8, top: 40, width: 150, height: 4, borderRadius: 2, background: `linear-gradient(90deg, ${FILM_COLORS2.cyanDim}, ${FILM_COLORS2.cyan})`, opacity: 0.9, transform: `rotate(${18 + needle * 26}deg)`, transformOrigin: 'right center', boxShadow: `0 0 10px rgba(95,216,255,0.4)` }} />
+        <div style={{ position: 'absolute', right: -16, top: 28, width: 24, height: 24, borderRadius: 12, border: `1.5px solid ${FILM_COLORS2.cyanDim}`, opacity: 0.8 }} />
+      </div>
+
+      {/* ★DAT-04 EQ 辉光柱（74–84 起势 → 相位差贴拍） */}
+      <div style={{ position: 'absolute', left: 1690, top: 380, display: 'flex', gap: 22, alignItems: 'flex-end' }}>
+        {bars.map((v, i) => (
+          <div
+            key={i}
+            style={{
+              width: 30,
+              height: eqGrow * (56 + v * 150),
+              background: `linear-gradient(180deg, ${FILM_COLORS2.cyan}, ${FILM_COLORS2.cyanDim})`,
+              borderRadius: 3,
+              boxShadow: `0 0 ${8 + v * 14}px rgba(95,216,255,${0.25 + v * 0.2})`,
+              opacity: 0.9,
+            }}
+          />
+        ))}
+      </div>
+
+      {/* 证据快闪：p-music-player 迷你播放器（辉光小窗，114 出现 → 170 退场） */}
+      <div style={{ position: 'absolute', right: 130, bottom: 150, width: 330, zIndex: 28, opacity: Number(proofIn.opacity ?? 0) * proofOut, transform: `${proofIn.transform} scale(${interpolate(frame, [114, 126], [1.07, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' })})` }}>
+        <Img
+          src={staticFile('wuh-site-intro-v3/site/p-music-player-v1.png')}
+          style={{
+            width: '100%',
+            borderRadius: 8,
+            border: `1px solid ${FILM_COLORS2.cyanDim}`,
+            boxShadow: `0 0 30px rgba(95,216,255,0.22), 0 18px 44px rgba(0,0,0,0.6)`,
+            display: 'block',
+          }}
+        />
+        <div style={{ position: 'absolute', left: -1, right: -1, top: -1, bottom: -1, borderRadius: 9, border: `1px solid rgba(95,216,255,0.4)`, opacity: 0.6, pointerEvents: 'none' }} />
+      </div>
+
+      <HudChrome label="wuh.site · MUSIC" readout="2018–2025" />
+      <Grade2 id="GR2-06" />
+      <SeqCaption text="时间的年轮，刻着每一年的歌。" from={20} to={106} />
+      <SeqCaption text="黑胶还在转，时光没走远。" from={112} to={168} />
     </AbsoluteFill>
   );
 };

@@ -1,25 +1,25 @@
 /* S45 · Act 7 坐忘 · 局部帧 [0,174) · 174f · 绝对 5954–6128
- *
- * 阅读之最：窗台纸页亮起为热度榜——S03 文章页打底（WIN-01 页内点亮展开 0–20，
- * WIN-03 驻定巡视 ≤1.06）；榜单自下而上滚动由快到停（20–106，末 30f 几乎静止）；
- * ★DAT-01 阅读数 0→1,842（46–106，落定 106=绝对 6060=拍303 对音，与榜单停同帧）；
- * 第二名 1,513 等背景虚化（Staging：滚数时其余静止）；凝住不推；
- * 末 18f 第一名纸页翻起一半（156–174）。转场：入「切」，出「切」。
- * 字幕安全窗：start≥12。
+ * V2 深空数据流样片（2026-11-10 科技重构）：「网站截图当主角」的反转示范——
+ * S03 文章页截图降级为证据快闪（0–16 显影放大 → 28 退场，全片证据窗口径）；
+ * 主角 = 全屏巨大等宽数字 0→1,842（★DAT-01 46–106 滚动，落定 106=绝对 6060=拍303 对音，
+ * 落定 SLAM 辉光脉冲 + scale 1.045→1）；《再读〈坐忘歌》》题名辉光；
+ * CHART-FLOW 五条阅读横条按比例同窗生长（46–106，与数字同拍）；
+ * 2–5 名数据行落定后淡入（Staging：滚数时其余静止）；末 18f 主条扫光（原纸页翻起的数据版）。
+ * 转场：入「切」，出「切」。字幕安全窗：start≥12。
  */
 import type { FC } from 'react';
 import { AbsoluteFill, Img, interpolate, useCurrentFrame } from 'remotion';
 import { staticFile } from 'remotion';
-import { colors, fontFamilies } from '../../../brand/tokens';
+import { fontFamilies } from '../../../brand/tokens';
 import { CURVES, writeFade } from '../../../brand/motion';
-import { fmtNum, numRoll, panePan, ROLL_DUR } from '../motion-tokens';
+import { bigNum, chartBar, FILM_COLORS2, fmtNum, glowText } from '../motion-tokens';
 import { Caption } from '../components/Caption';
-import { DustField } from '../components/DustField';
-import { Grade } from '../components/Grade';
-import { PaperGrain } from '../components/PaperGrain';
+import { DeepSpace } from '../components/DeepSpace';
+import { Grade2 } from '../components/Grade2';
+import { HudChrome } from '../components/HudChrome';
 
 const TOTAL = 174;
-const ROLL_END = 106; // = 绝对 6060 = 拍303
+/* 滚动落定 46+60=106 = 绝对 6060 = 拍303 */
 const RANKS = [
   { title: '再读《坐忘歌》', views: 1842, top: true },
   { title: 'codex 的开发范式', views: 1513 },
@@ -30,62 +30,111 @@ const RANKS = [
 
 const S45: FC = () => {
   const frame = useCurrentFrame();
-  const views = Math.round(numRoll(frame, 46, ROLL_DUR.significant, 0, 1842));
-  // 榜单滚动（20–106 由快到停：easeOut 长尾）
-  const scrollP = interpolate(frame, [20, ROLL_END], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: CURVES.cineEaseOut });
-  const pan = panePan(frame, 20, 120, { x: -10, y: -8 }, 1.05);
-  const cam = { scale: 1.03, x: 0, y: 0, rot: 0 };
-  const foldUp = interpolate(frame, [156, TOTAL], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: CURVES.cineEaseOut });
+  /* 主角大数字（46–106 滚动，落定=拍303） */
+  const hero = bigNum(frame, 46, 60, 0, 1842);
+  /* 证据快闪：文章页截图（0–16 显影放大 → 28 退场） */
+  const proofIn = writeFade(frame, 0, true);
+  const proofOut = interpolate(frame, [18, 28], [1, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  /* 题名与副标 */
+  const titleIn = writeFade(frame, 108);
+  /* 末 18f：主条扫光（数据版翻页） */
+  const sweepP = interpolate(frame, [156, TOTAL], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: CURVES.cineEaseOut });
 
   return (
-    <AbsoluteFill style={{ background: colors.bg }}>
-      <div style={{ position: 'absolute', inset: 0 }}>
-        {/* S03 文章页打底（页内点亮展开） */}
-        <Img
-          src={staticFile('wuh-site-intro-v3/site/s03-post-165-v1.png')}
-          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 20%', ...pan }}
-        />
-        <AbsoluteFill style={{ background: colors.bg, opacity: interpolate(frame, [0, 20], [0.4, 0.34], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }) }} />
+    <AbsoluteFill style={{ background: FILM_COLORS2.spaceDeep }}>
+      <DeepSpace seed="s45v2" stars={58} grid horizon />
 
-        {/* 热度榜（自下而上滚动，末 30f 几乎静止） */}
-        <div style={{ position: 'absolute', left: 300, top: 190, width: 1320, zIndex: 30 }}>
-          <div style={{ ...writeFade(frame, 16), marginBottom: 18 }}>
-            <span style={{ fontFamily: fontFamilies.mono, fontSize: 16, color: colors.muted, letterSpacing: '0.24em' }}>热 度 榜 · 2026-07</span>
-          </div>
-          <div style={{ transform: `translateY(${(1 - scrollP) * 320}px)` }}>
-            {RANKS.map((r, i) => (
-              <div
-                key={r.title}
-                style={{
-                  display: 'flex',
-                  alignItems: 'baseline',
-                  gap: 26,
-                  padding: '20px 30px',
-                  marginBottom: 14,
-                  borderRadius: 6,
-                  background: r.top ? colors.paper : 'transparent',
-                  border: r.top ? `1px solid ${colors.gold}` : `1px solid ${colors.hairline}`,
-                  opacity: r.top ? 1 : interpolate(frame, [60 + i * 10, 76 + i * 10], [0.5, 0.28], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }),
-                  filter: r.top ? 'none' : `blur(${interpolate(frame, [ROLL_END - 20, ROLL_END], [1.5, 2.5], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' })}px)`,
-                }}
-              >
-                <span style={{ fontFamily: fontFamilies.mono, fontSize: 22, color: r.top ? colors.seal : colors.muted, fontVariantNumeric: 'tabular-nums' }}>{i + 1}</span>
-                <span style={{ fontFamily: fontFamilies.serif, fontSize: r.top ? 40 : 30, color: r.top ? colors.ink : colors.muted }}>{r.title}</span>
-                <span style={{ marginLeft: 'auto', fontFamily: fontFamilies.mono, fontSize: r.top ? 46 : 26, color: r.top ? colors.seal : colors.muted, fontVariantNumeric: 'tabular-nums' }}>
-                  {r.top ? fmtNum(views) : fmtNum(r.views)}
-                </span>
-                <span style={{ fontFamily: fontFamilies.mono, fontSize: 18, color: colors.muted, opacity: 0.7 }}> 次</span>
-              </div>
-            ))}
-          </div>
+      {/* 证据快闪：文章页截图（真实感锚点，0–16 显 → 28 退场，不抢戏） */}
+      {frame < 30 ? (
+        <div
+          style={{
+            position: 'absolute',
+            left: '50%',
+            top: '46%',
+            width: interpolate(frame, [0, 16], [900, 560], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }),
+            zIndex: 28,
+            opacity: Number(proofIn.opacity ?? 0) * proofOut,
+            transform: `translate(-50%, -50%) scale(${interpolate(frame, [0, 16], [1.04, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' })})`,
+          }}
+        >
+          <Img
+            src={staticFile('wuh-site-intro-v3/site/s03-post-165-v1.png')}
+            style={{ width: '100%', borderRadius: 10, border: `1px solid ${FILM_COLORS2.cyanDim}`, boxShadow: `0 0 44px rgba(95,216,255,0.2), 0 24px 60px rgba(0,0,0,0.65)`, display: 'block' }}
+          />
         </div>
+      ) : null}
 
-        {/* 末 18f：第一名纸页翻起一半 */}
-        <div style={{ position: 'absolute', left: 300, top: 236, width: 1320, height: 120, transformOrigin: 'bottom center', transform: `perspective(1400px) rotateX(${foldUp * -42}deg)`, opacity: foldUp, background: colors.paper, borderRadius: 6, border: `1px solid ${colors.gold}`, zIndex: 31 }} />
+      {/* HUD 标题 */}
+      <div style={{ position: 'absolute', left: 0, right: 0, top: 150, textAlign: 'center', zIndex: 30, ...writeFade(frame, 36) }}>
+        <span style={{ fontFamily: fontFamilies.mono, fontSize: 17, letterSpacing: '0.4em', color: FILM_COLORS2.textMuted }}>READS RANK · 2026-07 · TOP 5</span>
       </div>
-      <DustField act={7} count={10} seedBase="s45" />
-      <PaperGrain opacity={0.05} />
-      <Grade id="GR-02" />
+
+      {/* 主角：全屏大数字 0→1,842（落定 SLAM 辉光） */}
+      <div
+        style={{
+          position: 'absolute',
+          left: 0,
+          right: 0,
+          top: 250,
+          textAlign: 'center',
+          zIndex: 30,
+          fontFamily: fontFamilies.mono,
+          fontSize: 300,
+          fontWeight: 700,
+          lineHeight: 1.05,
+          color: FILM_COLORS2.cyan,
+          fontVariantNumeric: 'tabular-nums',
+          letterSpacing: '0.02em',
+          opacity: interpolate(frame, [46, 58], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }),
+          transform: `scale(${hero.slam})`,
+          ...glowText(FILM_COLORS2.cyan, hero.glow),
+        }}
+      >
+        {hero.text}
+      </div>
+      <div style={{ position: 'absolute', left: 0, right: 0, top: 596, textAlign: 'center', zIndex: 30 }}>
+        <span style={{ fontFamily: fontFamilies.mono, fontSize: 18, letterSpacing: '0.5em', color: FILM_COLORS2.textMuted, opacity: interpolate(frame, [46, 60], [0, 0.9], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }) }}>次 阅读 · 全站之最</span>
+      </div>
+
+      {/* 题名 + 副标（落定后显影） */}
+      <div style={{ position: 'absolute', left: 0, right: 0, top: 668, textAlign: 'center', zIndex: 30, ...titleIn }}>
+        <span style={{ fontFamily: fontFamilies.serif, fontSize: 58, color: FILM_COLORS2.dataWhite, ...glowText(FILM_COLORS2.dataWhite, 0.32) }}>《再读〈坐忘歌〉》</span>
+        <span style={{ display: 'block', marginTop: 12, fontFamily: fontFamilies.mono, fontSize: 17, letterSpacing: '0.3em', color: FILM_COLORS2.amber, opacity: 0.9 }}>全站阅读最多 · 非技术文</span>
+      </div>
+
+      {/* CHART-FLOW：五条阅读横条（46–106 与数字同窗生长；落定后微辉光呼吸） */}
+      <div style={{ position: 'absolute', left: 330, right: 330, bottom: 108, zIndex: 29 }}>
+        {RANKS.map((r) => {
+          const bar = chartBar(frame, 46, 60, r.views / 1842);
+          const sweepX = interpolate(sweepP, [0, 1], [-4, 104], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+          return (
+            <div key={r.title} style={{ position: 'relative', height: 26, marginBottom: 12 }}>
+              <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: '100%', background: 'rgba(120,170,240,0.07)', borderRadius: 3 }} />
+              <div
+                style={{
+                  position: 'absolute',
+                  left: 0,
+                  top: 0,
+                  bottom: 0,
+                  width: `${bar.widthPct}%`,
+                  borderRadius: 3,
+                  background: r.top ? `linear-gradient(90deg, ${FILM_COLORS2.cyanDim}, ${FILM_COLORS2.cyan})` : 'rgba(120,170,240,0.3)',
+                  boxShadow: r.top ? `0 0 ${10 + bar.glow * 16}px rgba(95,216,255,${bar.glow * 0.5})` : 'none',
+                }}
+              />
+              {/* 末 18f 扫光带 */}
+              {r.top && sweepP > 0 && sweepP < 1 ? (
+                <div style={{ position: 'absolute', left: `${sweepX}%`, top: -2, bottom: -2, width: 90, background: 'linear-gradient(90deg, transparent, rgba(234,242,255,0.85), transparent)', opacity: 0.8, filter: 'blur(1px)' }} />
+              ) : null}
+              <span style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-52%)', fontFamily: fontFamilies.serif, fontSize: 16, color: r.top ? FILM_COLORS2.spaceDeep : FILM_COLORS2.dataWhite, opacity: r.top ? 0.95 : 0.75, whiteSpace: 'nowrap' }}>{r.title}</span>
+              <span style={{ position: 'absolute', right: 0, top: '50%', transform: 'translateY(-52%)', fontFamily: fontFamilies.mono, fontSize: 15, color: FILM_COLORS2.dataWhite, opacity: 0.85, fontVariantNumeric: 'tabular-nums' }}>{fmtNum(r.views)}</span>
+            </div>
+          );
+        })}
+      </div>
+
+      <HudChrome label="wuh.site · READS" readout="TOP 1 · 非技术" />
+      <Grade2 id="GR2-07" />
       <Caption text="七月，全站阅读最多的一篇不是技术，是《再读〈坐忘歌〉》——1,842 次。" appearAt={14} />
     </AbsoluteFill>
   );
