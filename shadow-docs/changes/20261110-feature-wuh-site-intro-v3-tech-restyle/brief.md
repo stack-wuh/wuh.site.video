@@ -4,7 +4,7 @@
   "name": "20261110-feature-wuh-site-intro-v3-tech-restyle",
   "type": "feature",
   "scope": "videos/wuh-site-intro-v3,public/wuh-site-intro-v3",
-  "status": "published",
+  "status": "committed",
   "baseBranch": "feature/20261109-feature-wuh-site-intro-v3-production",
   "branch": "feature/20261110-feature-wuh-site-intro-v3-tech-restyle",
   "files": [
@@ -29,8 +29,8 @@
   },
   "workflow": {
     "operation": null,
-    "checkpoint": "pr:62",
-    "planHash": "499a24c3bf259a6f254db825eef2870f1aa20b25471ff0f44f8dd0211b70cfcb",
+    "checkpoint": "a4d0e74b040130e98425df598bbc84568c7244ee",
+    "planHash": "ec5f3efeb21fe36ef0f973c1c37024ebe23385d84d0678922b1809a6e7b0b00f",
     "updatedAt": null,
     "lastError": null,
     "issuePlan": {
@@ -44,10 +44,9 @@
     },
     "commit": {
       "files": [
-        "videos/wuh-site-intro-v3/shots/s01.tsx",
         "videos/wuh-site-intro-v3/shots/s45.tsx"
       ],
-      "message": "fix(video-materials): 样片首轮自查三修——s01 年份千分位/wordmark 棕板改文字题记、s45 榜单条上移让位字幕带\n\n- s01: 年份 2019 走 numRoll 无分隔（bigNum 的 fmtNum 是给计数用的）；墨迹 wordmark PNG 在深空上是不透明棕板（screen 救不了）——弃图用字：文字题记「wuh.site · 朝朝如念」+ 原文案副题「雾失楼台，月迷津渡」+ 印章签名点保留\n- s45: 榜单条从 bottom 108 上移 210、行高 24——让位 Caption bottom150 字幕带（首轮帧实证撞条）"
+      "message": "fix(video-materials): s45 题名上移至大数字与榜单条之间——首轮帧实证 4.5s 后题名压条"
     }
   }
 }
