@@ -22,12 +22,12 @@ export const HudChrome: FC<{ label?: string; readout?: string }> = ({ label = 'w
   return (
     <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 25, opacity: inP * 0.6 }}>
       {corners.map((c) => (
-        <div key={c.key} style={{ position: 'absolute', width: arm, height: arm, borderColor: FILM_COLORS2.cyanDim, ...c.style }} />
+        <div key={c.key} style={{ position: 'absolute', width: arm, height: arm, borderColor: FILM_COLORS2.dataDim, ...c.style }} />
       ))}
       {/* 左上读数 */}
       <div style={{ position: 'absolute', left: 100, top: 42, display: 'flex', alignItems: 'baseline', gap: 14 }}>
-        <span style={{ fontFamily: 'Menlo, monospace', fontSize: 15, letterSpacing: '0.22em', color: FILM_COLORS2.dataWhite, opacity: 0.85 }}>{label}</span>
-        <span style={{ fontFamily: 'Menlo, monospace', fontSize: 12, letterSpacing: '0.3em', color: FILM_COLORS2.cyan, opacity: 0.7 }}>{readout}</span>
+        <span style={{ fontFamily: 'Menlo, monospace', fontSize: 15, letterSpacing: '0.22em', color: FILM_COLORS2.paperWhite, opacity: 0.85 }}>{label}</span>
+        <span style={{ fontFamily: 'Menlo, monospace', fontSize: 12, letterSpacing: '0.3em', color: FILM_COLORS2.data, opacity: 0.7 }}>{readout}</span>
       </div>
       {/* 右下帧读数（确定性：同帧同值） */}
       <div style={{ position: 'absolute', right: 100, bottom: 42, fontFamily: 'Menlo, monospace', fontSize: 12, letterSpacing: '0.2em', color: FILM_COLORS2.textMuted, fontVariantNumeric: 'tabular-nums', opacity: 0.55 }}>

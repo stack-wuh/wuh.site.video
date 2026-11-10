@@ -30,7 +30,7 @@
   "workflow": {
     "operation": null,
     "checkpoint": "pr:62",
-    "planHash": "5037b05ccdd82bfdda580443241814ba5d45714099bb169d8c8820d46362beae",
+    "planHash": "aadbb8415786fb2445ac14b6126a3c0fa357d38f1ab885ed9ed93cbabc8871e1",
     "updatedAt": null,
     "lastError": null,
     "issuePlan": {
@@ -52,7 +52,7 @@
         "videos/wuh-site-intro-v3/shots/s33.tsx",
         "videos/wuh-site-intro-v3/shots/s45.tsx"
       ],
-      "message": "fix(video-materials): 用户两道修正——主题色改品牌暖黑科技族 + s01 还原家族式设计\n\n- 主题色推倒重来：深空蓝青全族换站点同源色——底 #0f0e0c 暖黑、数据主色琥珀 #d4a373、落定高光暖金 #E9D9AE、强调钤印朱红 #7A1F16、文字暖纸白 #f5f0e8\n- s01 从基线还原家族式原版（Intro 属家族式设计不重构）；Out 段 s60–s62 Phase 3 一并豁免；转场遮罩（墨洇/纸翻/飞白）属家族视觉不换"
+      "message": "fix(video-materials): 主题色改品牌暖黑科技族 + s01 还原家族式设计\n\n- 站点同源色：底 #0f0e0c 暖黑、数据主色琥珀 #d4a373、落定暖金 #E9D9AE、钤印朱红 #7A1F16、文字暖纸白 #f5f0e8（FILM_COLORS2/GRADES2/DeepSpace/HudChrome/s33/s45 全线换肤；glowText 主色三元组参数化）\n- s01 从基线还原家族式原版（Intro 不重构）；Out 段 s60–s62 豁免"
     }
   }
 }

@@ -59,7 +59,7 @@ const S45: FC = () => {
         >
           <Img
             src={staticFile('wuh-site-intro-v3/site/s03-post-165-v1.png')}
-            style={{ width: '100%', borderRadius: 10, border: `1px solid ${FILM_COLORS2.cyanDim}`, boxShadow: `0 0 44px rgba(95,216,255,0.2), 0 24px 60px rgba(0,0,0,0.65)`, display: 'block' }}
+            style={{ width: '100%', borderRadius: 10, border: `1px solid ${FILM_COLORS2.dataDim}`, boxShadow: `0 0 44px rgba(212,163,115,0.2), 0 24px 60px rgba(0,0,0,0.65)`, display: 'block' }}
           />
         </div>
       ) : null}
@@ -82,12 +82,12 @@ const S45: FC = () => {
           fontSize: 300,
           fontWeight: 700,
           lineHeight: 1.05,
-          color: FILM_COLORS2.cyan,
+          color: FILM_COLORS2.data,
           fontVariantNumeric: 'tabular-nums',
           letterSpacing: '0.02em',
           opacity: interpolate(frame, [46, 58], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }),
           transform: `scale(${hero.slam})`,
-          ...glowText(FILM_COLORS2.cyan, hero.glow),
+          ...glowText(FILM_COLORS2.data, hero.glow),
         }}
       >
         {hero.text}
@@ -98,8 +98,8 @@ const S45: FC = () => {
 
       {/* 题名 + 副标（落定后显影；在「次 阅读」行之下、榜单条之上，互不相撞） */}
       <div style={{ position: 'absolute', left: 0, right: 0, top: 636, textAlign: 'center', zIndex: 30, ...titleIn }}>
-        <span style={{ fontFamily: fontFamilies.serif, fontSize: 46, color: FILM_COLORS2.dataWhite, ...glowText(FILM_COLORS2.dataWhite, 0.32) }}>《再读〈坐忘歌〉》</span>
-        <span style={{ fontFamily: fontFamilies.mono, fontSize: 16, letterSpacing: '0.26em', color: FILM_COLORS2.amber, opacity: 0.9, marginLeft: 26 }}>全站阅读最多 · 非技术文</span>
+        <span style={{ fontFamily: fontFamilies.serif, fontSize: 46, color: FILM_COLORS2.paperWhite, ...glowText(FILM_COLORS2.paperWhite, 0.32) }}>《再读〈坐忘歌〉》</span>
+        <span style={{ fontFamily: fontFamilies.mono, fontSize: 16, letterSpacing: '0.26em', color: FILM_COLORS2.gold, opacity: 0.9, marginLeft: 26 }}>全站阅读最多 · 非技术文</span>
       </div>
 
       {/* CHART-FLOW：五条阅读横条（46–106 与数字同窗生长；置于字幕带 bottom150 之上，不相撞） */}
@@ -118,16 +118,16 @@ const S45: FC = () => {
                   bottom: 0,
                   width: `${bar.widthPct}%`,
                   borderRadius: 3,
-                  background: r.top ? `linear-gradient(90deg, ${FILM_COLORS2.cyanDim}, ${FILM_COLORS2.cyan})` : 'rgba(120,170,240,0.3)',
-                  boxShadow: r.top ? `0 0 ${10 + bar.glow * 16}px rgba(95,216,255,${bar.glow * 0.5})` : 'none',
+                  background: r.top ? `linear-gradient(90deg, ${FILM_COLORS2.dataDim}, ${FILM_COLORS2.data})` : 'rgba(120,170,240,0.3)',
+                  boxShadow: r.top ? `0 0 ${10 + bar.glow * 16}px rgba(212,163,115,${bar.glow * 0.5})` : 'none',
                 }}
               />
               {/* 末 18f 扫光带 */}
               {r.top && sweepP > 0 && sweepP < 1 ? (
                 <div style={{ position: 'absolute', left: `${sweepX}%`, top: -2, bottom: -2, width: 90, background: 'linear-gradient(90deg, transparent, rgba(234,242,255,0.85), transparent)', opacity: 0.8, filter: 'blur(1px)' }} />
               ) : null}
-              <span style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-52%)', fontFamily: fontFamilies.serif, fontSize: 16, color: r.top ? FILM_COLORS2.spaceDeep : FILM_COLORS2.dataWhite, opacity: r.top ? 0.95 : 0.75, whiteSpace: 'nowrap' }}>{r.title}</span>
-              <span style={{ position: 'absolute', right: 0, top: '50%', transform: 'translateY(-52%)', fontFamily: fontFamilies.mono, fontSize: 15, color: FILM_COLORS2.dataWhite, opacity: 0.85, fontVariantNumeric: 'tabular-nums' }}>{fmtNum(r.views)}</span>
+              <span style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-52%)', fontFamily: fontFamilies.serif, fontSize: 16, color: r.top ? FILM_COLORS2.spaceDeep : FILM_COLORS2.paperWhite, opacity: r.top ? 0.95 : 0.75, whiteSpace: 'nowrap' }}>{r.title}</span>
+              <span style={{ position: 'absolute', right: 0, top: '50%', transform: 'translateY(-52%)', fontFamily: fontFamilies.mono, fontSize: 15, color: FILM_COLORS2.paperWhite, opacity: 0.85, fontVariantNumeric: 'tabular-nums' }}>{fmtNum(r.views)}</span>
             </div>
           );
         })}

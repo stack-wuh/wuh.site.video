@@ -43,7 +43,7 @@ const SeqCaption: FC<{ text: string; from: number; to: number }> = ({ text, from
   const out = interpolate(local, [to - from - 12, to - from], [1, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
   return (
     <div style={{ position: 'absolute', left: 0, right: 0, bottom: 150, textAlign: 'center', zIndex: 30, opacity: Math.min(1, interpolate(local, [0, 10], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' })) * out }}>
-      <span style={{ fontFamily: fontFamilies.serif, fontSize: 40, color: FILM_COLORS2.dataWhite, textShadow: `0 2px 18px rgba(2,3,8,0.9), 0 0 26px rgba(95,216,255,0.14)` }}>{text}</span>
+      <span style={{ fontFamily: fontFamilies.serif, fontSize: 40, color: FILM_COLORS2.paperWhite, textShadow: `0 2px 18px rgba(2,3,8,0.9), 0 0 26px rgba(212,163,115,0.14)` }}>{text}</span>
     </div>
   );
 };
@@ -80,8 +80,8 @@ const S33: FC = () => {
           top: TL_Y,
           height: 2.5,
           width: TL_X1 - TL_X0,
-          background: `linear-gradient(90deg, ${FILM_COLORS2.cyanDim}, ${FILM_COLORS2.cyan})`,
-          boxShadow: `0 0 14px 3px rgba(95,216,255,0.35)`,
+          background: `linear-gradient(90deg, ${FILM_COLORS2.dataDim}, ${FILM_COLORS2.data})`,
+          boxShadow: `0 0 14px 3px rgba(212,163,115,0.35)`,
           opacity: 0.9,
           clipPath: `inset(0 ${Math.max(0, (1 - tl.progress)) * 100}% 0 0)`,
         }}
@@ -103,18 +103,18 @@ const S33: FC = () => {
                 width: 10 + flash * 6,
                 height: 10 + flash * 6,
                 borderRadius: 8,
-                background: current ? FILM_COLORS2.cyan : FILM_COLORS2.dataWhite,
-                boxShadow: `0 0 ${12 + flash * 22}px ${3 + flash * 5}px rgba(95,216,255,${0.22 + flash * 0.4})`,
+                background: current ? FILM_COLORS2.data : FILM_COLORS2.paperWhite,
+                boxShadow: `0 0 ${12 + flash * 22}px ${3 + flash * 5}px rgba(212,163,115,${0.22 + flash * 0.4})`,
                 opacity: on ? 0.95 : 0.3,
               }}
             />
             {/* 年份（当前扫掠位辉光） */}
             <div style={{ position: 'absolute', left: x - 30, top: TL_Y - 96, width: 60, textAlign: 'center' }}>
-              <span style={{ fontFamily: fontFamilies.mono, fontSize: 26, fontWeight: 700, fontVariantNumeric: 'tabular-nums', color: current ? FILM_COLORS2.cyan : FILM_COLORS2.textMuted, opacity: on ? 1 : 0.35, ...(current ? glowText(FILM_COLORS2.cyan, 0.55) : {}) }}>{y.year}</span>
+              <span style={{ fontFamily: fontFamilies.mono, fontSize: 26, fontWeight: 700, fontVariantNumeric: 'tabular-nums', color: current ? FILM_COLORS2.data : FILM_COLORS2.textMuted, opacity: on ? 1 : 0.35, ...(current ? glowText(FILM_COLORS2.data, 0.55) : {}) }}>{y.year}</span>
             </div>
             {/* 年度最爱歌名 */}
             <div style={{ position: 'absolute', left: x - 95, top: TL_Y + 26, width: 190, textAlign: 'center' }}>
-              <span style={{ fontFamily: fontFamilies.serif, fontSize: 15, color: FILM_COLORS2.dataWhite, opacity: on ? (current ? 0.95 : 0.6) : 0.25 }}>{on ? y.song : '· · ·'}</span>
+              <span style={{ fontFamily: fontFamilies.serif, fontSize: 15, color: FILM_COLORS2.paperWhite, opacity: on ? (current ? 0.95 : 0.6) : 0.25 }}>{on ? y.song : '· · ·'}</span>
             </div>
           </div>
         );
@@ -130,17 +130,17 @@ const S33: FC = () => {
                 position: 'absolute',
                 inset: 24 + i * 46,
                 borderRadius: 240,
-                border: `1px solid ${i % 2 === 0 ? FILM_COLORS2.line : FILM_COLORS2.cyanDim}`,
+                border: `1px solid ${i % 2 === 0 ? FILM_COLORS2.line : FILM_COLORS2.dataDim}`,
                 opacity: 0.5 - i * 0.06,
-                boxShadow: i === 2 ? `0 0 18px rgba(95,216,255,0.16), inset 0 0 18px rgba(95,216,255,0.1)` : 'none',
+                boxShadow: i === 2 ? `0 0 18px rgba(212,163,115,0.16), inset 0 0 18px rgba(212,163,115,0.1)` : 'none',
               }}
             />
           ))}
-          <div style={{ position: 'absolute', left: '50%', top: '50%', width: 12, height: 12, borderRadius: 6, transform: 'translate(-6px,-6px)', background: FILM_COLORS2.cyan, boxShadow: `0 0 18px 6px rgba(95,216,255,0.5)` }} />
+          <div style={{ position: 'absolute', left: '50%', top: '50%', width: 12, height: 12, borderRadius: 6, transform: 'translate(-6px,-6px)', background: FILM_COLORS2.data, boxShadow: `0 0 18px 6px rgba(212,163,115,0.5)` }} />
         </div>
         {/* 唱针（线框光针） */}
-        <div style={{ position: 'absolute', right: -8, top: 40, width: 150, height: 4, borderRadius: 2, background: `linear-gradient(90deg, ${FILM_COLORS2.cyanDim}, ${FILM_COLORS2.cyan})`, opacity: 0.9, transform: `rotate(${18 + needle * 26}deg)`, transformOrigin: 'right center', boxShadow: `0 0 10px rgba(95,216,255,0.4)` }} />
-        <div style={{ position: 'absolute', right: -16, top: 28, width: 24, height: 24, borderRadius: 12, border: `1.5px solid ${FILM_COLORS2.cyanDim}`, opacity: 0.8 }} />
+        <div style={{ position: 'absolute', right: -8, top: 40, width: 150, height: 4, borderRadius: 2, background: `linear-gradient(90deg, ${FILM_COLORS2.dataDim}, ${FILM_COLORS2.data})`, opacity: 0.9, transform: `rotate(${18 + needle * 26}deg)`, transformOrigin: 'right center', boxShadow: `0 0 10px rgba(212,163,115,0.4)` }} />
+        <div style={{ position: 'absolute', right: -16, top: 28, width: 24, height: 24, borderRadius: 12, border: `1.5px solid ${FILM_COLORS2.dataDim}`, opacity: 0.8 }} />
       </div>
 
       {/* ★DAT-04 EQ 辉光柱（74–84 起势 → 相位差贴拍） */}
@@ -151,9 +151,9 @@ const S33: FC = () => {
             style={{
               width: 30,
               height: eqGrow * (56 + v * 150),
-              background: `linear-gradient(180deg, ${FILM_COLORS2.cyan}, ${FILM_COLORS2.cyanDim})`,
+              background: `linear-gradient(180deg, ${FILM_COLORS2.data}, ${FILM_COLORS2.dataDim})`,
               borderRadius: 3,
-              boxShadow: `0 0 ${8 + v * 14}px rgba(95,216,255,${0.25 + v * 0.2})`,
+              boxShadow: `0 0 ${8 + v * 14}px rgba(212,163,115,${0.25 + v * 0.2})`,
               opacity: 0.9,
             }}
           />
@@ -167,12 +167,12 @@ const S33: FC = () => {
           style={{
             width: '100%',
             borderRadius: 8,
-            border: `1px solid ${FILM_COLORS2.cyanDim}`,
-            boxShadow: `0 0 30px rgba(95,216,255,0.22), 0 18px 44px rgba(0,0,0,0.6)`,
+            border: `1px solid ${FILM_COLORS2.dataDim}`,
+            boxShadow: `0 0 30px rgba(212,163,115,0.22), 0 18px 44px rgba(0,0,0,0.6)`,
             display: 'block',
           }}
         />
-        <div style={{ position: 'absolute', left: -1, right: -1, top: -1, bottom: -1, borderRadius: 9, border: `1px solid rgba(95,216,255,0.4)`, opacity: 0.6, pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', left: -1, right: -1, top: -1, bottom: -1, borderRadius: 9, border: `1px solid rgba(212,163,115,0.4)`, opacity: 0.6, pointerEvents: 'none' }} />
       </div>
 
       <HudChrome label="wuh.site · MUSIC" readout="2018–2025" />

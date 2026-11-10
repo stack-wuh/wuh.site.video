@@ -680,23 +680,22 @@ export const PT = {
  * 网站截图降级为「证据快闪」（≤2s 辉光小窗）；手作签名点（印章/墨迹 wordmark）克制保留。
  * 样片门：s01/s33/s45 先行，用户定稿后才全量铺开（不在错误风格上烧 62 镜工时）。 */
 
-/** V2 影片私有色（深空数据流；场景内禁止内联色值） */
+/** V2 影片私有色（品牌暖黑科技：站点同源暖黑 + 琥珀数据主色 + 暖金落定 + 钤印朱红签名；场景内禁止内联色值） */
 export const FILM_COLORS2 = {
-  space: '#05070D',
-  spaceDeep: '#020308',
-  panel: 'rgba(13,18,30,0.72)',
-  grid: 'rgba(96,150,220,0.09)',
-  line: 'rgba(120,170,240,0.24)',
-  cyan: '#5FD8FF',
-  cyanDim: '#39718C',
-  dataWhite: '#EAF2FF',
-  textMuted: '#7B8AA3',
-  amber: '#FFB454',
-  sealRed: '#C96F4A',
-  paperInk: '#F6F1E7',
+  space: '#0f0e0c', // 暖黑底（brand/tokens bg 同源）
+  spaceDeep: '#0a0908',
+  panel: 'rgba(23,20,16,0.72)',
+  grid: 'rgba(212,163,115,0.07)',
+  line: 'rgba(212,163,115,0.24)',
+  data: '#d4a373', // 琥珀：数据主色（brand accent 同源）
+  dataDim: '#8a6b47',
+  gold: '#E9D9AE', // 暖金：落定/SLAM 高光（brand gold 同源）
+  paperWhite: '#f5f0e8', // 暖纸白文字（brand paper 同源）
+  textMuted: '#8a8272',
+  sealRed: '#7A1F16', // 钤印朱红：手作签名/强调（brand seal 同源）
 } as const;
 
-/** V2 八幕调色（GR2-01–08）：深空基调 + 幕间色温推移（黎明蓝→青→琥珀对比幕→亮数据终幕） */
+/** V2 八幕调色（GR2-01–08）：暖黑基调 + 幕间色温推移（琥珀黎明→暖金对比幕→亮数据终幕） */
 export type GradeId2 = 'GR2-01' | 'GR2-02' | 'GR2-03' | 'GR2-04' | 'GR2-05' | 'GR2-06' | 'GR2-07' | 'GR2-08';
 
 export type Grade2Def = {
@@ -708,17 +707,17 @@ export type Grade2Def = {
 };
 
 const V2_VIGNETTE =
-  'radial-gradient(ellipse 118% 96% at 50% 46%, rgba(5,7,13,0) 52%, rgba(2,3,8,0.55) 88%, rgba(2,3,8,0.82) 100%)';
+  'radial-gradient(ellipse 118% 96% at 50% 46%, rgba(10,9,8,0) 52%, rgba(10,9,8,0.55) 88%, rgba(10,9,8,0.82) 100%)';
 
 export const GRADES2: Record<GradeId2, Grade2Def> = {
-  'GR2-01': { id: 'GR2-01', base: { color: '#0A1420', blend: 'screen', opacity: 0.16 }, veil: { gradient: 'linear-gradient(180deg, rgba(95,216,255,0.10), rgba(95,216,255,0) 46%)', blend: 'screen', opacity: 0.5 }, saturate: 1.0 },
-  'GR2-02': { id: 'GR2-02', base: { color: '#101A30', blend: 'screen', opacity: 0.14 }, saturate: 0.98 },
-  'GR2-03': { id: 'GR2-03', base: { color: '#08202C', blend: 'screen', opacity: 0.16 }, veil: { gradient: 'linear-gradient(180deg, rgba(95,216,255,0.07), rgba(95,216,255,0) 40%)', blend: 'screen', opacity: 0.5 }, saturate: 1.02 },
-  'GR2-04': { id: 'GR2-04', base: { color: '#010204', blend: 'multiply', opacity: 0.4 }, veil: { gradient: V2_VIGNETTE, blend: 'normal', opacity: 0.7 }, saturate: 0.9, brightness: 0.97 },
-  'GR2-05': { id: 'GR2-05', base: { color: '#241505', blend: 'screen', opacity: 0.14 }, veil: { gradient: 'linear-gradient(180deg, rgba(255,180,84,0.08), rgba(255,180,84,0) 44%)', blend: 'screen', opacity: 0.5 }, saturate: 1.04 },
-  'GR2-06': { id: 'GR2-06', base: { color: '#062020', blend: 'screen', opacity: 0.14 }, saturate: 1.0 },
-  'GR2-07': { id: 'GR2-07', base: { color: '#141031', blend: 'screen', opacity: 0.16 }, veil: { gradient: 'linear-gradient(180deg, rgba(130,120,255,0.07), rgba(130,120,255,0) 44%)', blend: 'screen', opacity: 0.5 }, saturate: 1.02 },
-  'GR2-08': { id: 'GR2-08', base: { color: '#0E1A2C', blend: 'screen', opacity: 0.14 }, veil: { gradient: 'linear-gradient(180deg, rgba(95,216,255,0.09), rgba(95,216,255,0) 42%)', blend: 'screen', opacity: 0.55 }, saturate: 1.02, brightness: 1.05 },
+  'GR2-01': { id: 'GR2-01', base: { color: '#1a1208', blend: 'screen', opacity: 0.16 }, veil: { gradient: 'linear-gradient(180deg, rgba(212,163,115,0.10), rgba(212,163,115,0) 46%)', blend: 'screen', opacity: 0.5 }, saturate: 1.0 },
+  'GR2-02': { id: 'GR2-02', base: { color: '#161208', blend: 'screen', opacity: 0.14 }, saturate: 0.98 },
+  'GR2-03': { id: 'GR2-03', base: { color: '#1c1408', blend: 'screen', opacity: 0.16 }, veil: { gradient: 'linear-gradient(180deg, rgba(212,163,115,0.07), rgba(212,163,115,0) 40%)', blend: 'screen', opacity: 0.5 }, saturate: 1.02 },
+  'GR2-04': { id: 'GR2-04', base: { color: '#050403', blend: 'multiply', opacity: 0.4 }, veil: { gradient: V2_VIGNETTE, blend: 'normal', opacity: 0.7 }, saturate: 0.9, brightness: 0.97 },
+  'GR2-05': { id: 'GR2-05', base: { color: '#241505', blend: 'screen', opacity: 0.16 }, veil: { gradient: 'linear-gradient(180deg, rgba(233,217,174,0.08), rgba(233,217,174,0) 44%)', blend: 'screen', opacity: 0.5 }, saturate: 1.04 },
+  'GR2-06': { id: 'GR2-06', base: { color: '#1a140a', blend: 'screen', opacity: 0.14 }, saturate: 1.0 },
+  'GR2-07': { id: 'GR2-07', base: { color: '#1a1008', blend: 'screen', opacity: 0.16 }, veil: { gradient: 'linear-gradient(180deg, rgba(212,163,115,0.07), rgba(212,163,115,0) 44%)', blend: 'screen', opacity: 0.5 }, saturate: 1.02 },
+  'GR2-08': { id: 'GR2-08', base: { color: '#181208', blend: 'screen', opacity: 0.14 }, veil: { gradient: 'linear-gradient(180deg, rgba(212,163,115,0.09), rgba(212,163,115,0) 42%)', blend: 'screen', opacity: 0.55 }, saturate: 1.02, brightness: 1.05 },
 };
 
 /* ─── V2 科技令牌 ─── */
@@ -739,9 +738,9 @@ export const bigNum = (
   return { text: fmtNum(v), glow, slam };
 };
 
-/** 辉光文本样式：data 色 text-shadow 三段堆叠（intensity 0–1）。 */
-export const glowText = (color: string, intensity = 0.6): CSSProperties => ({
-  textShadow: `0 0 ${18 * intensity}px ${color}${Math.round(intensity * 160).toString(16).padStart(2, '0')}, 0 0 ${56 * intensity}px rgba(95,216,255,${0.28 * intensity}), 0 0 2px rgba(234,242,255,${0.6 * intensity})`,
+/** 辉光文本样式：主色 text-shadow 三段堆叠（intensity 0–1；rgb 传主色三元组，默认琥珀）。 */
+export const glowText = (color: string, intensity = 0.6, rgb = '212,163,115'): CSSProperties => ({
+  textShadow: `0 0 ${18 * intensity}px ${color}${Math.round(intensity * 160).toString(16).padStart(2, '0')}, 0 0 ${56 * intensity}px rgba(${rgb},${0.28 * intensity}), 0 0 2px rgba(245,240,232,${0.6 * intensity})`,
 });
 
 /** CHART-FLOW 数据行生长：横条按比例生长（对齐大数字滚动窗），返回条宽百分比与辉光。 */

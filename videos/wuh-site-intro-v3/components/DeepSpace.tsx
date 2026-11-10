@@ -49,8 +49,8 @@ export const DeepSpace: FC<{
 
   return (
     <AbsoluteFill style={{ pointerEvents: 'none' }}>
-      {/* 深空渐变底（中心微亮的蓝黑） */}
-      <AbsoluteFill style={{ background: `radial-gradient(ellipse 130% 100% at 50% 42%, #0A1018 0%, ${FILM_COLORS2.space} 52%, ${FILM_COLORS2.spaceDeep} 100%)` }} />
+      {/* 暖黑渐变底（中心微亮的暖炭，站点同源色族） */}
+      <AbsoluteFill style={{ background: `radial-gradient(ellipse 130% 100% at 50% 42%, #171410 0%, ${FILM_COLORS2.space} 52%, ${FILM_COLORS2.spaceDeep} 100%)` }} />
 
       {/* 微网格（年度报告坐标纸感，极淡） */}
       {grid ? (
@@ -97,7 +97,7 @@ export const DeepSpace: FC<{
               width: s.r * 2,
               height: s.r * 2,
               borderRadius: s.r,
-              background: FILM_COLORS2.dataWhite,
+              background: FILM_COLORS2.paperWhite,
               opacity: s.base * (0.72 + 0.28 * Math.sin((frame / s.speed) * Math.PI * 2 + s.phase)),
             }}
           />
@@ -112,8 +112,8 @@ export const DeepSpace: FC<{
               width: s.r * 2,
               height: s.r * 2,
               borderRadius: s.r,
-              background: i % 4 === 0 ? FILM_COLORS2.cyan : FILM_COLORS2.dataWhite,
-              boxShadow: i % 4 === 0 ? `0 0 8px 1px rgba(95,216,255,0.5)` : 'none',
+              background: i % 4 === 0 ? FILM_COLORS2.data : FILM_COLORS2.paperWhite,
+              boxShadow: i % 4 === 0 ? `0 0 8px 1px rgba(212,163,115,0.5)` : 'none',
               opacity: s.base * (0.7 + 0.3 * Math.sin((frame / s.speed) * Math.PI * 2 + s.phase)),
             }}
           />
@@ -132,7 +132,7 @@ export const DeepSpace: FC<{
               width: 90,
               height: 1.5,
               borderRadius: 1,
-              background: `linear-gradient(90deg, transparent, ${FILM_COLORS2.cyan})`,
+              background: `linear-gradient(90deg, transparent, ${FILM_COLORS2.data})`,
               opacity: s.o,
             }}
           />
@@ -147,7 +147,7 @@ export const DeepSpace: FC<{
           right: 0,
           top: `${(frame * (100 / 135)) % 112 - 6}%`,
           height: 2,
-          background: `linear-gradient(180deg, transparent, rgba(95,216,255,0.10), transparent)`,
+          background: `linear-gradient(180deg, transparent, rgba(212,163,115,0.10), transparent)`,
           opacity: 0.7,
         }}
       />
