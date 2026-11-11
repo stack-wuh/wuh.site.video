@@ -1,22 +1,23 @@
 /* S53 · Act 8 此刻 · 局部帧 [0,72) · 72f · 绝对 7192–7264
  *
- * 知识库：266 张 brief 档案卡自上方 cascade 落位成档案墙（0–50，由疏到密）；
- * 40 张知识卡自墙面升起（30–62）；★DAT-03 NUM-SLAM pair「266 / 40」双数同滚
- * 同停（44–68，落定 68=绝对 7260=拍363 对音，末帧 scale 1.05→1）；
- * 卡面真实知识卡名。转场：入「切」，出「切」。字幕安全窗：start≥12、end≤60。
+ * V2 深空数据流重构（2026-11-11）：档案墙降为线框密度底纹（60 格 cascade 0–50，
+ * 原窗口、低亮度）；40 张知识卡改线框辉光芯片升起（30–62 原窗口）；
+ * 数据主角化——★DAT-03 NUM-SLAM pair「266 / 40」双数同滚同停改全屏大字
+ * （44–68，落定 68=绝对 7260=拍363 对音，mono 琥珀辉光，末帧 scale 1.05→1）。
+ * 转场：入「切」，出「切」。字幕安全窗：start≥12、end≤60。
  * 尾帧：档案墙+知识卡悬停。
  */
 import type { FC } from 'react';
 import { AbsoluteFill, interpolate, useCurrentFrame } from 'remotion';
 import { random } from 'remotion';
-import { colors, fontFamilies } from '../../../brand/tokens';
+import { fontFamilies } from '../../../brand/tokens';
 import { CURVES } from '../../../brand/motion';
-import { fmtNum, slamPair } from '../motion-tokens';
+import { FILM_COLORS2, fmtNum, glowText, slamPair } from '../motion-tokens';
 import { CameraRig } from '../components/CameraRig';
 import { Caption } from '../components/Caption';
-import { DustField } from '../components/DustField';
-import { Grade } from '../components/Grade';
-import { PaperGrain } from '../components/PaperGrain';
+import { DeepSpace } from '../components/DeepSpace';
+import { Grade2 } from '../components/Grade2';
+import { HudChrome } from '../components/HudChrome';
 
 const TOTAL = 72;
 const SLAM_AT = 44;
@@ -34,12 +35,12 @@ const S53: FC = () => {
   const slam = slamPair(frame, SLAM_AT, SLAM_DUR, { from: 200, to: 266 }, { from: 20, to: 40 });
 
   return (
-    <AbsoluteFill style={{ background: colors.bg }}>
+    <AbsoluteFill style={{ background: FILM_COLORS2.spaceDeep }}>
       <CameraRig cam={cam}>
         <AbsoluteFill>
-          <DustField act={8} count={16} seedBase="s53" />
+          <DeepSpace seed="s53v2" stars={54} grid horizon />
 
-          {/* 档案墙：266 卡 cascade（由疏到密——前 60 张可见代表，其余密度底纹） */}
+          {/* 档案墙：60 格线框底纹 cascade（由疏到密——低亮度密度底纹） */}
           {Array.from({ length: 60 }).map((_, i) => {
             const col = i % 12;
             const row = Math.floor(i / 12);
@@ -55,40 +56,52 @@ const S53: FC = () => {
                   width: 130,
                   height: 112,
                   borderRadius: 4,
-                  background: colors.paperDeep,
-                  border: `1px solid ${colors.hairline}`,
-                  opacity: on ? 0.16 + random(`s53-${i}`) * 0.3 : 0,
+                  background: FILM_COLORS2.panel,
+                  border: `1px solid ${FILM_COLORS2.line}`,
+                  opacity: on ? 0.1 + random(`s53-${i}`) * 0.22 : 0,
                   transform: on ? `rotate(${(random(`s53-r-${i}`) - 0.5) * 2}deg)` : 'none',
                 }}
               />
             );
           })}
 
-          {/* 40 张知识卡自墙面升起（30–62） */}
+          {/* 40 张知识卡：线框辉光芯片自墙面升起（30–62） */}
           {CARD_NAMES.map((name, i) => {
             const rise = interpolate(frame, [30 + i * 3, 52 + i * 3], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: CURVES.cineEaseOut });
             const col = i % 5;
             const row = Math.floor(i / 5);
             return (
               <div key={name} style={{ position: 'absolute', left: 250 + col * 310, top: 180 + row * 210 - rise * 46, opacity: rise, transform: `rotate(${(i % 2 ? -1.2 : 1)}deg) translateY(${(1 - rise) * 40}px)` }}>
-                <div style={{ width: 270, height: 90, borderRadius: 6, background: colors.paper, border: `1px solid ${colors.gold}`, boxShadow: '0 12px 30px rgba(0,0,0,0.35)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <span style={{ fontFamily: fontFamilies.mono, fontSize: 19, color: colors.ink, opacity: 0.85 }}>{name}</span>
+                <div
+                  style={{
+                    width: 270,
+                    height: 90,
+                    borderRadius: 6,
+                    background: FILM_COLORS2.panel,
+                    border: `1px solid ${FILM_COLORS2.dataDim}`,
+                    boxShadow: `0 0 22px rgba(212,163,115,0.18), 0 12px 30px rgba(0,0,0,0.5)`,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <span style={{ fontFamily: fontFamilies.mono, fontSize: 19, color: FILM_COLORS2.paperWhite, opacity: 0.9 }}>{name}</span>
                 </div>
               </div>
             );
           })}
 
-          {/* ★DAT-03 双数同滚同停 */}
-          <div style={{ position: 'absolute', left: 0, right: 0, top: 96, textAlign: 'center', zIndex: 30, transform: `scale(${slam.slam})` }}>
-            <span style={{ fontFamily: fontFamilies.serif, fontSize: 84, color: colors.gold, fontVariantNumeric: 'tabular-nums' }}>{fmtNum(slam.va)}</span>
-            <span style={{ fontFamily: fontFamilies.serif, fontSize: 50, color: colors.muted }}> / </span>
-            <span style={{ fontFamily: fontFamilies.serif, fontSize: 84, color: colors.gold, fontVariantNumeric: 'tabular-nums' }}>{fmtNum(slam.vb)}</span>
+          {/* ★DAT-03 双数同滚同停（全屏大字主角，落定 SLAM） */}
+          <div style={{ position: 'absolute', left: 0, right: 0, top: 60, textAlign: 'center', zIndex: 30, transform: `scale(${slam.slam})` }}>
+            <span style={{ fontFamily: fontFamilies.mono, fontSize: 200, fontWeight: 700, color: FILM_COLORS2.data, fontVariantNumeric: 'tabular-nums', ...glowText(FILM_COLORS2.data, 0.5) }}>{fmtNum(slam.va)}</span>
+            <span style={{ fontFamily: fontFamilies.mono, fontSize: 90, color: FILM_COLORS2.textMuted }}> / </span>
+            <span style={{ fontFamily: fontFamilies.mono, fontSize: 200, fontWeight: 700, color: FILM_COLORS2.data, fontVariantNumeric: 'tabular-nums', ...glowText(FILM_COLORS2.data, 0.5) }}>{fmtNum(slam.vb)}</span>
           </div>
         </AbsoluteFill>
       </CameraRig>
-      <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: 300, backgroundImage: `linear-gradient(180deg, transparent, ${colors.bg})`, opacity: 0.22 }} />
-      <PaperGrain opacity={0.06} />
-      <Grade id="GR-08" />
+      <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: 300, backgroundImage: `linear-gradient(180deg, transparent, ${FILM_COLORS2.spaceDeep})`, opacity: 0.22 }} />
+      <HudChrome label="wuh.site · KNOWLEDGE" readout="266 LOOPS · 40 CARDS" />
+      <Grade2 id="GR2-08" />
       <Caption text="266 次完整循环，40 张知识卡片。" appearAt={14} />
     </AbsoluteFill>
   );
