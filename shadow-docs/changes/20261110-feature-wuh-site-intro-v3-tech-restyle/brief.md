@@ -4,7 +4,7 @@
   "name": "20261110-feature-wuh-site-intro-v3-tech-restyle",
   "type": "feature",
   "scope": "videos/wuh-site-intro-v3,public/wuh-site-intro-v3",
-  "status": "published",
+  "status": "committed",
   "baseBranch": "feature/20261109-feature-wuh-site-intro-v3-production",
   "branch": "feature/20261110-feature-wuh-site-intro-v3-tech-restyle",
   "files": [
@@ -29,8 +29,8 @@
   },
   "workflow": {
     "operation": null,
-    "checkpoint": "pr:62",
-    "planHash": "1a9cc4174cb27f0d2d8e7a5ea996630cfc87fdc741b5b44151ec0fdb85d903c0",
+    "checkpoint": "cbe966ebbfa4011efc72ddf1ab8065c6d4f1c187",
+    "planHash": "a36a048913e761430a2ca96f4d3af9561f15e16e1091a5d61b9602c145c41db8",
     "updatedAt": null,
     "lastError": null,
     "issuePlan": {
@@ -44,11 +44,21 @@
     },
     "commit": {
       "files": [
-        "public/wuh-site-intro-v3/score-tech",
-        "videos/wuh-site-intro-v3/WuhSiteIntroV3Audio.tsx",
-        "videos/wuh-site-intro-v3/assets/bgm-selection.md"
+        "videos/wuh-site-intro-v3/acceptance-gate.md",
+        "videos/wuh-site-intro-v3/books.ts",
+        "videos/wuh-site-intro-v3/motion-tokens.ts",
+        "videos/wuh-site-intro-v3/shots/s18.tsx",
+        "videos/wuh-site-intro-v3/shots/s29.tsx",
+        "videos/wuh-site-intro-v3/shots/s32.tsx",
+        "videos/wuh-site-intro-v3/shots/s33.tsx",
+        "videos/wuh-site-intro-v3/shots/s36.tsx",
+        "videos/wuh-site-intro-v3/shots/s45.tsx",
+        "videos/wuh-site-intro-v3/shots/s60.tsx",
+        "videos/wuh-site-intro-v3/shots/s61.tsx",
+        "videos/wuh-site-intro-v3/storyboard-audit.md",
+        "videos/wuh-site-intro-v3/style-anchor.md"
       ],
-      "message": "feat(video-materials): Phase 4 科技 BGM——电子/氛围族换装（段界与避让结构同构）\n\n- Kevin MacLeod CC-BY 电子族六曲：Spacial Harvest/Deep Haze/Crypto/Voltaic/Digital Lemonade/As I Figure\n- 单遍 loudnorm -17 LUFS / TP -1.4 → AAC 192k 入 score-tech/（V1 家族纸墨曲族保留 score/ 供回滚）\n- 8 段界/startFrom/30f 交叉淡化/白闪避让窗（preludeVol 原样）全同构——时间轴真源零改动\n- 时长核验：每段 startFrom+dur ≤ 曲长；署名清单 bgm-selection.md 更新"
+      "message": "feat(video-materials): Phase 5 样片八镜数据直读重做——事件链/翻牌/热力盘/书墙/SLAM/题记+六门验收门"
     }
   }
 }
