@@ -1,19 +1,38 @@
 /* S29 · Act 5 灯亮 · 局部帧 [0,252) · 252f · 绝对 4254–4506
  *
- * V2 深空数据流重写（2026-11-11 品牌暖黑科技）：《重启计划》金句主角化——机位自
- * 首屏骨架下沉（0–36 窗口原样，s28 线框首屏残影缩小上移淡出）；《重启计划》落在
- * 线框计划面板（panel 底 + line 边 + 辉光，serif 68 + glowText）+ 角标 2026-06-21；
- * 引文逐行压进面板（66/106/146，末行「开始重启计划~~」，write-fade 窗口原样）；
- * 重启钤印 206=绝对 4460=拍223 对音（sealStamp 6f 落下 + 印泥晕开 + paperShake
- * 参数原样）——本镜唯一手作签名点；落幅后全镜按住不动（locked），停 2 拍；
- * 尾帧钤印朱红晕开成 sealRed 辉光（交 s30 墨洇晕心）。
+ * V3 特效解禁重写（2026-11-11 逐拍脚本）：Act5《重启计划》金句 + 钤印，叙事镜（金句主角化）。
+ * 逐拍事件链（局部帧，fps=30）：
+ *   0–252   CameraRig scale 1.0→1.045（cineEaseInOut）+ handheld('s29-cam', 1.4)；
+ *           背景 DeepSpace(seed='s29v2' stars=40 grid 原样保留) + dataCurtain('s29-rain', 8 列, 110) 低密度数字雨帘
+ *   14–43   引言行「一周后，他写下《重启计划》：」typeCharsAt 键击逐字（起 14f，2.2f/字，serif 21px textMuted）
+ *   44–56   日期角标 2026-06-21 淡入（原窗口原样保留）
+ *   66–108  金句 L1『……每周发布一篇博客，kineticChars 逐字弹入（step 2.5f/字）
+ *   106–130 金句 L2 无限进步，同上（行锚 66/106/146 = 原文件金句 appearAt 原样）
+ *   146–190 金句 L3 开始重启计划~~』同上；serif 76px paperWhite intensity 0.55，落定辉光呼吸（token 自带）
+ *   192     钤印落下 springIn（scale 1.18→1 + y −40→0，12f）= ANCHORS.sealRestart 绝对 4446（对音，絕不动）；
+ *           落定瞬间 shockwave(sealRed 双环) + sparkBurst('s29-burst', 12 粒) + paperShake(2.5, 10)
+ *   192–246 尾帧交接态：以印章为中心 rgba(122,31,22,…)=sealRed radial-gradient 朱红晕开成红光——
+ *           opacity 0→0.38、半径 scale 0.22→1.56 从印面扩到全屏（interpolate [192,246] 驱动）→
+ *           末帧整屏泛朱红微光（交 s30）。
+ * 时间轴契约零改动：252f 总长；钤印 192（绝对 4446）；Caption appearAt=64 与文本原样；金句文本原样。
  * 转场：入「切」，出「切」。字幕安全窗：start≥12、end≤240。
  */
 import type { FC } from 'react';
-import { AbsoluteFill, interpolate, useCurrentFrame } from 'remotion';
+import { AbsoluteFill, interpolate, useCurrentFrame, useVideoConfig } from 'remotion';
 import { fontFamilies } from '../../../brand/tokens';
-import { CURVES, sealStamp, sealTilt, writeFade } from '../../../brand/motion';
-import { FILM_COLORS2, glowText, paperShake } from '../motion-tokens';
+import {
+  CURVES,
+  FILM_COLORS2,
+  dataCurtain,
+  glowText,
+  handheld,
+  kineticChars,
+  paperShake,
+  shockwave,
+  sparkBurst,
+  springIn,
+  typeCharsAt,
+} from '../motion-tokens';
 import { CameraRig } from '../components/CameraRig';
 import { Caption } from '../components/Caption';
 import { DeepSpace } from '../components/DeepSpace';
@@ -21,96 +40,212 @@ import { Grade2 } from '../components/Grade2';
 import { HudChrome } from '../components/HudChrome';
 
 const TOTAL = 252;
-const SEAL_AT = 206; // 绝对 4460 = 拍223
+const SEAL_AT = 192; // ANCHORS.sealRestart 绝对 4446 = 局部 192（对音，絕不动）
+const SEAL_RGB = '122,31,22'; // = FILM_COLORS2.sealRed (#7A1F16) 三元组（rgba/shockwave 参数用，唯一色源仍是色板）
+const SEAL_CX = '78.9%'; // 印章中心（1920×1080：right 300 + 105）
+const SEAL_CY = '67.1%'; // = top 620 + 105
+const KINETIC_STEP = 2.5; // 金句逐字步进（f/字）
+const INTRO_TEXT = '一周后，他写下《重启计划》：';
+const INTRO_START = 14;
+const INTRO_FPC = 2.2;
+/** 金句原文原样；start = 原文件金句 appearAt（writeFade delay 66/106/146 原样承接为 kinetic 锚点） */
 const QUOTE_LINES = [
-  { text: '『……每周发布一篇博客，', delay: 66 },
-  { text: '无限进步，', delay: 106 },
-  { text: '开始重启计划~~』', delay: 146 },
+  { text: '『……每周发布一篇博客，', start: 66 },
+  { text: '无限进步，', start: 106 },
+  { text: '开始重启计划~~』', start: 146 },
 ];
 
 const S29: FC = () => {
   const frame = useCurrentFrame();
-  // 机位自首屏骨架下沉（0–36）：残影缩小上移淡出
-  const sink = interpolate(frame, [0, 36], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: CURVES.cineEaseInOut });
+  const { fps } = useVideoConfig();
+  // 机位：全镜缓推 1.0→1.045（cineEaseInOut）+ 手持呼吸
+  const hand = handheld('s29-cam', frame, 1.4);
   const cam = {
-    scale: interpolate(frame, [0, 36], [1.02, 1.08], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: CURVES.cineEaseInOut }),
-    x: 0,
-    y: interpolate(frame, [0, 36], [40, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: CURVES.cineEaseInOut }),
-    rot: 0,
+    scale: interpolate(frame, [0, TOTAL], [1.0, 1.045], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: CURVES.cineEaseInOut }),
+    x: hand.dx,
+    y: hand.dy,
+    rot: hand.rot,
   };
-  const shake = paperShake(frame, SEAL_AT, 2, 10);
-  const titleIn = writeFade(frame, 36, true);
+  // 印章落定纸面轻震（192 落定瞬间，amp 2.5 / decay 10）
+  const shake = paperShake(frame, SEAL_AT, 2.5, 10);
+  // 引言行键击逐字（typeCharsAt 量化）
+  const introShown = typeCharsAt(frame, INTRO_TEXT.length, INTRO_START, INTRO_FPC);
+  // 尾帧朱红晕开进度（192→246：半径印面→全屏）
+  const bloomP = interpolate(frame, [SEAL_AT, 246], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  // 钤印 springIn 弹性落下（scale 1.18→1 + y −40→0）
+  const sealP = springIn(frame, SEAL_AT, fps);
 
   return (
     <AbsoluteFill style={{ background: FILM_COLORS2.spaceDeep }}>
       <DeepSpace seed="s29v2" stars={40} grid />
-      <CameraRig cam={cam}>
-        <AbsoluteFill>
-          {/* s28 线框首屏残影（下沉退场） */}
-          <div
+      {/* 数据雨帘（背景氛围层，opacity 峰值按 token 返回值，不再放大） */}
+      <AbsoluteFill>
+        {dataCurtain('s29-rain', frame, 8, 110).map((c, i) => (
+          <span
+            key={i}
             style={{
               position: 'absolute',
-              left: 380,
-              right: 380,
-              top: 60,
-              height: 420,
-              borderRadius: 12,
-              border: `1px solid ${FILM_COLORS2.line}`,
-              background: FILM_COLORS2.panel,
-              opacity: (1 - sink) * 0.7,
-              transform: `translateY(${-sink * 60}px) scale(${1 - sink * 0.06})`,
+              left: `${c.x}%`,
+              top: c.y,
+              transform: 'translateX(-50%)',
+              fontFamily: fontFamilies.mono,
+              fontSize: 18,
+              color: FILM_COLORS2.dataDim,
+              opacity: c.o,
+              fontVariantNumeric: 'tabular-nums',
             }}
           >
-            <div style={{ position: 'absolute', left: 0, right: 0, top: 120, textAlign: 'center' }}>
-              <span style={{ fontFamily: fontFamilies.serif, fontSize: 56, fontWeight: 700, color: FILM_COLORS2.paperWhite, opacity: 0.5 }}>wuh.site</span>
+            {c.text}
+          </span>
+        ))}
+      </AbsoluteFill>
+      <CameraRig cam={cam}>
+        <AbsoluteFill style={shake}>
+          {/* 引言行 + 金句主体（kinetic typography 主角化）+ 日期角标 */}
+          <div style={{ position: 'absolute', left: 0, right: 0, top: 230, textAlign: 'center' }}>
+            <div
+              style={{
+                fontFamily: fontFamilies.serif,
+                fontSize: 21,
+                letterSpacing: '0.18em',
+                color: FILM_COLORS2.textMuted,
+                minHeight: 32,
+                whiteSpace: 'pre-wrap',
+              }}
+            >
+              {Array.from(INTRO_TEXT)
+                .slice(0, introShown)
+                .join('')}
             </div>
-          </div>
-          <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(180deg, rgba(10,9,8,0.8), ${FILM_COLORS2.spaceDeep})`, opacity: 1 - sink * 0.55 }} />
-
-          {/* 线框计划面板（机位落幅后 locked） */}
-          <div style={{ position: 'absolute', left: 460, top: 190, width: 1000, height: 720, opacity: sink }}>
-            <div style={{ position: 'absolute', inset: 0, borderRadius: 10, background: FILM_COLORS2.panel, border: `1px solid ${FILM_COLORS2.line}`, boxShadow: `0 0 44px rgba(212,163,115,0.12), 0 26px 70px rgba(0,0,0,0.55)` }} />
-            {/* 标题落下 + 角标 */}
-            <div style={{ position: 'absolute', left: 90, top: 60, ...titleIn }}>
-              <span style={{ fontFamily: fontFamilies.serif, fontSize: 68, color: FILM_COLORS2.paperWhite, letterSpacing: '0.06em', ...glowText(FILM_COLORS2.paperWhite, 0.3, '245,240,232') }}>《重启计划》</span>
+            <div style={{ marginTop: 30 }}>
+              {QUOTE_LINES.map((line, li) => (
+                <div
+                  key={li}
+                  style={{
+                    position: 'relative',
+                    height: 108,
+                    lineHeight: 1,
+                    fontFamily: fontFamilies.serif,
+                    fontSize: 76,
+                    fontWeight: 700,
+                    color: FILM_COLORS2.paperWhite,
+                    whiteSpace: 'pre-wrap',
+                  }}
+                >
+                  {kineticChars(line.text, frame, line.start, KINETIC_STEP, fps, 0.55).map((k, ci) => (
+                    <span key={ci} style={k.style}>
+                      {k.ch}
+                    </span>
+                  ))}
+                </div>
+              ))}
             </div>
-            <div style={{ position: 'absolute', right: 80, top: 74, fontFamily: fontFamilies.mono, fontSize: 20, color: FILM_COLORS2.textMuted, opacity: interpolate(frame, [44, 56], [0, 0.75], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }), fontVariantNumeric: 'tabular-nums' }}>
+            <div
+              style={{
+                marginTop: 22,
+                fontFamily: fontFamilies.mono,
+                fontSize: 20,
+                letterSpacing: '0.14em',
+                color: FILM_COLORS2.textMuted,
+                fontVariantNumeric: 'tabular-nums',
+                opacity: interpolate(frame, [44, 56], [0, 0.75], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }),
+              }}
+            >
               2026-06-21
             </div>
-            <div style={{ position: 'absolute', left: 90, right: 90, top: 172, height: 1, background: FILM_COLORS2.line }} />
-            {/* 引文逐行压进面板（每行像数据行排入） */}
-            {QUOTE_LINES.map((line, i) => (
-              <div key={i} style={{ position: 'absolute', left: 90, top: 220 + i * 90, ...writeFade(frame, line.delay, true) }}>
-                <span style={{ fontFamily: fontFamilies.serif, fontSize: 40, color: FILM_COLORS2.paperWhite, opacity: 0.94 }}>{line.text}</span>
-                {/* 排入基线（数据行线） */}
-                <div style={{ position: 'absolute', left: 0, right: 0, bottom: -10, height: 1.5, background: FILM_COLORS2.line, opacity: Number(writeFade(frame, line.delay).opacity ?? 0) * 0.55 }} />
-              </div>
-            ))}
-            {/* 重启钤印（206=拍223 对音，6f 落下 + 印泥晕开）——手作签名点 */}
-            <div style={{ position: 'absolute', right: 120, top: 470, zIndex: 30, ...sealStamp(frame, SEAL_AT, 30, sealTilt('s29-restart')) }}>
-              <div style={{ position: 'relative', width: 210, height: 210, borderRadius: 10, background: FILM_COLORS2.sealRed, opacity: 0.93, boxShadow: `0 0 34px rgba(122,31,22,0.4)` }}>
+          </div>
+
+          {/* 重启钤印（192 = ANCHORS.sealRestart 绝对 4446 对音）——本镜唯一手作签名点 */}
+          <div style={{ position: 'absolute', right: 300, top: 620, width: 210, height: 210, zIndex: 30 }}>
+            <div
+              style={{
+                position: 'absolute',
+                inset: 0,
+                opacity: interpolate(frame, [SEAL_AT, SEAL_AT + 5], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }),
+                transform: `translateY(${-40 * (1 - sealP)}px) scale(${1.18 - 0.18 * sealP})`,
+              }}
+            >
+              <div
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  borderRadius: 10,
+                  background: FILM_COLORS2.sealRed,
+                  opacity: 0.93,
+                  boxShadow: `0 0 34px rgba(${SEAL_RGB},0.45)`,
+                }}
+              >
                 <div style={{ position: 'absolute', inset: 12, border: `2px solid ${FILM_COLORS2.paperWhite}`, opacity: 0.4, borderRadius: 6 }} />
-                <div style={{ position: 'absolute', left: 0, right: 0, top: 62, textAlign: 'center', fontFamily: fontFamilies.serif, fontSize: 40, color: FILM_COLORS2.paperWhite, letterSpacing: '0.1em' }}>
+                <div
+                  style={{
+                    position: 'absolute',
+                    left: 0,
+                    right: 0,
+                    top: 62,
+                    textAlign: 'center',
+                    fontFamily: fontFamilies.serif,
+                    fontSize: 40,
+                    color: FILM_COLORS2.paperWhite,
+                    letterSpacing: '0.1em',
+                    ...glowText(FILM_COLORS2.sealRed, 0.3, SEAL_RGB),
+                  }}
+                >
                   重启
                 </div>
-                <div style={{ position: 'absolute', left: 0, right: 0, top: 118, textAlign: 'center', fontFamily: fontFamilies.serif, fontSize: 40, color: FILM_COLORS2.paperWhite, letterSpacing: '0.1em' }}>
+                <div
+                  style={{
+                    position: 'absolute',
+                    left: 0,
+                    right: 0,
+                    top: 118,
+                    textAlign: 'center',
+                    fontFamily: fontFamilies.serif,
+                    fontSize: 40,
+                    color: FILM_COLORS2.paperWhite,
+                    letterSpacing: '0.1em',
+                    ...glowText(FILM_COLORS2.sealRed, 0.3, SEAL_RGB),
+                  }}
+                >
                   计划
                 </div>
               </div>
-              {/* 印泥晕开一圈 */}
-              {frame >= SEAL_AT ? (
-                <div style={{ position: 'absolute', left: -30, top: -30, width: 270, height: 270, borderRadius: 135, border: `2px solid ${FILM_COLORS2.sealRed}`, opacity: interpolate(frame, [SEAL_AT, SEAL_AT + 26], [0.5, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }) }} />
-              ) : null}
             </div>
-            {/* 尾帧：朱红晕光（延续到镜尾交 s30 晕心） */}
-            {frame >= SEAL_AT ? (
-              <AbsoluteFill style={{ background: `radial-gradient(circle at 78% 62%, rgba(122,31,22,0.22), transparent 55%)`, opacity: interpolate(frame, [SEAL_AT, TOTAL], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }), pointerEvents: 'none' }} />
-            ) : null}
+            {/* 落定瞬间冲击波双环（sealRed） */}
+            {(() => {
+              const sw = shockwave(frame, SEAL_AT, SEAL_RGB);
+              return sw ? (
+                <div style={{ position: 'absolute', left: '50%', top: '50%' }}>
+                  <div style={{ position: 'absolute', ...sw.ring1 }} />
+                  <div style={{ position: 'absolute', ...sw.ring2 }} />
+                </div>
+              ) : null;
+            })()}
+            {/* 落定瞬间粒子喷洒（random('s29-burst') 确定性） */}
+            <div style={{ position: 'absolute', left: '50%', top: '50%' }}>
+              {sparkBurst('s29-burst', frame, SEAL_AT, 12).map((p, i) => (
+                <div key={i} style={p.style} />
+              ))}
+            </div>
           </div>
-          {shake.transform ? <AbsoluteFill style={shake} /> : null}
+
+          {/* 尾帧交接态：钤印朱红晕开成红光（192–246 半径印面→全屏，末帧整屏泛朱红微光，交 s30） */}
+          {frame >= SEAL_AT ? (
+            <div
+              style={{
+                position: 'absolute',
+                inset: 0,
+                zIndex: 20,
+                background: `radial-gradient(circle at ${SEAL_CX} ${SEAL_CY}, rgba(${SEAL_RGB},0.62), rgba(${SEAL_RGB},0.22) 44%, transparent 74%)`,
+                opacity: bloomP * 0.38,
+                transform: `scale(${0.22 + bloomP * 1.34})`,
+                transformOrigin: `${SEAL_CX} ${SEAL_CY}`,
+                pointerEvents: 'none',
+              }}
+            />
+          ) : null}
         </AbsoluteFill>
       </CameraRig>
-      <HudChrome label="wuh.site · RESTART" readout="2026-06-21" />
+      <HudChrome label="wuh.site · RESTART PLAN" readout="D+7 · 无限进步" />
       <Grade2 id="GR2-05" />
       <Caption text="一周后，他写下《重启计划》：『……每周发布一篇博客，无限进步，开始重启计划~~』" appearAt={64} bottom={110} />
     </AbsoluteFill>
