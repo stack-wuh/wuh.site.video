@@ -29,8 +29,8 @@
   },
   "workflow": {
     "operation": null,
-    "checkpoint": "cbe966ebbfa4011efc72ddf1ab8065c6d4f1c187",
-    "planHash": "a36a048913e761430a2ca96f4d3af9561f15e16e1091a5d61b9602c145c41db8",
+    "checkpoint": "3287ae158e068e6ee4d26c5a5cbeab76e15e235f",
+    "planHash": "70c3ec06ae98d5b65cbc7ad613cc938aaecb74914993c13343cf72ef5d166b8b",
     "updatedAt": null,
     "lastError": null,
     "issuePlan": {
@@ -44,21 +44,9 @@
     },
     "commit": {
       "files": [
-        "videos/wuh-site-intro-v3/acceptance-gate.md",
-        "videos/wuh-site-intro-v3/books.ts",
-        "videos/wuh-site-intro-v3/motion-tokens.ts",
-        "videos/wuh-site-intro-v3/shots/s18.tsx",
-        "videos/wuh-site-intro-v3/shots/s29.tsx",
-        "videos/wuh-site-intro-v3/shots/s32.tsx",
-        "videos/wuh-site-intro-v3/shots/s33.tsx",
-        "videos/wuh-site-intro-v3/shots/s36.tsx",
-        "videos/wuh-site-intro-v3/shots/s45.tsx",
-        "videos/wuh-site-intro-v3/shots/s60.tsx",
-        "videos/wuh-site-intro-v3/shots/s61.tsx",
-        "videos/wuh-site-intro-v3/storyboard-audit.md",
-        "videos/wuh-site-intro-v3/style-anchor.md"
+        ".github/workflows/render-film.yml"
       ],
-      "message": "feat(video-materials): Phase 5 样片八镜数据直读重做——事件链/翻牌/热力盘/书墙/SLAM/题记+六门验收门"
+      "message": "ci(video): 镜作业超时 15→30 分钟——FX 解禁层（146 书脊/365 格/粒子系统）单镜渲染时长顶穿旧上限，三次 15 分钟整点被掐实证"
     }
   }
 }
