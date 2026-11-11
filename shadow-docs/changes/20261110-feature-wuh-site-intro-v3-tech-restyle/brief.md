@@ -4,7 +4,7 @@
   "name": "20261110-feature-wuh-site-intro-v3-tech-restyle",
   "type": "feature",
   "scope": "videos/wuh-site-intro-v3,public/wuh-site-intro-v3",
-  "status": "committed",
+  "status": "published",
   "baseBranch": "feature/20261109-feature-wuh-site-intro-v3-production",
   "branch": "feature/20261110-feature-wuh-site-intro-v3-tech-restyle",
   "files": [
@@ -29,8 +29,8 @@
   },
   "workflow": {
     "operation": null,
-    "checkpoint": "3287ae158e068e6ee4d26c5a5cbeab76e15e235f",
-    "planHash": "70c3ec06ae98d5b65cbc7ad613cc938aaecb74914993c13343cf72ef5d166b8b",
+    "checkpoint": "pr:62",
+    "planHash": "8d71d2727829e3187282acd8acd1965fb6852fb7b903a52693fb70499949a69c",
     "updatedAt": null,
     "lastError": null,
     "issuePlan": {
