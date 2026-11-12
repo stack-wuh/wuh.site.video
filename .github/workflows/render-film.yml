@@ -30,7 +30,7 @@ concurrency:
 jobs:
   bundle:
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    timeout-minutes: 30
     outputs:
       shots: ${{ steps.plan.outputs.shots }}
     steps:
@@ -74,7 +74,7 @@ jobs:
   shots:
     needs: bundle
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    timeout-minutes: 30
     strategy:
       matrix:
         shot: ${{ fromJSON(needs.bundle.outputs.shots) }}

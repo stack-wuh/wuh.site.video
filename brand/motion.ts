@@ -1,4 +1,6 @@
 import { Easing, interpolate, spring } from 'remotion';
+import { evolvePath } from '@remotion/paths';
+import { noise2D, noise3D } from '@remotion/noise';
 import type { CSSProperties } from 'react';
 
 /**
@@ -116,3 +118,68 @@ export const sealTilt = (seed: string): number => {
   for (const c of seed) h = (h * 31 + c.charCodeAt(0)) % 997;
   return ((h % 32) - 16) / 10;
 };
+
+/* ═══ 官方基元层（2026-11-10 Remotion 能力整合，shot-spec 决策记录 #9–#11）═══
+ * 原则：官方 API 优先，禁重复造轮子——镜内新动效先查本层。
+ * 能力地图、令牌→基元决策表与样板：技能 remotion-capabilities.md。
+ * 版本纪律：@remotion/* 与 remotion 同版本钉死（现 4.0.538，无 ^）。
+ */
+
+/** 描画笔画形状（evolvePath 口径：dashoffset 为数值，可直入 SVG attr / CSS style） */
+export type InkStroke = { strokeDasharray: string; strokeDashoffset: number };
+
+/** 描画基元（@remotion/paths evolvePath）：真实路径长度驱动 progress∈[0,1]。
+ * 消灭「猜 pathLen」——猜大必歪：起步死区（偏移超出真长度的段不可见）+ 变速扭曲。 */
+export const inkDraw = (progress: number, pathD: string): InkStroke => {
+  const p = Math.max(0, Math.min(1, progress));
+  const { strokeDasharray, strokeDashoffset } = evolvePath(p, pathD);
+  return { strokeDasharray, strokeDashoffset };
+};
+
+/** 手持颤动（@remotion/noise noise2D）：有机、非正弦；amp=1 时位移 ≤3px / 转 ≤0.35° */
+export const handheld = (seed: string, frame: number, amp = 1): { dx: number; dy: number; rot: number } => ({
+  dx: noise2D(`${seed}-x`, frame / 45, 0) * 3 * amp,
+  dy: noise2D(`${seed}-y`, frame / 38, 0) * 2.4 * amp,
+  rot: noise2D(`${seed}-r`, frame / 60, 0) * 0.35 * amp,
+});
+
+/** 漂移场（noise3D）：尘埃/纸纹粒子的连续方向角，替代 Math.sin 波场 */
+export const driftAngle = (seed: string, x: number, y: number, t: number): number =>
+  noise3D(seed, x / 260, y / 260, t / 90) * Math.PI;
+
+/** 弹性入场：spring 驱动位移+透明度+微缩（入场默认弹性，线性=例外需注释说明） */
+export const springEnter = (frame: number, delay: number, fps: number, fromY = 18, config = SPRINGS.springPop): CSSProperties => {
+  const s = spring({ frame: frame - delay, fps, config });
+  return {
+    opacity: Math.min(1, s * 1.6),
+    transform: `translateY(${(1 - s) * fromY}px) scale(${0.96 + 0.04 * s})`,
+  };
+};
+
+/* 转场曲线吸收：官方 @remotion/transitions presentation 的两侧镜像实现。
+ * 跨镜交接态协议不变（shot-spec §3 规则 4）——出镜尾/入镜首各自实现自己的一半，
+ * 本组令牌保证两侧曲线同形（同 easing 同窗口），拼接无缝。
+ * TransitionSeries 只用于镜内多场景切换（不进装配层，镜级缓存不动）。 */
+export const TRANS = {
+  /** TRANS-SLIDE 侧滑：出镜向左推出 / 入镜自右侧进入（1920 宽，cineEaseInOut 同形） */
+  slideOut: (frame: number, dur: number): CSSProperties => ({
+    transform: `translateX(${interpolate(frame, [0, dur], [0, -1920], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: CURVES.cineEaseInOut })}px)`,
+  }),
+  slideIn: (frame: number, dur: number): CSSProperties => ({
+    transform: `translateX(${interpolate(frame, [0, dur], [1920, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: CURVES.cineEaseInOut })}px)`,
+  }),
+  /** TRANS-WIPE 扫换：出镜自左收走 / 入镜自右展开（clipPath 单侧） */
+  wipeOut: (frame: number, dur: number): CSSProperties => ({
+    clipPath: `inset(0 0 0 ${interpolate(frame, [0, dur], [0, 100], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: CURVES.cineEaseInOut })}%)`,
+  }),
+  wipeIn: (frame: number, dur: number): CSSProperties => ({
+    clipPath: `inset(0 ${interpolate(frame, [0, dur], [100, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: CURVES.cineEaseInOut })}% 0 0)`,
+  }),
+  /** TRANS-FLASH 白场交接（交接态已在用，曲线统一：入白 whiteFlashIn / 出白 cineEaseOut） */
+  flashVeil: (frame: number, dur: number): CSSProperties => ({
+    opacity: interpolate(frame, [0, dur], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: CURVES.whiteFlashIn }),
+  }),
+  flashReveal: (frame: number, dur: number): CSSProperties => ({
+    opacity: interpolate(frame, [0, dur], [1, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: CURVES.cineEaseOut }),
+  }),
+} as const;

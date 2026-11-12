@@ -1,7 +1,9 @@
 import type { CSSProperties } from 'react';
-import { interpolate, random } from 'remotion';
+import { interpolate, random, spring } from 'remotion';
 import { colors } from '../../brand/tokens';
-import { CURVES } from '../../brand/motion';
+import { CURVES, inkDraw } from '../../brand/motion';
+import { numRoll } from '../../brand/motion';
+import type { InkStroke } from '../../brand/motion';
 
 /**
  * wuh-site-intro-v3 动效令牌库 —— motion-spec v3（123 枚）的 Remotion 落地。
@@ -30,6 +32,11 @@ export {
   dyeDrain,
   sealStamp,
   sealTilt,
+  inkDraw,
+  handheld,
+  driftAngle,
+  springEnter,
+  TRANS,
 } from '../../brand/motion';
 
 /* ─── 表 3.7.1 影片私有色（场景内禁止内联色值） ─── */
@@ -151,8 +158,9 @@ export const DATA = {
   summary2022Views: 1160,
 } as const;
 
-/* 月度活动总量（2025-11-09 → 2026-11-08 窗口，materials v3 §2.2）——热力图按此分配到日 */
-const MONTH_ACTIVITY = [
+/* 月度活动总量（2025-11-09 → 2026-11-08 窗口，materials v3 §2.2）——热力图按此分配到日；
+ * v3 镜内直读（s25 密度柱 / s28 灯柱主场同源口径），缺失月（2026-01/02）= 无活动 */
+export const MONTH_ACTIVITY = [
   { month: '2025-12', days: 31, total: 31 },
   { month: '2026-03', days: 31, total: 117 },
   { month: '2026-04', days: 30, total: 97 },
@@ -305,10 +313,11 @@ export const heatWave = (frame: number, delay: number, col: number, row: number,
   return { opacity: p, transform: `scaleY(${0.4 + p * 0.6})` };
 };
 
-/** FN-21 path-draw 描边生长 */
-export const pathDraw = (frame: number, delay: number, dur: number, length: number): CSSProperties => {
+/** FN-21 path-draw 描边生长（2026-11-10 升级：第 4 参从猜长度 pathLen 改收路径 d 字符串，
+ *  真长度由 @remotion/paths evolvePath 计算——猜大必歪：起步死区+变速扭曲） */
+export const pathDraw = (frame: number, delay: number, dur: number, pathD: string): CSSProperties => {
   const p = interpolate(frame - delay, [0, dur], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: CURVES.cineEaseInOut });
-  return { strokeDasharray: `${length}`, strokeDashoffset: `${length * (1 - p)}` };
+  return inkDraw(p, pathD);
 };
 
 /** FN-22 pen-glow 28px 笔尖微光（只允许固定小尺寸径向） */
@@ -564,10 +573,16 @@ export const slamSingle = (frame: number, delay: number, dur: number, from: numb
   return { v: r.va, slam: r.slam };
 };
 
-/** DAT-06 CHART-CUT 曲线断电：已描曲线反向收缩 + 分段熄灭（ease-in 骤停），断点由 PT-01 溅墨 */
-export const chartCut = (frame: number, start: number, dur: number, pathLen: number): { dashoffset: number; opacity: number } => {
+/** DAT-06 CHART-CUT 曲线断电：已描曲线反向收缩 + 分段熄灭（ease-in 骤停），断点由 PT-01 溅墨。
+ *  2026-11-10 升级：pathD 真长度驱动（stroke 供展开到 <path>，不再猜 pathLen） */
+export const chartCut = (
+  frame: number,
+  start: number,
+  dur: number,
+  pathD: string,
+): { stroke: InkStroke; opacity: number } => {
   const p = interpolate(frame - start, [0, dur], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: CURVES.cineEaseIn });
-  return { dashoffset: p * pathLen, opacity: 1 - p * 0.35 };
+  return { stroke: inkDraw(1 - p, pathD), opacity: 1 - p * 0.35 };
 };
 
 /** DAT-07 NUM-ZERO-HOLD 反衬档：指针 0→微偏→0（阻尼），无滚数——禁止假滚 */
@@ -602,10 +617,19 @@ export const dotCascade = (
 export const streamMerge = (frame: number, start: number, settle: number, sources = 4): Array<{ progress: number; arrive: number }> =>
   Array.from({ length: sources }, (_, i) => streamIn(frame, start + i * 16, settle));
 
-/** FN-45 tree-grow 树干/枝 path 生长 + 标签落位即现（镜 55–59） */
-export const treeGrow = (frame: number, start: number, dur: number, pathLen: number): { dashoffset: number; label: number } => {
+/** FN-45 tree-grow 树干/枝 path 生长 + 标签落位即现（镜 55–59）。
+ *  2026-11-10 升级：pathD 真长度驱动（stroke 供展开到 <path>） */
+export const treeGrow = (
+  frame: number,
+  start: number,
+  dur: number,
+  pathD: string,
+): { stroke: InkStroke; label: number } => {
   const p = interpolate(frame - start, [0, dur], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: CURVES.cineEaseOut });
-  return { dashoffset: (1 - p) * pathLen, label: interpolate(frame - start, [dur * 0.7, dur], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }) };
+  return {
+    stroke: inkDraw(p, pathD),
+    label: interpolate(frame - start, [dur * 0.7, dur], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }),
+  };
 };
 
 /** FN-46 motif-overlay 六母题依次叠印（镜 60）：12f 错峰 ×6，16f 淡入，opacity ≤12% */
@@ -650,3 +674,240 @@ export const fadeBlack = (frame: number, start: number, dur = 20): { bright: num
 export const PT = {
   paperGrain: { opacity: 0.05, blend: 'normal' },
 } as const;
+
+/* ═══ V2 深空数据流（2026-11-10 科技感重构，change 20261110-feature-…-tech-restyle）═══
+ * 参照系：年度报告数据流——深色底、多图表同屏生长、时间线流动、高信息密度。
+ * 语法反转：数据/内容当主角（全屏大数字/图表/kinetic typography），
+ * 网站截图降级为「证据快闪」（≤2s 辉光小窗）；手作签名点（印章/墨迹 wordmark）克制保留。
+ * 样片门：s01/s33/s45 先行，用户定稿后才全量铺开（不在错误风格上烧 62 镜工时）。 */
+
+/** V2 影片私有色（品牌暖黑科技：站点同源暖黑 + 琥珀数据主色 + 暖金落定 + 钤印朱红签名；场景内禁止内联色值） */
+export const FILM_COLORS2 = {
+  space: '#0f0e0c', // 暖黑底（brand/tokens bg 同源）
+  spaceDeep: '#0a0908',
+  panel: 'rgba(23,20,16,0.72)',
+  grid: 'rgba(212,163,115,0.07)',
+  line: 'rgba(212,163,115,0.24)',
+  data: '#d4a373', // 琥珀：数据主色（brand accent 同源）
+  dataDim: '#8a6b47',
+  gold: '#E9D9AE', // 暖金：落定/SLAM 高光（brand gold 同源）
+  paperWhite: '#f5f0e8', // 暖纸白文字（brand paper 同源）
+  textMuted: '#8a8272',
+  sealRed: '#7A1F16', // 钤印朱红：手作签名/强调（brand seal 同源）
+} as const;
+
+/** V2 八幕调色（GR2-01–08）：暖黑基调 + 幕间色温推移（琥珀黎明→暖金对比幕→亮数据终幕） */
+export type GradeId2 = 'GR2-01' | 'GR2-02' | 'GR2-03' | 'GR2-04' | 'GR2-05' | 'GR2-06' | 'GR2-07' | 'GR2-08';
+
+export type Grade2Def = {
+  id: GradeId2;
+  base: { color: string; blend: CSSProperties['mixBlendMode']; opacity: number };
+  veil?: { gradient: string; blend: CSSProperties['mixBlendMode']; opacity: number };
+  saturate: number;
+  brightness?: number;
+};
+
+const V2_VIGNETTE =
+  'radial-gradient(ellipse 118% 96% at 50% 46%, rgba(10,9,8,0) 52%, rgba(10,9,8,0.55) 88%, rgba(10,9,8,0.82) 100%)';
+
+export const GRADES2: Record<GradeId2, Grade2Def> = {
+  'GR2-01': { id: 'GR2-01', base: { color: '#1a1208', blend: 'screen', opacity: 0.16 }, veil: { gradient: 'linear-gradient(180deg, rgba(212,163,115,0.10), rgba(212,163,115,0) 46%)', blend: 'screen', opacity: 0.5 }, saturate: 1.0 },
+  'GR2-02': { id: 'GR2-02', base: { color: '#161208', blend: 'screen', opacity: 0.14 }, saturate: 0.98 },
+  'GR2-03': { id: 'GR2-03', base: { color: '#1c1408', blend: 'screen', opacity: 0.16 }, veil: { gradient: 'linear-gradient(180deg, rgba(212,163,115,0.07), rgba(212,163,115,0) 40%)', blend: 'screen', opacity: 0.5 }, saturate: 1.02 },
+  'GR2-04': { id: 'GR2-04', base: { color: '#050403', blend: 'multiply', opacity: 0.4 }, veil: { gradient: V2_VIGNETTE, blend: 'normal', opacity: 0.7 }, saturate: 0.9, brightness: 0.97 },
+  'GR2-05': { id: 'GR2-05', base: { color: '#241505', blend: 'screen', opacity: 0.16 }, veil: { gradient: 'linear-gradient(180deg, rgba(233,217,174,0.08), rgba(233,217,174,0) 44%)', blend: 'screen', opacity: 0.5 }, saturate: 1.04 },
+  'GR2-06': { id: 'GR2-06', base: { color: '#1a140a', blend: 'screen', opacity: 0.14 }, saturate: 1.0 },
+  'GR2-07': { id: 'GR2-07', base: { color: '#1a1008', blend: 'screen', opacity: 0.16 }, veil: { gradient: 'linear-gradient(180deg, rgba(212,163,115,0.07), rgba(212,163,115,0) 44%)', blend: 'screen', opacity: 0.5 }, saturate: 1.02 },
+  'GR2-08': { id: 'GR2-08', base: { color: '#181208', blend: 'screen', opacity: 0.14 }, veil: { gradient: 'linear-gradient(180deg, rgba(212,163,115,0.09), rgba(212,163,115,0) 42%)', blend: 'screen', opacity: 0.55 }, saturate: 1.02, brightness: 1.05 },
+};
+
+/* ─── V2 科技令牌 ─── */
+
+/** BIG-NUMBER 全屏大数字滚动：spring-out 落定 + 落定辉光脉冲（年度报告主角基元）。
+ *  返回千分位文本与辉光强度（落定瞬间 1→呼吸收敛）。 */
+export const bigNum = (
+  frame: number,
+  delay: number,
+  dur: number,
+  from: number,
+  to: number,
+): { text: string; glow: number; slam: number } => {
+  const v = numRoll(frame, delay, dur, from, to);
+  const landed = frame >= delay + dur;
+  const glow = landed ? interpolate(frame, [delay + dur, delay + dur + 3, delay + dur + 26], [0.35, 1, 0.4], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }) : interpolate(frame, [delay, delay + 8], [0.12, 0.35], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  const slam = landed ? interpolate(frame, [delay + dur, delay + dur + 8], [1.045, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }) : 1;
+  return { text: fmtNum(v), glow, slam };
+};
+
+/** 辉光文本样式：主色 text-shadow 三段堆叠（intensity 0–1；rgb 传主色三元组，默认琥珀）。 */
+export const glowText = (color: string, intensity = 0.6, rgb = '212,163,115'): CSSProperties => ({
+  textShadow: `0 0 ${18 * intensity}px ${color}${Math.round(intensity * 160).toString(16).padStart(2, '0')}, 0 0 ${56 * intensity}px rgba(${rgb},${0.28 * intensity}), 0 0 2px rgba(245,240,232,${0.6 * intensity})`,
+});
+
+/** CHART-FLOW 数据行生长：横条按比例生长（对齐大数字滚动窗），返回条宽百分比与辉光。 */
+export const chartBar = (
+  frame: number,
+  delay: number,
+  dur: number,
+  ratio: number,
+): { widthPct: number; glow: number } => {
+  const p = interpolate(frame - delay, [0, dur], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: CURVES.numRollOut });
+  return { widthPct: p * ratio * 100, glow: interpolate(p, [0.7, 1], [0.2, 0.55], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }) };
+};
+
+/** TIMELINE-FLOW 时间线流动：返回线已画比例（inkDraw 用）与第 i 节点的落点闪。 */
+export const timelineFlow = (frame: number, start: number, dur: number, nodes: number, nodeGap: number): { progress: number; nodeFlash: (i: number) => number } => {
+  const progress = interpolate(frame - start, [0, dur], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: CURVES.cineEaseInOut });
+  return {
+    progress,
+    nodeFlash: (i: number) => {
+      const at = start + (i + 1) * nodeGap;
+      return interpolate(frame, [at, at + 2, at + 10], [0, 0.95, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+    },
+  };
+};
+
+/* ═══ V3 特效解禁层（2026-11-11 用户拍板「不再限制动效权利」+ 内容编排向 v2 看齐）═══
+ * v2 的镜是「一场戏」：承接→触发→分层数据表演（帧级节奏数组）→收场交接；
+ * v3 此前是「一张海报」：两三个淡入后静止。本层给编排提供弹性/冲击/粒子/逐字/视差原语。 */
+
+/** FX-01 spring 弹入进度（真 spring 物理，带过冲；fps 由 useVideoConfig 取）。
+ *  用法：const p = springIn(frame, delay, fps); transform 里用 (1-p) 做位移/scale。 */
+export const springIn = (frame: number, delay: number, fps: number, damping = 17, stiffness = 160, mass = 0.9): number => {
+  const t = frame - delay;
+  if (t <= 0) return 0;
+  return spring({ frame: t, fps, config: { damping, stiffness, mass }, durationInFrames: 26 });
+};
+
+/** FX-02 帧级节奏数组（v2 LAND/GAPS 手法正体）：count 点在 [start, start+span] 内落定，
+ *  mode='accel' 前疏后密（推进感，末点对音），'even' 匀步，'decel' 前密后疏（喘息）。 */
+export const staggerLand = (count: number, start: number, span: number, mode: 'accel' | 'even' | 'decel' = 'accel'): number[] =>
+  Array.from({ length: count }, (_, i) => {
+    const k = i / Math.max(1, count - 1);
+    const e = mode === 'accel' ? Math.pow(k, 1.6) : mode === 'decel' ? 1 - Math.pow(1 - k, 1.6) : k;
+    return Math.round(start + e * span);
+  });
+
+/** FX-03 冲击波双环（落定瞬间效果）：主环粗、副环细快消；rgb 传主色三元组。 */
+export const shockwave = (frame: number, landAt: number, rgb = '212,163,115'): { ring1: CSSProperties; ring2: CSSProperties } | null => {
+  const t = frame - landAt;
+  if (t < 0 || t > 26) return null;
+  const r1 = interpolate(t, [0, 20], [0, 190], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: CURVES.cineEaseOut });
+  const o1 = interpolate(t, [0, 3, 20], [0.85, 0.6, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  const r2 = interpolate(t, [0, 14], [0, 120], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: CURVES.cineEaseOut });
+  const o2 = interpolate(t, [0, 2, 14], [0.6, 0.4, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  const ring = (r: number, o: number, w: number): CSSProperties => ({
+    position: 'absolute',
+    left: -r,
+    top: -r,
+    width: r * 2,
+    height: r * 2,
+    borderRadius: '50%',
+    border: `${w}px solid rgba(${rgb},${o})`,
+    boxShadow: `0 0 ${w * 6}px rgba(${rgb},${o * 0.7})`,
+  });
+  return { ring1: ring(r1, o1, 2.5), ring2: ring(r2, o2, 1.2) };
+};
+
+/** FX-04 粒子喷洒（落定瞬间；全 random(seed) 确定性）：count 粒从原点抛射，重力下坠 + 衰减；
+ *  gold=true 暖金粒否则琥珀。返回相对锚点的粒子样式数组（外层容器定位在锚点）。 */
+export const sparkBurst = (
+  seed: string,
+  frame: number,
+  landAt: number,
+  count = 14,
+  gold = false,
+): Array<{ style: CSSProperties }> => {
+  const t = frame - landAt;
+  if (t < 0 || t > 34) return [];
+  return Array.from({ length: count }, (_, i) => {
+    const ang = random(`${seed}-a${i}`) * Math.PI * 2;
+    const dist = 40 + random(`${seed}-d${i}`) * 130;
+    const life = 16 + random(`${seed}-l${i}`) * 16;
+    const p = interpolate(t, [0, life], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: CURVES.cineEaseOut });
+    const x = Math.cos(ang) * dist * p;
+    const y = Math.sin(ang) * dist * p * 0.7 + p * p * 60; // 重力下坠
+    const o = interpolate(t, [0, life * 0.25, life], [0.95, 0.7, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+    const s = 2 + random(`${seed}-s${i}`) * 3;
+    return {
+      style: {
+        position: 'absolute',
+        left: x,
+        top: y,
+        width: s,
+        height: s,
+        borderRadius: s / 2,
+        background: gold ? FILM_COLORS2.gold : FILM_COLORS2.data,
+        boxShadow: `0 0 6px rgba(${gold ? '233,217,174' : '212,163,115'},${o})`,
+        opacity: o,
+      },
+    };
+  });
+};
+
+/** FX-05 逐字 kinetic（金句/题名主角化）：每字 spring 弹入（微 y 上浮 + 轻微旋转），
+ *  step 每字帧数；落定后辉光随 intensity 呼吸。返回逐字样式（文本渲染由调用方拆字）。 */
+export const kineticChars = (
+  text: string,
+  frame: number,
+  start: number,
+  step: number,
+  fps: number,
+  intensity = 0.55,
+): Array<{ ch: string; style: CSSProperties }> => {
+  const chars = Array.from(text);
+  return chars.map((ch, i) => {
+    const p = springIn(frame, start + i * step, fps, 15, 190, 0.8);
+    const landed = p > 0.98;
+    return {
+      ch,
+      style: {
+        display: 'inline-block',
+        opacity: Math.min(1, p * 1.4),
+        transform: `translateY(${(1 - p) * 26}px) rotate(${(1 - p) * 3}deg) scale(${0.9 + p * 0.1})`,
+        ...(landed ? glowText(FILM_COLORS2.paperWhite, intensity * (0.7 + 0.3 * Math.sin(frame / 9 + i * 0.7))) : {}),
+      },
+    };
+  });
+};
+
+/** FX-06 数据雨帘（背景特效层，低干扰）：cols 列琥珀数字雨匀速下落，头部亮尾迹淡；
+ *  opacity 峰值 ≤0.22（信息层之下）。speed px/s。 */
+export const dataCurtain = (
+  seed: string,
+  frame: number,
+  cols = 14,
+  speed = 140,
+): Array<{ x: number; y: number; o: number; text: string }> =>
+  Array.from({ length: cols }, (_, i) => {
+    const x = (i + 0.5) * (100 / cols) + (random(`${seed}-x${i}`) - 0.5) * 4;
+    const cycle = 260 + random(`${seed}-c${i}`) * 240;
+    const phase = random(`${seed}-p${i}`) * cycle;
+    const y = ((frame * speed) / 30 + phase) % (cycle + 400) - 200;
+    const o = interpolate(y, [-160, -60, 900, 1180], [0, 0.22, 0.16, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }) * (0.5 + random(`${seed}-o${i}`) * 0.5);
+    return { x, y, o, text: `${Math.floor(random(`${seed}-n${i}-${Math.floor(frame / 14)}`) * 10)}` };
+  });
+
+/** FX-07 三层视差（纵深）：layer 0 远 / 1 中 / 2 近，返回该层 translate（px）；
+ *  amp 每层最大位移幅度，随 frame 线性漂移（近层最快）。 */
+export const parallax3 = (frame: number, layer: 0 | 1 | 2, amp = 18): { x: number; y: number } => {
+  const k = [0.25, 0.55, 1][layer];
+  return { x: Math.sin(frame / (210 / k)) * amp * k, y: Math.cos(frame / (260 / k)) * amp * k * 0.6 };
+};
+
+/** FX-08 金光横扫（施加在大数字/金句容器上的子层）：亮带从左掠到右，screen 峰值 0.28。 */
+export const sheenSweep = (frame: number, start: number, dur = 18): CSSProperties => {
+  const p = interpolate(frame - start, [0, dur], [-0.35, 1.35], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: CURVES.cineEaseInOut });
+  const o = frame - start >= 0 && frame - start <= dur ? Math.sin(Math.min(1, Math.max(0, p)) * Math.PI) * 0.28 : 0;
+  return {
+    position: 'absolute',
+    top: '-12%',
+    bottom: '-12%',
+    left: `${p * 100}%`,
+    width: 120,
+    background: `linear-gradient(90deg, transparent, rgba(233,217,174,${o}), transparent)`,
+    mixBlendMode: 'screen',
+    filter: 'blur(6px)',
+    pointerEvents: 'none',
+  } as CSSProperties;
+};
