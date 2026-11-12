@@ -158,8 +158,9 @@ export const DATA = {
   summary2022Views: 1160,
 } as const;
 
-/* 月度活动总量（2025-11-09 → 2026-11-08 窗口，materials v3 §2.2）——热力图按此分配到日 */
-const MONTH_ACTIVITY = [
+/* 月度活动总量（2025-11-09 → 2026-11-08 窗口，materials v3 §2.2）——热力图按此分配到日；
+ * v3 镜内直读（s25 密度柱 / s28 灯柱主场同源口径），缺失月（2026-01/02）= 无活动 */
+export const MONTH_ACTIVITY = [
   { month: '2025-12', days: 31, total: 31 },
   { month: '2026-03', days: 31, total: 117 },
   { month: '2026-04', days: 30, total: 97 },

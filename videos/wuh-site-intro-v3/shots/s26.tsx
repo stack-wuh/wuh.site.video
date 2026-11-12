@@ -1,18 +1,25 @@
 /* S26 · Act 5 灯亮 · 局部帧 [0,132) · 132f · 绝对 3858–3990
  *
- * V2 深空数据流重写（2026-11-11 品牌暖黑科技）：迁入节拍——新站首页改为线框数据面板
- * （border + 辉光，非仿真浏览器 chrome，0–22 展开），历史文章卡成队从左侧飞入内容栏
- * （cardFly 窗口原样：22+i*10 起、22f 时长、半拍一卡压实感），行内墨点标记 + 日期
- * 「05-0X」等宽；侧栏保留 s25 双苔痕余韵（两枚琥珀辉光斑，blur 4）；侧向跟移
- * （CameraRig x 50→-40 / scale 1.04 窗口原样）。只给密度、不给计数。
- * 转场：入「切」，出「切」。无字幕（迁入节拍）。
- * 尾帧：文章数据行铺满线框首屏（交接态：满屏文章列表）。
+ * 迁入节拍镜：呼吸/节拍语义保留，微动不断（handheld 全镜）；新站首页=线框数据面板
+ * （border + 辉光，非仿真浏览器 chrome），历史文章卡成队从左侧飞入（cardFly 窗口原样），
+ * 只给密度、不给计数。侧栏保留 s25 双苔痕余韵（两枚琥珀辉光斑）。
+ * 编排四问：
+ *   承接 = s25 交出的湿纸+双苔痕（侧栏双辉光斑余韵即交接物入画）；
+ *   触发 = 线框面板展开后，文章数据卡逐张飞入（半拍一卡，迁入的机械节拍）；
+ *   展开 = 帧级节奏：0–22 面板展开（springIn scale 0.97→1）→ 22+i*10 起 9 卡 cardFly（各 22f，末卡 102–124 落定）→ cam 侧向跟移全镜；
+ *   交接 = 尾帧：文章数据行铺满线框首屏（交接态：满屏文章列表，交 s27 失焦压暗）。
+ * 逐拍帧表（fps=30）：
+ *   [0–22]   线框面板 springIn 展开（位移入场 scale 0.97→1 + 辉光渐起）；题行/副行/分隔线随面板显影；
+ *   [22/32/42/52/62/72/82/92/102] 9 张文章卡 cardFly 自左飞入（x -420→0，各 22f，半拍一卡压实感）；行内墨点+日期 05-0X 等宽随卡落位；
+ *   [0–132]  cam 侧向跟移 x 50→-40（窗原样）+ handheld('s26-cam', 1.0) 呼吸微动不断；
+ *   [全镜]   侧栏双苔痕余韵（blur 4 / opacity 0.35，静置呼应 s25 尾帧）。
+ * 时间轴零改动：132f / cardFly 窗 22+i*10 / 面板几何 原样；转场：入「切」，出「切」。无字幕（迁入节拍）。
  */
 import type { FC } from 'react';
-import { AbsoluteFill, interpolate, useCurrentFrame } from 'remotion';
+import { AbsoluteFill, interpolate, useCurrentFrame, useVideoConfig } from 'remotion';
 import { fontFamilies } from '../../../brand/tokens';
 import { CURVES } from '../../../brand/motion';
-import { cardFly, FILM_COLORS2, type Pose } from '../motion-tokens';
+import { cardFly, FILM_COLORS2, handheld, springIn, type Pose } from '../motion-tokens';
 import { CameraRig } from '../components/CameraRig';
 import { DeepSpace } from '../components/DeepSpace';
 import { Grade2 } from '../components/Grade2';
@@ -23,19 +30,23 @@ const CARDS = 9;
 
 const S26: FC = () => {
   const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
+  const hh = handheld('s26-cam', frame, 1.0);
   const cam = {
     scale: 1.04,
-    x: interpolate(frame, [0, TOTAL], [50, -40], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: CURVES.cineEaseInOut }),
-    y: 0,
-    rot: 0,
+    x: interpolate(frame, [0, TOTAL], [50, -40], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: CURVES.cineEaseInOut }) + hh.dx,
+    y: hh.dy,
+    rot: hh.rot,
   };
+  // 面板展开（0–22，springIn 位移入场）
+  const panelP = springIn(frame, 0, fps, 16, 150, 0.9);
 
   return (
     <AbsoluteFill style={{ background: FILM_COLORS2.spaceDeep }}>
       <DeepSpace seed="s26v2" stars={48} grid />
       <CameraRig cam={cam}>
         <AbsoluteFill>
-          {/* 新站首页线框数据面板（展开 0–22） */}
+          {/* 新站首页线框数据面板（展开 0–22，springIn scale 0.97→1） */}
           <div
             style={{
               position: 'absolute',
@@ -47,7 +58,8 @@ const S26: FC = () => {
               background: FILM_COLORS2.panel,
               border: `1px solid ${FILM_COLORS2.line}`,
               boxShadow: `0 0 44px rgba(212,163,115,0.12), 0 24px 60px rgba(0,0,0,0.5)`,
-              opacity: interpolate(frame, [0, 22], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: CURVES.cineEaseOut }),
+              opacity: Math.min(1, panelP * 1.3),
+              transform: `scale(${0.97 + panelP * 0.03})`,
             }}
           >
             {/* 面板头：题行 + 副行 + 分隔线 */}
