@@ -30,21 +30,15 @@
   },
   "workflow": {
     "operation": null,
-    "checkpoint": "52eace6c7d4efd4681f459af03fa4d1e90fad546",
-    "planHash": "899b692907485dafe3a2bf569450e7ca9fb027d68f0aeda6f976461c976bfdff",
+    "checkpoint": "d11dd5e5337c7e9c26ee087ab77c92cb75fe9f9e",
+    "planHash": "7e1fad2c5fd2b5cdde3467c3d40b3fc48bca9d698e8ba428f84292c954ec7ad3",
     "updatedAt": null,
     "lastError": null,
     "commit": {
       "files": [
-        "shadow-docs/changes/20261114-feature-wuh-site-intro-v3-redesign/brief.md",
-        "videos/preprod-wuh-site-intro-v3/assets/asset-registry.md",
-        "videos/preprod-wuh-site-intro-v3/assets/materials.md",
-        "videos/preprod-wuh-site-intro-v3/assets/script.md",
-        "videos/preprod-wuh-site-intro-v3/assets/storyboard.md",
-        "videos/preprod-wuh-site-intro-v3/assets/style-anchor.md",
-        "videos/wuh-site-intro-v3/shots-manifest.json"
+        "videos/preprod-wuh-site-intro-v3/assets/motion-spec.md"
       ],
-      "message": "feat(video-materials): 前期重做 Phase 1-3"
+      "message": "feat(video-materials): 动效规范 v2——76 令牌/56 镜覆盖矩阵/60 对音点"
     },
     "issuePlan": {
       "title": "[feature] wuh.site 介绍片 v3 全流程重做：亮色信息密度 · 产品发布片方向",
@@ -138,8 +132,8 @@
 - [x] 用户剧本评审：交付差异化的新叙事 + 时长 + 视觉样例说明，拿到定稿意见 — 评审记录写入本 brief「结果」
 
 ### Phase 3 分镜与动效规范
-- [ ] storyboard v2：7 列逐镜表（镜号/时长·帧窗/画面/镜头语言/文案·字幕/转场/尾帧）+ 帧数对账 + 每镜四问自查 — `videos/preprod-wuh-site-intro-v3/assets/storyboard.md`
-- [ ] motion-spec v2：令牌化（曲线/弹性/节奏/版式切换/数据滚动/图表生长/动能字幕/签名点）+ 全镜覆盖矩阵 + 实现基元列 — `videos/preprod-wuh-site-intro-v3/assets/motion-spec.md`
+- [x] storyboard v2：7 列逐镜表（镜号/时长·帧窗/画面/镜头语言/文案·字幕/转场/尾帧）+ 帧数对账 + 每镜四问自查 — `videos/preprod-wuh-site-intro-v3/assets/storyboard.md`
+- [x] motion-spec v2：令牌化（曲线/弹性/节奏/版式切换/数据滚动/图表生长/动能字幕/签名点）+ 全镜覆盖矩阵 + 实现基元列 — `videos/preprod-wuh-site-intro-v3/assets/motion-spec.md`
 
 ### Phase 4 前期机器对账与交付
 - [ ] `shots.mjs import` 生成新 manifest（帧数唯一真源），对账全绿 — `videos/wuh-site-intro-v3/shots-manifest.json`
