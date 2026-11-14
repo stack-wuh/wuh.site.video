@@ -30,7 +30,7 @@
   },
   "workflow": {
     "operation": null,
-    "checkpoint": "issue:64",
+    "checkpoint": "52eace6c7d4efd4681f459af03fa4d1e90fad546",
     "planHash": "899b692907485dafe3a2bf569450e7ca9fb027d68f0aeda6f976461c976bfdff",
     "updatedAt": null,
     "lastError": null,
