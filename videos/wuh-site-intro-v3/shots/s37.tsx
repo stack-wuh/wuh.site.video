@@ -92,9 +92,9 @@ const S37: FC = () => {
           <Meta size={12} style={{ marginLeft: 24 }}>{`${SCALARS.activity_active_days} / 365 DAYS ACTIVE`}</Meta>
         </div>
 
-        <div style={{ position: 'absolute', left: GRID.margin, bottom: 118, width: 900 }}>
-          <KineticLine text="过去一年，8,437 次活动，156 天有动静。" start={26} framesPerChar={2} size={T.line} />
-          <div style={{ marginTop: 18, height: 1, width: 320, backgroundColor: FILM_COLORS.hairline }} />
+        <div style={{ position: 'absolute', left: GRID.margin, bottom: 108, width: 1640 }}>
+          <KineticLine text="过去一年，8,437 次活动，156 天有动静。" start={26} framesPerChar={2} size={48} />
+          <div style={{ marginTop: 16, height: 1, width: 320, backgroundColor: FILM_COLORS.hairline }} />
         </div>
       </AbsoluteFill>
     </ShotShell>
