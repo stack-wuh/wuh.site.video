@@ -31,14 +31,14 @@
   "workflow": {
     "operation": null,
     "checkpoint": "d11dd5e5337c7e9c26ee087ab77c92cb75fe9f9e",
-    "planHash": "7e1fad2c5fd2b5cdde3467c3d40b3fc48bca9d698e8ba428f84292c954ec7ad3",
+    "planHash": "2324defbe26af1a751806dd3acb9f3749fe71c6422020501d7be9e9a8e091787",
     "updatedAt": null,
     "lastError": null,
     "commit": {
       "files": [
-        "videos/preprod-wuh-site-intro-v3/assets/motion-spec.md"
+        "shadow-docs/changes/20261114-feature-wuh-site-intro-v3-redesign/brief.md"
       ],
-      "message": "feat(video-materials): 动效规范 v2——76 令牌/56 镜覆盖矩阵/60 对音点"
+      "message": "docs(shadow): 前期结果与验证证据回写"
     },
     "issuePlan": {
       "title": "[feature] wuh.site 介绍片 v3 全流程重做：亮色信息密度 · 产品发布片方向",
@@ -136,14 +136,22 @@
 - [x] motion-spec v2：令牌化（曲线/弹性/节奏/版式切换/数据滚动/图表生长/动能字幕/签名点）+ 全镜覆盖矩阵 + 实现基元列 — `videos/preprod-wuh-site-intro-v3/assets/motion-spec.md`
 
 ### Phase 4 前期机器对账与交付
-- [ ] `shots.mjs import` 生成新 manifest（帧数唯一真源），对账全绿 — `videos/wuh-site-intro-v3/shots-manifest.json`
-- [ ] `shots.mjs check` 全绿（帧数/字数）+ script↔storyboard 文案逐行对账
-- [ ] 前期定稿：写清制作 change 的输入清单（风格锚点/令牌/资产/镜表）并交用户，下一步另立 production change
+- [x] `shots.mjs import` 生成新 manifest（帧数唯一真源），对账全绿 — `videos/wuh-site-intro-v3/shots-manifest.json`
+- [x] `shots.mjs check` 全绿（帧数/字数）+ script↔storyboard 文案逐行对账
+- [x] 前期定稿：写清制作 change 的输入清单（风格锚点/令牌/资产/镜表）并交用户，下一步另立 production change
 
 ## 结果
 
-- 实际耗时: —
-- 验证: —
+- 实际耗时: 约 1.5h（2026-11-14 23:30 → 11-15 00:4x；含素材侦察/设计侦察/剧本/分镜/动效四个 subagent 并行与 Lead 整合）
+- 验证:
+  - | INV-1 | 观察点：`node scripts/shots.mjs import --unit wuh-site-intro-v3` → `✅ import: 56 镜 / 7 幕 / 5700 帧`；各幕 Σ=幕窗、镜窗连续、镜 start 全 10f 网格 |
+  - | INV-2 | 观察点：分镜附表二逐句核对 → 35/35 句在字数硬表内（34 镜有字幕）；文案全部取自 script 定稿 |
+  - | INV-3 | 观察点：materials v4 §九 24 条可上屏数据 + 逐镜素材列；修正 3 处未溯源值（#165 label daily、s18 时刻、s54 日志日期）与 1 处口径（2025「访问 0」→「0 篇公开文章」，因 TTL 后访问量不可考） |
+  - | INV-4 | 观察点：`asset-registry.md` 零资产登记；分镜表未声明资产外键；全片零网站截图/零书封 |
+  - | INV-5 | 观察点：用户评审记录（2026-11-14 四项拍板）；见上「用户评审记录」节 |
+  - 跨段残差：`check` 报 56 处「shots/sNN.tsx 不存在」——制作 change 补齐镜文件后消除；除此无其他 INV 报错。
+- 前期交付物：`materials.md` v4（276 行）/ `style-anchor.md` v2 / `script.md` v2（定稿）/ `storyboard.md` v2（286 行，56 镜）/ `motion-spec.md` v2（719 行，76 令牌 + 56×4 矩阵 + 60 对音点）/ `asset-registry.md`（零资产）/ `shots-manifest.json`（5700f）
+- 下一步：另立 production change（`20261115-feature-wuh-site-intro-v3-rebuild`）进行视觉基座、3 镜样片门、56 镜实装、CI 出片。
 
 ## 知识评估
 
