@@ -4,7 +4,7 @@
   "name": "20261114-feature-wuh-site-intro-v3-redesign",
   "type": "feature",
   "scope": "videos/preprod-wuh-site-intro-v3,videos/wuh-site-intro-v3,public/wuh-site-intro-v3",
-  "status": "committed",
+  "status": "published",
   "baseBranch": "main",
   "branch": "feature/20261114-feature-wuh-site-intro-v3-redesign",
   "files": [
@@ -20,8 +20,8 @@
     "repository": "stack-wuh/wuh.site.video",
     "issue": 64,
     "issueUrl": "https://github.com/stack-wuh/wuh.site.video/issues/64",
-    "pullRequest": null,
-    "pullRequestUrl": null
+    "pullRequest": 65,
+    "pullRequestUrl": "https://github.com/stack-wuh/wuh.site.video/pull/65"
   },
   "review": {
     "conclusion": "pending",
@@ -30,8 +30,8 @@
   },
   "workflow": {
     "operation": null,
-    "checkpoint": "66029875cc28a2d2bd60c353629f9618f97cbc67",
-    "planHash": "2324defbe26af1a751806dd3acb9f3749fe71c6422020501d7be9e9a8e091787",
+    "checkpoint": "pr:65",
+    "planHash": "8d21afa3dbc4553b62f5f8aae04fd0006e2f19d2cc82ca5d7c1ce9ec6f19426b",
     "updatedAt": null,
     "lastError": null,
     "commit": {

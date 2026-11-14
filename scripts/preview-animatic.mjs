@@ -54,8 +54,6 @@ const stills = picked.map((i, k) => {
 });
 
 const esc = (t) => String(t ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-const fmt = (f) => `${Math.floor(f / 30 / 60)}:${String(Math.floor((f / 30) % 60)).padStart(2, '0')}`;
-const actRange = (a) => { const inA = shots.filter((s) => s.act === a); return [inA[0]?.startFrame ?? 0, inA[inA.length - 1].startFrame + inA[inA.length - 1].durationFrames]; };
 const ACT_TITLES = { 1: '墨点', 2: '旧屋', 3: '第一行', 4: '留白', 5: '灯亮', 6: '入院', 7: '坐忘', 8: '此刻' };
 
 const shotData = shots.map((s, i) => ({

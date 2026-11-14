@@ -5,5 +5,5 @@
   // 不含 src 的原因：src/Root.tsx 汇总了所有视频单元的 routes，一旦纳入就会把 intro-v2 经导入图拉进程序，
   // 收窄失效——这是已知覆盖缺口，只能随全仓门一起恢复。
   "extends": "./tsconfig.json",
-  "include": ["videos/zhi-guo-xiang", "brand", "scripts"]
+  "include": ["videos/wuh-site-intro-v3", "brand", "scripts"]
 }
