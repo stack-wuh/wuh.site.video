@@ -12,7 +12,7 @@ source:
   - changes/20261101-feature-zhi-guo-xiang-production/brief.md
   - changes/20261107-feature-asset-registry-shot-schema/brief.md
   - changes/archive/20261107-feature-making-of-zhi-guo-xiang-preprod/brief.md
-verified: 2026-11-07
+verified: 2026-11-15
 verified-depth: runtime
 verified-scope: 2026-11-07 资产层机检落地（asset-registry.md 登记表 + 导演列解析 + 字数硬表 + INV-S7：fixture 六轮红绿拒绝路径 + site-film/wuh-site-intro-v2/zhi-guo-xiang 三单元双绿 + zhi-guo-xiang import 幂等 diff 为空；资产层生图生产流程本身待首片 runtime 实证）。site-film《朝朝如念》4:00 成片全流程实证（素材库→分镜 45 镜→动效规范 108 令牌→animatic→正式制作→分段渲染出片）；2026-11-01 第二片 wuh-site-intro-v2 正式制作落地（57 镜 / 124 令牌 / FilmShell 三段装配 / render-film --unit + CI film 输入），本片出片待 CI 实证；2026-11-01 第三片《风陵·致郭襄》前期：52 镜 / 7200f、人物视觉设定、106 令牌 / 52×4 矩阵、animatic 7500f CI 出片（run 41260324683）、本地 BGM 4320 断点 mux 试听版；2026-11-01 第三片正式制作出片：52 镜一镜一文件 + 共享件整合，CI run 41270162934 全绿（bundle → 52 镜矩阵 → assemble），ffprobe 7500f / 250s，本地 mux 250s，断点静默实测 137.8–148.8s
 ---
@@ -70,6 +70,21 @@ verified-scope: 2026-11-07 资产层机检落地（asset-registry.md 登记表 +
 - 片长变更在前期阶段做（改分镜数字重排即可）；正式制作开始后改片长=重渲全片
 - 真实数据优先：能抓 API 就抓（如 /api/music/playlist?playlistId=、/api/about/activity），素材库全条目标注抓取日期
 - 配乐默认 CC-BY 可溯源，署名清单随片交付（B 站简介用）；下载的音频用 ffprobe/afinfo 验格式（原站可能误发视频文件）。**版权曲目例外**：不进 `public/`，CI 只出无声画面，发布前本地 mux（见 `videos/preprod-zhi-guo-xiang/assets/music.md` 示例）。
+
+## 亮色信息密度片型（2026-11-15 实证 · wuh-site-intro-v3 重做）
+
+用户对「纸墨」与「深空科技」两版视觉层返工均否决后，第三轮改为**叙事 + 视觉系统双重重做**，落成《七年，一座站》（56 镜 / 正片 5700f / 全片 6030f / 3:21 / 零网站截图 / 亮色信息密度）。以下口径可复用：
+
+- **色板从站点源码取，不从零发明**：读 `x.wuh.site/packages/components/themes`（wine 亮色）→ `paper #F5F0EC` / `card #FFFBF8` / `ink #2A1E16` / `inkSoft #5A4438` / `muted #8A6E5C` / `primary #C94A44` / `accent #E3B567`；热力图沿用站点暖金五阶。片子与站点同源，观众看完片再打开站点是同一个世界。
+- **零图片资产也可成片**：全片 = 真实数据（`data.ts`）+ 文本 + 矢量图形；分镜表不声明「资产外键」即关闭 strictAssets，`check` 只查帧数/字数/镜文件存在。片型适合「数据自画像」，不适合需要场景/人物的叙事片。
+- **组件层清单**（`videos/<unit>/components/`，16 件，一镜一文件调用）：ShotShell（纸底+四角角标+微网格）、Type（Kicker/DataLabel/Meta/Hairline/DiamondRule/Serif/DropCap）、BigNumber、Odometer、BarChart、Heatmap、KineticLine、Typewriter、CodePanel、FlowDiagram、Tape、SealStamp、SpineArray、TagCloud、DotMatrix、Panel。
+- **两个新踩坑（都会让画面「看起来坏」）**：
+  1. `AbsoluteFill` 默认 `flexDirection: column`——用 `alignItems:center` 做垂直居中会把内容顶出画幅（s01 曾整镜空白）；垂直定位一律 `position:absolute + top`，或 `justifyContent:'center'`。
+  2. **里程表不能直接拿连续小数偏移**：`v/place` 的高位在静帧仍带小数（64,985 的万位 = 6.4985），连续 `translateY` 会把 64,985 渲成「95,0/5」半格叠字；显示用途必须**整位吸附**（`offset = floor(cont)%10`），滚动只在换位瞬间跳。
+- **CI 依赖要查 package.json，不查 node_modules**：main 分支未声明 `@remotion/paths` / `@remotion/noise`（node_modules 有符号链接是历史残留，CI `--frozen-lockfile` 解析不到）。替代：SVG `pathLength={1}` + 动画 `strokeDashoffset` 做描画（`draw(p)` 令牌），自研 `noise1D/noise2D`（deterministic value noise）做有机漂移。
+- **BGM 直接进 Audio comp**（CI 出有声成片）：`WuhSiteIntroV3Audio.tsx` 按绝对帧分段 + 30f 交叉淡化 + loudnorm -17 LUFS；改配乐只改该文件与 `bgm-selection.md`，不重渲画面。实测 volumedetect 分段 −20 dB 左右、沉默段 −25 dB 为预期。
+- **3 镜样片门值回票价**：先渲「冷开场 / 数字墙 / 热力图」过用户门，再铺全量；本轮据此在铺量前发现并修正了 s01 布局与字幕换行。
+- **CI 实测**：56 镜矩阵（max-parallel 20）+ bundle + assemble 全绿约 7–9 分钟；assemble 三重终验 `6030/6030` 帧、两路时长一致、分段音量覆盖片尾。
 
 ## 适用边界
 

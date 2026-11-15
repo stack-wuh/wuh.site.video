@@ -4,7 +4,7 @@
   "name": "20261115-feature-wuh-site-intro-v3-rebuild",
   "type": "feature",
   "scope": "videos/wuh-site-intro-v3,public/wuh-site-intro-v3,src/Root.tsx,.github/workflows/render-film.yml",
-  "status": "published",
+  "status": "reviewed",
   "baseBranch": "feature/20261114-feature-wuh-site-intro-v3-redesign",
   "branch": "feature/20261115-feature-wuh-site-intro-v3-rebuild",
   "files": [
@@ -31,21 +31,22 @@
     "pullRequestUrl": "https://github.com/stack-wuh/wuh.site.video/pull/66"
   },
   "review": {
-    "conclusion": "pending",
-    "verifiedCommit": null,
-    "verifiedAt": null
+    "conclusion": "passed",
+    "verifiedCommit": "a34ba89ce2cff015f909bce0c0c63fbae4a40e78",
+    "verifiedAt": "2026-11-15T03:01:42.205Z"
   },
   "workflow": {
     "operation": null,
     "checkpoint": "pr:66",
-    "planHash": "cefeaf59a8419d937d1db7413f8dfe91c69e3a6a457603fa96c4fd9a0606b040",
+    "planHash": "824428d310df76223b845904007cbdb45214f0aafbfcb58ffb40f9144fb7efe4",
     "updatedAt": null,
     "lastError": null,
     "commit": {
       "files": [
-        "shadow-docs/changes/20261115-feature-wuh-site-intro-v3-rebuild/brief.md"
+        "shadow-docs/changes/20261115-feature-wuh-site-intro-v3-rebuild/brief.md",
+        "shadow-docs/knowledge/video-production-flow.md"
       ],
-      "message": "docs(shadow): 制作结果与三重终验证据回写"
+      "message": "docs(shadow): review passed + 知识卡回写（亮色信息密度片型）"
     },
     "issuePlan": {
       "title": "[feature] wuh.site 介绍片 v3 正式制作：56 镜亮色信息密度 · CI 出片",
@@ -56,6 +57,11 @@
         "feature"
       ]
     }
+  },
+  "knowledge": {
+    "action": "更新",
+    "target": "shadow-docs/knowledge/video-production-flow.md",
+    "reason": "亮色信息密度片型首次 CI 实证：站点同源色板/组件层清单/两个渲染坑（AbsoluteFill 列向、里程表整位吸附）/CI 无 @remotion/paths 的 draw 替代/BGM 直进 Audio comp 口径，均已写入卡片「亮色信息密度片型」节"
   }
 }
 ---
