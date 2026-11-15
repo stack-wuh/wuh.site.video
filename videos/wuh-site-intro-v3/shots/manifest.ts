@@ -1,0 +1,568 @@
+/* 由 scripts/shots.mjs sync 生成——勿手改；真源 shots-manifest.json（类型化视图） */
+export type Transition = 'page' | 'dry' | 'ink' | 'cut';
+
+/** 转场单侧帧数（总帧 = 2×；cut = 0）：墨洇 20 / 纸翻 18 / 飞白 10。in = 镜首 inbound，out = 下一镜 inbound */
+export const TRANSITION_SIDE: Record<Transition, number> = {
+  "page": 18,
+  "dry": 10,
+  "ink": 20,
+  "cut": 0
+};
+
+export type Manifest = { film: string; fps: number; totalFrames: number; acts: Array<{ act: number; title: string; startFrame: number; endFrame: number }>; shots: Array<{ id: string; act: number; title: string; startFrame: number; durationFrames: number; transition: Transition; source: string; characterIds?: string[]; environmentId?: string | null; firstFrameAsset?: string | null; endFrameDesc?: string }> };
+
+export const manifest: Manifest = {
+  "film": "wuh-site-intro-v3",
+  "fps": 30,
+  "totalFrames": 5700,
+  "acts": [
+    {
+      "act": 0,
+      "title": "冷开场",
+      "startFrame": 0,
+      "endFrame": 600
+    },
+    {
+      "act": 1,
+      "title": "起点",
+      "startFrame": 600,
+      "endFrame": 1500
+    },
+    {
+      "act": 2,
+      "title": "沉默",
+      "startFrame": 1500,
+      "endFrame": 2400
+    },
+    {
+      "act": 3,
+      "title": "重启",
+      "startFrame": 2400,
+      "endFrame": 3300
+    },
+    {
+      "act": 4,
+      "title": "屋里",
+      "startFrame": 3300,
+      "endFrame": 4500
+    },
+    {
+      "act": 5,
+      "title": "方法",
+      "startFrame": 4500,
+      "endFrame": 5200
+    },
+    {
+      "act": 6,
+      "title": "签名",
+      "startFrame": 5200,
+      "endFrame": 5700
+    }
+  ],
+  "shots": [
+    {
+      "id": "s01",
+      "act": 0,
+      "title": "无（数据）",
+      "startFrame": 0,
+      "durationFrames": 80,
+      "transition": "cut",
+      "source": "shots/s01.tsx"
+    },
+    {
+      "id": "s02",
+      "act": 0,
+      "title": "无（数据）",
+      "startFrame": 80,
+      "durationFrames": 120,
+      "transition": "cut",
+      "source": "shots/s02.tsx"
+    },
+    {
+      "id": "s03",
+      "act": 0,
+      "title": "所有答案，都在这座站里。",
+      "startFrame": 200,
+      "durationFrames": 100,
+      "transition": "cut",
+      "source": "shots/s03.tsx"
+    },
+    {
+      "id": "s04",
+      "act": 0,
+      "title": "2019 → 2026",
+      "startFrame": 300,
+      "durationFrames": 120,
+      "transition": "cut",
+      "source": "shots/s04.tsx"
+    },
+    {
+      "id": "s05",
+      "act": 0,
+      "title": "七年，一座站",
+      "startFrame": 420,
+      "durationFrames": 180,
+      "transition": "cut",
+      "source": "shots/s05.tsx"
+    },
+    {
+      "id": "s06",
+      "act": 1,
+      "title": "2019 年 7 月 26 日，博客有了第一篇。",
+      "startFrame": 600,
+      "durationFrames": 110,
+      "transition": "cut",
+      "source": "shots/s06.tsx"
+    },
+    {
+      "id": "s07",
+      "act": 1,
+      "title": "2020 年 4 月，他用 30 天搭起第一代站",
+      "startFrame": 710,
+      "durationFrames": 110,
+      "transition": "cut",
+      "source": "shots/s07.tsx"
+    },
+    {
+      "id": "s08",
+      "act": 1,
+      "title": "无（数据）",
+      "startFrame": 820,
+      "durationFrames": 100,
+      "transition": "cut",
+      "source": "shots/s08.tsx"
+    },
+    {
+      "id": "s09",
+      "act": 1,
+      "title": "2021 年，工具换代：",
+      "startFrame": 920,
+      "durationFrames": 110,
+      "transition": "cut",
+      "source": "shots/s09.tsx"
+    },
+    {
+      "id": "s10",
+      "act": 1,
+      "title": "无（数据）",
+      "startFrame": 1030,
+      "durationFrames": 100,
+      "transition": "cut",
+      "source": "shots/s10.tsx"
+    },
+    {
+      "id": "s11",
+      "act": 1,
+      "title": "无（数据）",
+      "startFrame": 1130,
+      "durationFrames": 100,
+      "transition": "cut",
+      "source": "shots/s11.tsx"
+    },
+    {
+      "id": "s12",
+      "act": 1,
+      "title": "除了工作就是工作，是时候做出一点点改变了，去玩生",
+      "startFrame": 1230,
+      "durationFrames": 140,
+      "transition": "cut",
+      "source": "shots/s12.tsx"
+    },
+    {
+      "id": "s13",
+      "act": 1,
+      "title": "无（数据）",
+      "startFrame": 1370,
+      "durationFrames": 130,
+      "transition": "cut",
+      "source": "shots/s13.tsx"
+    },
+    {
+      "id": "s14",
+      "act": 2,
+      "title": "不要停步不前，每一天都要做出一点改变",
+      "startFrame": 1500,
+      "durationFrames": 110,
+      "transition": "cut",
+      "source": "shots/s14.tsx"
+    },
+    {
+      "id": "s15",
+      "act": 2,
+      "title": "2022 到 2024，写作越来越密：2024 ",
+      "startFrame": 1610,
+      "durationFrames": 110,
+      "transition": "cut",
+      "source": "shots/s15.tsx"
+    },
+    {
+      "id": "s16",
+      "act": 2,
+      "title": "无（数据）",
+      "startFrame": 1720,
+      "durationFrames": 80,
+      "transition": "cut",
+      "source": "shots/s16.tsx"
+    },
+    {
+      "id": "s17",
+      "act": 2,
+      "title": "2024 年 12 月 8 日，他敲下新站第一行",
+      "startFrame": 1800,
+      "durationFrames": 130,
+      "transition": "cut",
+      "source": "shots/s17.tsx"
+    },
+    {
+      "id": "s18",
+      "act": 2,
+      "title": "无（数据）",
+      "startFrame": 1930,
+      "durationFrames": 80,
+      "transition": "cut",
+      "source": "shots/s18.tsx"
+    },
+    {
+      "id": "s19",
+      "act": 2,
+      "title": "2025 年，只有 4 次提交。／全年 0 篇公",
+      "startFrame": 2010,
+      "durationFrames": 190,
+      "transition": "cut",
+      "source": "shots/s19.tsx"
+    },
+    {
+      "id": "s20",
+      "act": 2,
+      "title": "但生活没有停：杨梅坑、梧桐山。",
+      "startFrame": 2200,
+      "durationFrames": 90,
+      "transition": "cut",
+      "source": "shots/s20.tsx"
+    },
+    {
+      "id": "s21",
+      "act": 2,
+      "title": "无（数据）",
+      "startFrame": 2290,
+      "durationFrames": 110,
+      "transition": "cut",
+      "source": "shots/s21.tsx"
+    },
+    {
+      "id": "s22",
+      "act": 3,
+      "title": "2025 年 12 月，21 次提交——火重新点",
+      "startFrame": 2400,
+      "durationFrames": 120,
+      "transition": "cut",
+      "source": "shots/s22.tsx"
+    },
+    {
+      "id": "s23",
+      "act": 3,
+      "title": "2026 年春：71、53、151、192。",
+      "startFrame": 2520,
+      "durationFrames": 100,
+      "transition": "cut",
+      "source": "shots/s23.tsx"
+    },
+    {
+      "id": "s24",
+      "act": 3,
+      "title": "无（数据）",
+      "startFrame": 2620,
+      "durationFrames": 80,
+      "transition": "cut",
+      "source": "shots/s24.tsx"
+    },
+    {
+      "id": "s25",
+      "act": 3,
+      "title": "2026 年 6 月 14 日，新站上线。",
+      "startFrame": 2700,
+      "durationFrames": 90,
+      "transition": "cut",
+      "source": "shots/s25.tsx"
+    },
+    {
+      "id": "s26",
+      "act": 3,
+      "title": "无（数据）",
+      "startFrame": 2790,
+      "durationFrames": 40,
+      "transition": "cut",
+      "source": "shots/s26.tsx"
+    },
+    {
+      "id": "s27",
+      "act": 3,
+      "title": "一周后，他写下《重启计划》：每周一篇，无限进步。",
+      "startFrame": 2830,
+      "durationFrames": 110,
+      "transition": "cut",
+      "source": "shots/s27.tsx"
+    },
+    {
+      "id": "s28",
+      "act": 3,
+      "title": "无（数据）",
+      "startFrame": 2940,
+      "durationFrames": 90,
+      "transition": "cut",
+      "source": "shots/s28.tsx"
+    },
+    {
+      "id": "s29",
+      "act": 3,
+      "title": "无（数据）",
+      "startFrame": 3030,
+      "durationFrames": 80,
+      "transition": "cut",
+      "source": "shots/s29.tsx"
+    },
+    {
+      "id": "s30",
+      "act": 3,
+      "title": "无（数据）",
+      "startFrame": 3110,
+      "durationFrames": 90,
+      "transition": "cut",
+      "source": "shots/s30.tsx"
+    },
+    {
+      "id": "s31",
+      "act": 3,
+      "title": "无（数据）",
+      "startFrame": 3200,
+      "durationFrames": 100,
+      "transition": "cut",
+      "source": "shots/s31.tsx"
+    },
+    {
+      "id": "s32",
+      "act": 4,
+      "title": "46 篇文章，64,985 个字。",
+      "startFrame": 3300,
+      "durationFrames": 120,
+      "transition": "cut",
+      "source": "shots/s32.tsx"
+    },
+    {
+      "id": "s33",
+      "act": 4,
+      "title": "无（数据）",
+      "startFrame": 3420,
+      "durationFrames": 100,
+      "transition": "cut",
+      "source": "shots/s33.tsx"
+    },
+    {
+      "id": "s34",
+      "act": 4,
+      "title": "被读过 26,948 次。",
+      "startFrame": 3520,
+      "durationFrames": 100,
+      "transition": "cut",
+      "source": "shots/s34.tsx"
+    },
+    {
+      "id": "s35",
+      "act": 4,
+      "title": "读得最多的一篇，是《再读〈坐忘歌〉》。",
+      "startFrame": 3620,
+      "durationFrames": 110,
+      "transition": "cut",
+      "source": "shots/s35.tsx"
+    },
+    {
+      "id": "s36",
+      "act": 4,
+      "title": "无（数据）",
+      "startFrame": 3730,
+      "durationFrames": 100,
+      "transition": "cut",
+      "source": "shots/s36.tsx"
+    },
+    {
+      "id": "s37",
+      "act": 4,
+      "title": "过去一年，8,437 次活动，156 天有动静。",
+      "startFrame": 3830,
+      "durationFrames": 140,
+      "transition": "cut",
+      "source": "shots/s37.tsx"
+    },
+    {
+      "id": "s38",
+      "act": 4,
+      "title": "无（数据）",
+      "startFrame": 3970,
+      "durationFrames": 110,
+      "transition": "cut",
+      "source": "shots/s38.tsx"
+    },
+    {
+      "id": "s39",
+      "act": 4,
+      "title": "无（数据）",
+      "startFrame": 4080,
+      "durationFrames": 100,
+      "transition": "cut",
+      "source": "shots/s39.tsx"
+    },
+    {
+      "id": "s40",
+      "act": 4,
+      "title": "一半的提交，发生在周末。",
+      "startFrame": 4180,
+      "durationFrames": 100,
+      "transition": "cut",
+      "source": "shots/s40.tsx"
+    },
+    {
+      "id": "s41",
+      "act": 4,
+      "title": "书架上有 146 本书。",
+      "startFrame": 4280,
+      "durationFrames": 80,
+      "transition": "cut",
+      "source": "shots/s41.tsx"
+    },
+    {
+      "id": "s42",
+      "act": 4,
+      "title": "无（数据）",
+      "startFrame": 4360,
+      "durationFrames": 60,
+      "transition": "cut",
+      "source": "shots/s42.tsx"
+    },
+    {
+      "id": "s43",
+      "act": 4,
+      "title": "音乐、留言、话题——都在这间屋里。",
+      "startFrame": 4420,
+      "durationFrames": 80,
+      "transition": "cut",
+      "source": "shots/s43.tsx"
+    },
+    {
+      "id": "s44",
+      "act": 5,
+      "title": "写作即提 Issue，Issue 就是文章。",
+      "startFrame": 4500,
+      "durationFrames": 110,
+      "transition": "cut",
+      "source": "shots/s44.tsx"
+    },
+    {
+      "id": "s45",
+      "act": 5,
+      "title": "无（数据）",
+      "startFrame": 4610,
+      "durationFrames": 90,
+      "transition": "cut",
+      "source": "shots/s45.tsx"
+    },
+    {
+      "id": "s46",
+      "act": 5,
+      "title": "一次提交，自动构建、测试、部署。",
+      "startFrame": 4700,
+      "durationFrames": 100,
+      "transition": "cut",
+      "source": "shots/s46.tsx"
+    },
+    {
+      "id": "s47",
+      "act": 5,
+      "title": "705 天，127 个版本。",
+      "startFrame": 4800,
+      "durationFrames": 100,
+      "transition": "cut",
+      "source": "shots/s47.tsx"
+    },
+    {
+      "id": "s48",
+      "act": 5,
+      "title": "280 份 brief，40 张知识卡。",
+      "startFrame": 4900,
+      "durationFrames": 90,
+      "transition": "cut",
+      "source": "shots/s48.tsx"
+    },
+    {
+      "id": "s49",
+      "act": 5,
+      "title": "六个仓库，2,655 次提交。",
+      "startFrame": 4990,
+      "durationFrames": 90,
+      "transition": "cut",
+      "source": "shots/s49.tsx"
+    },
+    {
+      "id": "s50",
+      "act": 5,
+      "title": "上周，他合并了 9 个 PR——把访问统计重做了",
+      "startFrame": 5080,
+      "durationFrames": 120,
+      "transition": "cut",
+      "source": "shots/s50.tsx"
+    },
+    {
+      "id": "s51",
+      "act": 6,
+      "title": "人生一世不过 3 万多天，实在是太短了。",
+      "startFrame": 5200,
+      "durationFrames": 80,
+      "transition": "cut",
+      "source": "shots/s51.tsx"
+    },
+    {
+      "id": "s52",
+      "act": 6,
+      "title": "上班就好好上班，下班了就好好生活。",
+      "startFrame": 5280,
+      "durationFrames": 70,
+      "transition": "cut",
+      "source": "shots/s52.tsx"
+    },
+    {
+      "id": "s53",
+      "act": 6,
+      "title": "写作是抵抗遗忘的方式，代码是构建世界的语言。",
+      "startFrame": 5350,
+      "durationFrames": 90,
+      "transition": "cut",
+      "source": "shots/s53.tsx"
+    },
+    {
+      "id": "s54",
+      "act": 6,
+      "title": "无（数据）",
+      "startFrame": 5440,
+      "durationFrames": 60,
+      "transition": "cut",
+      "source": "shots/s54.tsx"
+    },
+    {
+      "id": "s55",
+      "act": 6,
+      "title": "wuh.site · 朝朝如念",
+      "startFrame": 5500,
+      "durationFrames": 60,
+      "transition": "cut",
+      "source": "shots/s55.tsx"
+    },
+    {
+      "id": "s56",
+      "act": 6,
+      "title": "七年，一座站",
+      "startFrame": 5560,
+      "durationFrames": 140,
+      "transition": "cut",
+      "source": "shots/s56.tsx"
+    }
+  ]
+};
