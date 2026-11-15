@@ -4,7 +4,7 @@
   "name": "20261115-feature-wuh-site-intro-v3-rebuild",
   "type": "feature",
   "scope": "videos/wuh-site-intro-v3,public/wuh-site-intro-v3,src/Root.tsx,.github/workflows/render-film.yml",
-  "status": "published",
+  "status": "committed",
   "baseBranch": "feature/20261114-feature-wuh-site-intro-v3-redesign",
   "branch": "feature/20261115-feature-wuh-site-intro-v3-rebuild",
   "files": [
@@ -37,17 +37,15 @@
   },
   "workflow": {
     "operation": null,
-    "checkpoint": "pr:66",
-    "planHash": "cefeaf59a8419d937d1db7413f8dfe91c69e3a6a457603fa96c4fd9a0606b040",
+    "checkpoint": "ff56431b7ad57c648335b04d4736711d1cfadff5",
+    "planHash": "ee0391a4d40b7e724b7c279170c8a86f1d10b4754373b4ef073cd12899dadbbf",
     "updatedAt": null,
     "lastError": null,
     "commit": {
       "files": [
-        "videos/wuh-site-intro-v3/components/Odometer.tsx",
-        "videos/wuh-site-intro-v3/shots/s27.tsx",
-        "videos/wuh-site-intro-v3/shots/s50.tsx"
+        "videos/wuh-site-intro-v3/components/Odometer.tsx"
       ],
-      "message": "fix(video-materials): 里程表数字残影 + s27 首字下沉误读 + s50 PR 章可读性"
+      "message": "fix(video-materials): 里程表整位吸附——静帧不再半格字"
     },
     "issuePlan": {
       "title": "[feature] wuh.site 介绍片 v3 正式制作：56 镜亮色信息密度 · CI 出片",
