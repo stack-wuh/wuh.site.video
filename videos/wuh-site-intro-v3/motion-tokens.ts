@@ -233,3 +233,12 @@ export const noise2D = (seed: string, x: number, y: number): number => {
   const b = v01 + (v11 - v01) * sx;
   return a + (b - a) * sy;
 };
+
+/** 热力图五阶填充（站点暖金阶；唯一色源，组件与镜文件都从这里取） */
+export const HEAT_LEVEL_FILL = [
+  FILM_COLORS.paperDeep,
+  'rgba(227,181,103,0.30)',
+  'rgba(227,181,103,0.55)',
+  'rgba(227,181,103,0.75)',
+  FILM_COLORS.accent,
+] as const;

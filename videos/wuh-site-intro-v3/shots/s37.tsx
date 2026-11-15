@@ -5,7 +5,7 @@ import { KineticLine } from '../components/KineticLine';
 import { ShotShell } from '../components/ShotShell';
 import { DataLabel, Kicker, Meta } from '../components/Type';
 import { HEATMAP, SCALARS } from '../data';
-import { FILM_COLORS, GRID, fmtInt } from '../motion-tokens';
+import { FILM_COLORS, GRID, HEAT_LEVEL_FILL, fmtInt } from '../motion-tokens';
 
 const CELL = 18;
 const GAP = 4;
@@ -83,8 +83,8 @@ const S37: FC = () => {
                 height: 14,
                 borderRadius: 2,
                 backgroundColor:
-                  lv === 0 ? FILM_COLORS.paperDeep : `rgba(227,181,103,${[0, 0.3, 0.55, 0.75, 1][lv]})`,
-                border: '1px solid rgba(42,30,22,0.06)',
+                  HEAT_LEVEL_FILL[lv],
+                border: `1px solid ${FILM_COLORS.hairlineSoft}`,
               }}
             />
           ))}

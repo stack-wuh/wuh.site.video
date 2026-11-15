@@ -1,6 +1,6 @@
 import type { CSSProperties, FC } from 'react';
 import { useCurrentFrame } from 'remotion';
-import { FILM_COLORS, cascadeDelay, progress, rnd } from '../motion-tokens';
+import { FILM_COLORS, HEAT_LEVEL_FILL, cascadeDelay, progress, rnd } from '../motion-tokens';
 
 export type HeatDay = { date: string; total: number; level: number };
 
@@ -21,13 +21,7 @@ export type HeatmapProps = {
   style?: CSSProperties;
 };
 
-const LEVEL_FILL = [
-  FILM_COLORS.paperDeep,
-  'rgba(227,181,103,0.30)',
-  'rgba(227,181,103,0.55)',
-  'rgba(227,181,103,0.75)',
-  FILM_COLORS.accent,
-] as const;
+
 
 /** 纯日期算星期（禁 Date：Howard Hinnant days_from_civil；1970-01-01 为周四=4） */
 const weekdayOf = (iso: string): number => {
@@ -101,7 +95,7 @@ export const Heatmap: FC<HeatmapProps> = ({
               width: cell,
               height: cell,
               borderRadius: 2,
-              backgroundColor: d.level > 0 ? LEVEL_FILL[Math.min(4, d.level)] : FILM_COLORS.paperDeep,
+              backgroundColor: d.level > 0 ? HEAT_LEVEL_FILL[Math.min(4, d.level)] : FILM_COLORS.paperDeep,
               border: isPeak && peak ? `1.5px solid ${FILM_COLORS.vermillion}` : '1px solid rgba(42,30,22,0.06)',
               opacity: 0.25 + 0.75 * p,
               transform: `scale(${scale})`,
