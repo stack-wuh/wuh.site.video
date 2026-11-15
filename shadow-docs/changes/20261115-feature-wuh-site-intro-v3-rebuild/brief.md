@@ -4,7 +4,7 @@
   "name": "20261115-feature-wuh-site-intro-v3-rebuild",
   "type": "feature",
   "scope": "videos/wuh-site-intro-v3,public/wuh-site-intro-v3,src/Root.tsx,.github/workflows/render-film.yml",
-  "status": "committed",
+  "status": "published",
   "baseBranch": "feature/20261114-feature-wuh-site-intro-v3-redesign",
   "branch": "feature/20261115-feature-wuh-site-intro-v3-rebuild",
   "files": [
@@ -37,8 +37,8 @@
   },
   "workflow": {
     "operation": null,
-    "checkpoint": "2f64c687efd5eb1cd4fe5d49510361f1e507206e",
-    "planHash": "35a352ff838318579a9b285ad85477270fc2dea1b1af9b5154faf1a547f7073c",
+    "checkpoint": "pr:66",
+    "planHash": "cefeaf59a8419d937d1db7413f8dfe91c69e3a6a457603fa96c4fd9a0606b040",
     "updatedAt": null,
     "lastError": null,
     "commit": {
