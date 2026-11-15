@@ -80,8 +80,9 @@ export const Odometer: FC<OdometerProps> = ({
           const place = places[i];
           const cont = v / place;
           const digit = Math.floor(cont) % 10;
-          const frac = cont - Math.floor(cont);
-          const offset = digit + frac;
+          /* 整位吸附：机械表在高位会长期停在小数偏移（64,985 → 十位 6.4985），
+             连续 offset 会把静帧渲染成「半格字」；显示用途必须落整位。 */
+          const offset = digit;
           return (
             <span
               key={`d-${i}`}
