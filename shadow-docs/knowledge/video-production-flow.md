@@ -83,6 +83,7 @@ verified-scope: 2026-11-07 资产层机检落地（asset-registry.md 登记表 +
   2. **里程表不能直接拿连续小数偏移**：`v/place` 的高位在静帧仍带小数（64,985 的万位 = 6.4985），连续 `translateY` 会把 64,985 渲成「95,0/5」半格叠字；显示用途必须**整位吸附**（`offset = floor(cont)%10`），滚动只在换位瞬间跳。
 - **CI 依赖要查 package.json，不查 node_modules**：main 分支未声明 `@remotion/paths` / `@remotion/noise`（node_modules 有符号链接是历史残留，CI `--frozen-lockfile` 解析不到）。替代：SVG `pathLength={1}` + 动画 `strokeDashoffset` 做描画（`draw(p)` 令牌），自研 `noise1D/noise2D`（deterministic value noise）做有机漂移。
 - **BGM 直接进 Audio comp**（CI 出有声成片）：`WuhSiteIntroV3Audio.tsx` 按绝对帧分段 + 30f 交叉淡化 + loudnorm -17 LUFS；改配乐只改该文件与 `bgm-selection.md`，不重渲画面。实测 volumedetect 分段 −20 dB 左右、沉默段 −25 dB 为预期。
+- **何时该从「视觉层返工」升级为「全流程重做」**（2026-11-14 用户拍板判据）：同一单元连续两次视觉层返工仍被否决（第一次「截图当主角」，第二次「没有科技感」→ 科技化后变成「近黑、空、信息更少」），说明问题在叙事密度与视觉语法而非单镜画质——此时应重采素材 + 重写剧本 + 换视觉系统，并把「样片门」前置到铺量之前。判定前先抽帧取证（越黑越要量信息密度），不要继续在旧时间轴上修补。
 - **3 镜样片门值回票价**：先渲「冷开场 / 数字墙 / 热力图」过用户门，再铺全量；本轮据此在铺量前发现并修正了 s01 布局与字幕换行。
 - **CI 实测**：56 镜矩阵（max-parallel 20）+ bundle + assemble 全绿约 7–9 分钟；assemble 三重终验 `6030/6030` 帧、两路时长一致、分段音量覆盖片尾。
 

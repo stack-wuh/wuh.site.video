@@ -4,7 +4,7 @@
   "name": "20261114-feature-wuh-site-intro-v3-redesign",
   "type": "feature",
   "scope": "videos/preprod-wuh-site-intro-v3,videos/wuh-site-intro-v3,public/wuh-site-intro-v3",
-  "status": "published",
+  "status": "reviewed",
   "baseBranch": "main",
   "branch": "feature/20261114-feature-wuh-site-intro-v3-redesign",
   "files": [
@@ -24,14 +24,14 @@
     "pullRequestUrl": "https://github.com/stack-wuh/wuh.site.video/pull/65"
   },
   "review": {
-    "conclusion": "pending",
-    "verifiedCommit": null,
-    "verifiedAt": null
+    "conclusion": "passed",
+    "verifiedCommit": "720eb967ad605d8a4fd88a6b3a292418296c4767",
+    "verifiedAt": "2026-11-15T03:04:36.345Z"
   },
   "workflow": {
     "operation": null,
     "checkpoint": "pr:65",
-    "planHash": "8d21afa3dbc4553b62f5f8aae04fd0006e2f19d2cc82ca5d7c1ce9ec6f19426b",
+    "planHash": "1ff41e4f431299e5aaa7fee3ca704181098490f246701bb54752f1a27b6ae2b5",
     "updatedAt": null,
     "lastError": null,
     "commit": {
@@ -49,6 +49,11 @@
         "feature"
       ]
     }
+  },
+  "knowledge": {
+    "action": "更新",
+    "target": "shadow-docs/knowledge/video-production-flow.md",
+    "reason": "前期重做判据回写：视觉层返工两次仍被否决 → 升级为叙事+视觉系统双重重做；样片门前置。用户四项拍板与 56 镜/76 令牌前期交付已核"
   }
 }
 ---
