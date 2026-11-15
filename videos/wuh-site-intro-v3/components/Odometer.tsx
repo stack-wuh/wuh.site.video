@@ -17,8 +17,9 @@ const STRIP = Array.from({ length: 20 }, (_, i) => i % 10);
 
 /**
  * NUM-02 NUM-ODOMETER：逐位滚动（机械计数器）。
- * 每位一列 overflow hidden，列内 0-9 重复两遍；按连续值 translateY(-(digit+frac)·1em)。
- * 千分位逗号静态渲染（不参与滚动）。
+ * 每位一列：窗口高 = 1em（严格裁切），列内 0-9 ×2；每个数字格用 flex 居中，
+ * 避免字体上升部/下降部越过 1em 行盒造成相邻数字残影（首版踩坑：整屏数字叠成乱码）。
+ * 千分位逗号静态渲染。
  */
 export const Odometer: FC<OdometerProps> = ({
   value,
@@ -31,9 +32,7 @@ export const Odometer: FC<OdometerProps> = ({
 }) => {
   const frame = useCurrentFrame();
   const v = dur > 0 ? roll(frame, start, dur, 0, value) : value;
-  const finalText = fmtInt(value);
-  const chars = Array.from(finalText);
-  // 每位对应的数量级
+  const chars = Array.from(fmtInt(value));
   const places: number[] = [];
   {
     let p = 1;
@@ -46,6 +45,14 @@ export const Odometer: FC<OdometerProps> = ({
       }
     }
   }
+
+  const digitCell: CSSProperties = {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: size,
+    lineHeight: `${size}px`,
+  };
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', ...style }}>
@@ -65,7 +72,7 @@ export const Odometer: FC<OdometerProps> = ({
         {chars.map((ch, i) => {
           if (ch === ',') {
             return (
-              <span key={`c-${i}`} style={{ display: 'inline-block', width: size * 0.28, textAlign: 'center' }}>
+              <span key={`c-${i}`} style={{ display: 'inline-block', width: size * 0.3, ...digitCell }}>
                 ,
               </span>
             );
@@ -74,15 +81,15 @@ export const Odometer: FC<OdometerProps> = ({
           const cont = v / place;
           const digit = Math.floor(cont) % 10;
           const frac = cont - Math.floor(cont);
-          const offset = (digit + frac) * 1;
+          const offset = digit + frac;
           return (
             <span
               key={`d-${i}`}
               style={{
                 display: 'inline-block',
                 position: 'relative',
-                width: size * 0.62,
-                height: size * 1.02,
+                width: size * 0.64,
+                height: size,
                 overflow: 'hidden',
               }}
             >
@@ -93,14 +100,11 @@ export const Odometer: FC<OdometerProps> = ({
                   left: 0,
                   top: 0,
                   width: '100%',
-                  transform: `translateY(${-offset}em)`,
+                  transform: `translateY(${-offset * size}px)`,
                 }}
               >
                 {STRIP.map((d, k) => (
-                  <span
-                    key={k}
-                    style={{ display: 'block', height: '1em', lineHeight: '1em', textAlign: 'center' }}
-                  >
+                  <span key={k} style={digitCell}>
                     {d}
                   </span>
                 ))}

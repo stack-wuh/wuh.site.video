@@ -1,11 +1,10 @@
 import type { FC } from 'react';
 import { AbsoluteFill, useCurrentFrame } from 'remotion';
 import { KineticLine } from '../components/KineticLine';
-import { SealStamp } from '../components/SealStamp';
 import { ShotShell } from '../components/ShotShell';
 import { DataLabel, Kicker, Meta } from '../components/Type';
 import { AUDIT_PRS, REPOS, SCALARS } from '../data';
-import { CURVES, FILM_COLORS, FONTS, GRID, fmtInt, progress, roll, slam } from '../motion-tokens';
+import { CURVES, FILM_COLORS, FONTS, GRID, SP, fmtInt, progress, roll, slam, springP } from '../motion-tokens';
 
 /**
  * s50 · 九枚 PR 章 + 访问口径（120f，5080–5200 ｜ 主落定 80f）
@@ -25,8 +24,9 @@ const BAND_LEFT = GRID.margin;
 const BAND_W = 960;
 const BAND_TOP = 360;
 const BAND_H = 56;
-const SEAL = 56;
-const SEAL_PITCH = (BAND_W - SEAL) / (AUDIT_PRS.length - 1);
+const CHIP_W = 86;
+const CHIP_H = 38;
+const CHIP_PITCH = (BAND_W - CHIP_W) / (AUDIT_PRS.length - 1);
 
 /** 访问口径重置前的旧值（storyboard s50 / materials §〇；data.ts 只保留新口径 5,440） */
 const VISITS_BEFORE = 10760;
@@ -107,20 +107,37 @@ const S50: FC = () => {
           ))}
 
           {/* INK-04：九枚 PR 章依次落下（错 6f） */}
-          {AUDIT_PRS.map((pr, i) => (
-            <div
-              key={pr.pr}
-              style={{
-                position: 'absolute',
-                left: BAND_LEFT + i * SEAL_PITCH,
-                top: BAND_TOP,
-                width: SEAL,
-                height: SEAL,
-              }}
-            >
-              <SealStamp text={pr.pr} size={SEAL} start={14 + i * 6} variant="label" />
-            </div>
-          ))}
+          {AUDIT_PRS.map((pr, i) => {
+            const at = 14 + i * 6;
+            const pop = springP(frame, 30, at, SP.badgePop);
+            const a = progress(frame, at, 4);
+            return (
+              <div
+                key={pr.pr}
+                style={{
+                  position: 'absolute',
+                  left: BAND_LEFT + i * CHIP_PITCH,
+                  top: BAND_TOP + (BAND_H - CHIP_H) / 2,
+                  width: CHIP_W,
+                  height: CHIP_H,
+                  boxSizing: 'border-box',
+                  border: `1px solid ${FILM_COLORS.vermillion}`,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontFamily: FONTS.mono,
+                  fontSize: 15,
+                  letterSpacing: '0.02em',
+                  color: FILM_COLORS.vermillion,
+                  backgroundColor: FILM_COLORS.card,
+                  opacity: a,
+                  transform: `scale(${0.72 + 0.28 * pop})`,
+                }}
+              >
+                {pr.pr}
+              </div>
+            );
+          })}
 
           {/* 合并结果（9 是量，也滚；一行读完） */}
           <div style={{ position: 'absolute', left: BAND_LEFT, top: BAND_TOP + BAND_H + 58, display: 'flex', alignItems: 'baseline', gap: 18 }}>

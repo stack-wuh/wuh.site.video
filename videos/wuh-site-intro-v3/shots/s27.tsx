@@ -18,8 +18,6 @@ const LINES = ['一周后，他写下《重启计划》：', '每周一篇，', 
 /** 三行的局部帧起点：按 2f/字 + 标点顿 2f 连续排（末字 60f 起笔、68f 显影完，落定 70 拍）。 */
 const LINE_START = [6, 38, 50] as const;
 
-/** 首字下沉占位宽（3.35em + 0.18em 右气口），第 2/3 行按此悬挂缩进。 */
-const CAP_W = 64 * 3.35 + 64 * 0.18;
 
 /**
  * s27 · 《重启计划》引语（110f，2830–2940）
@@ -72,10 +70,9 @@ const S27: FC = () => {
               framesPerChar={2}
               size={64}
               weight={400}
-              dropCap
               lineHeight={1.45}
             />
-            <div style={{ marginLeft: CAP_W, marginTop: 22 }}>
+            <div style={{ marginLeft: 0, marginTop: 22 }}>
               <KineticLine text={LINES[1]} start={LINE_START[1]} framesPerChar={2} size={64} lineHeight={1.45} />
               <KineticLine text={LINES[2]} start={LINE_START[2]} framesPerChar={2} size={64} lineHeight={1.45} />
             </div>
