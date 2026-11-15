@@ -38,20 +38,20 @@
   "workflow": {
     "operation": null,
     "checkpoint": "pr:66",
-    "planHash": "cefeaf59a8419d937d1db7413f8dfe91c69e3a6a457603fa96c4fd9a0606b040",
+    "planHash": "77f16ed2b3ffebf26dd66097388e017783fbb29c0e80d06c2cd7a068193785b1",
     "updatedAt": null,
     "lastError": null,
     "commit": {
       "files": [
-        "videos/wuh-site-intro-v3/components/Odometer.tsx"
+        "shadow-docs/changes/20261115-feature-wuh-site-intro-v3-rebuild/brief.md"
       ],
-      "message": "fix(video-materials): 里程表整位吸附——静帧不再半格字"
+      "message": "docs(shadow): 制作结果与三重终验证据回写"
     },
     "issuePlan": {
       "title": "[feature] wuh.site 介绍片 v3 正式制作：56 镜亮色信息密度 · CI 出片",
       "titleRaw": "[feature] wuh.site 介绍片 v3 正式制作：56 镜亮色信息密度 · CI 出片",
       "supplement": "前期重做已定稿（《七年，一座站》3:21 / 六幕 / 无配音 / 56 镜 / 5700f / 76 令牌）。本 change 走两段式第二段：视觉基座（data.ts + motion-tokens + 组件层）→ 3 镜风格样片门 → 56 镜全量实装 → 装配 → CI 渲染 → 抽帧评审 → BGM 终混。详见 shadow-docs/changes/20261115-feature-wuh-site-intro-v3-rebuild/brief.md",
-      "body": "## 动机\n前期 change（`20261114-feature-wuh-site-intro-v3-redesign`）已交付并定稿：素材库 v4（2026-11-14）、风格锚点 v2（亮色信息密度 / 站点同源色板）、剧本 v2《七年，一座站》（3:21 / 六幕 + 冷开场 / 无配音，用户四项拍板通过）、分镜 v2（56 镜 / 正片 5700f / import 全绿）、动效规范 v2（令牌 + 全镜覆盖矩阵）。本 change 把它落成成片。\n\n## 引用规范\n- `shadow-docs/knowledge/video-production-flow.md` — 镜级契约 + CI 渲染 + 三重终验\n- `shadow-docs/knowledge/render-stability-playbook.md` — 本机不渲 / CI 兜底 / CFR 终装\n- `shadow-docs/knowledge/video-studio-structure.md` — 品牌令牌唯一源 / shots.mjs / film-kit\n- 技能 `shadow-dev-video`：`shot-spec.md`（镜级契约）、`remotion-capabilities.md`（基元决策表）\n\n## 决策\n- **选型:** 沿用两段式第二段标准管线：motion-tokens+组件层 → 3 镜样片门 → 4 批并行实装 56 镜 → 装配（FilmShell 150+5700+180=6030）→ CI 全片渲染 → 抽帧预览 → BGM 终混。零图片资产，全部 Remotion 矢量 + `data.ts`（由 `.tmp/materials-v4.json` 固化）。\n- **对比方案:** 逐镜串行实装（弃：56 镜墙钟过长）；先全量后看样片（弃：方向错误会烧 56 镜）；引入 AI 首帧图（弃：用户令零截图/内容当主角，且增资产复杂度）。\n- **理由:** 样片门用最小成本锁风格；并行批次按幕切分、零共享状态（一镜一文件），符合 shot-spec 缓存与返工粒度。\n\n## 任务\n### Phase 1 视觉基座（一镜都不写）\n- [ ] `data.ts`：从 `.tmp/materials-v4.json` 固化 29 标量 / 13 序列 / 24 屏素材（含 46 篇标题、top7、热力 365 格、月度/年度序列、仓库规模、金句）— `videos/wuh-site-intro-v3/data.ts`\n- [ ] `motion-tokens.ts`：FILM_COLORS（站点 wine 同源）/ FONTS / 网格 / SPRINGS / 曲线 / ODOMETER·SLAM·CHART-GROW·KINETIC·SEAL 等令牌 — `videos/wuh-site-intro-v3/motion-tokens.ts`\n- [ ] 组件层：ShotShell（纸底+四角角标+微网格）+ BigNumber/Odometer + BarChart + Heatmap + Tape + KineticLine + SealStamp + CodePanel + FlowDiagram + Panel — `videos/wuh-site-intro-v3/components/`\n- [ ] typecheck + oxlint 绿（`pnpm typecheck:ci` / `pnpm lint`）\n\n### Phase 2 三镜样片（用户定稿门）\n- [ ] 样片三镜：s01（冷开场 `git init`）/ s02（8 数数字墙 SLAM）/ s37（365 格热力图点亮）— `videos/wuh-site-intro-v3/shots/`\n- [ ] CI 子集渲染 `shots: \"s01 s02 s37\"` → 抽帧 → 内联预览/图片交用户；过门后进 Phase 3\n\n### Phase 3 全量 56 镜（4 批并行，按幕分组）\n- [ ] 批次 A：Act 0 + Act 1（s01–s13）\n- [ ] 批次 B：Act 2 + Act 3（s14–s31）\n- [ ] 批次 C：Act 4 上半（s32–s38）\n- [ ] 批次 D：Act 4 下半 + Act 5 + Act 6（s39–s56）\n- [ ] 各批自报：镜数 / 数据出处核对 / 未用旧组件 / 自判风险\n\n### Phase 4 装配与路由\n- [ ] `WuhSiteIntroV3.tsx`（FilmShell + manifest 遍历 + ShotShell，纯装配）+ `WuhSiteIntroV3Audio.tsx` + `film.config.json`（intro150/outro180）+ `shots.mjs sync` 生成 routes — `videos/wuh-site-intro-v3/`\n- [ ] `src/Root.tsx` 注册路由；typecheck 绿；`shots.mjs check` 全绿（56 镜文件齐 + 生成物一致）\n\n### Phase 5 CI 全片渲染与评审\n- [ ] `gh workflow run render-film.yml --ref <branch> -f film=wuh-site-intro-v3` → assemble 三重终验（6030f / 两路时长 / 分段音量）\n- [ ] 抽帧（镜中点帧 + 12–16 帧 contact sheet）+ 内联预览页（走片 player / 六幕结构条 / 镜序 chips）交用户评审；单镜返工走 shots 子集\n\n### Phase 6 配乐与终混\n- [ ] 亮色电子 BGM 选曲（CC-BY / incompetech；90 BPM 对拍；二幕退薄、三幕回满、六幕收单音）+ 段编排 + 署名清单 — `videos/wuh-site-intro-v3/assets/bgm-selection.md`, `public/wuh-site-intro-v3/score-bright/`\n- [ ] `WuhSiteIntroV3Audio` 落段 + 本地 `scripts/mux-film.sh` 终混（无声成片 + BGM，AAC 192k，响度归一）+ 三重终验 + 交付用户\n\n## 补充\n前期重做已定稿（《七年，一座站》3:21 / 六幕 / 无配音 / 56 镜 / 5700f / 76 令牌）。本 change 走两段式第二段：视觉基座（data.ts + motion-tokens + 组件层）→ 3 镜风格样片门 → 56 镜全量实装 → 装配 → CI 渲染 → 抽帧评审 → BGM 终混。详见 shadow-docs/changes/20261115-feature-wuh-site-intro-v3-rebuild/brief.md\n\n完整 brief：shadow-docs/changes/20261115-feature-wuh-site-intro-v3-rebuild/brief.md\n\n<!-- shadow-dev:issue-metadata {\"name\":\"20261115-feature-wuh-site-intro-v3-rebuild\",\"type\":\"feature\",\"scope\":\"videos/wuh-site-intro-v3,public/wuh-site-intro-v3,src/Root.tsx,.github/workflows/render-film.yml\",\"status\":\"committed\",\"branch\":\"feature/20261115-feature-wuh-site-intro-v3-rebuild\",\"baseBranch\":\"feature/20261114-feature-wuh-site-intro-v3-redesign\",\"briefPath\":\"shadow-docs/changes/20261115-feature-wuh-site-intro-v3-rebuild/brief.md\",\"cliVersion\":\"1.9.0\",\"prUrl\":null,\"issueNumber\":null} -->\n",
+      "body": "## 动机\n前期 change（`20261114-feature-wuh-site-intro-v3-redesign`）已交付并定稿：素材库 v4（2026-11-14）、风格锚点 v2（亮色信息密度 / 站点同源色板）、剧本 v2《七年，一座站》（3:21 / 六幕 + 冷开场 / 无配音，用户四项拍板通过）、分镜 v2（56 镜 / 正片 5700f / import 全绿）、动效规范 v2（令牌 + 全镜覆盖矩阵）。本 change 把它落成成片。\n\n## 引用规范\n- `shadow-docs/knowledge/video-production-flow.md` — 镜级契约 + CI 渲染 + 三重终验\n- `shadow-docs/knowledge/render-stability-playbook.md` — 本机不渲 / CI 兜底 / CFR 终装\n- `shadow-docs/knowledge/video-studio-structure.md` — 品牌令牌唯一源 / shots.mjs / film-kit\n- 技能 `shadow-dev-video`：`shot-spec.md`（镜级契约）、`remotion-capabilities.md`（基元决策表）\n\n## 决策\n- **选型:** 沿用两段式第二段标准管线：motion-tokens+组件层 → 3 镜样片门 → 4 批并行实装 56 镜 → 装配（FilmShell 150+5700+180=6030）→ CI 全片渲染 → 抽帧预览 → BGM 终混。零图片资产，全部 Remotion 矢量 + `data.ts`（由 `.tmp/materials-v4.json` 固化）。\n- **对比方案:** 逐镜串行实装（弃：56 镜墙钟过长）；先全量后看样片（弃：方向错误会烧 56 镜）；引入 AI 首帧图（弃：用户令零截图/内容当主角，且增资产复杂度）。\n- **理由:** 样片门用最小成本锁风格；并行批次按幕切分、零共享状态（一镜一文件），符合 shot-spec 缓存与返工粒度。\n\n## 任务\n### Phase 1 视觉基座（一镜都不写）\n- [x] `data.ts`：从 `.tmp/materials-v4.json` 固化 29 标量 / 13 序列 / 24 屏素材（含 46 篇标题、top7、热力 365 格、月度/年度序列、仓库规模、金句）— `videos/wuh-site-intro-v3/data.ts`\n- [x] `motion-tokens.ts`：FILM_COLORS（站点 wine 同源）/ FONTS / 网格 / SPRINGS / 曲线 / ODOMETER·SLAM·CHART-GROW·KINETIC·SEAL 等令牌 — `videos/wuh-site-intro-v3/motion-tokens.ts`\n- [x] 组件层：ShotShell（纸底+四角角标+微网格）+ BigNumber/Odometer + BarChart + Heatmap + Tape + KineticLine + SealStamp + CodePanel + FlowDiagram + Panel — `videos/wuh-site-intro-v3/components/`\n- [x] typecheck + oxlint 绿（`pnpm typecheck:ci` / `pnpm lint`）\n\n### Phase 2 三镜样片（用户定稿门）\n- [x] 样片三镜：s01（冷开场 `git init`）/ s02（8 数数字墙 SLAM）/ s37（365 格热力图点亮）— `videos/wuh-site-intro-v3/shots/`\n- [x] CI 子集渲染 `shots: \"s01 s02 s37\"` → 抽帧 → 内联预览/图片交用户；过门后进 Phase 3\n\n### Phase 3 全量 56 镜（4 批并行，按幕分组）\n- [x] 批次 A：Act 0 + Act 1（s01–s13）\n- [x] 批次 B：Act 2 + Act 3（s14–s31）\n- [x] 批次 C：Act 4 上半（s32–s38）\n- [x] 批次 D：Act 4 下半 + Act 5 + Act 6（s39–s56）\n- [x] 各批自报：镜数 / 数据出处核对 / 未用旧组件 / 自判风险\n\n### Phase 4 装配与路由\n- [x] `WuhSiteIntroV3.tsx`（FilmShell + manifest 遍历 + ShotShell，纯装配）+ `WuhSiteIntroV3Audio.tsx` + `film.config.json`（intro150/outro180）+ `shots.mjs sync` 生成 routes — `videos/wuh-site-intro-v3/`\n- [x] `src/Root.tsx` 注册路由；typecheck 绿；`shots.mjs check` 全绿（56 镜文件齐 + 生成物一致）\n\n### Phase 5 CI 全片渲染与评审\n- [x] `gh workflow run render-film.yml --ref <branch> -f film=wuh-site-intro-v3` → assemble 三重终验（6030f / 两路时长 / 分段音量）\n- [x] 抽帧（镜中点帧 + 12–16 帧 contact sheet）+ 内联预览页（走片 player / 六幕结构条 / 镜序 chips）交用户评审；单镜返工走 shots 子集\n\n### Phase 6 配乐与终混\n- [x] 亮色电子 BGM 选曲（CC-BY / incompetech；90 BPM 对拍；二幕退薄、三幕回满、六幕收单音）+ 段编排 + 署名清单 — `videos/wuh-site-intro-v3/assets/bgm-selection.md`, `public/wuh-site-intro-v3/score-bright/`\n- [x] `WuhSiteIntroV3Audio` 落段 + 本地 `scripts/mux-film.sh` 终混（无声成片 + BGM，AAC 192k，响度归一）+ 三重终验 + 交付用户\n\n## 补充\n前期重做已定稿（《七年，一座站》3:21 / 六幕 / 无配音 / 56 镜 / 5700f / 76 令牌）。本 change 走两段式第二段：视觉基座（data.ts + motion-tokens + 组件层）→ 3 镜风格样片门 → 56 镜全量实装 → 装配 → CI 渲染 → 抽帧评审 → BGM 终混。详见 shadow-docs/changes/20261115-feature-wuh-site-intro-v3-rebuild/brief.md\n\n完整 brief：shadow-docs/changes/20261115-feature-wuh-site-intro-v3-rebuild/brief.md\n\n<!-- shadow-dev:issue-metadata {\"name\":\"20261115-feature-wuh-site-intro-v3-rebuild\",\"type\":\"feature\",\"scope\":\"videos/wuh-site-intro-v3,public/wuh-site-intro-v3,src/Root.tsx,.github/workflows/render-film.yml\",\"status\":\"committed\",\"branch\":\"feature/20261115-feature-wuh-site-intro-v3-rebuild\",\"baseBranch\":\"feature/20261114-feature-wuh-site-intro-v3-redesign\",\"briefPath\":\"shadow-docs/changes/20261115-feature-wuh-site-intro-v3-rebuild/brief.md\",\"cliVersion\":\"1.9.0\",\"prUrl\":null,\"issueNumber\":null} -->\n",
       "labels": [
         "feature"
       ]
@@ -106,38 +106,49 @@
 ## 任务
 
 ### Phase 1 视觉基座（一镜都不写）
-- [ ] `data.ts`：从 `.tmp/materials-v4.json` 固化 29 标量 / 13 序列 / 24 屏素材（含 46 篇标题、top7、热力 365 格、月度/年度序列、仓库规模、金句）— `videos/wuh-site-intro-v3/data.ts`
-- [ ] `motion-tokens.ts`：FILM_COLORS（站点 wine 同源）/ FONTS / 网格 / SPRINGS / 曲线 / ODOMETER·SLAM·CHART-GROW·KINETIC·SEAL 等令牌 — `videos/wuh-site-intro-v3/motion-tokens.ts`
-- [ ] 组件层：ShotShell（纸底+四角角标+微网格）+ BigNumber/Odometer + BarChart + Heatmap + Tape + KineticLine + SealStamp + CodePanel + FlowDiagram + Panel — `videos/wuh-site-intro-v3/components/`
-- [ ] typecheck + oxlint 绿（`pnpm typecheck:ci` / `pnpm lint`）
+- [x] `data.ts`：从 `.tmp/materials-v4.json` 固化 29 标量 / 13 序列 / 24 屏素材（含 46 篇标题、top7、热力 365 格、月度/年度序列、仓库规模、金句）— `videos/wuh-site-intro-v3/data.ts`
+- [x] `motion-tokens.ts`：FILM_COLORS（站点 wine 同源）/ FONTS / 网格 / SPRINGS / 曲线 / ODOMETER·SLAM·CHART-GROW·KINETIC·SEAL 等令牌 — `videos/wuh-site-intro-v3/motion-tokens.ts`
+- [x] 组件层：ShotShell（纸底+四角角标+微网格）+ BigNumber/Odometer + BarChart + Heatmap + Tape + KineticLine + SealStamp + CodePanel + FlowDiagram + Panel — `videos/wuh-site-intro-v3/components/`
+- [x] typecheck + oxlint 绿（`pnpm typecheck:ci` / `pnpm lint`）
 
 ### Phase 2 三镜样片（用户定稿门）
-- [ ] 样片三镜：s01（冷开场 `git init`）/ s02（8 数数字墙 SLAM）/ s37（365 格热力图点亮）— `videos/wuh-site-intro-v3/shots/`
-- [ ] CI 子集渲染 `shots: "s01 s02 s37"` → 抽帧 → 内联预览/图片交用户；过门后进 Phase 3
+- [x] 样片三镜：s01（冷开场 `git init`）/ s02（8 数数字墙 SLAM）/ s37（365 格热力图点亮）— `videos/wuh-site-intro-v3/shots/`
+- [x] CI 子集渲染 `shots: "s01 s02 s37"` → 抽帧 → 内联预览/图片交用户；过门后进 Phase 3
 
 ### Phase 3 全量 56 镜（4 批并行，按幕分组）
-- [ ] 批次 A：Act 0 + Act 1（s01–s13）
-- [ ] 批次 B：Act 2 + Act 3（s14–s31）
-- [ ] 批次 C：Act 4 上半（s32–s38）
-- [ ] 批次 D：Act 4 下半 + Act 5 + Act 6（s39–s56）
-- [ ] 各批自报：镜数 / 数据出处核对 / 未用旧组件 / 自判风险
+- [x] 批次 A：Act 0 + Act 1（s01–s13）
+- [x] 批次 B：Act 2 + Act 3（s14–s31）
+- [x] 批次 C：Act 4 上半（s32–s38）
+- [x] 批次 D：Act 4 下半 + Act 5 + Act 6（s39–s56）
+- [x] 各批自报：镜数 / 数据出处核对 / 未用旧组件 / 自判风险
 
 ### Phase 4 装配与路由
-- [ ] `WuhSiteIntroV3.tsx`（FilmShell + manifest 遍历 + ShotShell，纯装配）+ `WuhSiteIntroV3Audio.tsx` + `film.config.json`（intro150/outro180）+ `shots.mjs sync` 生成 routes — `videos/wuh-site-intro-v3/`
-- [ ] `src/Root.tsx` 注册路由；typecheck 绿；`shots.mjs check` 全绿（56 镜文件齐 + 生成物一致）
+- [x] `WuhSiteIntroV3.tsx`（FilmShell + manifest 遍历 + ShotShell，纯装配）+ `WuhSiteIntroV3Audio.tsx` + `film.config.json`（intro150/outro180）+ `shots.mjs sync` 生成 routes — `videos/wuh-site-intro-v3/`
+- [x] `src/Root.tsx` 注册路由；typecheck 绿；`shots.mjs check` 全绿（56 镜文件齐 + 生成物一致）
 
 ### Phase 5 CI 全片渲染与评审
-- [ ] `gh workflow run render-film.yml --ref <branch> -f film=wuh-site-intro-v3` → assemble 三重终验（6030f / 两路时长 / 分段音量）
-- [ ] 抽帧（镜中点帧 + 12–16 帧 contact sheet）+ 内联预览页（走片 player / 六幕结构条 / 镜序 chips）交用户评审；单镜返工走 shots 子集
+- [x] `gh workflow run render-film.yml --ref <branch> -f film=wuh-site-intro-v3` → assemble 三重终验（6030f / 两路时长 / 分段音量）
+- [x] 抽帧（镜中点帧 + 12–16 帧 contact sheet）+ 内联预览页（走片 player / 六幕结构条 / 镜序 chips）交用户评审；单镜返工走 shots 子集
 
 ### Phase 6 配乐与终混
-- [ ] 亮色电子 BGM 选曲（CC-BY / incompetech；90 BPM 对拍；二幕退薄、三幕回满、六幕收单音）+ 段编排 + 署名清单 — `videos/wuh-site-intro-v3/assets/bgm-selection.md`, `public/wuh-site-intro-v3/score-bright/`
-- [ ] `WuhSiteIntroV3Audio` 落段 + 本地 `scripts/mux-film.sh` 终混（无声成片 + BGM，AAC 192k，响度归一）+ 三重终验 + 交付用户
+- [x] 亮色电子 BGM 选曲（CC-BY / incompetech；90 BPM 对拍；二幕退薄、三幕回满、六幕收单音）+ 段编排 + 署名清单 — `videos/wuh-site-intro-v3/assets/bgm-selection.md`, `public/wuh-site-intro-v3/score-bright/`
+- [x] `WuhSiteIntroV3Audio` 落段 + 本地 `scripts/mux-film.sh` 终混（无声成片 + BGM，AAC 192k，响度归一）+ 三重终验 + 交付用户
 
 ## 结果
 
-- 实际耗时: —
-- 验证: —
+- 实际耗时: 约 3.5h（2026-11-15 00:45 → 10:50；含组件层 2 批并行、56 镜 5 批并行、3 轮 CI 出片与 2 轮返工）
+- 验证:
+  - | INV-1 | 观察点：`node scripts/shots.mjs check --unit wuh-site-intro-v3` → `✅ 56 镜 Σ=5700`；CI assemble 终验 `6030/6030` 帧 |
+  - | INV-2 | 观察点：`./node_modules/.bin/tsc --noEmit -p tsconfig.ci.json` → 0 错；`oxlint --deny-warnings` → 0 warnings / 0 errors（335 files） |
+  - | INV-3 | 观察点：`ffprobe` → 6030 帧 / 201.000s / audio 流 9423 帧；`volumedetect` 分段 5–198s 全部 > -25dB（二幕沉默段 -25，其余 -20） |
+  - | INV-4 | 观察点：抽帧走查 56 镜 + 判定修复 3 轮（s01 布局出画幅、里程表静帧半格字、s27 首字下沉误读、s50 PR 章可读性） |
+  - | INV-5 | 观察点：用户样片门（s01/s02/s37 CI 出图，2026-11-15 拍板「过门，按这个风格铺全量」） |
+  - CI run: 43668611701（final, success）｜ artifact `20261115024556-wuh-site-intro-v3`（6030f / 20.2MB）
+- 交付物:
+  - 成片：`out/ci-v3-release/20261115024556-wuh-site-intro-v3.mp4`（1920×1080 / 30fps / 3:21.0 / 有 BGM）
+  - 全片 contact sheet + 逐镜 settled 帧：`out/review-final/`
+  - 配乐方案与署名：`videos/wuh-site-intro-v3/assets/bgm-selection.md`
+- 待办：用户成片评审 → 反馈按镜返工（`workflow_dispatch -f shots="sNN"` 子集重渲）→ PR #66 合入 → 归档
 
 ## 知识评估
 
