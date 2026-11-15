@@ -4,7 +4,7 @@
   "name": "20261115-feature-wuh-site-intro-v3-rebuild",
   "type": "feature",
   "scope": "videos/wuh-site-intro-v3,public/wuh-site-intro-v3,src/Root.tsx,.github/workflows/render-film.yml",
-  "status": "published",
+  "status": "committed",
   "baseBranch": "feature/20261114-feature-wuh-site-intro-v3-redesign",
   "branch": "feature/20261115-feature-wuh-site-intro-v3-rebuild",
   "files": [
@@ -37,16 +37,16 @@
   },
   "workflow": {
     "operation": null,
-    "checkpoint": "pr:66",
-    "planHash": "b36fa02541422074f69c0630123c8fb8aab0a8aa5f1247181f5c1cbdb501aadf",
+    "checkpoint": "b1cd23598389d8203872b88f838362eb2f047644",
+    "planHash": "2d8a43484f84063646872ef021c4405ffb9fbc8fe3f154369e46c806d43b192f",
     "updatedAt": null,
     "lastError": null,
     "commit": {
       "files": [
-        "shadow-docs/changes/20261115-feature-wuh-site-intro-v3-rebuild/brief.md",
+        "shadow-docs/changes/20261114-feature-wuh-site-intro-v3-redesign/brief.md",
         "shadow-docs/knowledge/video-production-flow.md"
       ],
-      "message": "docs(shadow): review passed + 知识卡回写（亮色信息密度片型）"
+      "message": "docs(shadow): 前期 review passed + 重做判据回写知识卡"
     },
     "issuePlan": {
       "title": "[feature] wuh.site 介绍片 v3 正式制作：56 镜亮色信息密度 · CI 出片",
