@@ -4,7 +4,7 @@
   "name": "20261115-feature-wuh-site-intro-v3-rebuild",
   "type": "feature",
   "scope": "videos/wuh-site-intro-v3,public/wuh-site-intro-v3,src/Root.tsx,.github/workflows/render-film.yml",
-  "status": "published",
+  "status": "archived",
   "baseBranch": "feature/20261114-feature-wuh-site-intro-v3-redesign",
   "branch": "feature/20261115-feature-wuh-site-intro-v3-rebuild",
   "files": [
@@ -32,13 +32,13 @@
   },
   "review": {
     "conclusion": "passed",
-    "verifiedCommit": "a34ba89ce2cff015f909bce0c0c63fbae4a40e78",
-    "verifiedAt": "2026-11-15T03:01:42.205Z"
+    "verifiedCommit": "09b82b2dc15423f1d44f8a9c203b9ce9c17b7adf",
+    "verifiedAt": "2026-11-15T05:17:05.184Z"
   },
   "workflow": {
     "operation": null,
-    "checkpoint": "pr:66",
-    "planHash": "b36fa02541422074f69c0630123c8fb8aab0a8aa5f1247181f5c1cbdb501aadf",
+    "checkpoint": "merged-pr:66",
+    "planHash": "eec76eb6f968d7206e470d1aa09ce8eaef3633b7ba7bdc8194ef0b04b167ac7f",
     "updatedAt": null,
     "lastError": null,
     "commit": {
@@ -61,7 +61,7 @@
   "knowledge": {
     "action": "更新",
     "target": "shadow-docs/knowledge/video-production-flow.md",
-    "reason": "亮色信息密度片型首次 CI 实证：站点同源色板/组件层清单/两个渲染坑（AbsoluteFill 列向、里程表整位吸附）/CI 无 @remotion/paths 的 draw 替代/BGM 直进 Audio comp 口径，均已写入卡片「亮色信息密度片型」节"
+    "reason": "亮色信息密度片型首次 CI 实证，已写入知识卡"
   }
 }
 ---
