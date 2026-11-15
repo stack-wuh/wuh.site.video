@@ -4,7 +4,7 @@
   "name": "20261115-feature-wuh-site-intro-v3-rebuild",
   "type": "feature",
   "scope": "videos/wuh-site-intro-v3,public/wuh-site-intro-v3,src/Root.tsx,.github/workflows/render-film.yml",
-  "status": "published",
+  "status": "committed",
   "baseBranch": "feature/20261114-feature-wuh-site-intro-v3-redesign",
   "branch": "feature/20261115-feature-wuh-site-intro-v3-rebuild",
   "files": [
@@ -37,16 +37,33 @@
   },
   "workflow": {
     "operation": null,
-    "checkpoint": "pr:66",
-    "planHash": "399fb97d357ac1f3e0995a9b0843f0b36333cb6a7fdc2a61dee37b49c4b31327",
+    "checkpoint": "b6229a680dd3f41ca87432c39aaaa7aa052a1982",
+    "planHash": "e69b42cad15317a7021f53205c2b2a2468d7009612d8d962b62c05e55c44f749",
     "updatedAt": null,
     "lastError": null,
     "commit": {
       "files": [
+        "videos/wuh-site-intro-v3/components/BarChart.tsx",
+        "videos/wuh-site-intro-v3/components/BigNumber.tsx",
+        "videos/wuh-site-intro-v3/components/CodePanel.tsx",
+        "videos/wuh-site-intro-v3/components/DotMatrix.tsx",
+        "videos/wuh-site-intro-v3/components/FlowDiagram.tsx",
+        "videos/wuh-site-intro-v3/components/Heatmap.tsx",
+        "videos/wuh-site-intro-v3/components/KineticLine.tsx",
+        "videos/wuh-site-intro-v3/components/Odometer.tsx",
+        "videos/wuh-site-intro-v3/components/Panel.tsx",
+        "videos/wuh-site-intro-v3/components/SealStamp.tsx",
+        "videos/wuh-site-intro-v3/components/ShotShell.tsx",
+        "videos/wuh-site-intro-v3/components/SpineArray.tsx",
+        "videos/wuh-site-intro-v3/components/TagCloud.tsx",
+        "videos/wuh-site-intro-v3/components/Tape.tsx",
+        "videos/wuh-site-intro-v3/components/Type.tsx",
+        "videos/wuh-site-intro-v3/components/Typewriter.tsx",
+        "videos/wuh-site-intro-v3/motion-tokens.ts",
         "videos/wuh-site-intro-v3/shots/s01.tsx",
         "videos/wuh-site-intro-v3/shots/s37.tsx"
       ],
-      "message": "fix(video-materials): s01 layout + s37 caption"
+      "message": "feat(video-materials): 组件层 v1（14 件）+ draw/noise 基元（CI 无 @remotion/paths 依赖）"
     },
     "issuePlan": {
       "title": "[feature] wuh.site 介绍片 v3 正式制作：56 镜亮色信息密度 · CI 出片",
