@@ -197,3 +197,39 @@ export const EASE = {
 /** 延迟透明度（快速工具） */
 export const fadeAt = (frame: number, start: number, dur = 10): number =>
   interpolate(frame - start, [0, dur], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+
+/* ─── SVG 描画（替代 @remotion/paths evolvePath；依赖未在 package.json 声明，CI 解析不到） ───
+ * 用 SVG 的 pathLength 归一化：pathLength=1 时 dasharray/dashoffset 直接用 0→1 进度，无需知道真实长度。
+ * 任何 <path>/<line>/<circle>/<rect> 展开 {...draw(p)} 即可从 0 描到 1。 */
+export const draw = (p: number): { pathLength: number; strokeDasharray: number; strokeDashoffset: number } => ({
+  pathLength: 1,
+  strokeDasharray: 1,
+  strokeDashoffset: 1 - clamp01(p),
+});
+
+/** 确定性 1D 平滑噪声（替代 @remotion/noise：同 seed 同 x 同值，值域 0–1） */
+export const noise1D = (seed: string, x: number): number => {
+  const i = Math.floor(x);
+  const f = x - i;
+  const s = f * f * (3 - 2 * f);
+  const a = rnd(seed, i);
+  const b = rnd(seed, i + 1);
+  return a + (b - a) * s;
+};
+
+/** 确定性 2D 平滑噪声（双线性 + smoothstep），用于有机漂移/手持感 */
+export const noise2D = (seed: string, x: number, y: number): number => {
+  const xi = Math.floor(x);
+  const yi = Math.floor(y);
+  const xf = x - xi;
+  const yf = y - yi;
+  const sx = xf * xf * (3 - 2 * xf);
+  const sy = yf * yf * (3 - 2 * yf);
+  const v00 = rnd(`${seed}:${xi}:${yi}`, 0);
+  const v10 = rnd(`${seed}:${xi + 1}:${yi}`, 0);
+  const v01 = rnd(`${seed}:${xi}:${yi + 1}`, 0);
+  const v11 = rnd(`${seed}:${xi + 1}:${yi + 1}`, 0);
+  const a = v00 + (v10 - v00) * sx;
+  const b = v01 + (v11 - v01) * sx;
+  return a + (b - a) * sy;
+};

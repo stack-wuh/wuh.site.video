@@ -5,7 +5,7 @@ import { KineticLine } from '../components/KineticLine';
 import { ShotShell } from '../components/ShotShell';
 import { DataLabel, Kicker, Meta } from '../components/Type';
 import { HEATMAP, SCALARS } from '../data';
-import { FILM_COLORS, GRID, T, fmtInt } from '../motion-tokens';
+import { FILM_COLORS, GRID, fmtInt } from '../motion-tokens';
 
 const CELL = 18;
 const GAP = 4;
